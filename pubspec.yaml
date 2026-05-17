@@ -1,5 +1,5 @@
 name: sameway
-description: "A new Flutter project."
+description: "Rideshare app — connect drivers and passengers in real time."
 publish_to: 'none'
 version: 0.1.0
 
@@ -13,6 +13,10 @@ dependencies:
   geocoding: ^4.0.0
   geolocator: ^14.0.2
   latlong2: ^0.9.1
+  provider: ^6.1.2
+  shared_preferences: ^2.3.2
+  http: ^1.2.2
+  web_socket_channel: ^3.0.1
 
 dev_dependencies:
   flutter_test:
