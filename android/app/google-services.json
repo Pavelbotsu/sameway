@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125379278015",
+    "project_id": "sameway-f87ea",
+    "storage_bucket": "sameway-f87ea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125379278015:android:f9a0237b04474c92fec20a",
+        "android_client_info": {
+          "package_name": "com.example.sameway"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLF64-TPLicq_NfTBYkxj1iPoND2w2b8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,9 @@ class DriverProvider extends ChangeNotifier {
   List<RideRequest> requests = [];
   bool isLoading = false;
   String? error;
+  String? acceptedRequestId;
+  String? acceptedPassengerName;
+  int unreadMessages = 0;
   StreamSubscription? _wsSub;
 
   DriverProvider(this._repo, this._ws);
@@ -18,8 +21,18 @@ class DriverProvider extends ChangeNotifier {
   void connectWS(String token) {
     _ws.connect(token);
     _wsSub = _ws.messages.listen((msg) {
-      if (msg['type'] == 'ride_response') {
+      if (msg['type'] == 'ride_cancelled') {
+        acceptedRequestId = null;
         loadRequests();
+      } else if (msg['type'] == 'ride_response') {
+        final p = msg['payload'] as Map<String, dynamic>?;
+        if (p != null && p['status'] == 'accepted') {
+          acceptedRequestId = p['request_id'] as String?;
+        }
+        loadRequests();
+      } else if (msg['type'] == 'chat_message') {
+        unreadMessages++;
+        notifyListeners();
       }
     });
   }
@@ -60,11 +73,43 @@ class DriverProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
+  void clearUnread() {
+    unreadMessages = 0;
+    notifyListeners();
+  }
+
+  Future<void> cancelRide(String requestId) async {
+    try {
+      await _repo.cancelRide(requestId);
+      acceptedRequestId = null;
+      await loadRequests();
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> completeRide(double distanceKm) async {
+    try {
+      await _repo.updateStatus('done', distanceKm: distanceKm);
+      acceptedRequestId = null;
+      requests = [];
+      activeRoute = null;
+      unreadMessages = 0;
+      notifyListeners();
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
   Future<void> deleteRoute() async {
     try {
       await _repo.deleteRoute();
       activeRoute = null;
       requests = [];
+      acceptedRequestId = null;
+      unreadMessages = 0;
       error = null;
       notifyListeners();
     } catch (e) {

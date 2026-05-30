@@ -23,6 +23,10 @@ class PassengerRepository {
     );
   }
 
+  Future<void> cancelRide(String requestId) async {
+    await _api.delete('/passenger/ride/$requestId', auth: true);
+  }
+
   Future<void> goOffline() async {
     await _api.delete('/passenger/active', auth: true);
   }

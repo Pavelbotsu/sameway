@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-const _wsBase = 'ws://10.0.2.2:8080';
+const _wsBase = 'wss://ibuprofen-dolly-prison.ngrok-free.dev';
 
 class WebSocketClient {
   WebSocketChannel? _channel;

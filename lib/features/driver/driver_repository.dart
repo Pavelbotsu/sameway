@@ -66,8 +66,13 @@ class DriverRepository {
         .toList();
   }
 
-  Future<void> updateStatus(String status) async {
-    await _api.put('/driver/status', {'status': status}, auth: true);
+  Future<void> updateStatus(String status, {double distanceKm = 0}) async {
+    await _api.put('/driver/status',
+        {'status': status, 'distance_km': distanceKm}, auth: true);
+  }
+
+  Future<void> cancelRide(String requestId) async {
+    await _api.delete('/driver/ride/$requestId', auth: true);
   }
 
   Future<void> deleteRoute() async {

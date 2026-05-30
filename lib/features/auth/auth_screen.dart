@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
+import '../../core/fcm_service.dart';
 import 'auth_provider.dart';
 import '../driver/driver_home_screen.dart';
 import '../passenger/passenger_home_screen.dart';
@@ -61,6 +63,10 @@ class _AuthScreenState extends State<AuthScreen>
             role: widget.role,
           );
     if (ok && mounted) {
+      // Re-issue JWT with the role chosen on this screen (login may return DB role).
+      await context.read<AuthProvider>().switchRole(widget.role);
+      if (!mounted) return;
+      FcmService.sendTokenToBackend();
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => _isDriver
@@ -80,6 +86,7 @@ class _AuthScreenState extends State<AuthScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -95,14 +102,12 @@ class _AuthScreenState extends State<AuthScreen>
                 _RoleBadge(role: widget.role, color: _roleColor),
                 const SizedBox(height: 16),
                 Text(
-                  _isLogin ? 'Welcome back' : 'Create account',
+                  _isLogin ? l.welcomeBack : l.createAccount,
                   style: Theme.of(context).textTheme.displayMedium,
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  _isLogin
-                      ? 'Sign in to continue your journey'
-                      : 'Join sameway today',
+                  _isLogin ? l.signInContinue : l.joinSameway,
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 15,
@@ -185,7 +190,7 @@ class _AuthScreenState extends State<AuthScreen>
                                   ),
                                 )
                               : Text(
-                                  _isLogin ? 'Sign In' : 'Create Account',
+                                  _isLogin ? l.signIn : l.createAccount,
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -196,7 +201,51 @@ class _AuthScreenState extends State<AuthScreen>
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: AppColors.border)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        l.or,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                    const Expanded(child: Divider(color: AppColors.border)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: OutlinedButton.icon(
+                    onPressed: null,
+                    icon: const Icon(
+                      Icons.g_mobiledata_rounded,
+                      size: 24,
+                      color: AppColors.textSecondary,
+                    ),
+                    label: Text(
+                      l.continueWithGoogle,
+                      style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.border),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -212,7 +261,7 @@ class _AuthScreenState extends State<AuthScreen>
                     GestureDetector(
                       onTap: _toggleMode,
                       child: Text(
-                        _isLogin ? 'Sign Up' : 'Sign In',
+                        _isLogin ? l.signUp : l.signIn,
                         style: TextStyle(
                           color: _roleColor,
                           fontSize: 14,

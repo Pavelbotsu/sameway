@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'token_storage.dart';
 
 // Android emulator → host machine localhost. Change to your server URL for production.
-const _base = 'http://10.0.2.2:8080';
+const kApiBase = 'https://ibuprofen-dolly-prison.ngrok-free.dev';
+const _base = kApiBase;
 
 class ApiException implements Exception {
   final String message;

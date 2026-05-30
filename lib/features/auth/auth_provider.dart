@@ -47,6 +47,8 @@ class AuthProvider extends ChangeNotifier {
         token: result.token,
         role: result.role,
         userId: result.userId,
+        name: result.name,
+        email: result.email,
       );
       role = result.role;
       status = AuthStatus.idle;
@@ -58,6 +60,10 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  Future<bool> switchRole(String role) async {
+    return _run(() => _repo.switchRole(role: role));
   }
 
   void clearError() {

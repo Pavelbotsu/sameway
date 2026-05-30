@@ -4,11 +4,15 @@ class AuthResult {
   final String token;
   final String userId;
   final String role;
+  final String? name;
+  final String? email;
 
   AuthResult.fromJson(Map<String, dynamic> j)
       : token = j['token'] as String,
         userId = j['user_id'] as String,
-        role = j['role'] as String;
+        role = j['role'] as String,
+        name = j['name'] as String?,
+        email = j['email'] as String?;
 }
 
 class AuthRepository {
@@ -38,6 +42,11 @@ class AuthRepository {
       'email': email,
       'password': password,
     });
+    return AuthResult.fromJson(data);
+  }
+
+  Future<AuthResult> switchRole({required String role}) async {
+    final data = await _api.post('/auth/switch-role', {'role': role}, auth: true);
     return AuthResult.fromJson(data);
   }
 }

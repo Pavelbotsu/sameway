@@ -29,7 +29,13 @@ class PassengerProvider extends ChangeNotifier {
 
   PassengerStatus state = PassengerStatus.looking;
   RideOffer? pendingOffer;
+  String? acceptedRequestId;
+  String? acceptedDriverId;
+  String? acceptedDriverName;
+  int unreadMessages = 0;
   String? error;
+  String? pendingRatingRequestId;
+  String? pendingRatingDriverId;
   StreamSubscription? _wsSub;
 
   PassengerProvider(this._repo, this._ws);
@@ -37,7 +43,23 @@ class PassengerProvider extends ChangeNotifier {
   void connectWS(String token) {
     _ws.connect(token);
     _wsSub = _ws.messages.listen((msg) {
-      if (msg['type'] == 'ride_request') {
+      if (msg['type'] == 'chat_message') {
+        unreadMessages++;
+        notifyListeners();
+      } else if (msg['type'] == 'ride_done') {
+        final p = msg['payload'] as Map<String, dynamic>?;
+        pendingRatingRequestId = p?['request_id'] as String?;
+        pendingRatingDriverId = p?['driver_id'] as String?;
+        acceptedRequestId = null;
+        pendingOffer = null;
+        state = PassengerStatus.looking;
+        notifyListeners();
+      } else if (msg['type'] == 'ride_cancelled') {
+        acceptedRequestId = null;
+        pendingOffer = null;
+        state = PassengerStatus.looking;
+        notifyListeners();
+      } else if (msg['type'] == 'ride_request') {
         final p = msg['payload'] as Map<String, dynamic>;
         pendingOffer = RideOffer(
           requestId: p['request_id'] as String? ?? '',
@@ -64,7 +86,23 @@ class PassengerProvider extends ChangeNotifier {
     try {
       await _repo.respond(
           requestId: pendingOffer!.requestId, status: 'accepted');
+      acceptedRequestId = pendingOffer!.requestId;
+      acceptedDriverId = pendingOffer!.driverId;
       state = PassengerStatus.accepted;
+      notifyListeners();
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> cancelRide() async {
+    if (acceptedRequestId == null) return;
+    try {
+      await _repo.cancelRide(acceptedRequestId!);
+      acceptedRequestId = null;
+      pendingOffer = null;
+      state = PassengerStatus.looking;
       notifyListeners();
     } catch (e) {
       error = e.toString();
@@ -93,6 +131,12 @@ class PassengerProvider extends ChangeNotifier {
     try {
       await _repo.goOffline();
     } catch (_) {}
+  }
+
+  void clearPendingRating() {
+    pendingRatingRequestId = null;
+    pendingRatingDriverId = null;
+    notifyListeners();
   }
 
   void clearError() {

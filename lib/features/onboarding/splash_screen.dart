@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/app_colors.dart';
+import '../../core/fcm_service.dart';
 import '../../core/token_storage.dart';
 import '../driver/driver_home_screen.dart';
 import '../passenger/passenger_home_screen.dart';
@@ -40,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
     final role = await storage.getRole();
     if (!mounted) return;
     if (token != null && role != null) {
+      FcmService.sendTokenToBackend(); // refresh token on every app start
       Navigator.pushReplacement(
         context,
         _route(

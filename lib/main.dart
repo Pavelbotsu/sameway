@@ -1,8 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'core/api_client.dart';
+import 'core/app_localizations.dart';
 import 'core/app_theme.dart';
+import 'core/fcm_service.dart';
+import 'core/language_provider.dart';
+import 'core/map_style_provider.dart';
 import 'core/token_storage.dart';
 import 'core/websocket_client.dart';
 import 'features/auth/auth_provider.dart';
@@ -13,8 +19,10 @@ import 'features/onboarding/splash_screen.dart';
 import 'features/passenger/passenger_provider.dart';
 import 'features/passenger/passenger_repository.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FcmService.init();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -30,6 +38,8 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => MapStyleProvider()),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(AuthRepository(api), storage),
         ),
@@ -56,9 +66,18 @@ class SamewayApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.watch<LanguageProvider>().locale;
     return MaterialApp(
       title: 'sameway',
       theme: buildAppTheme(),
+      locale: locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('uk')],
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
