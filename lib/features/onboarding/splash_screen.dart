@@ -101,10 +101,20 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.route_rounded,
-                    color: Colors.white,
-                    size: 48,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 600),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder: (child, anim) => ScaleTransition(
+                      scale: anim,
+                      child: FadeTransition(opacity: anim, child: child),
+                    ),
+                    child: Icon(
+                      Icons.route_rounded,
+                      color: Colors.white,
+                      size: 48,
+                      key: ValueKey(_anim.status),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 28),

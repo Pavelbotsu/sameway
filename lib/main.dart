@@ -68,6 +68,7 @@ class SamewayApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = context.watch<LanguageProvider>().locale;
     return MaterialApp(
+      scaffoldMessengerKey: FcmService.scaffoldMessengerKey,
       title: 'sameway',
       theme: buildAppTheme(),
       locale: locale,

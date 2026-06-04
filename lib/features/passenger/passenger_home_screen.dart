@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
-// ignore: unnecessary_import
-import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -18,8 +17,13 @@ import '../../core/token_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
+import '../../core/widgets/rating_wait_banner.dart';
+import '../../core/widgets/m3_expressive/wave_progress_indicator.dart';
+import '../../core/widgets/role_switch_sheet.dart';
+import '../driver/driver_home_screen.dart';
 import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
+import '../account/account_security_screen.dart';
 import '../chat/chat_screen.dart';
 import '../onboarding/role_selection_screen.dart';
 import '../promotions/promotions_screen.dart';
@@ -38,6 +42,9 @@ class PassengerHomeScreen extends StatefulWidget {
 
 class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   final _mapController = MapController();
+  final DraggableScrollableController _sheetCtrl =
+      DraggableScrollableController();
+  PassengerStatus? _prevState;
   LatLng? _myPos;
   Timer? _locationTimer;
   Timer? _driversTimer;
@@ -77,7 +84,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
           final reqId = provider.pendingRatingRequestId!;
           final driverId = provider.pendingRatingDriverId!;
           provider.clearPendingRating();
-          showModalBottomSheet(
+          showModalBottomSheet<bool>(
             context: context,
             isScrollControlled: true,
             backgroundColor: Colors.transparent,
@@ -87,7 +94,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               ratedUserLabel: 'driver',
               accentColor: AppColors.teal,
             ),
-          );
+          ).then((rated) {
+            if (rated == true) {
+              provider.markAwaitingDriverRating(reqId);
+            }
+          });
         }
       };
       provider.addListener(_ratingListener);
@@ -98,6 +109,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   void dispose() {
     _locationTimer?.cancel();
     _driversTimer?.cancel();
+    _sheetCtrl.dispose();
     super.dispose();
   }
 
@@ -135,28 +147,15 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   }
 
   Future<void> _requestRide(_NearbyDriverInfo driver) async {
-    try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.post(
-        Uri.parse('$kApiBase/passenger/request-driver'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'driver_id': driver.driverId}),
-      );
-      if (!mounted) return;
-      final ok = resp.statusCode == 200;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(ok
-            ? 'Ride request sent!'
-            : (jsonDecode(resp.body) as Map)['error'] as String? ??
-                'Failed'),
-        backgroundColor: ok ? AppColors.success : AppColors.error,
-        behavior: SnackBarBehavior.floating,
-      ));
-    } catch (_) {}
+    if (widget.isGuest) return;
+    final provider = context.read<PassengerProvider>();
+    final ok = await provider.sendRequestToDriver(driver.driverId);
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(ok ? 'Ride request sent!' : (provider.error ?? 'Failed')),
+      backgroundColor: ok ? AppColors.success : AppColors.error,
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   void _showDriverInfo(_NearbyDriverInfo driver) {
@@ -175,24 +174,6 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
     ).then((_) {
       if (mounted) setState(() => _selectedDriver = null);
     });
-  }
-
-  void _showDestinationSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (_) => _DestinationSheet(
-        nearbyPos: _myPos,
-        onSelected: (pos, name) {
-          setState(() {
-            _destPos = pos;
-            _destName = name;
-          });
-          _fetchNearbyDrivers();
-        },
-      ),
-    );
   }
 
   Future<void> _initLocation() async {
@@ -215,6 +196,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   }
 
   void _showGpsDisabledDialog() {
+    final l = AppLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -222,19 +204,21 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
         backgroundColor: AppColors.surface,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'GPS is off',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        title: Text(
+          l.gpsOff,
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w700),
         ),
-        content: const Text(
-          'Location services are required to show your position on the map. Please enable GPS and try again.',
-          style: TextStyle(color: AppColors.textSecondary, height: 1.5),
+        content: Text(
+          l.gpsOffMessage,
+          style:
+              const TextStyle(color: AppColors.textSecondary, height: 1.5),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Later',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(l.later,
+                style: const TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () async {
@@ -242,8 +226,8 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               await Geolocator.openLocationSettings();
               if (mounted) _initLocation();
             },
-            child: const Text('Open Settings',
-                style: TextStyle(
+            child: Text(l.openSettings,
+                style: const TextStyle(
                     color: AppColors.teal,
                     fontWeight: FontWeight.w600)),
           ),
@@ -354,6 +338,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
             Future.delayed(
                 const Duration(milliseconds: 200), _showMapStyleSheet);
           },
+          onShowAccountSecurity: (name, email) {
+            Navigator.pop(context);
+            Future.delayed(const Duration(milliseconds: 200),
+                () => _openAccountSecurity(name, email));
+          },
           onSignOut: _logout,
         ),
       ),
@@ -365,6 +354,38 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       context,
       MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
       (_) => false,
+    );
+  }
+
+  void _showRoleSwitchSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => RoleSwitchSheet(
+        currentRole: 'passenger',
+        onSwitched: () {
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const DriverHomeScreen()),
+            (_) => false,
+          );
+        },
+      ),
+    );
+  }
+
+  void _openAccountSecurity(String? name, String? email) {
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AccountSecurityScreen(
+          initialName: name,
+          initialEmail: email,
+        ),
+      ),
     );
   }
 
@@ -390,7 +411,21 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Consumer<PassengerProvider>(
-      builder: (_, p, __) => Scaffold(
+      builder: (_, p, __) {
+        if (p.state == PassengerStatus.offered &&
+            _prevState != PassengerStatus.offered) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_sheetCtrl.isAttached && _sheetCtrl.size < 0.55) {
+              _sheetCtrl.animateTo(
+                0.55,
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+              );
+            }
+          });
+        }
+        _prevState = p.state;
+        return Scaffold(
         backgroundColor: AppColors.background,
         resizeToAvoidBottomInset: false,
         bottomNavigationBar: _PassengerNavBar(
@@ -499,46 +534,56 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                       horizontal: 16, vertical: 8),
                   child: Row(
                     children: [
-                      GlassCard(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 10),
-                        borderRadius: 16,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.person_rounded,
-                                color: AppColors.teal, size: 18),
-                            const SizedBox(width: 6),
-                            Text(
-                              l.passenger,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                              ),
-                            ),
-                            if (widget.isGuest) ...[
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: AppColors.textSecondary
-                                      .withValues(alpha: 0.15),
-                                  borderRadius: BorderRadius.circular(6),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: widget.isGuest ? null : _showRoleSwitchSheet,
+                        child: GlassCard(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 10),
+                          borderRadius: 16,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.person_rounded,
+                                  color: AppColors.teal, size: 18),
+                              const SizedBox(width: 6),
+                              Text(
+                                l.passenger,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
                                 ),
-                                child: Text(
-                                  l.guest,
-                                  style: const TextStyle(
+                              ),
+                              if (!widget.isGuest) ...[
+                                const SizedBox(width: 6),
+                                const Icon(Icons.swap_horiz_rounded,
                                     color: AppColors.textSecondary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    letterSpacing: 0.5,
+                                    size: 16),
+                              ],
+                              if (widget.isGuest) ...[
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 7, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.textSecondary
+                                        .withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    l.guest,
+                                    style: const TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 0.5,
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -555,7 +600,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                                   color: AppColors.textSecondary, size: 20),
                               tooltip: 'Language',
                               constraints: const BoxConstraints(
-                                  minWidth: 36, minHeight: 36),
+                                  minWidth: 48, minHeight: 48),
                               padding: EdgeInsets.zero,
                             ),
                             IconButton(
@@ -566,7 +611,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                                   size: 22),
                               tooltip: 'Account',
                               constraints: const BoxConstraints(
-                                  minWidth: 36, minHeight: 36),
+                                  minWidth: 48, minHeight: 48),
                               padding: EdgeInsets.zero,
                             ),
                           ],
@@ -631,12 +676,24 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 ),
               ),
 
+            if (p.awaitingRatingRequestId != null)
+              Positioned(
+                top: MediaQuery.of(context).viewPadding.top + 8,
+                left: 0,
+                right: 0,
+                child: RatingWaitBanner(
+                  otherPartyLabel: 'driver',
+                  onDismiss: () => p.clearAwaitingRating(),
+                ),
+              ),
+
             DraggableScrollableSheet(
+              controller: _sheetCtrl,
               initialChildSize: 0.28,
               minChildSize: 0.07,
               maxChildSize: 0.85,
               snap: true,
-              snapSizes: const [0.28],
+              snapSizes: const [0.28, 0.55],
               builder: (_, scrollController) => _StatusPanel(
                 provider: p,
                 scrollController: scrollController,
@@ -661,7 +718,8 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
             ),
           ],
         ),
-      ),
+      );
+      },
     );
   }
 }
@@ -741,24 +799,57 @@ class _StatusPanel extends StatelessWidget {
               ),
               child: isGuest
                   ? const _GuestPassengerCard()
-                  : switch (provider.state) {
-                      PassengerStatus.looking => _LookingCard(
-                          currentPos: currentPos,
-                          destName: destName,
-                          onDestinationSet: onDestinationSet,
-                          onClearDestination: onClearDestination,
+                  : AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 280),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeOutCubic,
+                      transitionBuilder: (child, anim) => FadeTransition(
+                        opacity: anim,
+                        child: SizeTransition(
+                          axisAlignment: -1,
+                          sizeFactor: anim,
+                          child: child,
                         ),
-                      PassengerStatus.offered => _OfferCard(
-                          offer: provider.pendingOffer!,
-                          onAccept: () => provider.acceptRide(),
-                          onDecline: () => provider.declineRide(),
-                        ),
-                      PassengerStatus.accepted => _AcceptedCard(
-                          requestId: provider.acceptedRequestId,
-                          onCancel: () => provider.cancelRide(),
-                        ),
-                      PassengerStatus.declined => const _DeclinedCard(),
-                    },
+                      ),
+                      child: KeyedSubtree(
+                        key: ValueKey(provider.state),
+                        child: switch (provider.state) {
+                          PassengerStatus.looking => _LookingCard(
+                              currentPos: currentPos,
+                              destName: destName,
+                              onDestinationSet: onDestinationSet,
+                              onClearDestination: onClearDestination,
+                              outstandingRequests:
+                                  provider.outstandingRequests,
+                              onCancelOutstanding: (id) =>
+                                  provider.cancelOutstandingRequest(id),
+                            ),
+                          PassengerStatus.offered => _OfferCard(
+                              offer: provider.pendingOffer!,
+                              onAccept: () => provider.acceptRide(),
+                              onDecline: () => provider.declineRide(),
+                            ),
+                          PassengerStatus.accepted => _AcceptedCard(
+                              requestId: provider.acceptedRequestId,
+                              driverName: provider.acceptedDriverName,
+                              carSummary: provider.acceptedCarSummary,
+                              driverAvgRating:
+                                  provider.acceptedDriverAvgRating,
+                              driverRatingCount:
+                                  provider.acceptedDriverRatingCount,
+                              passengerPos: currentPos,
+                              driverPos: (provider.peerLat != null &&
+                                      provider.peerLng != null)
+                                  ? LatLng(
+                                      provider.peerLat!, provider.peerLng!)
+                                  : null,
+                              onCancel: () => provider.cancelRide(),
+                            ),
+                          PassengerStatus.declined =>
+                            const _DeclinedCard(),
+                        },
+                      ),
+                    ),
             ),
           ),
         ],
@@ -910,10 +1001,14 @@ class _LookingCard extends StatefulWidget {
   final String? destName;
   final void Function(LatLng pos, String name) onDestinationSet;
   final VoidCallback onClearDestination;
+  final List<OutstandingRequest> outstandingRequests;
+  final void Function(String requestId) onCancelOutstanding;
 
   const _LookingCard({
     required this.onDestinationSet,
     required this.onClearDestination,
+    required this.outstandingRequests,
+    required this.onCancelOutstanding,
     this.currentPos,
     this.destName,
   });
@@ -1123,10 +1218,156 @@ class _LookingCardState extends State<_LookingCard> {
               },
             ),
           ),
+        if (widget.outstandingRequests.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          ...widget.outstandingRequests.map(
+            (r) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: _OutstandingRequestTile(
+                req: r,
+                onCancel: () => widget.onCancelOutstanding(r.requestId),
+              ),
+            ),
+          ),
+        ],
         const SizedBox(height: 12),
         const _Co2MiniCard(),
         const SizedBox(height: 4),
       ],
+    );
+  }
+}
+
+class _OutstandingRequestTile extends StatelessWidget {
+  final OutstandingRequest req;
+  final VoidCallback onCancel;
+  const _OutstandingRequestTile({required this.req, required this.onCancel});
+
+  @override
+  Widget build(BuildContext context) {
+    final hasRating = (req.driverRatingCount ?? 0) > 0 &&
+        req.driverAvgRating != null;
+    final isPending = req.status == 'pending';
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isPending
+              ? AppColors.teal.withValues(alpha: 0.35)
+              : AppColors.success.withValues(alpha: 0.5),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: AppColors.teal.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.person_rounded,
+                    color: AppColors.teal, size: 20),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            req.driverName?.trim().isNotEmpty == true
+                                ? req.driverName!
+                                : 'Driver',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (hasRating) ...[
+                          const SizedBox(width: 6),
+                          const Icon(Icons.star_rounded,
+                              color: Color(0xFFFFC857), size: 13),
+                          const SizedBox(width: 2),
+                          Text(
+                            '${req.driverAvgRating!.toStringAsFixed(1)}'
+                            ' (${req.driverRatingCount})',
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (req.carSummary != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        req.carSummary!,
+                        style: const TextStyle(
+                            color: AppColors.textSecondary, fontSize: 11),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Icon(
+                isPending
+                    ? Icons.access_time_rounded
+                    : Icons.check_circle_rounded,
+                size: 14,
+                color: isPending ? AppColors.teal : AppColors.success,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                isPending
+                    ? 'Waiting for driver…'
+                    : 'Driver accepted',
+                style: TextStyle(
+                  color: isPending ? AppColors.teal : AppColors.success,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const Spacer(),
+              if (isPending)
+                TextButton(
+                  onPressed: onCancel,
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.error,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    minimumSize: const Size(0, 28),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text('Cancel',
+                      style: TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w600)),
+                ),
+            ],
+          ),
+          if (isPending) ...[
+            const SizedBox(height: 8),
+            const WaveProgressIndicator(height: 4),
+          ],
+        ],
+      ),
     );
   }
 }
@@ -1168,55 +1409,49 @@ class _Co2MiniCardState extends State<_Co2MiniCard> {
 
   @override
   Widget build(BuildContext context) {
-    if (_co2 == null) {
-      return Shimmer.fromColors(
-        baseColor: AppColors.surface,
-        highlightColor: AppColors.border,
-        child: Container(
-          width: double.infinity,
-          height: 40,
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-          ),
+    final loading = _co2 == null;
+    final co2Display = (_co2 ?? 12.3).toStringAsFixed(1);
+    final tripsDisplay = _trips ?? 4;
+    return Skeletonizer(
+      enabled: loading,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0A1F10),
+          borderRadius: BorderRadius.circular(12),
+          border:
+              Border.all(color: AppColors.success.withValues(alpha: 0.2)),
         ),
-      );
-    }
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0A1F10),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.success.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.eco_rounded, color: AppColors.success, size: 18),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              '${_co2!.toStringAsFixed(1)} kg CO₂ saved',
-              style: const TextStyle(
-                color: AppColors.success,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+        child: Row(
+          children: [
+            const Icon(Icons.eco_rounded,
+                color: AppColors.success, size: 18),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                '$co2Display kg CO₂ saved',
+                style: const TextStyle(
+                  color: AppColors.success,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
-          if (_trips != null && _trips! > 0)
-            Text(
-              '$_trips trip${_trips! == 1 ? '' : 's'}',
-              style: const TextStyle(
-                  color: AppColors.textSecondary, fontSize: 11),
-            ),
-        ],
+            if (loading || (_trips != null && _trips! > 0))
+              Text(
+                '$tripsDisplay trip${tripsDisplay == 1 ? '' : 's'}',
+                style: const TextStyle(
+                    color: AppColors.textSecondary, fontSize: 11),
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _OfferCard extends StatelessWidget {
+class _OfferCard extends StatefulWidget {
   final RideOffer offer;
   final VoidCallback onAccept;
   final VoidCallback onDecline;
@@ -1227,7 +1462,37 @@ class _OfferCard extends StatelessWidget {
   });
 
   @override
+  State<_OfferCard> createState() => _OfferCardState();
+}
+
+class _OfferCardState extends State<_OfferCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulseCtrl;
+  late final Animation<double> _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _pulse = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseCtrl.dispose();
+    super.dispose();
+  }
+
+  RideOffer get offer => widget.offer;
+
+  @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1252,21 +1517,73 @@ class _OfferCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Ride offer!',
-                    style: TextStyle(
+                  Text(
+                    l.rideOffer,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
+                  const SizedBox(height: 2),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          (offer.driverName?.trim().isNotEmpty == true)
+                              ? offer.driverName!
+                              : 'Driver ${offer.driverId.substring(0, 8)}…',
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if ((offer.driverRatingCount ?? 0) > 0 &&
+                          offer.driverAvgRating != null) ...[
+                        const SizedBox(width: 8),
+                        const Icon(Icons.star_rounded,
+                            color: Color(0xFFFFC857), size: 14),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${offer.driverAvgRating!.toStringAsFixed(1)} (${offer.driverRatingCount})',
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  if (offer.carSummary != null) ...[
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        const Icon(Icons.directions_car_rounded,
+                            color: AppColors.textSecondary, size: 12),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            offer.carSummary!,
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  const SizedBox(height: 2),
                   Text(
-                    'Driver ${offer.driverId.substring(0, 8)}… · '
-                    '${offer.corridorKm.toStringAsFixed(1)} km corridor · '
-                    '${offer.seats} seat${offer.seats == 1 ? '' : 's'}',
+                    '${offer.corridorKm.toStringAsFixed(1)} ${l.corridorLabel} · '
+                    '${offer.seats} ${offer.seats == 1 ? l.seatLabel : l.seatsLabel}',
                     style: const TextStyle(
                       color: AppColors.textSecondary,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                   ),
                 ],
@@ -1281,7 +1598,7 @@ class _OfferCard extends StatelessWidget {
               child: SizedBox(
                 height: 50,
                 child: OutlinedButton(
-                  onPressed: onDecline,
+                  onPressed: widget.onDecline,
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(
                         color: AppColors.error, width: 1.5),
@@ -1290,26 +1607,29 @@ class _OfferCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Decline',
-                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  child: Text(l.decline,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: onAccept,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.teal,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: ScaleTransition(
+                scale: _pulse,
+                child: SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: widget.onAccept,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.teal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      minimumSize: Size.zero,
                     ),
-                    minimumSize: Size.zero,
+                    child: Text(l.accept,
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
                   ),
-                  child: const Text('Accept',
-                      style: TextStyle(fontWeight: FontWeight.w600)),
                 ),
               ),
             ),
@@ -1320,46 +1640,325 @@ class _OfferCard extends StatelessWidget {
   }
 }
 
-class _AcceptedCard extends StatelessWidget {
+class _AcceptedCard extends StatefulWidget {
   final String? requestId;
+  final String? driverName;
+  final String? carSummary;
+  final double? driverAvgRating;
+  final int? driverRatingCount;
+  final LatLng? passengerPos;
+  final LatLng? driverPos;
   final VoidCallback? onCancel;
-  const _AcceptedCard({this.requestId, this.onCancel});
+  const _AcceptedCard({
+    this.requestId,
+    this.driverName,
+    this.carSummary,
+    this.driverAvgRating,
+    this.driverRatingCount,
+    this.passengerPos,
+    this.driverPos,
+    this.onCancel,
+  });
+
+  @override
+  State<_AcceptedCard> createState() => _AcceptedCardState();
+}
+
+class _AcceptedCardState extends State<_AcceptedCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bloomCtrl;
+  late final Animation<double> _scale;
+  late final Animation<double> _rotation;
+  late final Animation<double> _ring;
+  final MapController _miniMapCtrl = MapController();
+
+  @override
+  void didUpdateWidget(covariant _AcceptedCard old) {
+    super.didUpdateWidget(old);
+    if (widget.passengerPos != old.passengerPos ||
+        widget.driverPos != old.driverPos) {
+      _fitMiniMap();
+    }
+  }
+
+  void _fitMiniMap() {
+    final a = widget.passengerPos;
+    final b = widget.driverPos;
+    if (a == null || b == null) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      try {
+        _miniMapCtrl.fitCamera(
+          CameraFit.bounds(
+            bounds: LatLngBounds.fromPoints([a, b]),
+            padding: const EdgeInsets.all(36),
+          ),
+        );
+      } catch (_) {}
+    });
+  }
+
+  double _haversineKm(LatLng a, LatLng b) {
+    const r = 6371.0;
+    final dLat = (b.latitude - a.latitude) * math.pi / 180.0;
+    final dLng = (b.longitude - a.longitude) * math.pi / 180.0;
+    final lat1 = a.latitude * math.pi / 180.0;
+    final lat2 = b.latitude * math.pi / 180.0;
+    final h = math.sin(dLat / 2) * math.sin(dLat / 2) +
+        math.cos(lat1) * math.cos(lat2) *
+            math.sin(dLng / 2) * math.sin(dLng / 2);
+    return 2 * r * math.asin(math.min(1.0, math.sqrt(h)));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bloomCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 720),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fitMiniMap());
+    _scale = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _bloomCtrl,
+        curve: const Interval(0.0, 0.7, curve: Curves.easeOutBack),
+      ),
+    );
+    _rotation = Tween<double>(begin: -0.08, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _bloomCtrl,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOutCubic),
+      ),
+    );
+    // Single expanding success-ring "ping" behind the icon, fading out by 1.0.
+    _ring = CurvedAnimation(
+      parent: _bloomCtrl,
+      curve: const Interval(0.15, 1.0, curve: Curves.easeOutCubic),
+    );
+    _bloomCtrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _bloomCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final hasRating = (widget.driverRatingCount ?? 0) > 0 &&
+        widget.driverAvgRating != null;
     return Column(
       children: [
-        Container(
-          width: 52,
-          height: 52,
-          decoration: BoxDecoration(
-            color: AppColors.success.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(16),
+        SizedBox(
+          width: 96,
+          height: 96,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Expanding ping ring (fires once on mount).
+              AnimatedBuilder(
+                animation: _ring,
+                builder: (_, __) {
+                  final t = _ring.value;
+                  final size = 52 + 44 * t;
+                  return IgnorePointer(
+                    child: Container(
+                      width: size,
+                      height: size,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.success
+                              .withValues(alpha: 0.45 * (1 - t)),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              // Bloom check icon (scale + slight rotate).
+              RotationTransition(
+                turns: _rotation,
+                child: ScaleTransition(
+                  scale: _scale,
+                  child: Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: AppColors.success.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(Icons.check_circle_rounded,
+                        color: AppColors.success, size: 28),
+                  ),
+                ),
+              ),
+            ],
           ),
-          child: const Icon(Icons.check_circle_rounded,
-              color: AppColors.success, size: 28),
         ),
         const SizedBox(height: 14),
-        const Text(
-          'Ride accepted!',
-          style: TextStyle(
+        Text(
+          l.rideAccepted,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
         ),
+        if (widget.driverName != null &&
+            widget.driverName!.trim().isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${l.driverLabel}: ${widget.driverName}',
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (hasRating) ...[
+                const SizedBox(width: 8),
+                const Icon(Icons.star_rounded,
+                    color: Color(0xFFFFC857), size: 14),
+                const SizedBox(width: 2),
+                Text(
+                  '${widget.driverAvgRating!.toStringAsFixed(1)} (${widget.driverRatingCount})',
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+        if (widget.carSummary != null) ...[
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.directions_car_rounded,
+                  color: AppColors.textSecondary, size: 12),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  widget.carSummary!,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ],
+        if (widget.passengerPos != null && widget.driverPos != null) ...[
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: SizedBox(
+              height: 220,
+              child: FlutterMap(
+                mapController: _miniMapCtrl,
+                options: MapOptions(
+                  initialCenter: LatLng(
+                    (widget.passengerPos!.latitude +
+                            widget.driverPos!.latitude) /
+                        2,
+                    (widget.passengerPos!.longitude +
+                            widget.driverPos!.longitude) /
+                        2,
+                  ),
+                  initialZoom: 14,
+                  interactionOptions: const InteractionOptions(
+                    flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+                  ),
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.sameway.app',
+                  ),
+                  PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: [
+                          widget.passengerPos!,
+                          widget.driverPos!,
+                        ],
+                        strokeWidth: 2,
+                        color: AppColors.teal,
+                      ),
+                    ],
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: widget.passengerPos!,
+                        width: 28,
+                        height: 28,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.teal,
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(Icons.person_rounded,
+                              size: 16, color: Colors.white),
+                        ),
+                      ),
+                      Marker(
+                        point: widget.driverPos!,
+                        width: 28,
+                        height: 28,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(Icons.directions_car_rounded,
+                              size: 14, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${_haversineKm(widget.passengerPos!, widget.driverPos!).toStringAsFixed(1)} km away',
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
         const SizedBox(height: 6),
-        const Text(
-          'Your driver has been notified. Stay at your location.',
+        Text(
+          l.driverNotified,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 13,
             height: 1.5,
           ),
         ),
         const SizedBox(height: 14),
-        if (requestId != null)
+        if (widget.requestId != null)
           SizedBox(
             width: double.infinity,
             child: OutlinedButton.icon(
@@ -1367,14 +1966,14 @@ class _AcceptedCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (_) => ChatScreen(
-                    rideRequestId: requestId!,
-                    otherPartyName: 'Driver',
+                    rideRequestId: widget.requestId!,
+                    otherPartyName: l.driverLabel,
                   ),
                 ),
               ),
               icon: const Icon(Icons.chat_bubble_rounded, size: 18),
-              label: const Text('Message Driver',
-                  style: TextStyle(fontWeight: FontWeight.w600)),
+              label: Text(l.messageDriver,
+                  style: const TextStyle(fontWeight: FontWeight.w600)),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.teal,
                 side: const BorderSide(color: AppColors.teal),
@@ -1384,7 +1983,7 @@ class _AcceptedCard extends StatelessWidget {
               ),
             ),
           ),
-        if (onCancel != null) ...[
+        if (widget.onCancel != null) ...[
           const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
@@ -1396,37 +1995,37 @@ class _AcceptedCard extends StatelessWidget {
                     backgroundColor: AppColors.surface,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    title: const Text('Cancel ride?',
-                        style: TextStyle(
+                    title: Text(l.cancelRideQ,
+                        style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w700)),
-                    content: const Text(
-                      'Your driver will be notified.',
-                      style: TextStyle(
+                    content: Text(
+                      l.cancelRideMessagePassenger,
+                      style: const TextStyle(
                           color: AppColors.textSecondary, height: 1.5),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text('Keep ride',
-                            style:
-                                TextStyle(color: AppColors.textSecondary)),
+                        child: Text(l.keepRide,
+                            style: const TextStyle(
+                                color: AppColors.textSecondary)),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, true),
-                        child: const Text('Cancel',
-                            style: TextStyle(
+                        child: Text(l.cancel,
+                            style: const TextStyle(
                                 color: AppColors.error,
                                 fontWeight: FontWeight.w600)),
                       ),
                     ],
                   ),
                 );
-                if (confirmed == true) onCancel!();
+                if (confirmed == true) widget.onCancel!();
               },
               icon: const Icon(Icons.cancel_outlined, size: 18),
-              label: const Text('Cancel ride',
-                  style: TextStyle(fontWeight: FontWeight.w600)),
+              label: Text(l.cancel,
+                  style: const TextStyle(fontWeight: FontWeight.w600)),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.error,
                 side: const BorderSide(color: AppColors.error),
@@ -1622,6 +2221,7 @@ class _AccountSheet extends StatefulWidget {
   final VoidCallback onSwitchRole;
   final VoidCallback onShowLanguage;
   final VoidCallback onShowMapStyle;
+  final void Function(String? name, String? email) onShowAccountSecurity;
   final VoidCallback onSignOut;
 
   const _AccountSheet({
@@ -1631,6 +2231,7 @@ class _AccountSheet extends StatefulWidget {
     required this.onSwitchRole,
     required this.onShowLanguage,
     required this.onShowMapStyle,
+    required this.onShowAccountSecurity,
     required this.onSignOut,
     this.currentPos,
   });
@@ -1713,9 +2314,10 @@ class _AccountSheetState extends State<_AccountSheet> {
       );
       if (!mounted) return;
       final ok = resp.statusCode == 200;
+      final l = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
-            ? 'Test notification sent! Check your device.'
+            ? l.testNotificationSent
             : (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed'),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
@@ -1849,49 +2451,40 @@ class _AccountSheetState extends State<_AccountSheet> {
               ],
             ),
             const SizedBox(height: 20),
-            if (!widget.isGuest && _co2Saved == null)
-              Shimmer.fromColors(
-                baseColor: AppColors.surface,
-                highlightColor: AppColors.border,
+            if (!widget.isGuest) ...[
+              Skeletonizer(
+                enabled: _co2Saved == null,
                 child: Container(
                   width: double.infinity,
-                  height: 52,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: const Color(0xFF0D2818),
                     borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                        color: AppColors.success.withValues(alpha: 0.3)),
                   ),
-                ),
-              ),
-            if (!widget.isGuest && _co2Saved != null) ...[
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0D2818),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                      color: AppColors.success.withValues(alpha: 0.3)),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.eco_rounded,
-                        color: AppColors.success, size: 22),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'You saved ${_co2Saved!.toStringAsFixed(1)} kg CO₂',
-                        style: const TextStyle(
-                            color: AppColors.success,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.eco_rounded,
+                          color: AppColors.success, size: 22),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'You saved ${(_co2Saved ?? 18.7).toStringAsFixed(1)} kg CO₂',
+                          style: const TextStyle(
+                              color: AppColors.success,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${_tripsCount ?? 0} trip${(_tripsCount ?? 0) == 1 ? '' : 's'}',
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 12),
-                    ),
-                  ],
+                      Text(
+                        '${_tripsCount ?? 6} trip${(_tripsCount ?? 6) == 1 ? '' : 's'}',
+                        style: const TextStyle(
+                            color: AppColors.textSecondary, fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -1901,22 +2494,14 @@ class _AccountSheetState extends State<_AccountSheet> {
             if (!widget.isGuest)
               _SheetTile(
                 icon: Icons.manage_accounts_rounded,
-                label: 'Account & Security',
-                onTap: () => showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                  builder: (_) => _AccountManagementSheet(
-                    userName: _userName,
-                    userEmail: _userEmail,
-                    onNameUpdated: (n) => setState(() => _userName = n),
-                  ),
-                ),
+                label: l.accountSecurity,
+                onTap: () =>
+                    widget.onShowAccountSecurity(_userName, _userEmail),
               ),
             if (!widget.isGuest)
               _SheetTile(
                 icon: Icons.history_rounded,
-                label: 'Trip History',
+                label: l.tripHistory,
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -1941,12 +2526,12 @@ class _AccountSheetState extends State<_AccountSheet> {
             ),
             _SheetTile(
               icon: Icons.map_rounded,
-              label: 'Map Style',
+              label: l.mapStyle,
               onTap: widget.onShowMapStyle,
             ),
             _SheetTile(
               icon: Icons.local_offer_rounded,
-              label: 'Promotions & Rewards',
+              label: l.promotionsAndRewards,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(context,
@@ -1956,7 +2541,7 @@ class _AccountSheetState extends State<_AccountSheet> {
             if (!widget.isGuest)
               _SheetTile(
                 icon: Icons.search_rounded,
-                label: 'Find Planned Trips',
+                label: l.findPlannedTrips,
                 onTap: () {
                   Navigator.pop(context);
                   showModalBottomSheet(
@@ -1970,7 +2555,7 @@ class _AccountSheetState extends State<_AccountSheet> {
             if (!widget.isGuest)
               _SheetTile(
                 icon: Icons.directions_car_rounded,
-                label: 'My Car',
+                label: l.myCar,
                 onTap: () => showModalBottomSheet(
                   context: context,
                   backgroundColor: Colors.transparent,
@@ -1981,7 +2566,7 @@ class _AccountSheetState extends State<_AccountSheet> {
             if (!widget.isGuest)
               _SheetTile(
                 icon: Icons.notifications_active_rounded,
-                label: 'Test Notification',
+                label: l.testNotification,
                 trailing: _sending
                     ? const SizedBox(
                         width: 16,
@@ -2054,343 +2639,6 @@ class _SheetTile extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _AccountManagementSheet extends StatefulWidget {
-  final String? userName;
-  final String? userEmail;
-  final void Function(String name) onNameUpdated;
-
-  const _AccountManagementSheet({
-    required this.onNameUpdated,
-    this.userName,
-    this.userEmail,
-  });
-
-  @override
-  State<_AccountManagementSheet> createState() =>
-      _AccountManagementSheetState();
-}
-
-class _AccountManagementSheetState extends State<_AccountManagementSheet> {
-  late final TextEditingController _nameCtrl;
-  bool _savingName = false;
-  bool _showPasswordForm = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameCtrl = TextEditingController(text: widget.userName ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _saveName() async {
-    final name = _nameCtrl.text.trim();
-    if (name.isEmpty) return;
-    setState(() => _savingName = true);
-    try {
-      final storage = TokenStorage();
-      final jwt = await storage.getToken();
-      if (jwt == null) return;
-      final resp = await http.put(
-        Uri.parse('$kApiBase/auth/profile'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'name': name}),
-      );
-      if (resp.statusCode == 200 && mounted) {
-        await storage.save(
-          token: jwt,
-          role: (await storage.getRole()) ?? '',
-          userId: (await storage.getUserId()) ?? '',
-          name: name,
-        );
-        if (!mounted) return;
-        widget.onNameUpdated(name);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Name updated'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _savingName = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-          24, 12, 24,
-          MediaQuery.of(context).viewInsets.bottom +
-              MediaQuery.of(context).padding.bottom + 24),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40, height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const Text(
-              'Account & Security',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.email_outlined,
-                      color: AppColors.textSecondary, size: 18),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.userEmail ?? '—',
-                      style: const TextStyle(
-                          color: AppColors.textPrimary, fontSize: 14),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (widget.userEmail != null) {
-                        Clipboard.setData(
-                            ClipboardData(text: widget.userEmail!));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Email copied'),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    },
-                    child: const Icon(Icons.copy_rounded,
-                        color: AppColors.textSecondary, size: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _nameCtrl,
-                    style: const TextStyle(color: AppColors.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: 'Display name',
-                      labelStyle:
-                          const TextStyle(color: AppColors.textSecondary),
-                      filled: true,
-                      fillColor: AppColors.background,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _savingName ? null : _saveName,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.teal,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: _savingName
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.black))
-                        : const Text('Save'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Divider(color: AppColors.border),
-            const SizedBox(height: 4),
-            _SheetTile(
-              icon: Icons.lock_outline_rounded,
-              label: 'Change Password',
-              onTap: () =>
-                  setState(() => _showPasswordForm = !_showPasswordForm),
-            ),
-            if (_showPasswordForm) ...[
-              const SizedBox(height: 8),
-              const _ChangePasswordForm(),
-            ],
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ChangePasswordForm extends StatefulWidget {
-  const _ChangePasswordForm();
-
-  @override
-  State<_ChangePasswordForm> createState() => _ChangePasswordFormState();
-}
-
-class _ChangePasswordFormState extends State<_ChangePasswordForm> {
-  final _currentCtrl = TextEditingController();
-  final _newCtrl = TextEditingController();
-  final _confirmCtrl = TextEditingController();
-  bool _saving = false;
-  String? _error;
-
-  @override
-  void dispose() {
-    _currentCtrl.dispose();
-    _newCtrl.dispose();
-    _confirmCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    setState(() => _error = null);
-    if (_newCtrl.text != _confirmCtrl.text) {
-      setState(() => _error = 'New passwords do not match');
-      return;
-    }
-    if (_newCtrl.text.length < 6) {
-      setState(() => _error = 'Password must be at least 6 characters');
-      return;
-    }
-    setState(() => _saving = true);
-    try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.post(
-        Uri.parse('$kApiBase/auth/change-password'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'current_password': _currentCtrl.text,
-          'new_password': _newCtrl.text,
-        }),
-      );
-      if (!mounted) return;
-      if (resp.statusCode == 200) {
-        _currentCtrl.clear();
-        _newCtrl.clear();
-        _confirmCtrl.clear();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Password updated'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-        ));
-        Navigator.pop(context);
-      } else {
-        final msg =
-            (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        setState(() => _error = msg);
-      }
-    } catch (_) {
-      setState(() => _error = 'Network error');
-    }
-    if (mounted) setState(() => _saving = false);
-  }
-
-  Widget _field(TextEditingController ctrl, String label) => Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: TextField(
-          controller: ctrl,
-          obscureText: true,
-          style: const TextStyle(color: AppColors.textPrimary),
-          decoration: InputDecoration(
-            labelText: label,
-            labelStyle: const TextStyle(color: AppColors.textSecondary),
-            filled: true,
-            fillColor: AppColors.background,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.border),
-            ),
-          ),
-        ),
-      );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _field(_currentCtrl, 'Current password'),
-        _field(_newCtrl, 'New password'),
-        _field(_confirmCtrl, 'Confirm new password'),
-        if (_error != null) ...[
-          const SizedBox(height: 4),
-          Text(_error!,
-              style: const TextStyle(color: AppColors.error, fontSize: 12)),
-          const SizedBox(height: 8),
-        ],
-        ElevatedButton(
-          onPressed: _saving ? null : _submit,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.teal,
-            foregroundColor: Colors.black,
-            minimumSize: const Size.fromHeight(48),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          child: _saving
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: Colors.black))
-              : const Text('Update Password'),
-        ),
-      ],
     );
   }
 }
@@ -2542,9 +2790,9 @@ class _MapStyleSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const Text(
-            'Map Style',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).mapStyle,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w700,
@@ -2987,186 +3235,3 @@ class _PlaceSuggestion {
   const _PlaceSuggestion({required this.name, required this.lat, required this.lng});
 }
 
-class _DestinationSheet extends StatefulWidget {
-  final LatLng? nearbyPos;
-  final void Function(LatLng pos, String name) onSelected;
-
-  const _DestinationSheet({required this.nearbyPos, required this.onSelected});
-
-  @override
-  State<_DestinationSheet> createState() => _DestinationSheetState();
-}
-
-class _DestinationSheetState extends State<_DestinationSheet> {
-  final _ctrl = TextEditingController();
-  List<_PlaceSuggestion> _suggestions = [];
-  bool _loading = false;
-  Timer? _debounce;
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  void _onChanged(String v) {
-    _debounce?.cancel();
-    if (v.length < 3) {
-      setState(() => _suggestions = []);
-      return;
-    }
-    _debounce = Timer(const Duration(milliseconds: 400), () => _fetch(v));
-  }
-
-  Future<void> _fetch(String query) async {
-    setState(() => _loading = true);
-    try {
-      final origin = widget.nearbyPos;
-      final bbox = origin != null
-          ? '&viewbox=${origin.longitude - 0.5},${origin.latitude - 0.5}'
-            ',${origin.longitude + 0.5},${origin.latitude + 0.5}&bounded=1'
-          : '';
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&addressdetails=0$bbox',
-      );
-      final resp = await http.get(
-        uri,
-        headers: {'Accept-Language': 'en', 'User-Agent': 'sameway-app'},
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        setState(() => _suggestions = list
-            .map((e) => _PlaceSuggestion(
-                  name: e['display_name'] as String,
-                  lat: double.parse(e['lat'] as String),
-                  lng: double.parse(e['lon'] as String),
-                ))
-            .toList());
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _loading = false);
-  }
-
-  void _select(_PlaceSuggestion s) {
-    Navigator.pop(context);
-    widget.onSelected(LatLng(s.lat, s.lng), s.name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-          24, 12, 24, MediaQuery.of(context).padding.bottom + 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const Text(
-            'Where do you want to go?',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'Only drivers whose route passes near your destination will be shown.',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-              height: 1.4,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _ctrl,
-            autofocus: true,
-            onChanged: _onChanged,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: 'Search address…',
-              hintStyle:
-                  const TextStyle(color: AppColors.textSecondary, fontSize: 14),
-              filled: true,
-              fillColor: AppColors.background,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: AppColors.border),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: AppColors.border),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide:
-                    const BorderSide(color: AppColors.teal, width: 1.5),
-              ),
-              prefixIcon: const Icon(Icons.search_rounded,
-                  color: AppColors.textSecondary, size: 20),
-              suffixIcon: _loading
-                  ? const Padding(
-                      padding: EdgeInsets.all(12),
-                      child: SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: AppColors.teal),
-                      ),
-                    )
-                  : null,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            ),
-          ),
-          if (_suggestions.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 200),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: _suggestions.length,
-                separatorBuilder: (_, __) =>
-                    const Divider(color: AppColors.border, height: 1),
-                itemBuilder: (_, i) {
-                  final s = _suggestions[i];
-                  return ListTile(
-                    dense: true,
-                    leading: const Icon(Icons.location_on_outlined,
-                        color: AppColors.teal, size: 18),
-                    title: Text(
-                      s.name,
-                      style: const TextStyle(
-                          color: Colors.white, fontSize: 13),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    onTap: () => _select(s),
-                  );
-                },
-              ),
-            ),
-          ],
-          const SizedBox(height: 8),
-        ],
-      ),
-    );
-  }
-}

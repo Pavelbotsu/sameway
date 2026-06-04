@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
+// Seed-based Material 3 tonal palette derived from the brand teal.
+// Per user preference (secondary > primary), teal is now the dominant
+// theme accent: it seeds the M3 palette so primaryContainer / surfaceTint /
+// etc. all skew teal, and overrides scheme.primary so built-in Material
+// widgets (FilledButton, Switch, SnackBar action) pick teal by default.
+// AppColors.primary (purple) is kept on scheme.secondary so it remains
+// available via `Theme.of(context).colorScheme.secondary` without losing
+// brand identity in the role-color semantics (driver=purple, passenger=teal).
+ColorScheme _brandScheme() {
+  final base = ColorScheme.fromSeed(
+    seedColor: AppColors.teal,
+    brightness: Brightness.dark,
+  );
+  return base.copyWith(
+    primary: AppColors.teal,
+    secondary: AppColors.primary,
+    surface: AppColors.surface,
+    error: AppColors.error,
+    onSurface: AppColors.textPrimary,
+  );
+}
+
 ThemeData buildAppTheme() => ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.primary,
-        secondary: AppColors.teal,
-        surface: AppColors.surface,
-        error: AppColors.error,
-      ),
+      colorScheme: _brandScheme(),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -59,9 +76,14 @@ ThemeData buildAppTheme() => ThemeData(
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          // backgroundColor intentionally omitted — naked ElevatedButtons
+          // now adopt colorScheme.primary (teal) instead of hardcoding
+          // purple. Per-call styleFrom overrides keep their explicit colors.
           foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 56),
+          // M3 spec minimum (64×48); per-call SizedBox or styleFrom override
+          // sets full-width where intended. Avoids the infinite-width crash
+          // when an ElevatedButton is placed inside a Row without Expanded.
+          minimumSize: const Size(64, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
 
 class ChatMessage {
@@ -23,6 +24,15 @@ class ChatMessage {
         senderID: j['sender_id'] as String,
         content: j['content'] as String,
         createdAt: DateTime.parse(j['created_at'] as String),
+      );
+
+  /// Sentinel placeholder for Skeletonizer. Alternates the senderID hash
+  /// across an index so a mixed me/them rendering can be simulated.
+  factory ChatMessage.skeleton({String? sender}) => ChatMessage(
+        id: '',
+        senderID: sender ?? 'them',
+        content: 'Loading message content placeholder.',
+        createdAt: DateTime.now(),
       );
 }
 
@@ -152,6 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -171,10 +182,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.w700),
             ),
-            const Text(
-              'Active trip',
-              style:
-                  TextStyle(color: AppColors.textSecondary, fontSize: 12),
+            Text(
+              l.activeTrip,
+              style: const TextStyle(
+                  color: AppColors.textSecondary, fontSize: 12),
             ),
           ],
         ),
@@ -187,20 +198,17 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: !_historyLoaded
-                ? ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
-                    itemCount: 5,
-                    itemBuilder: (_, __) => Shimmer.fromColors(
-                      baseColor: AppColors.surface,
-                      highlightColor: AppColors.border,
-                      child: Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(12),
+                ? Skeletonizer(
+                    enabled: true,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      itemCount: 5,
+                      itemBuilder: (_, i) => _MessageBubble(
+                        msg: ChatMessage.skeleton(
+                          sender: i.isEven ? 'them' : '',
                         ),
+                        myId: '',
                       ),
                     ),
                   )
@@ -212,10 +220,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             Icon(Icons.chat_bubble_outline_rounded,
                                 color: AppColors.border, size: 48),
                             const SizedBox(height: 12),
-                            const Text(
-                              'No messages yet.\nSay hello!',
+                            Text(
+                              l.noMessages,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: AppColors.textSecondary, fontSize: 14),
                             ),
                           ],
@@ -246,7 +254,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     maxLines: null,
                     textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
-                      hintText: 'Message…',
+                      hintText: l.messageHint,
                       hintStyle: const TextStyle(
                           color: AppColors.textSecondary, fontSize: 14),
                       filled: true,

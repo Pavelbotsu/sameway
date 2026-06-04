@@ -41,7 +41,7 @@ class RoleSelectionScreen extends StatelessWidget {
                     color: AppColors.textSecondary,
                     size: 22,
                   ),
-                  tooltip: 'Language',
+                  tooltip: l.language,
                 ),
               ),
               const SizedBox(height: 8),

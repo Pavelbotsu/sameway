@@ -78,4 +78,15 @@ class DriverRepository {
   Future<void> deleteRoute() async {
     await _api.delete('/driver/route', auth: true);
   }
+
+  Future<void> respond({
+    required String requestId,
+    required String status,
+  }) async {
+    await _api.post(
+      '/driver/respond',
+      {'request_id': requestId, 'status': status},
+      auth: true,
+    );
+  }
 }

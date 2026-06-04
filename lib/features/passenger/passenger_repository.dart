@@ -30,4 +30,22 @@ class PassengerRepository {
   Future<void> goOffline() async {
     await _api.delete('/passenger/active', auth: true);
   }
+
+  Future<Map<String, dynamic>> requestDriver(String driverId) async {
+    return _api.post(
+      '/passenger/request-driver',
+      {'driver_id': driverId},
+      auth: true,
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getMyRequests() async {
+    final data = await _api.get('/passenger/my-requests', auth: true);
+    if (data is! List) return const [];
+    return data.cast<Map<String, dynamic>>();
+  }
+
+  Future<void> cancelOutstandingRequest(String requestId) async {
+    await _api.delete('/passenger/request/$requestId', auth: true);
+  }
 }

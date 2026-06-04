@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:flutter/services.dart' show HapticFeedback, SystemSound, SystemSoundType;
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
@@ -17,13 +17,16 @@ import '../../core/map_style_provider.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
+import '../../core/widgets/rating_sheet.dart';
+import '../../core/widgets/rating_wait_banner.dart';
+import '../../core/widgets/role_switch_sheet.dart';
+import '../passenger/passenger_home_screen.dart';
 import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
+import '../account/account_security_screen.dart';
 import '../onboarding/role_selection_screen.dart';
-import '../../core/widgets/rating_sheet.dart';
 import 'driver_provider.dart';
-import 'driver_repository.dart';
-import '../chat/chat_screen.dart';
+import 'widgets/driver_bottom_panel.dart';
 import '../promotions/promotions_screen.dart';
 import '../trips/trip_history_screen.dart';
 import '../trips/trip_planner_sheet.dart';
@@ -43,6 +46,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   Timer? _locationTimer;
   String? _lastNotifiedRequestId;
   late VoidCallback _providerListener;
+  late VoidCallback _ratingListener;
+  StreamSubscription<PassengerMatchInfo>? _incomingSub;
 
   @override
   void initState() {
@@ -62,6 +67,31 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         }
       }
     };
+    _ratingListener = () {
+      final provider = context.read<DriverProvider>();
+      if (provider.pendingRatingRequestId != null &&
+          provider.pendingRatingPassengerId != null &&
+          mounted) {
+        final reqId = provider.pendingRatingRequestId!;
+        final passengerId = provider.pendingRatingPassengerId!;
+        provider.clearPendingRating();
+        showModalBottomSheet<bool>(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (_) => RatingSheet(
+            rideRequestId: reqId,
+            ratedUserId: passengerId,
+            ratedUserLabel: 'passenger',
+            accentColor: AppColors.primary,
+          ),
+        ).then((rated) {
+          if (rated == true) {
+            provider.markAwaitingPassengerRating(reqId);
+          }
+        });
+      }
+    };
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _initLocation();
       if (!widget.isGuest) {
@@ -70,7 +100,25 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           context.read<DriverProvider>().connectWS(token);
         }
       }
-      if (mounted) context.read<DriverProvider>().addListener(_providerListener);
+      if (mounted) {
+        final provider = context.read<DriverProvider>();
+        provider.addListener(_providerListener);
+        provider.addListener(_ratingListener);
+        _incomingSub = provider.incomingRequests.listen((info) {
+          if (!mounted) return;
+          HapticFeedback.heavyImpact();
+          SystemSound.play(SystemSoundType.click);
+          final name = (info.name?.trim().isNotEmpty == true)
+              ? info.name!
+              : 'A passenger';
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('$name sent you a ride request'),
+            backgroundColor: AppColors.teal,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 6),
+          ));
+        });
+      }
       _locationTimer =
           Timer.periodic(const Duration(seconds: 15), (_) => _sendLocation());
     });
@@ -97,6 +145,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   void _showGpsDisabledDialog() {
+    final l = AppLocalizations.of(context);
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -104,19 +153,21 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         backgroundColor: AppColors.surface,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'GPS is off',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        title: Text(
+          l.gpsOff,
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w700),
         ),
-        content: const Text(
-          'Location services are required to show your position on the map. Please enable GPS and try again.',
-          style: TextStyle(color: AppColors.textSecondary, height: 1.5),
+        content: Text(
+          l.gpsOffMessage,
+          style:
+              const TextStyle(color: AppColors.textSecondary, height: 1.5),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Later',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(l.later,
+                style: const TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () async {
@@ -124,8 +175,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               await Geolocator.openLocationSettings();
               if (mounted) _initLocation();
             },
-            child: const Text('Open Settings',
-                style: TextStyle(
+            child: Text(l.openSettings,
+                style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600)),
           ),
@@ -264,6 +315,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             Future.delayed(
                 const Duration(milliseconds: 200), _showMapStyleSheet);
           },
+          onShowAccountSecurity: (name, email) {
+            Navigator.pop(context);
+            Future.delayed(const Duration(milliseconds: 200),
+                () => _openAccountSecurity(name, email));
+          },
           onSignOut: _logout,
         ),
       ),
@@ -275,6 +331,38 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       context,
       MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
       (_) => false,
+    );
+  }
+
+  void _showRoleSwitchSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => RoleSwitchSheet(
+        currentRole: 'driver',
+        onSwitched: () {
+          if (!mounted) return;
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const PassengerHomeScreen()),
+            (_) => false,
+          );
+        },
+      ),
+    );
+  }
+
+  void _openAccountSecurity(String? name, String? email) {
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AccountSecurityScreen(
+          initialName: name,
+          initialEmail: email,
+        ),
+      ),
     );
   }
 
@@ -310,7 +398,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   @override
   void dispose() {
-    context.read<DriverProvider>().removeListener(_providerListener);
+    final provider = context.read<DriverProvider>();
+    provider.removeListener(_providerListener);
+    provider.removeListener(_ratingListener);
+    _incomingSub?.cancel();
     _locationTimer?.cancel();
     super.dispose();
   }
@@ -385,46 +476,55 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    GlassCard(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 10),
-                      borderRadius: 16,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.drive_eta_rounded,
-                              color: AppColors.primary, size: 18),
-                          const SizedBox(width: 6),
-                          Text(
-                            l.driver,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
-                          if (widget.isGuest) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.textSecondary
-                                    .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: widget.isGuest ? null : _showRoleSwitchSheet,
+                      child: GlassCard(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
+                        borderRadius: 16,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.drive_eta_rounded,
+                                color: AppColors.primary, size: 18),
+                            const SizedBox(width: 6),
+                            Text(
+                              l.driver,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
                               ),
-                              child: Text(
-                                l.guest,
-                                style: const TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
+                            ),
+                            if (!widget.isGuest) ...[
+                              const SizedBox(width: 6),
+                              const Icon(Icons.swap_horiz_rounded,
+                                  color: AppColors.textSecondary, size: 16),
+                            ],
+                            if (widget.isGuest) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 7, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: AppColors.textSecondary
+                                      .withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  l.guest,
+                                  style: const TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -441,7 +541,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                 color: AppColors.textSecondary, size: 20),
                             tooltip: 'Language',
                             constraints: const BoxConstraints(
-                                minWidth: 36, minHeight: 36),
+                                minWidth: 48, minHeight: 48),
                             padding: EdgeInsets.zero,
                           ),
                           IconButton(
@@ -450,7 +550,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                                 color: AppColors.textSecondary, size: 22),
                             tooltip: 'Account',
                             constraints: const BoxConstraints(
-                                minWidth: 36, minHeight: 36),
+                                minWidth: 48, minHeight: 48),
                             padding: EdgeInsets.zero,
                           ),
                         ],
@@ -470,222 +570,35 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             snap: true,
             snapSizes: const [0.28],
             builder: (_, scrollController) => Consumer<DriverProvider>(
-              builder: (_, driver, __) => _BottomPanel(
+              builder: (_, driver, __) => DriverBottomPanel(
                 driver: driver,
                 scrollController: scrollController,
                 isGuest: widget.isGuest,
+                myPos: _myPos,
                 onSetRoute: _showSetRouteSheet,
+                onPlanTrip: _showPlanTripSheet,
+                onFindTrips: _showFindTripsSheet,
                 onDeleteRoute: () => driver.deleteRoute(),
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
 
-class _BottomPanel extends StatelessWidget {
-  final DriverProvider driver;
-  final bool isGuest;
-  final ScrollController scrollController;
-  final VoidCallback onSetRoute;
-  final VoidCallback onDeleteRoute;
-
-  const _BottomPanel({
-    required this.driver,
-    required this.isGuest,
-    required this.scrollController,
-    required this.onSetRoute,
-    required this.onDeleteRoute,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      child: Column(
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-              decoration: BoxDecoration(
-                color: AppColors.border,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-          const Divider(color: AppColors.border, height: 1),
-          Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              padding: EdgeInsets.fromLTRB(
-                20, 12, 20,
-                MediaQuery.of(context).padding.bottom + 36,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (driver.activeRoute != null && !isGuest) ...[
-                    _RouteActiveCard(
-                      route: driver.activeRoute!,
-                      onDelete: onDeleteRoute,
-                    ),
-                    const SizedBox(height: 16),
-                    if (driver.requests.isNotEmpty)
-                      _RequestsList(
-                        requests: driver.requests,
-                        acceptedRequestId: driver.acceptedRequestId,
-                        onCancelRide: (id) =>
-                            context.read<DriverProvider>().cancelRide(id),
-                        onCompleteRide: (id, passengerId) async {
-                          await context
-                              .read<DriverProvider>()
-                              .completeRide(0);
-                          if (context.mounted) {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (_) => RatingSheet(
-                                rideRequestId: id,
-                                ratedUserId: passengerId,
-                                ratedUserLabel: 'passenger',
-                                accentColor: AppColors.primary,
-                              ),
-                            );
-                          }
-                        },
-                      )
-                    else
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 20),
-                        decoration: BoxDecoration(
-                          color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: const Icon(Icons.people_outline_rounded,
-                                  color: AppColors.primary, size: 22),
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              'No ride requests yet',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Passengers near your route will appear here.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 12,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                  ] else if (isGuest) ...[
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Icon(Icons.explore_rounded,
-                          color: AppColors.primary, size: 26),
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      l.exploringAsGuest,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      l.signInShareDesc,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 13,
-                          height: 1.5),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: ElevatedButton(
-                        onPressed: onSetRoute,
-                        child: Text(l.signInToShareRoute),
-                      ),
-                    ),
-                  ] else ...[
-                    Text(
-                      l.readyToShare,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      l.setRouteDesc,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: AppColors.textSecondary, fontSize: 13),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: ElevatedButton.icon(
-                        onPressed: driver.isLoading ? null : onSetRoute,
-                        icon: driver.isLoading
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Icon(Icons.add_road_rounded, size: 20),
-                        label: Text(
-                            driver.isLoading ? l.settingRoute : l.setRoute),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+          // Rating-wait banner overlay
+          Consumer<DriverProvider>(
+            builder: (_, driver, __) {
+              if (driver.awaitingRatingRequestId == null) {
+                return const SizedBox.shrink();
+              }
+              return Positioned(
+                top: MediaQuery.of(context).viewPadding.top + 8,
+                left: 0,
+                right: 0,
+                child: RatingWaitBanner(
+                  otherPartyLabel: 'passenger',
+                  onDismiss: () => driver.clearAwaitingRating(),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -798,267 +711,6 @@ class _DriverNavBar extends StatelessWidget {
             color: AppColors.primary,
             onTap: onShowAccount,
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RouteActiveCard extends StatelessWidget {
-  final RouteResult route;
-  final VoidCallback onDelete;
-  const _RouteActiveCard({required this.route, required this.onDelete});
-
-  @override
-  Widget build(BuildContext context) {
-    final l = AppLocalizations.of(context);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.route_rounded,
-                color: AppColors.primary, size: 22),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l.routeActive,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  '${route.distanceKm.toStringAsFixed(1)} km · '
-                  '${route.notifiedCount} passenger${route.notifiedCount == 1 ? '' : 's'} notified',
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.close_rounded,
-                color: AppColors.error, size: 20),
-            onPressed: onDelete,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RequestsList extends StatelessWidget {
-  final List<RideRequest> requests;
-  final String? acceptedRequestId;
-  final void Function(String requestId) onCancelRide;
-  final void Function(String requestId, String passengerId) onCompleteRide;
-  const _RequestsList({
-    required this.requests,
-    required this.onCancelRide,
-    required this.onCompleteRide,
-    this.acceptedRequestId,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Ride requests (${requests.length})',
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
-          ),
-        ),
-        const SizedBox(height: 8),
-        ...requests.map((r) => _RequestTile(
-              request: r,
-              acceptedRequestId: acceptedRequestId,
-              onCancel: r.status == 'accepted'
-                  ? () => onCancelRide(r.id)
-                  : null,
-              onComplete: r.status == 'accepted'
-                  ? () => onCompleteRide(r.id, r.passengerID)
-                  : null,
-            )),
-      ],
-    );
-  }
-}
-
-class _RequestTile extends StatelessWidget {
-  final RideRequest request;
-  final String? acceptedRequestId;
-  final VoidCallback? onCancel;
-  final VoidCallback? onComplete;
-  const _RequestTile({
-    required this.request,
-    this.acceptedRequestId,
-    this.onCancel,
-    this.onComplete,
-  });
-
-  Color get _statusColor {
-    return switch (request.status) {
-      'accepted' => AppColors.success,
-      'declined' => AppColors.error,
-      _ => AppColors.textSecondary,
-    };
-  }
-
-  IconData get _statusIcon {
-    return switch (request.status) {
-      'accepted' => Icons.check_circle_rounded,
-      'declined' => Icons.cancel_rounded,
-      _ => Icons.schedule_rounded,
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Row(
-        children: [
-          Icon(_statusIcon, color: _statusColor, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'Passenger ${request.passengerID.substring(0, 8)}…',
-              style:
-                  const TextStyle(color: AppColors.textPrimary, fontSize: 13),
-            ),
-          ),
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: _statusColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              request.status,
-              style: TextStyle(
-                color: _statusColor,
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          if (request.status == 'accepted') ...[
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => ChatScreen(
-                    rideRequestId: acceptedRequestId ?? request.id,
-                    otherPartyName: 'Passenger',
-                  ),
-                ),
-              ),
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.chat_bubble_rounded,
-                    color: AppColors.primary, size: 16),
-              ),
-            ),
-            if (onComplete != null) ...[
-              const SizedBox(width: 6),
-              GestureDetector(
-                onTap: onComplete,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: AppColors.success.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.check_circle_outline_rounded,
-                      color: AppColors.success, size: 16),
-                ),
-              ),
-            ],
-            const SizedBox(width: 6),
-            GestureDetector(
-              onTap: () async {
-                final confirmed = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    backgroundColor: AppColors.surface,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    title: const Text('Cancel ride?',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700)),
-                    content: const Text(
-                      'The passenger will be notified.',
-                      style: TextStyle(
-                          color: AppColors.textSecondary, height: 1.5),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text('Keep',
-                            style: TextStyle(
-                                color: AppColors.textSecondary)),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(ctx, true),
-                        child: const Text('Cancel',
-                            style: TextStyle(
-                                color: AppColors.error,
-                                fontWeight: FontWeight.w600)),
-                      ),
-                    ],
-                  ),
-                );
-                if (confirmed == true) onCancel?.call();
-              },
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(Icons.cancel_outlined,
-                    color: AppColors.error, size: 16),
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -1528,6 +1180,7 @@ class _AccountSheet extends StatefulWidget {
   final VoidCallback onSwitchRole;
   final VoidCallback onShowLanguage;
   final VoidCallback onShowMapStyle;
+  final void Function(String? name, String? email) onShowAccountSecurity;
   final VoidCallback onSignOut;
 
   const _AccountSheet({
@@ -1537,6 +1190,7 @@ class _AccountSheet extends StatefulWidget {
     required this.onSwitchRole,
     required this.onShowLanguage,
     required this.onShowMapStyle,
+    required this.onShowAccountSecurity,
     required this.onSignOut,
     this.currentPos,
   });
@@ -1619,9 +1273,10 @@ class _AccountSheetState extends State<_AccountSheet> {
       );
       if (!mounted) return;
       final ok = resp.statusCode == 200;
+      final l = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
-            ? 'Test notification sent! Check your device.'
+            ? l.testNotificationSent
             : (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed'),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
@@ -1754,24 +1409,12 @@ class _AccountSheetState extends State<_AccountSheet> {
               ),
             ],
           ),
-          if (_co2Saved == null) ...[
-            const SizedBox(height: 12),
-            Shimmer.fromColors(
-              baseColor: AppColors.surface,
-              highlightColor: AppColors.border,
-              child: Container(
-                height: 52,
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ],
-          if (_co2Saved != null) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          const SizedBox(height: 12),
+          Skeletonizer(
+            enabled: _co2Saved == null,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 color: AppColors.success.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
@@ -1788,49 +1431,39 @@ class _AccountSheetState extends State<_AccountSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${_co2Saved!.toStringAsFixed(1)} kg CO₂ saved',
+                          '${(_co2Saved ?? 24.6).toStringAsFixed(1)} kg CO₂ saved',
                           style: const TextStyle(
                             color: AppColors.success,
                             fontSize: 13,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        if (_tripsCount != null && _tripsCount! > 0)
-                          Text(
-                            '$_tripsCount shared trip${_tripsCount! == 1 ? '' : 's'}',
-                            style: const TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 11),
-                          ),
+                        Text(
+                          '${_tripsCount ?? 8} shared trip${(_tripsCount ?? 8) == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 11),
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
           const SizedBox(height: 20),
           const Divider(color: AppColors.border),
           const SizedBox(height: 8),
           if (!widget.isGuest)
             _SheetTile(
               icon: Icons.manage_accounts_rounded,
-              label: 'Account & Security',
-              onTap: () => showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                builder: (_) => _AccountManagementSheet(
-                  userName: _userName,
-                  userEmail: _userEmail,
-                  onNameUpdated: (n) => setState(() => _userName = n),
-                ),
-              ),
+              label: l.accountSecurity,
+              onTap: () => widget.onShowAccountSecurity(_userName, _userEmail),
             ),
           if (!widget.isGuest)
             _SheetTile(
               icon: Icons.history_rounded,
-              label: 'Trip History',
+              label: l.tripHistory,
               onTap: () {
                 Navigator.pop(context);
                 Navigator.push(
@@ -1855,12 +1488,12 @@ class _AccountSheetState extends State<_AccountSheet> {
           ),
           _SheetTile(
             icon: Icons.map_rounded,
-            label: 'Map Style',
+            label: l.mapStyle,
             onTap: widget.onShowMapStyle,
           ),
           _SheetTile(
             icon: Icons.local_offer_rounded,
-            label: 'Promotions & Rewards',
+            label: l.promotionsAndRewards,
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context,
@@ -1870,7 +1503,7 @@ class _AccountSheetState extends State<_AccountSheet> {
           if (!widget.isGuest) ...[
             _SheetTile(
               icon: Icons.event_available_rounded,
-              label: 'Plan a Trip',
+              label: l.planATrip,
               onTap: () {
                 Navigator.pop(context);
                 showModalBottomSheet(
@@ -1883,7 +1516,7 @@ class _AccountSheetState extends State<_AccountSheet> {
             ),
             _SheetTile(
               icon: Icons.search_rounded,
-              label: 'Find Planned Trips',
+              label: l.findPlannedTrips,
               onTap: () {
                 Navigator.pop(context);
                 showModalBottomSheet(
@@ -1898,7 +1531,7 @@ class _AccountSheetState extends State<_AccountSheet> {
           if (!widget.isGuest)
             _SheetTile(
               icon: Icons.directions_car_rounded,
-              label: 'My Car',
+              label: l.myCar,
               onTap: () => showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.transparent,
@@ -1909,7 +1542,7 @@ class _AccountSheetState extends State<_AccountSheet> {
           if (!widget.isGuest)
             _SheetTile(
               icon: Icons.notifications_active_rounded,
-              label: 'Test Notification',
+              label: l.testNotification,
               trailing: _sending
                   ? const SizedBox(
                       width: 16,
@@ -1982,320 +1615,6 @@ class _SheetTile extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _AccountManagementSheet extends StatefulWidget {
-  final String? userName;
-  final String? userEmail;
-  final void Function(String name) onNameUpdated;
-
-  const _AccountManagementSheet({
-    required this.onNameUpdated,
-    this.userName,
-    this.userEmail,
-  });
-
-  @override
-  State<_AccountManagementSheet> createState() =>
-      _AccountManagementSheetState();
-}
-
-class _AccountManagementSheetState extends State<_AccountManagementSheet> {
-  late final TextEditingController _nameCtrl;
-  bool _savingName = false;
-  bool _showPasswordForm = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameCtrl = TextEditingController(text: widget.userName ?? '');
-  }
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _saveName() async {
-    final name = _nameCtrl.text.trim();
-    if (name.isEmpty) return;
-    setState(() => _savingName = true);
-    try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.put(
-        Uri.parse('$kApiBase/auth/profile'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'name': name}),
-      );
-      if (resp.statusCode == 200 && mounted) {
-        await TokenStorage().save(
-          token: jwt,
-          role: (await TokenStorage().getRole()) ?? '',
-          userId: (await TokenStorage().getUserId()) ?? '',
-          name: name,
-        );
-        if (!mounted) return;
-        widget.onNameUpdated(name);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Name updated'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-        ));
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _savingName = false);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-          24, 12, 24, MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).padding.bottom + 24),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40, height: 4,
-                margin: const EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const Text(
-              'Account & Security',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.email_outlined, color: AppColors.textSecondary, size: 18),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      widget.userEmail ?? '—',
-                      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (widget.userEmail != null) {
-                        Clipboard.setData(ClipboardData(text: widget.userEmail!));
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Email copied'),
-                          behavior: SnackBarBehavior.floating,
-                        ));
-                      }
-                    },
-                    child: const Icon(Icons.copy_rounded, color: AppColors.textSecondary, size: 16),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _nameCtrl,
-                    style: const TextStyle(color: AppColors.textPrimary),
-                    decoration: InputDecoration(
-                      labelText: 'Display name',
-                      labelStyle: const TextStyle(color: AppColors.textSecondary),
-                      filled: true,
-                      fillColor: AppColors.background,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                SizedBox(
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _savingName ? null : _saveName,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: _savingName
-                        ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
-                        : const Text('Save'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Divider(color: AppColors.border),
-            const SizedBox(height: 4),
-            _SheetTile(
-              icon: Icons.lock_outline_rounded,
-              label: 'Change Password',
-              onTap: () => setState(() => _showPasswordForm = !_showPasswordForm),
-            ),
-            if (_showPasswordForm) ...[
-              const SizedBox(height: 8),
-              _ChangePasswordForm(),
-            ],
-            const SizedBox(height: 8),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ChangePasswordForm extends StatefulWidget {
-  const _ChangePasswordForm();
-
-  @override
-  State<_ChangePasswordForm> createState() => _ChangePasswordFormState();
-}
-
-class _ChangePasswordFormState extends State<_ChangePasswordForm> {
-  final _currentCtrl = TextEditingController();
-  final _newCtrl = TextEditingController();
-  final _confirmCtrl = TextEditingController();
-  bool _saving = false;
-  String? _error;
-
-  @override
-  void dispose() {
-    _currentCtrl.dispose();
-    _newCtrl.dispose();
-    _confirmCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    setState(() => _error = null);
-    if (_newCtrl.text != _confirmCtrl.text) {
-      setState(() => _error = 'New passwords do not match');
-      return;
-    }
-    if (_newCtrl.text.length < 6) {
-      setState(() => _error = 'Password must be at least 6 characters');
-      return;
-    }
-    setState(() => _saving = true);
-    try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.post(
-        Uri.parse('$kApiBase/auth/change-password'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'current_password': _currentCtrl.text,
-          'new_password': _newCtrl.text,
-        }),
-      );
-      if (!mounted) return;
-      if (resp.statusCode == 200) {
-        _currentCtrl.clear();
-        _newCtrl.clear();
-        _confirmCtrl.clear();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Password updated'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-        ));
-        Navigator.pop(context);
-      } else {
-        final msg = (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        setState(() => _error = msg);
-      }
-    } catch (_) {
-      setState(() => _error = 'Network error');
-    }
-    if (mounted) setState(() => _saving = false);
-  }
-
-  Widget _field(TextEditingController ctrl, String label) => Padding(
-    padding: const EdgeInsets.only(bottom: 10),
-    child: TextField(
-      controller: ctrl,
-      obscureText: true,
-      style: const TextStyle(color: AppColors.textPrimary),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(color: AppColors.textSecondary),
-        filled: true,
-        fillColor: AppColors.background,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.border),
-        ),
-      ),
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _field(_currentCtrl, 'Current password'),
-        _field(_newCtrl, 'New password'),
-        _field(_confirmCtrl, 'Confirm new password'),
-        if (_error != null) ...[
-          const SizedBox(height: 4),
-          Text(_error!, style: const TextStyle(color: AppColors.error, fontSize: 12)),
-          const SizedBox(height: 8),
-        ],
-        ElevatedButton(
-          onPressed: _saving ? null : _submit,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.black,
-            minimumSize: const Size.fromHeight(48),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-          child: _saving
-              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
-              : const Text('Update Password'),
-        ),
-      ],
     );
   }
 }
@@ -2447,9 +1766,9 @@ class _MapStyleSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const Text(
-            'Map Style',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).mapStyle,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
               fontWeight: FontWeight.w700,

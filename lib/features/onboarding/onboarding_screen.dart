@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 import 'role_selection_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -13,32 +14,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _page = 0;
 
-  static const _pages = [
-    _PageData(
-      icon: Icons.route_rounded,
-      iconColor: AppColors.primary,
-      title: 'Smarter routes,\ntogether.',
-      subtitle:
-          'Drivers share their route and pick up passengers heading the same way. Less empty seats, less traffic.',
-    ),
-    _PageData(
-      icon: Icons.people_alt_rounded,
-      iconColor: AppColors.teal,
-      title: 'Real-time\nmatching.',
-      subtitle:
-          'Get matched with nearby riders or drivers instantly. No detours, no waiting — just your way.',
-    ),
-    _PageData(
-      icon: Icons.verified_rounded,
-      iconColor: Color(0xFFFFD166),
-      title: 'Safe and\ntransparent.',
-      subtitle:
-          'Every ride is tracked live. Mutual confirmations before any trip begins. Your safety first.',
-    ),
-  ];
+  List<_PageData> _buildPages(AppLocalizations l) => [
+        _PageData(
+          icon: Icons.route_rounded,
+          iconColor: AppColors.primary,
+          title: l.onboardTitle1,
+          subtitle: l.onboardSubtitle1,
+        ),
+        _PageData(
+          icon: Icons.people_alt_rounded,
+          iconColor: AppColors.teal,
+          title: l.onboardTitle2,
+          subtitle: l.onboardSubtitle2,
+        ),
+        _PageData(
+          icon: Icons.verified_rounded,
+          iconColor: const Color(0xFFFFD166),
+          title: l.onboardTitle3,
+          subtitle: l.onboardSubtitle3,
+        ),
+      ];
+
+  static const int _pageCount = 3;
 
   void _next() {
-    if (_page < _pages.length - 1) {
+    if (_page < _pageCount - 1) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 380),
         curve: Curves.easeInOut,
@@ -59,6 +59,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final pages = _buildPages(l);
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -74,9 +76,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     MaterialPageRoute(
                         builder: (_) => const RoleSelectionScreen()),
                   ),
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
+                  child: Text(
+                    l.skip,
+                    style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 15,
                     ),
@@ -87,9 +89,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: PageView.builder(
                 controller: _controller,
-                itemCount: _pages.length,
+                itemCount: pages.length,
                 onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (_, i) => _OnboardingPage(data: _pages[i]),
+                itemBuilder: (_, i) => _OnboardingPage(data: pages[i]),
               ),
             ),
             Padding(
@@ -99,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      _pages.length,
+                      pages.length,
                       (i) => AnimatedContainer(
                         duration: const Duration(milliseconds: 280),
                         margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -118,18 +120,47 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   SizedBox(
                     width: double.infinity,
                     height: 58,
-                    child: ElevatedButton(
-                      onPressed: _next,
-                      child: Text(
-                        _page == _pages.length - 1
-                            ? 'Get Started'
-                            : 'Continue',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                    child: _page == pages.length - 1
+                        ? FilledButton(
+                            onPressed: _next,
+                            style: FilledButton.styleFrom(
+                              minimumSize: const Size.fromHeight(58),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 220),
+                              child: Text(
+                                l.getStarted,
+                                key: const ValueKey('get-started'),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          )
+                        : FilledButton.tonal(
+                            onPressed: _next,
+                            style: FilledButton.styleFrom(
+                              minimumSize: const Size.fromHeight(58),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 220),
+                              child: Text(
+                                l.continueLabel,
+                                key: const ValueKey('continue'),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),

@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
 
 class _PlannedTrip {
@@ -42,6 +43,19 @@ class _PlannedTrip {
         seats: j['seats'] as int,
         status: j['status'] as String,
       );
+
+  /// Sentinel placeholder for Skeletonizer.
+  factory _PlannedTrip.skeleton() => _PlannedTrip(
+        id: '',
+        driverName: 'Loading driver',
+        carSummary: 'Toyota Corolla · White',
+        originName: 'Origin location',
+        destName: 'Destination location',
+        distanceKm: 12.0,
+        plannedAt: DateTime.now(),
+        seats: 2,
+        status: 'open',
+      );
 }
 
 enum _SortBy { distance, time, destination }
@@ -72,9 +86,10 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
   }
 
   Future<void> _search() async {
+    final l = AppLocalizations.of(context);
     final origin = widget.currentPos;
     if (origin == null) {
-      setState(() => _error = 'Location not available');
+      setState(() => _error = l.locationNotAvailable);
       return;
     }
     setState(() {
@@ -109,7 +124,7 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
         });
       }
     } catch (_) {
-      setState(() => _error = 'Network error');
+      setState(() => _error = l.networkError);
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -128,8 +143,9 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
       );
       if (!mounted) return;
       final ok = resp.statusCode == 200;
+      final l = AppLocalizations.of(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(ok ? 'Request sent!' : 'Failed to send request'),
+        content: Text(ok ? l.requestSent : l.requestFailed),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
@@ -251,17 +267,14 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
 
           if (_loading) ...[
             const SizedBox(height: 16),
-            ...List.generate(
-              3,
-              (_) => Shimmer.fromColors(
-                baseColor: AppColors.surface,
-                highlightColor: AppColors.border,
-                child: Container(
-                  height: 72,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(14),
+            Skeletonizer(
+              enabled: true,
+              child: Column(
+                children: List.generate(
+                  3,
+                  (_) => _TripCard(
+                    trip: _PlannedTrip.skeleton(),
+                    onRequest: () {},
                   ),
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 
 class _Promotion {
   final String id;
@@ -90,6 +91,7 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final active = _promos.where((p) => !p.isExpired).toList();
     final expired = _promos.where((p) => p.isExpired).toList();
 
@@ -102,9 +104,9 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
           icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Promotions & Rewards',
-          style: TextStyle(
+        title: Text(
+          l.promotionsAndRewards,
+          style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.w700),
@@ -122,7 +124,7 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
               children: [
                 if (active.isNotEmpty) ...[
                   _SectionHeader(
-                      label: 'Active Offers',
+                      label: l.activeOffers,
                       icon: Icons.bolt_rounded,
                       color: AppColors.teal),
                   const SizedBox(height: 10),
@@ -131,7 +133,7 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
                 ],
                 if (expired.isNotEmpty) ...[
                   _SectionHeader(
-                      label: 'Expired',
+                      label: l.expired,
                       icon: Icons.history_rounded,
                       color: AppColors.textSecondary),
                   const SizedBox(height: 10),
@@ -142,12 +144,12 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 60),
                       child: Column(
-                        children: const [
-                          Icon(Icons.local_offer_outlined,
+                        children: [
+                          const Icon(Icons.local_offer_outlined,
                               color: AppColors.border, size: 52),
-                          SizedBox(height: 16),
-                          Text('No promotions available',
-                              style: TextStyle(
+                          const SizedBox(height: 16),
+                          Text(l.noPromotions,
+                              style: const TextStyle(
                                   color: AppColors.textSecondary,
                                   fontSize: 15)),
                         ],
@@ -279,7 +281,7 @@ class _PromoCard extends StatelessWidget {
                         const Spacer(),
                         Text(
                           expired
-                              ? 'Expired'
+                              ? AppLocalizations.of(context).expired
                               : daysLeft == 0
                                   ? 'Expires today'
                                   : 'Expires in $daysLeft days',

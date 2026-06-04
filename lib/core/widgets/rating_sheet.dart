@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../api_client.dart';
 import '../app_colors.dart';
+import '../app_localizations.dart';
 import '../token_storage.dart';
 
 class RatingSheet extends StatefulWidget {
@@ -53,7 +54,7 @@ class _RatingSheetState extends State<RatingSheet> {
           'comment': _commentCtrl.text.trim(),
         }),
       );
-      if (mounted) Navigator.pop(context);
+      if (mounted) Navigator.pop(context, true);
     } catch (_) {
       if (mounted) setState(() => _submitting = false);
     }
@@ -61,6 +62,8 @@ class _RatingSheetState extends State<RatingSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final isPassengerRated = widget.ratedUserLabel.toLowerCase() == 'passenger';
     return Container(
       padding: EdgeInsets.fromLTRB(
           24, 20, 24, MediaQuery.of(context).viewInsets.bottom + 24),
@@ -81,7 +84,7 @@ class _RatingSheetState extends State<RatingSheet> {
           ),
           const SizedBox(height: 20),
           Text(
-            'Rate your ${widget.ratedUserLabel}',
+            isPassengerRated ? l.rateYourPassenger : l.rateYourDriver,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
@@ -89,9 +92,10 @@ class _RatingSheetState extends State<RatingSheet> {
             ),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'How was your experience?',
-            style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+          Text(
+            l.howWasExperience,
+            style: const TextStyle(
+                color: AppColors.textSecondary, fontSize: 13),
           ),
           const SizedBox(height: 24),
           Row(
@@ -116,7 +120,7 @@ class _RatingSheetState extends State<RatingSheet> {
             controller: _commentCtrl,
             style: const TextStyle(color: Colors.white, fontSize: 14),
             decoration: InputDecoration(
-              hintText: 'Add a comment (optional)',
+              hintText: l.addCommentOptional,
               hintStyle: const TextStyle(
                   color: AppColors.textSecondary, fontSize: 13),
               filled: true,
@@ -153,8 +157,8 @@ class _RatingSheetState extends State<RatingSheet> {
                       child: CircularProgressIndicator(
                           strokeWidth: 2, color: Colors.white),
                     )
-                  : const Text('Submit',
-                      style: TextStyle(
+                  : Text(l.submit,
+                      style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600)),
             ),
@@ -164,8 +168,8 @@ class _RatingSheetState extends State<RatingSheet> {
             width: double.infinity,
             child: TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Skip',
-                  style: TextStyle(color: AppColors.textSecondary)),
+              child: Text(l.skipRating,
+                  style: const TextStyle(color: AppColors.textSecondary)),
             ),
           ),
         ],

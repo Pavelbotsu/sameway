@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
 
 class TripHistoryScreen extends StatefulWidget {
@@ -53,15 +54,16 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         foregroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Trip History',
-          style: TextStyle(
+        title: Text(
+          l.tripHistory,
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w700,
             fontSize: 17,
@@ -72,39 +74,30 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: _loading
-          ? _buildShimmer()
-          : _trips.isEmpty
-              ? _buildEmpty()
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _trips.length,
-                  itemBuilder: (_, i) =>
-                      _TripCard(trip: _trips[i], userId: _userId ?? ''),
-                ),
-    );
-  }
-
-  Widget _buildShimmer() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: 6,
-      itemBuilder: (_, __) => Shimmer.fromColors(
-        baseColor: AppColors.surface,
-        highlightColor: AppColors.border,
-        child: Container(
-          height: 80,
-          margin: const EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
+      body: Skeletonizer(
+        enabled: _loading,
+        child: _loading
+            ? ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: 6,
+                itemBuilder: (_, __) =>
+                    _TripCard(trip: _TripItem.skeleton(), userId: ''),
+              )
+            : _trips.isEmpty
+                ? _buildEmpty()
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: _trips.length,
+                    itemBuilder: (_, i) =>
+                        _TripCard(trip: _trips[i], userId: _userId ?? ''),
+                  ),
       ),
     );
   }
 
+
   Widget _buildEmpty() {
+    final l = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -122,19 +115,19 @@ class _TripHistoryScreenState extends State<TripHistoryScreen> {
                   color: AppColors.textSecondary, size: 30),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'No trips yet',
-              style: TextStyle(
+            Text(
+              l.noTripsYet,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 17,
                 fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Complete your first ride to see it here.',
+            Text(
+              l.firstRidePrompt,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 13,
                 height: 1.5,
@@ -173,6 +166,17 @@ class _TripItem {
         completedAt: j['completed_at'] != null
             ? DateTime.tryParse(j['completed_at'] as String) ?? DateTime.now()
             : DateTime.now(),
+      );
+
+  /// Sentinel placeholder used by Skeletonizer so the loaded layout
+  /// and the loading layout share the exact same widget tree dimensions.
+  factory _TripItem.skeleton() => _TripItem(
+        id: '',
+        driverId: '',
+        passengerId: '',
+        distanceKm: 12.0,
+        co2SavedKg: 1.8,
+        completedAt: DateTime.now(),
       );
 }
 

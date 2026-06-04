@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
+import '../../core/validators/validators.dart';
 
 class _Suggestion {
   final String name;
@@ -97,12 +99,13 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
   }
 
   Future<void> _submit() async {
+    final l = AppLocalizations.of(context);
     if (_originSug == null) {
-      setState(() => _error = 'Select an origin location');
+      setState(() => _error = l.selectOriginLocation);
       return;
     }
     if (_destSug == null) {
-      setState(() => _error = 'Select a destination location');
+      setState(() => _error = l.selectDestinationLocation);
       return;
     }
     setState(() {
@@ -119,10 +122,12 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'origin_name': _originSug!.name.split(',').first,
+          'origin_name':
+              TextSanitizer.sanitize(_originSug!.name.split(',').first),
           'origin_lat': _originSug!.lat,
           'origin_lng': _originSug!.lng,
-          'dest_name': _destSug!.name.split(',').first,
+          'dest_name':
+              TextSanitizer.sanitize(_destSug!.name.split(',').first),
           'dest_lat': _destSug!.lat,
           'dest_lng': _destSug!.lng,
           'seats': _seats,
@@ -134,8 +139,8 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
       if (resp.statusCode == 200) {
         final messenger = ScaffoldMessenger.of(context);
         Navigator.pop(context);
-        messenger.showSnackBar(const SnackBar(
-          content: Text('Trip planned successfully!'),
+        messenger.showSnackBar(SnackBar(
+          content: Text(l.tripPlannedSuccess),
           backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ));
@@ -144,7 +149,7 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
         setState(() => _error = msg);
       }
     } catch (_) {
-      setState(() => _error = 'Network error');
+      setState(() => _error = l.networkError);
     }
     if (mounted) setState(() => _submitting = false);
   }
@@ -310,6 +315,7 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
       padding: EdgeInsets.fromLTRB(
           24, 12, 24, MediaQuery.of(context).padding.bottom + 24),
       child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

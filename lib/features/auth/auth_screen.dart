@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/fcm_service.dart';
+import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
 import '../driver/driver_home_screen.dart';
 import '../passenger/passenger_home_screen.dart';
@@ -51,14 +52,16 @@ class _AuthScreenState extends State<AuthScreen>
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     final auth = context.read<AuthProvider>();
+    final email = TextSanitizer.sanitize(_email.text).toLowerCase();
+    final name = TextSanitizer.sanitize(_name.text);
     final ok = _isLogin
         ? await auth.login(
-            email: _email.text.trim(),
+            email: email,
             password: _password.text,
           )
         : await auth.register(
-            name: _name.text.trim(),
-            email: _email.text.trim(),
+            name: name,
+            email: email,
             password: _password.text,
             role: widget.role,
           );
@@ -93,6 +96,7 @@ class _AuthScreenState extends State<AuthScreen>
         child: FadeTransition(
           opacity: _fade,
           child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,36 +125,47 @@ class _AuthScreenState extends State<AuthScreen>
                       if (!_isLogin) ...[
                         _Field(
                           controller: _name,
-                          hint: 'Full name',
+                          hint: l.fullName,
                           icon: Icons.person_outline_rounded,
                           validator: (v) =>
-                              (v?.isEmpty ?? true) ? 'Required' : null,
+                              RequiredValidator.validate(v, l),
                         ),
                         const SizedBox(height: 12),
                       ],
                       _Field(
                         controller: _email,
-                        hint: 'Email address',
+                        hint: l.emailAddress,
                         icon: Icons.email_outlined,
                         type: TextInputType.emailAddress,
-                        validator: (v) =>
-                            (v?.contains('@') ?? false) ? null : 'Invalid email',
+                        validator: (v) => EmailValidator.validate(v, l),
                       ),
                       const SizedBox(height: 12),
                       _Field(
                         controller: _password,
-                        hint: 'Password',
+                        hint: l.password,
                         icon: Icons.lock_outline_rounded,
                         obscure: _obscure,
-                        validator: (v) =>
-                            (v?.length ?? 0) >= 6 ? null : 'Min 6 characters',
+                        validator: (v) => PasswordValidator.validate(v, l),
                         suffix: IconButton(
-                          icon: Icon(
-                            _obscure
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color: AppColors.textSecondary,
-                            size: 20,
+                          icon: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 220),
+                            switchInCurve: Curves.easeOutCubic,
+                            transitionBuilder: (child, anim) => RotationTransition(
+                              turns: Tween<double>(begin: 0.75, end: 1.0)
+                                  .animate(anim),
+                              child: FadeTransition(
+                                opacity: anim,
+                                child: child,
+                              ),
+                            ),
+                            child: Icon(
+                              _obscure
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              key: ValueKey(_obscure),
+                              color: AppColors.textSecondary,
+                              size: 20,
+                            ),
                           ),
                           onPressed: () =>
                               setState(() => _obscure = !_obscure),
@@ -170,32 +185,39 @@ class _AuthScreenState extends State<AuthScreen>
                       SizedBox(
                         width: double.infinity,
                         height: 56,
-                        child: ElevatedButton(
+                        child: FilledButton(
                           onPressed: auth.status == AuthStatus.loading
                               ? null
                               : _submit,
-                          style: ElevatedButton.styleFrom(
+                          style: FilledButton.styleFrom(
                             backgroundColor: _roleColor,
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
+                            minimumSize: const Size.fromHeight(56),
                           ),
-                          child: auth.status == AuthStatus.loading
-                              ? const SizedBox(
-                                  width: 22,
-                                  height: 22,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.5,
-                                    color: Colors.white,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            child: auth.status == AuthStatus.loading
+                                ? const SizedBox(
+                                    key: ValueKey('loading'),
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.5,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    _isLogin ? l.signIn : l.createAccount,
+                                    key: ValueKey(_isLogin ? 'in' : 'up'),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  _isLogin ? l.signIn : l.createAccount,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                          ),
                         ),
                       ),
                     ],
@@ -250,9 +272,7 @@ class _AuthScreenState extends State<AuthScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _isLogin
-                          ? "Don't have an account? "
-                          : 'Already have an account? ',
+                      _isLogin ? l.noAccountYet : l.alreadyHaveAccount,
                       style: const TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 14,
