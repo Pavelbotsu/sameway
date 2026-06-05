@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:latlong2/latlong.dart';
 import '../../core/websocket_client.dart';
 import 'passenger_repository.dart';
 
@@ -120,6 +121,36 @@ class PassengerProvider extends ChangeNotifier {
   String? pendingRatingDriverId;
   String? awaitingRatingRequestId;
   Timer? _ratingWaitTimeout;
+
+  LatLng? destinationPos;
+  String? plannedRouteWkt;
+  double? plannedDistanceKm;
+  bool isSearching = false;
+
+  Future<void> setSearchDestination(LatLng dest) async {
+    destinationPos = dest;
+    isSearching = true;
+    notifyListeners();
+    try {
+      final data = await _repo.search(
+        destLat: dest.latitude,
+        destLng: dest.longitude,
+      );
+      plannedRouteWkt = (data['route_wkt'] as String?) ?? '';
+      plannedDistanceKm = (data['distance_km'] as num?)?.toDouble() ?? 0;
+    } catch (e) {
+      error = e.toString();
+    }
+    notifyListeners();
+  }
+
+  void clearSearchDestination() {
+    destinationPos = null;
+    plannedRouteWkt = null;
+    plannedDistanceKm = null;
+    isSearching = false;
+    notifyListeners();
+  }
   StreamSubscription? _wsSub;
   StreamSubscription? _wsStateSub;
 
@@ -362,6 +393,7 @@ class PassengerProvider extends ChangeNotifier {
     try {
       await _repo.goOffline();
     } catch (_) {}
+    clearSearchDestination();
   }
 
   void clearPendingRating() {

@@ -42,6 +42,38 @@ class DriverProvider extends ChangeNotifier {
   String? pendingRatingPassengerId;
   Timer? _ratingWaitTimeout;
 
+  PickupRoute? pickupRoute;
+  LatLng? _lastPickupComputedAt;
+  DateTime _lastPickupComputeTime =
+      DateTime.fromMillisecondsSinceEpoch(0);
+
+  // Rolling EMA of observed speed (km/h), computed from successive
+  // updateLocation() samples. Used for the ETA badge.
+  double? rollingAvgSpeedKmh;
+  LatLng? _lastMyPos;
+  DateTime _lastMyPosTime = DateTime.fromMillisecondsSinceEpoch(0);
+
+  Future<void> _maybeRefreshPickupRoute(
+      String requestId, LatLng passengerPos) async {
+    if (requestId != acceptedRequestId) return;
+    final now = DateTime.now();
+    final tooSoon =
+        now.difference(_lastPickupComputeTime) < const Duration(seconds: 30);
+    final movedFar = _lastPickupComputedAt == null ||
+        geoDistanceKm(_lastPickupComputedAt!, passengerPos) > 0.5;
+    if (pickupRoute != null && tooSoon) return;
+    if (pickupRoute != null && !movedFar) return;
+    _lastPickupComputeTime = now;
+    _lastPickupComputedAt = passengerPos;
+    try {
+      final r = await _repo.getPickupRoute(requestId);
+      if (acceptedRequestId == requestId) {
+        pickupRoute = r.isEmpty ? null : r;
+        notifyListeners();
+      }
+    } catch (_) {}
+  }
+
   double? distanceToDestinationKm(LatLng? myPos) {
     if (myPos == null || destinationPos == null) return null;
     return geoDistanceKm(myPos, destinationPos!);
@@ -107,6 +139,7 @@ class DriverProvider extends ChangeNotifier {
         acceptedPassengerName = null;
         acceptedPassengerAvgRating = null;
         acceptedPassengerRatingCount = null;
+        _clearPickupRoute();
       }
       if (reqId != null) {
         passengerLocations.remove(reqId);
@@ -129,6 +162,10 @@ class DriverProvider extends ChangeNotifier {
         acceptedPassengerName = name;
         acceptedPassengerAvgRating = avg;
         acceptedPassengerRatingCount = count;
+        final loc = passengerLocations[reqId];
+        if (loc != null) {
+          _maybeRefreshPickupRoute(reqId, LatLng(loc.lat, loc.lng));
+        }
       }
       loadRequests();
     } else if (type == 'passenger_request') {
@@ -150,6 +187,9 @@ class DriverProvider extends ChangeNotifier {
       if (reqId != null && lat != null && lng != null) {
         passengerLocations[reqId] = PeerLatLng(lat, lng);
         notifyListeners();
+        if (reqId == acceptedRequestId) {
+          _maybeRefreshPickupRoute(reqId, LatLng(lat, lng));
+        }
       }
     } else if (type == 'ride_done') {
       final reqId = p['request_id'] as String?;
@@ -220,6 +260,10 @@ class DriverProvider extends ChangeNotifier {
         acceptedPassengerName = info?.name;
         acceptedPassengerAvgRating = info?.avgRating;
         acceptedPassengerRatingCount = info?.ratingCount;
+        final loc = passengerLocations[requestId];
+        if (loc != null) {
+          _maybeRefreshPickupRoute(requestId, LatLng(loc.lat, loc.lng));
+        }
       } else {
         passengerInfo.remove(requestId);
         passengerLocations.remove(requestId);
@@ -247,6 +291,7 @@ class DriverProvider extends ChangeNotifier {
       acceptedPassengerRatingCount = null;
       passengerInfo.remove(requestId);
       passengerLocations.remove(requestId);
+      _clearPickupRoute();
       await loadRequests();
     } catch (e) {
       error = e.toString();
@@ -274,8 +319,15 @@ class DriverProvider extends ChangeNotifier {
     requests = [];
     activeRoute = null;
     destinationPos = null;
+    _clearPickupRoute();
     unreadMessages = 0;
     notifyListeners();
+  }
+
+  void _clearPickupRoute() {
+    pickupRoute = null;
+    _lastPickupComputedAt = null;
+    _lastPickupComputeTime = DateTime.fromMillisecondsSinceEpoch(0);
   }
 
   Future<void> deleteRoute() async {
@@ -290,6 +342,7 @@ class DriverProvider extends ChangeNotifier {
       passengerInfo.clear();
       passengerLocations.clear();
       destinationPos = null;
+      _clearPickupRoute();
       unreadMessages = 0;
       error = null;
       notifyListeners();
@@ -300,6 +353,22 @@ class DriverProvider extends ChangeNotifier {
   }
 
   Future<void> updateLocation(double lat, double lng) async {
+    final now = DateTime.now();
+    final newPos = LatLng(lat, lng);
+    if (_lastMyPos != null) {
+      final dtSec =
+          now.difference(_lastMyPosTime).inMilliseconds / 1000.0;
+      if (dtSec >= 5) {
+        final km = geoDistanceKm(_lastMyPos!, newPos);
+        final kmh = km / (dtSec / 3600.0);
+        final clamped = kmh.clamp(5.0, 130.0);
+        rollingAvgSpeedKmh = rollingAvgSpeedKmh == null
+            ? clamped
+            : (0.3 * clamped) + (0.7 * rollingAvgSpeedKmh!);
+      }
+    }
+    _lastMyPos = newPos;
+    _lastMyPosTime = now;
     try {
       await _repo.updateLocation(lat, lng);
     } catch (_) {}

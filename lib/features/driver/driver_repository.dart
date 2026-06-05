@@ -28,6 +28,23 @@ class RouteResult {
         notifiedCount = (j['notified_count'] as num).toInt();
 }
 
+class PickupRoute {
+  final String pickupWkt;
+  final double pickupDistanceKm;
+  final String continuationWkt;
+  final double continuationDistanceKm;
+
+  PickupRoute.fromJson(Map<String, dynamic> j)
+      : pickupWkt = (j['pickup_wkt'] as String?) ?? '',
+        pickupDistanceKm =
+            (j['pickup_distance_km'] as num?)?.toDouble() ?? 0,
+        continuationWkt = (j['continuation_wkt'] as String?) ?? '',
+        continuationDistanceKm =
+            (j['continuation_distance_km'] as num?)?.toDouble() ?? 0;
+
+  bool get isEmpty => pickupWkt.isEmpty && continuationWkt.isEmpty;
+}
+
 class DriverRepository {
   final ApiClient _api;
   DriverRepository(this._api);
@@ -88,5 +105,10 @@ class DriverRepository {
       {'request_id': requestId, 'status': status},
       auth: true,
     );
+  }
+
+  Future<PickupRoute> getPickupRoute(String requestId) async {
+    final data = await _api.get('/driver/pickup-route/$requestId', auth: true);
+    return PickupRoute.fromJson(data as Map<String, dynamic>);
   }
 }

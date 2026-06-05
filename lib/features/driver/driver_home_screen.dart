@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
-import '../../core/language_provider.dart';
 import '../../core/map_style_provider.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
+import '../../core/widgets/language_sheet.dart';
 import '../../core/widgets/rating_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
 import '../../core/widgets/role_switch_sheet.dart';
@@ -48,6 +48,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   late VoidCallback _providerListener;
   late VoidCallback _ratingListener;
   StreamSubscription<PassengerMatchInfo>? _incomingSub;
+  bool _hasFitPickupCamera = false;
 
   @override
   void initState() {
@@ -253,11 +254,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   void _showLanguageSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const _LanguageSheet(),
-    );
+    LanguageSheet.show(context);
   }
 
   void _showMapStyleSheet() {
@@ -426,6 +423,45 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               final routePoints = driver.activeRoute != null
                   ? _parseWKT(driver.activeRoute!.routeWkt)
                   : <LatLng>[];
+              final pickup = driver.pickupRoute;
+              final pickupPts = pickup == null
+                  ? const <LatLng>[]
+                  : _parseWKT(pickup.pickupWkt);
+              final continuationPts = pickup == null
+                  ? const <LatLng>[]
+                  : _parseWKT(pickup.continuationWkt);
+
+              // One-shot camera fit when a pickup route first arrives.
+              final accepted = driver.acceptedRequestId;
+              final passengerPeer = accepted == null
+                  ? null
+                  : driver.passengerLocations[accepted];
+              if (pickup != null &&
+                  !_hasFitPickupCamera &&
+                  _myPos != null &&
+                  passengerPeer != null &&
+                  driver.destinationPos != null) {
+                _hasFitPickupCamera = true;
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (!mounted) return;
+                  try {
+                    _mapController.fitCamera(
+                      CameraFit.bounds(
+                        bounds: LatLngBounds.fromPoints([
+                          _myPos!,
+                          LatLng(passengerPeer.lat, passengerPeer.lng),
+                          driver.destinationPos!,
+                        ]),
+                        padding: const EdgeInsets.fromLTRB(40, 80, 40, 240),
+                      ),
+                    );
+                  } catch (_) {}
+                });
+              }
+              if (pickup == null && _hasFitPickupCamera) {
+                _hasFitPickupCamera = false;
+              }
+
               return FlutterMap(
                 mapController: _mapController,
                 options: MapOptions(
@@ -439,25 +475,67 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                       userAgentPackageName: 'com.example.sameway',
                     ),
                   ),
-                  if (routePoints.isNotEmpty)
+                  if (routePoints.isNotEmpty ||
+                      pickupPts.isNotEmpty ||
+                      continuationPts.isNotEmpty)
                     PolylineLayer(
                       polylines: [
-                        Polyline(
-                          points: routePoints,
-                          color: AppColors.primary,
-                          strokeWidth: 5,
-                        ),
+                        if (routePoints.isNotEmpty)
+                          Polyline(
+                            points: routePoints,
+                            color: AppColors.primary,
+                            strokeWidth: 5,
+                          ),
+                        if (continuationPts.isNotEmpty)
+                          Polyline(
+                            points: continuationPts,
+                            color: const Color(0xFF43A047),
+                            strokeWidth: 5,
+                          ),
+                        if (pickupPts.isNotEmpty)
+                          Polyline(
+                            points: pickupPts,
+                            color: const Color(0xFFFF9800),
+                            strokeWidth: 5,
+                          ),
                       ],
                     ),
-                  if (_myPos != null)
+                  if (_myPos != null || passengerPeer != null)
                     MarkerLayer(
                       markers: [
-                        Marker(
-                          point: _myPos!,
-                          width: 56,
-                          height: 56,
-                          child: _MyLocationMarker(color: AppColors.primary),
-                        ),
+                        if (_myPos != null)
+                          Marker(
+                            point: _myPos!,
+                            width: 56,
+                            height: 56,
+                            child:
+                                _MyLocationMarker(color: AppColors.primary),
+                          ),
+                        if (passengerPeer != null)
+                          Marker(
+                            point: LatLng(
+                                passengerPeer.lat, passengerPeer.lng),
+                            width: 36,
+                            height: 36,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.teal,
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: AppColors.teal
+                                        .withValues(alpha: 0.5),
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(Icons.person_rounded,
+                                  color: Colors.white, size: 20),
+                            ),
+                          ),
                       ],
                     ),
                 ],
@@ -560,6 +638,26 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 ),
               ),
             ),
+          ),
+
+          // Pickup-route distance + ETA pill (only while a pickup route is active).
+          Consumer<DriverProvider>(
+            builder: (_, driver, __) {
+              final pickup = driver.pickupRoute;
+              if (pickup == null) return const SizedBox.shrink();
+              return Positioned(
+                top: MediaQuery.of(context).viewPadding.top + 72,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: _PickupEtaPill(
+                    pickupKm: pickup.pickupDistanceKm,
+                    continuationKm: pickup.continuationDistanceKm,
+                    speedKmh: driver.rollingAvgSpeedKmh,
+                  ),
+                ),
+              );
+            },
           ),
 
           // Bottom panel
@@ -1619,127 +1717,6 @@ class _SheetTile extends StatelessWidget {
   }
 }
 
-class _LanguageSheet extends StatelessWidget {
-  const _LanguageSheet();
-
-  @override
-  Widget build(BuildContext context) {
-    final langProvider = context.watch<LanguageProvider>();
-    final currentCode = langProvider.locale.languageCode;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: const EdgeInsets.fromLTRB(24, 12, 24, 48),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 24),
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const Text(
-            'Language / Мова',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.3,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _LangOption(
-            label: 'English',
-            code: 'en',
-            selected: currentCode == 'en',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('en'));
-              Navigator.pop(context);
-            },
-          ),
-          const SizedBox(height: 10),
-          _LangOption(
-            label: 'Українська',
-            code: 'uk',
-            selected: currentCode == 'uk',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('uk'));
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LangOption extends StatelessWidget {
-  final String label;
-  final String code;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _LangOption({
-    required this.label,
-    required this.code,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.12)
-              : AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected
-                ? AppColors.primary.withValues(alpha: 0.4)
-                : AppColors.border,
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(
-              code == 'en' ? '🇬🇧' : '🇺🇦',
-              style: const TextStyle(fontSize: 22),
-            ),
-            const SizedBox(width: 14),
-            Text(
-              label,
-              style: TextStyle(
-                color:
-                    selected ? Colors.white : AppColors.textSecondary,
-                fontSize: 15,
-                fontWeight:
-                    selected ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-            const Spacer(),
-            if (selected)
-              const Icon(Icons.check_rounded,
-                  color: AppColors.primary, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _MapStyleSheet extends StatelessWidget {
   const _MapStyleSheet();
 
@@ -1946,6 +1923,92 @@ class _GuestSignInSheet extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _PickupEtaPill extends StatelessWidget {
+  final double pickupKm;
+  final double continuationKm;
+  final double? speedKmh;
+
+  const _PickupEtaPill({
+    required this.pickupKm,
+    required this.continuationKm,
+    this.speedKmh,
+  });
+
+  int _etaMin(double km) {
+    final s = (speedKmh ?? 30).clamp(15, 130);
+    final mins = (km / s) * 60;
+    return mins < 1 ? 1 : mins.round();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GlassCard(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        borderRadius: 18,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (pickupKm > 0) ...[
+              _LegChip(
+                color: const Color(0xFFFF9800),
+                label: 'Pickup',
+                km: pickupKm,
+                etaMin: _etaMin(pickupKm),
+              ),
+              if (continuationKm > 0) const SizedBox(width: 10),
+            ],
+            if (continuationKm > 0)
+              _LegChip(
+                color: const Color(0xFF43A047),
+                label: 'Continue',
+                km: continuationKm,
+                etaMin: _etaMin(continuationKm),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LegChip extends StatelessWidget {
+  final Color color;
+  final String label;
+  final double km;
+  final int etaMin;
+  const _LegChip({
+    required this.color,
+    required this.label,
+    required this.km,
+    required this.etaMin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          '$label ${km.toStringAsFixed(1)} km · $etaMin min',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

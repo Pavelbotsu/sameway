@@ -31,6 +31,17 @@ class PassengerRepository {
     await _api.delete('/passenger/active', auth: true);
   }
 
+  Future<Map<String, dynamic>> search({
+    required double destLat,
+    required double destLng,
+  }) {
+    return _api.post(
+      '/passenger/search',
+      {'dest_lat': destLat, 'dest_lng': destLng},
+      auth: true,
+    );
+  }
+
   Future<Map<String, dynamic>> requestDriver(String driverId) async {
     return _api.post(
       '/passenger/request-driver',

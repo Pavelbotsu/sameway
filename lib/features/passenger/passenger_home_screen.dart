@@ -11,12 +11,12 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
-import '../../core/language_provider.dart';
 import '../../core/map_style_provider.dart';
 import '../../core/token_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
+import '../../core/widgets/language_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
 import '../../core/widgets/m3_expressive/wave_progress_indicator.dart';
 import '../../core/widgets/role_switch_sheet.dart';
@@ -283,11 +283,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   }
 
   void _showLanguageSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const _LanguageSheet(),
-    );
+    LanguageSheet.show(context);
   }
 
   void _showMapStyleSheet() {
@@ -473,6 +469,25 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                       ),
                     ],
                   ),
+                Consumer<PassengerProvider>(
+                  builder: (_, p, __) {
+                    final wkt = p.plannedRouteWkt;
+                    if (wkt == null || wkt.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    final pts = _parseWKT(wkt);
+                    if (pts.isEmpty) return const SizedBox.shrink();
+                    return PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: pts,
+                          color: AppColors.teal,
+                          strokeWidth: 3,
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 if (_nearbyDrivers.isNotEmpty)
                   MarkerLayer(
                     markers: _nearbyDrivers
@@ -712,6 +727,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                     _destPos = null;
                     _destName = '';
                   });
+                  if (!widget.isGuest) {
+                    context
+                        .read<PassengerProvider>()
+                        .clearSearchDestination();
+                  }
                   _fetchNearbyDrivers();
                 },
               ),
@@ -1085,7 +1105,9 @@ class _LookingCardState extends State<_LookingCard> {
   void _select(_PlaceSuggestion s) {
     _ctrl.text = s.name.split(',').first.trim();
     setState(() => _suggestions = []);
-    widget.onDestinationSet(LatLng(s.lat, s.lng), s.name);
+    final pos = LatLng(s.lat, s.lng);
+    widget.onDestinationSet(pos, s.name);
+    context.read<PassengerProvider>().setSearchDestination(pos);
   }
 
   @override
@@ -1218,6 +1240,62 @@ class _LookingCardState extends State<_LookingCard> {
               },
             ),
           ),
+        // "Searching for drivers heading your way" copy + wave indicator.
+        Consumer<PassengerProvider>(
+          builder: (_, p, __) {
+            if (!p.isSearching || widget.outstandingRequests.isNotEmpty) {
+              return const SizedBox.shrink();
+            }
+            final km = p.plannedDistanceKm;
+            return Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                decoration: BoxDecoration(
+                  color: AppColors.card,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                      color: AppColors.teal.withValues(alpha: 0.35)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.travel_explore_rounded,
+                            color: AppColors.teal, size: 18),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Text(
+                            'Searching for drivers heading your way…',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (km != null && km > 0) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        '${km.toStringAsFixed(1)} km route · '
+                        "we'll notify you when one is found.",
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 10),
+                    const WaveProgressIndicator(height: 4),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
         if (widget.outstandingRequests.isNotEmpty) ...[
           const SizedBox(height: 16),
           ...widget.outstandingRequests.map(
@@ -2636,127 +2714,6 @@ class _SheetTile extends StatelessWidget {
             trailing ??
                 Icon(Icons.chevron_right_rounded,
                     color: AppColors.textSecondary, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _LanguageSheet extends StatelessWidget {
-  const _LanguageSheet();
-
-  @override
-  Widget build(BuildContext context) {
-    final langProvider = context.watch<LanguageProvider>();
-    final currentCode = langProvider.locale.languageCode;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: const EdgeInsets.fromLTRB(24, 12, 24, 48),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 24),
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const Text(
-            'Language / Мова',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.3,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _LangOption(
-            label: 'English',
-            code: 'en',
-            selected: currentCode == 'en',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('en'));
-              Navigator.pop(context);
-            },
-          ),
-          const SizedBox(height: 10),
-          _LangOption(
-            label: 'Українська',
-            code: 'uk',
-            selected: currentCode == 'uk',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('uk'));
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LangOption extends StatelessWidget {
-  final String label;
-  final String code;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _LangOption({
-    required this.label,
-    required this.code,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.teal.withValues(alpha: 0.12)
-              : AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected
-                ? AppColors.teal.withValues(alpha: 0.4)
-                : AppColors.border,
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(
-              code == 'en' ? '🇬🇧' : '🇺🇦',
-              style: const TextStyle(fontSize: 22),
-            ),
-            const SizedBox(width: 14),
-            Text(
-              label,
-              style: TextStyle(
-                color:
-                    selected ? Colors.white : AppColors.textSecondary,
-                fontSize: 15,
-                fontWeight:
-                    selected ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-            const Spacer(),
-            if (selected)
-              const Icon(Icons.check_rounded,
-                  color: AppColors.teal, size: 20),
           ],
         ),
       ),

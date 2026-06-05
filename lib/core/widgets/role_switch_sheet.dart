@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../api_client.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../token_storage.dart';
 import '../../features/auth/auth_repository.dart';
+import '../../features/driver/driver_provider.dart';
+import '../../features/passenger/passenger_provider.dart';
 
 class RoleSwitchSheet extends StatefulWidget {
   final String currentRole; // 'driver' | 'passenger'
@@ -23,10 +26,94 @@ class RoleSwitchSheet extends StatefulWidget {
 class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
   bool _loading = false;
 
+  // Returns null if no confirmation is needed, otherwise the human-readable
+  // reason the current role has live state that will be terminated.
+  String? _liveStateReason() {
+    if (widget.currentRole == 'driver') {
+      final driver = context.read<DriverProvider?>();
+      if (driver == null) return null;
+      if (driver.activeRoute != null) return 'active driver route';
+      if (driver.acceptedRequestId != null) return 'accepted passenger ride';
+    } else {
+      final passenger = context.read<PassengerProvider?>();
+      if (passenger == null) return null;
+      if (passenger.acceptedRequestId != null) return 'accepted driver ride';
+      if (passenger.outstandingRequests.isNotEmpty) {
+        return 'pending ride requests';
+      }
+      if (passenger.isSearching) return 'active destination search';
+    }
+    return null;
+  }
+
+  Future<bool> _confirmEndLiveState(String reason) async {
+    final isDriver = widget.currentRole == 'driver';
+    final actionLabel = isDriver
+        ? 'End route & switch'
+        : 'Cancel requests & switch';
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          isDriver ? 'End your driver route?' : 'Cancel passenger search?',
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.w700),
+        ),
+        content: Text(
+          'You have an $reason. Switching will end it and notify the other party.',
+          style: const TextStyle(
+              color: AppColors.textSecondary, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(
+              isDriver ? 'Stay as driver' : 'Stay as passenger',
+              style: const TextStyle(color: AppColors.textSecondary),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              actionLabel,
+              style: const TextStyle(
+                  color: AppColors.error, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result == true;
+  }
+
   Future<void> _doSwitch() async {
+    // Capture providers up-front so we can safely await without the analyzer
+    // flagging context-across-async-gap.
+    final driver = context.read<DriverProvider?>();
+    final passenger = context.read<PassengerProvider?>();
+
+    final reason = _liveStateReason();
+    if (reason != null) {
+      final ok = await _confirmEndLiveState(reason);
+      if (!ok) return;
+    }
+
     final other = widget.currentRole == 'driver' ? 'passenger' : 'driver';
     setState(() => _loading = true);
     try {
+      // Reset the *outgoing* role's client-side state before we hop screens so
+      // the next screen lands clean and any next render doesn't show stale UI.
+      // The backend already deleted the corresponding active_* row in
+      // SwitchRole, so this is a UI-only clean.
+      if (widget.currentRole == 'driver') {
+        await driver?.deleteRoute();
+      } else {
+        await passenger?.goOffline();
+      }
+
       final api = ApiClient(TokenStorage());
       final result = await AuthRepository(api).switchRole(role: other);
       await TokenStorage().save(

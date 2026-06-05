@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
-import '../../core/language_provider.dart';
+import '../../core/widgets/language_sheet.dart';
 import '../../core/token_storage.dart';
 import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
@@ -13,11 +13,7 @@ class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
   void _showLanguageSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (_) => const _LanguageSheet(),
-    );
+    LanguageSheet.show(context);
   }
 
   @override
@@ -415,122 +411,3 @@ class _GuestRoleButton extends StatelessWidget {
   }
 }
 
-class _LanguageSheet extends StatelessWidget {
-  const _LanguageSheet();
-
-  @override
-  Widget build(BuildContext context) {
-    final langProvider = context.watch<LanguageProvider>();
-    final currentCode = langProvider.locale.languageCode;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(top: BorderSide(color: AppColors.border)),
-      ),
-      padding: const EdgeInsets.fromLTRB(24, 12, 24, 48),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: 24),
-            decoration: BoxDecoration(
-              color: AppColors.border,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-          const Text(
-            'Language / Мова',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.3,
-            ),
-          ),
-          const SizedBox(height: 20),
-          _LangOption(
-            label: 'English',
-            code: 'en',
-            selected: currentCode == 'en',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('en'));
-              Navigator.pop(context);
-            },
-          ),
-          const SizedBox(height: 10),
-          _LangOption(
-            label: 'Українська',
-            code: 'uk',
-            selected: currentCode == 'uk',
-            onTap: () {
-              context.read<LanguageProvider>().setLocale(const Locale('uk'));
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LangOption extends StatelessWidget {
-  final String label;
-  final String code;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _LangOption({
-    required this.label,
-    required this.code,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withValues(alpha: 0.12)
-              : AppColors.card,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected
-                ? AppColors.primary.withValues(alpha: 0.4)
-                : AppColors.border,
-          ),
-        ),
-        child: Row(
-          children: [
-            Text(
-              code == 'en' ? '🇬🇧' : '🇺🇦',
-              style: const TextStyle(fontSize: 22),
-            ),
-            const SizedBox(width: 14),
-            Text(
-              label,
-              style: TextStyle(
-                color: selected ? Colors.white : AppColors.textSecondary,
-                fontSize: 15,
-                fontWeight:
-                    selected ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-            const Spacer(),
-            if (selected)
-              const Icon(Icons.check_rounded,
-                  color: AppColors.primary, size: 20),
-          ],
-        ),
-      ),
-    );
-  }
-}

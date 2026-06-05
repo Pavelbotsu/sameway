@@ -78,7 +78,12 @@ class SamewayApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('en'), Locale('uk')],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('uk'),
+        Locale('es'),
+        Locale('de'),
+      ],
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
