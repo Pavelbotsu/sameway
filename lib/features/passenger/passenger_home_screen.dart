@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/geo.dart';
 import '../../core/app_localizations.dart';
 import '../../core/map_style_provider.dart';
 import '../../core/token_storage.dart';
@@ -488,6 +489,59 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                     );
                   },
                 ),
+                // Walking line: passenger origin → suggested pickup point on
+                // the driver's road. Only rendered while a fresh offer is
+                // pending and the WS payload included pickup coords.
+                Consumer<PassengerProvider>(
+                  builder: (_, p, __) {
+                    final offer = p.pendingOffer;
+                    if (p.state != PassengerStatus.offered ||
+                        offer == null ||
+                        offer.pickupLat == null ||
+                        offer.pickupLng == null ||
+                        _myPos == null) {
+                      return const SizedBox.shrink();
+                    }
+                    final pickup = LatLng(offer.pickupLat!, offer.pickupLng!);
+                    return Stack(
+                      children: [
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: [_myPos!, pickup],
+                              color: AppColors.teal,
+                              strokeWidth: 2.5,
+                              pattern: StrokePattern.dashed(
+                                  segments: const [10, 6]),
+                            ),
+                          ],
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: pickup,
+                              width: 36,
+                              height: 36,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFF9800),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2),
+                                ),
+                                child: const Icon(
+                                  Icons.directions_walk_rounded,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 if (_nearbyDrivers.isNotEmpty)
                   MarkerLayer(
                     markers: _nearbyDrivers
@@ -863,6 +917,29 @@ class _StatusPanel extends StatelessWidget {
                                   ? LatLng(
                                       provider.peerLat!, provider.peerLng!)
                                   : null,
+                              pickupCode: provider.acceptedPickupCode,
+                              inRide: false,
+                              onConfirmPickup: (code) =>
+                                  provider.confirmPickup(code),
+                              onCancel: () => provider.cancelRide(),
+                            ),
+                          PassengerStatus.inRide => _AcceptedCard(
+                              requestId: provider.acceptedRequestId,
+                              driverName: provider.acceptedDriverName,
+                              carSummary: provider.acceptedCarSummary,
+                              driverAvgRating:
+                                  provider.acceptedDriverAvgRating,
+                              driverRatingCount:
+                                  provider.acceptedDriverRatingCount,
+                              passengerPos: currentPos,
+                              driverPos: (provider.peerLat != null &&
+                                      provider.peerLng != null)
+                                  ? LatLng(
+                                      provider.peerLat!, provider.peerLng!)
+                                  : null,
+                              pickupCode: null,
+                              inRide: true,
+                              onConfirmPickup: null,
                               onCancel: () => provider.cancelRide(),
                             ),
                           PassengerStatus.declined =>
@@ -1669,6 +1746,31 @@ class _OfferCardState extends State<_OfferCard>
             ),
           ],
         ),
+        if (offer.walkDistanceM != null ||
+            offer.driverDistanceToPickupM != null) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              if (offer.walkDistanceM != null)
+                _PickupPill(
+                  icon: Icons.directions_walk_rounded,
+                  color: AppColors.teal,
+                  label: 'Walk ${offer.walkDistanceM!.round()} m · '
+                      '${minutesAt(offer.walkDistanceM!, walkSpeedKmh)} min',
+                ),
+              if (offer.walkDistanceM != null &&
+                  offer.driverDistanceToPickupM != null)
+                const SizedBox(width: 8),
+              if (offer.driverDistanceToPickupM != null)
+                _PickupPill(
+                  icon: Icons.drive_eta_rounded,
+                  color: AppColors.primary,
+                  label: 'Driver in '
+                      '${minutesAt(offer.driverDistanceToPickupM!, assumedDriverKmh)} min',
+                ),
+            ],
+          ),
+        ],
         const SizedBox(height: 16),
         Row(
           children: [
@@ -1718,6 +1820,44 @@ class _OfferCardState extends State<_OfferCard>
   }
 }
 
+class _PickupPill extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String label;
+  const _PickupPill({
+    required this.icon,
+    required this.color,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: color, size: 14),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _AcceptedCard extends StatefulWidget {
   final String? requestId;
   final String? driverName;
@@ -1726,6 +1866,12 @@ class _AcceptedCard extends StatefulWidget {
   final int? driverRatingCount;
   final LatLng? passengerPos;
   final LatLng? driverPos;
+  // Pickup handshake: present when the row is `accepted` and we haven't met
+  // yet. When inRide is true, the card switches to the "on board" variant
+  // and these are ignored.
+  final String? pickupCode;
+  final bool inRide;
+  final Future<bool> Function(String code)? onConfirmPickup;
   final VoidCallback? onCancel;
   const _AcceptedCard({
     this.requestId,
@@ -1735,6 +1881,9 @@ class _AcceptedCard extends StatefulWidget {
     this.driverRatingCount,
     this.passengerPos,
     this.driverPos,
+    this.pickupCode,
+    this.inRide = false,
+    this.onConfirmPickup,
     this.onCancel,
   });
 
@@ -1879,13 +2028,20 @@ class _AcceptedCardState extends State<_AcceptedCard>
         ),
         const SizedBox(height: 14),
         Text(
-          l.rideAccepted,
+          widget.inRide ? "You're in the ride" : l.rideAccepted,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
         ),
+        if (!widget.inRide && widget.pickupCode != null) ...[
+          const SizedBox(height: 14),
+          _PickupCodeBlock(
+            code: widget.pickupCode!,
+            onConfirm: widget.onConfirmPickup,
+          ),
+        ],
         if (widget.driverName != null &&
             widget.driverName!.trim().isNotEmpty) ...[
           const SizedBox(height: 6),
@@ -3190,5 +3346,133 @@ class _PlaceSuggestion {
   final double lat;
   final double lng;
   const _PlaceSuggestion({required this.name, required this.lat, required this.lng});
+}
+
+// _PickupCodeBlock renders the 4-digit pickup code prominently and provides a
+// secondary affordance for the passenger to *enter* a code (in case the
+// driver was the one displaying it). Either side can submit — the backend
+// idempotently treats the first valid submission as the source of truth.
+class _PickupCodeBlock extends StatelessWidget {
+  final String code;
+  final Future<bool> Function(String code)? onConfirm;
+  const _PickupCodeBlock({required this.code, this.onConfirm});
+
+  Future<void> _showEntryDialog(BuildContext context) async {
+    final ctrl = TextEditingController();
+    final entered = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
+        title: const Text('Enter driver\'s code',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w700)),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 28,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 8,
+            fontFeatures: [FontFeature.tabularFigures()],
+          ),
+          decoration: const InputDecoration(
+            counterText: '',
+            hintText: '____',
+            hintStyle: TextStyle(color: AppColors.textSecondary),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel',
+                style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () {
+              if (ctrl.text.length == 4) {
+                Navigator.pop(ctx, ctrl.text);
+              }
+            },
+            child: const Text('Confirm',
+                style: TextStyle(
+                    color: AppColors.teal, fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
+    );
+    if (entered == null || onConfirm == null) return;
+    final ok = await onConfirm!(entered);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Wrong code'),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppColors.teal.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(16),
+        border:
+            Border.all(color: AppColors.teal.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        children: [
+          const Text(
+            'Show this code to your driver',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            code,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 38,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 10,
+              fontFeatures: [FontFeature.tabularFigures()],
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextButton.icon(
+            onPressed: onConfirm == null
+                ? null
+                : () => _showEntryDialog(context),
+            icon: const Icon(Icons.keyboard_rounded,
+                size: 16, color: AppColors.teal),
+            label: const Text(
+              'I have a code from the driver — enter',
+              style: TextStyle(
+                color: AppColors.teal,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 4),
+              minimumSize: const Size(0, 32),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 

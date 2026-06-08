@@ -277,7 +277,58 @@ class _ActivePanel extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _RouteActiveCard(route: driver.activeRoute!, onDelete: onDeleteRoute),
+        _RouteActiveCard(
+          route: driver.activeRoute!,
+          onDelete: () async {
+            // If there are any active rides (accepted or in_progress),
+            // confirm and end the route via the bulk done flow — that emits
+            // ride_done WS for every remaining passenger so they each get
+            // their rating prompt. Otherwise just delete the route silently.
+            final hasActive = driver.requests.any(
+                (r) => r.status == 'accepted' || r.status == 'in_progress');
+            if (!hasActive) {
+              onDeleteRoute();
+              return;
+            }
+            final l = AppLocalizations.of(context);
+            final proceed = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                backgroundColor: AppColors.surface,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                title: const Text(
+                  'End route?',
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w700),
+                ),
+                content: const Text(
+                  'Every passenger currently on board will be dropped off '
+                  "and you'll stop receiving new matches.",
+                  style: TextStyle(
+                      color: AppColors.textSecondary, height: 1.5),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: Text(l.keepRide,
+                        style: const TextStyle(
+                            color: AppColors.textSecondary)),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    child: const Text('End route',
+                        style: TextStyle(
+                            color: AppColors.error,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+            );
+            if (proceed != true) return;
+            await driver.completeRide(driver.activeRoute?.distanceKm ?? 0);
+          },
+        ),
         const SizedBox(height: 16),
         if (driver.requests.isNotEmpty)
           _RequestsList(
@@ -287,13 +338,14 @@ class _ActivePanel extends StatelessWidget {
             onCancelRide: (id) =>
                 context.read<DriverProvider>().cancelRide(id),
             onCompleteRide: (id, passengerId) async {
-              // Fire-and-forget: backend will emit `ride_done` over WS, which
-              // sets pendingRatingRequestId on the provider. The home screen's
-              // _ratingListener then opens RatingSheet — single source of truth
-              // for both the local complete and any redundant WS event.
+              // Per-passenger drop-off. Backend emits ride_done over WS, which
+              // surgically removes just this ride from local state and sets
+              // pendingRatingRequestId so the home screen's _ratingListener
+              // opens RatingSheet. Other passengers (in_progress) on this
+              // driver remain untouched.
               await context
                   .read<DriverProvider>()
-                  .completeRide(driver.activeRoute?.distanceKm ?? 0);
+                  .dropoff(id, distanceKm: driver.activeRoute?.distanceKm ?? 0);
             },
           )
         else
@@ -483,6 +535,7 @@ class _RequestTile extends StatelessWidget {
   Color get _statusColor {
     return switch (request.status) {
       'accepted' => AppColors.success,
+      'in_progress' => AppColors.teal,
       'declined' => AppColors.error,
       _ => AppColors.textSecondary,
     };
@@ -491,6 +544,7 @@ class _RequestTile extends StatelessWidget {
   IconData get _statusIcon {
     return switch (request.status) {
       'accepted' => Icons.check_circle_rounded,
+      'in_progress' => Icons.directions_car_rounded,
       'declined' => Icons.cancel_rounded,
       _ => Icons.schedule_rounded,
     };
@@ -514,7 +568,18 @@ class _RequestTile extends StatelessWidget {
             const SizedBox(height: 10),
             _buildAcceptDeclineRow(context),
           ],
-          if (request.status == 'accepted') ...[
+          if (request.status == 'accepted' ||
+              request.status == 'in_progress') ...[
+            if (request.status == 'accepted' &&
+                request.pickupCode != null) ...[
+              const SizedBox(height: 10),
+              _DriverPickupCodeBlock(
+                code: request.pickupCode!,
+                onConfirm: (entered) => context
+                    .read<DriverProvider>()
+                    .confirmPickup(request.id, entered),
+              ),
+            ],
             const SizedBox(height: 12),
             _AcceptedRideMap(
               myPos: myPos,
@@ -531,77 +596,31 @@ class _RequestTile extends StatelessWidget {
   }
 
   Widget _buildAcceptedActions(BuildContext context) {
-    final destKm = context
-        .watch<DriverProvider>()
-        .distanceToDestinationKm(myPos);
-    final farFromDest = destKm != null && destKm > 0.15;
-    final label = farFromDest
-        ? 'Complete ride (${destKm.toStringAsFixed(1)} km away)'
-        : 'Complete ride';
     final dialogL = AppLocalizations.of(context);
+    final isInRide = request.status == 'in_progress';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        FilledButton.icon(
-          onPressed: onComplete == null
-              ? null
-              : () async {
-                  if (farFromDest) {
-                    final proceed = await showDialog<bool>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: AppColors.surface,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        title: const Text(
-                          'End ride here?',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        content: Text(
-                          "You're ${destKm.toStringAsFixed(1)} km from your "
-                          'destination. End the ride anyway?',
-                          style: const TextStyle(
-                              color: AppColors.textSecondary, height: 1.5),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx, false),
-                            child: const Text(
-                              'Keep driving',
-                              style: TextStyle(
-                                  color: AppColors.textSecondary),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx, true),
-                            child: const Text(
-                              'End ride',
-                              style: TextStyle(
-                                  color: AppColors.error,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                    if (proceed != true) return;
-                  }
-                  onComplete?.call();
-                },
-          icon: const Icon(Icons.check_circle_outline_rounded, size: 18),
-          label: Text(label,
-              style: const TextStyle(fontWeight: FontWeight.w600)),
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.success,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
+        // The "Complete ride" button only appears after the pickup handshake
+        // has completed (status == in_progress). For accepted-but-not-met
+        // rides, the code-entry block above the map is the next action.
+        if (isInRide)
+          FilledButton.icon(
+            onPressed: onComplete == null ? null : () => onComplete!.call(),
+            icon: const Icon(Icons.check_circle_outline_rounded, size: 18),
+            label: Text(
+              'Drop off ${request.passengerName?.trim().isNotEmpty == true ? request.passengerName : "passenger"}',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.success,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14)),
+            ),
           ),
-        ),
-        const SizedBox(height: 6),
+        if (isInRide) const SizedBox(height: 6),
         Center(
           child: TextButton(
             onPressed: onCancel == null
@@ -707,18 +726,31 @@ class _RequestTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  (info?.name?.trim().isNotEmpty == true)
-                      ? info!.name!
-                      : 'Passenger ${request.passengerID.substring(0, 8)}…',
-                  style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (info?.hasRating == true)
-                  Padding(
+                Builder(builder: (_) {
+                  // Prefer the durable backend join (request.passengerName)
+                  // over the volatile WS-hydrated info; either beats the UUID
+                  // hash placeholder.
+                  final name = (request.passengerName?.trim().isNotEmpty == true)
+                      ? request.passengerName!
+                      : (info?.name?.trim().isNotEmpty == true)
+                          ? info!.name!
+                          : 'Passenger';
+                  return Text(
+                    name,
+                    style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600),
+                    overflow: TextOverflow.ellipsis,
+                  );
+                }),
+                Builder(builder: (_) {
+                  final avg = request.passengerAvgRating ?? info?.avgRating;
+                  final count = request.passengerRatingCount ?? info?.ratingCount;
+                  if (avg == null || count == null || count == 0) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
                     padding: const EdgeInsets.only(top: 2),
                     child: Row(
                       children: [
@@ -726,13 +758,14 @@ class _RequestTile extends StatelessWidget {
                             color: Color(0xFFFFC857), size: 12),
                         const SizedBox(width: 2),
                         Text(
-                          '${info!.avgRating!.toStringAsFixed(1)} (${info!.ratingCount})',
+                          '${avg.toStringAsFixed(1)} ($count)',
                           style: const TextStyle(
                               color: AppColors.textSecondary, fontSize: 11),
                         ),
                       ],
                     ),
-                  ),
+                  );
+                }),
               ],
             ),
           ),
@@ -928,3 +961,126 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
   }
 }
 
+// _DriverPickupCodeBlock displays the shared 4-digit code and lets the driver
+// type it in to confirm pickup. The passenger sees the same code on their
+// _AcceptedCard; either side can submit first — the backend is idempotent.
+class _DriverPickupCodeBlock extends StatefulWidget {
+  final String code;
+  final Future<bool> Function(String entered) onConfirm;
+  const _DriverPickupCodeBlock({
+    required this.code,
+    required this.onConfirm,
+  });
+
+  @override
+  State<_DriverPickupCodeBlock> createState() => _DriverPickupCodeBlockState();
+}
+
+class _DriverPickupCodeBlockState extends State<_DriverPickupCodeBlock> {
+  final _ctrl = TextEditingController();
+  bool _submitting = false;
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_ctrl.text.length != 4) return;
+    setState(() => _submitting = true);
+    final ok = await widget.onConfirm(_ctrl.text);
+    if (!mounted) return;
+    setState(() => _submitting = false);
+    if (!ok) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Wrong code'),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: AppColors.teal.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.teal.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Ask passenger for their pickup code',
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _ctrl,
+                  enabled: !_submitting,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 6,
+                  ),
+                  decoration: const InputDecoration(
+                    counterText: '',
+                    hintText: '____',
+                    hintStyle: TextStyle(color: AppColors.textSecondary),
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  onSubmitted: (_) => _submit(),
+                  onChanged: (_) => setState(() {}),
+                ),
+              ),
+              const SizedBox(width: 10),
+              FilledButton(
+                onPressed:
+                    (_ctrl.text.length == 4 && !_submitting) ? _submit : null,
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.teal,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                child: _submitting
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
+                    : const Text('Confirm',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 12)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'or share this code with them: ${widget.code}',
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -197,7 +197,19 @@ class DriverProvider extends ChangeNotifier {
       if (reqId != null) {
         pendingRatingRequestId = reqId;
         pendingRatingPassengerId = passengerID;
-        _localCleanupOnDone();
+        // Per-passenger drop-off arrived — surgically remove just this ride.
+        // Other passengers (in_progress on the same vehicle) and the active
+        // route stay. End-of-day cleanup is handled by endRoute below.
+        _surgicalRemoveRide(reqId);
+      }
+    } else if (type == 'pickup_confirmed') {
+      final reqId = p['request_id'] as String?;
+      if (reqId != null) {
+        requests = [
+          for (final r in requests)
+            r.id == reqId ? r.copyWith(status: 'in_progress') : r,
+        ];
+        notifyListeners();
       }
     } else if (type == 'rating_submitted') {
       final reqId = p['request_id'] as String?;
@@ -322,6 +334,66 @@ class DriverProvider extends ChangeNotifier {
     _clearPickupRoute();
     unreadMessages = 0;
     notifyListeners();
+  }
+
+  // Drops a single ride from local state without touching the active route or
+  // the driver's other passengers. Used by the per-passenger ride_done handler.
+  void _surgicalRemoveRide(String requestId) {
+    requests = requests.where((r) => r.id != requestId).toList();
+    passengerInfo.remove(requestId);
+    passengerLocations.remove(requestId);
+    if (acceptedRequestId == requestId) {
+      // Promote whoever's left to the singleton "current accepted" slot so
+      // the SnackBar/_lastNotifiedRequestId logic in driver_home_screen
+      // keeps working without a deeper refactor.
+      final next = requests
+          .where((r) => r.status == 'accepted' || r.status == 'in_progress')
+          .toList();
+      if (next.isEmpty) {
+        acceptedRequestId = null;
+        acceptedPassengerName = null;
+        acceptedPassengerAvgRating = null;
+        acceptedPassengerRatingCount = null;
+        _clearPickupRoute();
+      } else {
+        final r = next.last;
+        acceptedRequestId = r.id;
+        acceptedPassengerName = r.passengerName;
+        acceptedPassengerAvgRating = r.passengerAvgRating;
+        acceptedPassengerRatingCount = r.passengerRatingCount;
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<bool> confirmPickup(String requestId, String code) async {
+    try {
+      await _repo.confirmPickup(requestId: requestId, code: code);
+      // Optimistically flip local state; the WS confirm event will land too.
+      requests = [
+        for (final r in requests)
+          r.id == requestId ? r.copyWith(status: 'in_progress') : r,
+      ];
+      notifyListeners();
+      return true;
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> dropoff(String requestId, {double distanceKm = 0}) async {
+    try {
+      await _repo.dropoff(requestId: requestId, distanceKm: distanceKm);
+      // The ride_done WS event will arrive and trigger _surgicalRemoveRide
+      // and the rating sheet — no local optimistic patch needed here.
+      return true;
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+      return false;
+    }
   }
 
   void _clearPickupRoute() {

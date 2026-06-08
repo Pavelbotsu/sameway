@@ -7,14 +7,69 @@ class RideRequest {
   final double pickupLat;
   final double pickupLng;
   final String status;
+  // Joined from users + ratings on the backend so the driver UI never has to
+  // fall back to "Passenger <uuid prefix>…" placeholder text.
+  final String? passengerName;
+  final double? passengerAvgRating;
+  final int? passengerRatingCount;
+  // Pickup-handshake fields. `pickupCode` is the shared 4-digit code (empty
+  // until the row reaches 'accepted'); `pickedUpAt` is non-null once either
+  // side confirms via POST /pickup/confirm.
+  final String? pickupCode;
+  final DateTime? pickedUpAt;
 
-  RideRequest.fromJson(Map<String, dynamic> j)
-      : id = j['id'] as String,
-        driverID = j['driver_id'] as String,
-        passengerID = j['passenger_id'] as String,
-        pickupLat = (j['pickup_lat'] as num).toDouble(),
-        pickupLng = (j['pickup_lng'] as num).toDouble(),
-        status = j['status'] as String;
+  const RideRequest({
+    required this.id,
+    required this.driverID,
+    required this.passengerID,
+    required this.pickupLat,
+    required this.pickupLng,
+    required this.status,
+    this.passengerName,
+    this.passengerAvgRating,
+    this.passengerRatingCount,
+    this.pickupCode,
+    this.pickedUpAt,
+  });
+
+  factory RideRequest.fromJson(Map<String, dynamic> j) => RideRequest(
+        id: j['id'] as String,
+        driverID: j['driver_id'] as String,
+        passengerID: j['passenger_id'] as String,
+        pickupLat: (j['pickup_lat'] as num).toDouble(),
+        pickupLng: (j['pickup_lng'] as num).toDouble(),
+        status: j['status'] as String,
+        passengerName: j['passenger_name'] as String?,
+        passengerAvgRating:
+            (j['passenger_avg_rating'] as num?)?.toDouble(),
+        passengerRatingCount:
+            (j['passenger_rating_count'] as num?)?.toInt(),
+        pickupCode: (j['pickup_code'] as String?)?.trim().isEmpty == true
+            ? null
+            : j['pickup_code'] as String?,
+        pickedUpAt: j['picked_up_at'] == null
+            ? null
+            : DateTime.tryParse(j['picked_up_at'] as String),
+      );
+
+  RideRequest copyWith({
+    String? status,
+    String? pickupCode,
+    DateTime? pickedUpAt,
+  }) =>
+      RideRequest(
+        id: id,
+        driverID: driverID,
+        passengerID: passengerID,
+        pickupLat: pickupLat,
+        pickupLng: pickupLng,
+        status: status ?? this.status,
+        passengerName: passengerName,
+        passengerAvgRating: passengerAvgRating,
+        passengerRatingCount: passengerRatingCount,
+        pickupCode: pickupCode ?? this.pickupCode,
+        pickedUpAt: pickedUpAt ?? this.pickedUpAt,
+      );
 }
 
 class RouteResult {
@@ -110,5 +165,27 @@ class DriverRepository {
   Future<PickupRoute> getPickupRoute(String requestId) async {
     final data = await _api.get('/driver/pickup-route/$requestId', auth: true);
     return PickupRoute.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<Map<String, dynamic>> confirmPickup({
+    required String requestId,
+    required String code,
+  }) {
+    return _api.post(
+      '/pickup/confirm',
+      {'request_id': requestId, 'code': code},
+      auth: true,
+    );
+  }
+
+  Future<void> dropoff({
+    required String requestId,
+    double distanceKm = 0,
+  }) async {
+    await _api.post(
+      '/driver/dropoff/$requestId',
+      {'distance_km': distanceKm},
+      auth: true,
+    );
   }
 }

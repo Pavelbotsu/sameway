@@ -18,6 +18,12 @@ class RideOffer {
   final double destLng;
   final double corridorKm;
   final int seats;
+  // Heading-aware match payload (Tier 2). Pickup point lies on the driver's
+  // road; walk/drive distances let the UI render an honest ETA.
+  final double? pickupLat;
+  final double? pickupLng;
+  final double? walkDistanceM;
+  final double? driverDistanceToPickupM;
 
   const RideOffer({
     required this.requestId,
@@ -33,6 +39,10 @@ class RideOffer {
     required this.destLng,
     required this.corridorKm,
     required this.seats,
+    this.pickupLat,
+    this.pickupLng,
+    this.walkDistanceM,
+    this.driverDistanceToPickupM,
   });
 
   String? get carSummary => _carSummary(carColor, carMake, carModel, carPlate);
@@ -97,7 +107,7 @@ String? _carSummary(String? color, String? make, String? model, String? plate) {
   return parts.isEmpty ? null : parts.join(' · ');
 }
 
-enum PassengerStatus { looking, offered, accepted, declined }
+enum PassengerStatus { looking, offered, accepted, inRide, declined }
 
 class PassengerProvider extends ChangeNotifier {
   final PassengerRepository _repo;
@@ -111,6 +121,10 @@ class PassengerProvider extends ChangeNotifier {
   double? acceptedDriverAvgRating;
   int? acceptedDriverRatingCount;
   String? acceptedCarSummary;
+  // Pickup handshake: the 4-digit code the server attached to this ride.
+  // Cleared on entering inRide/looking; populated from the driver_response WS
+  // payload or from /passenger/my-requests on reconnect.
+  String? acceptedPickupCode;
   double? peerLat;
   double? peerLng;
   List<OutstandingRequest> outstandingRequests = [];
@@ -202,6 +216,7 @@ class PassengerProvider extends ChangeNotifier {
       pendingRatingDriverId = p['driver_id'] as String?;
       acceptedRequestId = null;
       acceptedDriverId = null;
+      acceptedPickupCode = null;
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
@@ -210,6 +225,7 @@ class PassengerProvider extends ChangeNotifier {
     } else if (type == 'ride_cancelled') {
       acceptedRequestId = null;
       acceptedDriverId = null;
+      acceptedPickupCode = null;
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
@@ -236,6 +252,11 @@ class PassengerProvider extends ChangeNotifier {
         destLng: (p['destination_lng'] as num?)?.toDouble() ?? 0,
         corridorKm: (p['corridor_km'] as num?)?.toDouble() ?? 0,
         seats: (p['seats'] as num?)?.toInt() ?? 0,
+        pickupLat: (p['pickup_lat'] as num?)?.toDouble(),
+        pickupLng: (p['pickup_lng'] as num?)?.toDouble(),
+        walkDistanceM: (p['walk_distance_m'] as num?)?.toDouble(),
+        driverDistanceToPickupM:
+            (p['driver_distance_to_pickup_m'] as num?)?.toDouble(),
       );
       state = PassengerStatus.offered;
       notifyListeners();
@@ -257,6 +278,8 @@ class PassengerProvider extends ChangeNotifier {
           p['car_model'] as String?,
           p['car_plate'] as String?,
         );
+        final code = (p['pickup_code'] as String?)?.trim();
+        acceptedPickupCode = (code == null || code.isEmpty) ? null : code;
         outstandingRequests = const [];
         state = PassengerStatus.accepted;
         notifyListeners();
@@ -272,11 +295,35 @@ class PassengerProvider extends ChangeNotifier {
         peerLng = (p['lng'] as num?)?.toDouble();
         notifyListeners();
       }
+    } else if (type == 'pickup_confirmed') {
+      final reqId = p['request_id'] as String?;
+      if (reqId != null && reqId == acceptedRequestId) {
+        state = PassengerStatus.inRide;
+        acceptedPickupCode = null; // No longer needed; ride is in progress.
+        notifyListeners();
+      }
     } else if (type == 'rating_submitted') {
       final reqId = p['request_id'] as String?;
       if (reqId != null && reqId == awaitingRatingRequestId) {
         clearAwaitingRating();
       }
+    }
+  }
+
+  Future<bool> confirmPickup(String code) async {
+    final reqId = acceptedRequestId;
+    if (reqId == null) return false;
+    try {
+      await _repo.confirmPickup(requestId: reqId, code: code);
+      // Optimistic local flip — the WS event will land too and is a no-op.
+      state = PassengerStatus.inRide;
+      acceptedPickupCode = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      error = e.toString();
+      notifyListeners();
+      return false;
     }
   }
 

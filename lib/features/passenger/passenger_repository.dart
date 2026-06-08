@@ -59,4 +59,15 @@ class PassengerRepository {
   Future<void> cancelOutstandingRequest(String requestId) async {
     await _api.delete('/passenger/request/$requestId', auth: true);
   }
+
+  Future<Map<String, dynamic>> confirmPickup({
+    required String requestId,
+    required String code,
+  }) {
+    return _api.post(
+      '/pickup/confirm',
+      {'request_id': requestId, 'code': code},
+      auth: true,
+    );
+  }
 }
