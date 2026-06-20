@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/token_storage.dart';
+import 'illustrations.dart';
 import 'role_selection_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  /// When true, the screen is being replayed from the account sheet — it
+  /// pops on completion instead of pushing into `RoleSelectionScreen` and
+  /// does not flip the onboarding-completed flag.
+  final bool replay;
+
+  const OnboardingScreen({super.key, this.replay = false});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -16,26 +23,47 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   List<_PageData> _buildPages(AppLocalizations l) => [
         _PageData(
-          icon: Icons.route_rounded,
-          iconColor: AppColors.primary,
+          scene: OnboardingScene.route,
+          accent: AppColors.primary,
           title: l.onboardTitle1,
           subtitle: l.onboardSubtitle1,
         ),
         _PageData(
-          icon: Icons.people_alt_rounded,
-          iconColor: AppColors.teal,
+          scene: OnboardingScene.matching,
+          accent: AppColors.teal,
           title: l.onboardTitle2,
           subtitle: l.onboardSubtitle2,
         ),
         _PageData(
-          icon: Icons.verified_rounded,
-          iconColor: const Color(0xFFFFD166),
+          scene: OnboardingScene.co2,
+          accent: const Color(0xFFFFD166),
           title: l.onboardTitle3,
           subtitle: l.onboardSubtitle3,
         ),
+        _PageData(
+          scene: OnboardingScene.pickupCode,
+          accent: const Color(0xFF7C3AED),
+          title: l.onboardTitle4,
+          subtitle: l.onboardSubtitle4,
+        ),
       ];
 
-  static const int _pageCount = 3;
+  static const int _pageCount = 4;
+
+  Future<void> _finishOnboarding() async {
+    if (!widget.replay) {
+      await TokenStorage().markOnboardingCompleted();
+    }
+    if (!mounted) return;
+    if (widget.replay) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+      );
+    }
+  }
 
   void _next() {
     if (_page < _pageCount - 1) {
@@ -44,10 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
-      );
+      _finishOnboarding();
     }
   }
 
@@ -71,11 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 16, right: 24),
                 child: TextButton(
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => const RoleSelectionScreen()),
-                  ),
+                  onPressed: _finishOnboarding,
                   child: Text(
                     l.skip,
                     style: const TextStyle(
@@ -183,20 +204,8 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              color: data.iconColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(36),
-              border: Border.all(
-                color: data.iconColor.withValues(alpha: 0.25),
-                width: 1.5,
-              ),
-            ),
-            child: Icon(data.icon, color: data.iconColor, size: 60),
-          ),
-          const SizedBox(height: 48),
+          OnboardingArt(scene: data.scene, accent: data.accent),
+          const SizedBox(height: 32),
           Text(
             data.title,
             textAlign: TextAlign.center,
@@ -225,13 +234,13 @@ class _OnboardingPage extends StatelessWidget {
 }
 
 class _PageData {
-  final IconData icon;
-  final Color iconColor;
+  final OnboardingScene scene;
+  final Color accent;
   final String title;
   final String subtitle;
   const _PageData({
-    required this.icon,
-    required this.iconColor,
+    required this.scene,
+    required this.accent,
     required this.title,
     required this.subtitle,
   });

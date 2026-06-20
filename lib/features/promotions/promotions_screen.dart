@@ -101,6 +101,7 @@ class _PromotionsScreenState extends State<PromotionsScreen> {
         backgroundColor: AppColors.surface,
         elevation: 0,
         leading: IconButton(
+          tooltip: l.back,
           icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),

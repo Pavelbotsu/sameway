@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../../core/app_colors.dart';
 import '../../core/fcm_service.dart';
 import '../../core/token_storage.dart';
+import '../../core/widgets/language_sheet.dart';
 import '../driver/driver_home_screen.dart';
 import '../passenger/passenger_home_screen.dart';
 import 'onboarding_screen.dart';
+import 'role_selection_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen>
     final storage = TokenStorage();
     final token = await storage.getToken();
     final role = await storage.getRole();
+    final onboardingDone = await storage.hasCompletedOnboarding();
     if (!mounted) return;
     if (token != null && role != null) {
       FcmService.sendTokenToBackend(); // refresh token on every app start
@@ -50,10 +53,16 @@ class _SplashScreenState extends State<SplashScreen>
               : const PassengerHomeScreen(),
         ),
       );
-    } else {
+    } else if (!onboardingDone) {
       Navigator.pushReplacement(
         context,
         _route(const OnboardingScreen()),
+      );
+    } else {
+      // Returning user without a session — skip the carousel.
+      Navigator.pushReplacement(
+        context,
+        _route(const RoleSelectionScreen()),
       );
     }
   }
@@ -75,8 +84,29 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: Center(
-        child: FadeTransition(
+      body: Stack(
+        children: [
+          // Globe in the top-right so a first-time non-English user can switch
+          // before anything else loads. Anchored above the brand wordmark so
+          // the chrome doesn't clutter the centerpiece.
+          Positioned(
+            top: MediaQuery.of(context).viewPadding.top + 8,
+            right: 8,
+            child: Material(
+              color: Colors.transparent,
+              child: IconButton(
+                tooltip: 'Language',
+                icon: const Icon(
+                  Icons.language_rounded,
+                  color: AppColors.textSecondary,
+                  size: 26,
+                ),
+                onPressed: () => LanguageSheet.show(context),
+              ),
+            ),
+          ),
+          Center(
+            child: FadeTransition(
           opacity: _fade,
           child: ScaleTransition(
             scale: _scale,
@@ -140,6 +170,8 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
         ),
+      ),
+        ],
       ),
     );
   }

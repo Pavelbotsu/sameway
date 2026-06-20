@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
+import '../app_localizations.dart';
 
 class RatingWaitBanner extends StatelessWidget {
   final String otherPartyLabel; // "driver" / "passenger"
@@ -50,7 +51,7 @@ class RatingWaitBanner extends StatelessWidget {
                     size: 18, color: AppColors.textSecondary),
                 visualDensity: VisualDensity.compact,
                 onPressed: onDismiss,
-                tooltip: 'Dismiss',
+                tooltip: AppLocalizations.of(context).dismiss,
               ),
           ],
         ),

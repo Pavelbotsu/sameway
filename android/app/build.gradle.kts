@@ -14,6 +14,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        // Required by flutter_local_notifications (Phase 3.6) — backports
+        // Java 8+ APIs (java.time, etc.) to older Android API levels.
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -29,6 +32,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // flutter_local_notifications requires multidex on lower API levels.
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -42,4 +47,11 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Core library desugaring — required by flutter_local_notifications.
+    // The version is pinned to a known-good release; bump in lockstep with
+    // the AGP version when upgrading.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

@@ -127,4 +127,27 @@ ThemeData buildAppTheme() => ThemeData(
           fontSize: 15,
         ),
       ),
+      // Catches stray `ScaffoldMessenger.showSnackBar(SnackBar(...))` calls
+      // (Flutter built-ins, plugins, future code) so they at least adopt the
+      // branded surface/radius/border instead of the default M3 toast.
+      // Call sites that want icon + retry CTA should use BrandedSnack.
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.surface,
+        elevation: 8,
+        contentTextStyle: const TextStyle(
+          color: AppColors.textPrimary,
+          fontSize: 13.5,
+          height: 1.25,
+        ),
+        actionTextColor: AppColors.teal,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: AppColors.border.withValues(alpha: 0.9),
+            width: 1,
+          ),
+        ),
+        insetPadding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
+      ),
     );

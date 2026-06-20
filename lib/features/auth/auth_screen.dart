@@ -5,6 +5,7 @@ import '../../core/app_localizations.dart';
 import '../../core/fcm_service.dart';
 import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
+import 'forgot_password_screen.dart';
 import '../driver/driver_home_screen.dart';
 import '../passenger/passenger_home_screen.dart';
 
@@ -147,6 +148,7 @@ class _AuthScreenState extends State<AuthScreen>
                         obscure: _obscure,
                         validator: (v) => PasswordValidator.validate(v, l),
                         suffix: IconButton(
+                          tooltip: l.togglePasswordVisibility,
                           icon: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 220),
                             switchInCurve: Curves.easeOutCubic,
@@ -174,7 +176,25 @@ class _AuthScreenState extends State<AuthScreen>
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                if (_isLogin)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ForgotPasswordScreen()),
+                      ),
+                      child: Text(
+                        l.forgotPassword,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
                 Consumer<AuthProvider>(
                   builder: (_, auth, __) => Column(
                     children: [
@@ -223,51 +243,11 @@ class _AuthScreenState extends State<AuthScreen>
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    const Expanded(child: Divider(color: AppColors.border)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        l.or,
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                    const Expanded(child: Divider(color: AppColors.border)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: OutlinedButton.icon(
-                    onPressed: null,
-                    icon: const Icon(
-                      Icons.g_mobiledata_rounded,
-                      size: 24,
-                      color: AppColors.textSecondary,
-                    ),
-                    label: Text(
-                      l.continueWithGoogle,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: AppColors.border),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                // "or / Continue with Google" was here but Google Sign-In
+                // isn't wired yet (separate plan). A disabled button creates
+                // doubt — hiding it until the integration ships. See Phase
+                // 1.9 of the UX readiness plan.
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

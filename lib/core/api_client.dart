@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
+import 'session.dart';
 import 'token_storage.dart';
 
 const kApiBase = 'https://ibuprofen-dolly-prison.ngrok-free.dev';
@@ -14,7 +15,11 @@ const _kStandardTimeout = Duration(seconds: 120);
 
 class ApiException implements Exception {
   final String message;
-  const ApiException(this.message);
+  // statusCode is 0 for non-HTTP failures (timeout, parse, transport).
+  // `friendlyError` in core/error_handling.dart maps it to a user-facing
+  // message; the 401 session-expiry hook lives in ApiClient itself.
+  final int statusCode;
+  const ApiException(this.message, {this.statusCode = 0});
   @override
   String toString() => message;
 }
@@ -30,14 +35,15 @@ class ApiClient {
     bool auth = false,
   }) async {
     try {
+      final h = await _headers(auth, mutating: true);
       final res = await http
           .post(
             Uri.parse('$_base$path'),
-            headers: await _headers(auth, mutating: true),
+            headers: h,
             body: jsonEncode(body),
           )
           .timeout(_kStandardTimeout);
-      return _parse(res);
+      return _parse(res, authed: h.containsKey('Authorization'));
     } on TimeoutException {
       throw const ApiException('timeout');
     }
@@ -49,14 +55,15 @@ class ApiClient {
     bool auth = false,
   }) async {
     try {
+      final h = await _headers(auth, mutating: true);
       final res = await http
           .put(
             Uri.parse('$_base$path'),
-            headers: await _headers(auth, mutating: true),
+            headers: h,
             body: jsonEncode(body),
           )
           .timeout(_kStandardTimeout);
-      return _parse(res);
+      return _parse(res, authed: h.containsKey('Authorization'));
     } on TimeoutException {
       throw const ApiException('timeout');
     }
@@ -64,12 +71,26 @@ class ApiClient {
 
   Future<dynamic> get(String path, {bool auth = false}) async {
     try {
+      final h = await _headers(auth, mutating: false);
       final res = await http
           .get(
             Uri.parse('$_base$path'),
-            headers: await _headers(auth, mutating: false),
+            headers: h,
           )
           .timeout(_kStandardTimeout);
+      if (res.statusCode >= 400) {
+        String msg = 'Request failed';
+        try {
+          final parsed = jsonDecode(res.body);
+          if (parsed is Map && parsed['error'] != null) {
+            msg = parsed['error'].toString();
+          }
+        } catch (_) {/* not JSON — keep default */}
+        if (res.statusCode == 401 && h.containsKey('Authorization')) {
+          SessionEvents.instance.fireExpired();
+        }
+        throw ApiException(msg, statusCode: res.statusCode);
+      }
       return jsonDecode(res.body);
     } on TimeoutException {
       throw const ApiException('timeout');
@@ -81,13 +102,14 @@ class ApiClient {
     bool auth = false,
   }) async {
     try {
+      final h = await _headers(auth, mutating: true);
       final res = await http
           .delete(
             Uri.parse('$_base$path'),
-            headers: await _headers(auth, mutating: true),
+            headers: h,
           )
           .timeout(_kStandardTimeout);
-      return _parse(res);
+      return _parse(res, authed: h.containsKey('Authorization'));
     } on TimeoutException {
       throw const ApiException('timeout');
     }
@@ -105,10 +127,22 @@ class ApiClient {
     return h;
   }
 
-  Map<String, dynamic> _parse(http.Response res) {
+  Map<String, dynamic> _parse(http.Response res, {required bool authed}) {
     final data = jsonDecode(res.body) as Map<String, dynamic>;
     if (res.statusCode >= 400) {
-      throw ApiException(data['error']?.toString() ?? 'Request failed');
+      // Only treat 401 from a request we actually authenticated as a session-
+      // expiry signal. 403 is the backend saying "you can't touch this
+      // specific resource" (e.g. wrong role, not part of this ride) — that
+      // doesn't invalidate the session. 401 on a request without an
+      // Authorization header just means the user is already logged out, and
+      // re-firing the expiry event would loop the SnackBar/navigation.
+      if (res.statusCode == 401 && authed) {
+        SessionEvents.instance.fireExpired();
+      }
+      throw ApiException(
+        data['error']?.toString() ?? 'Request failed',
+        statusCode: res.statusCode,
+      );
     }
     return data;
   }

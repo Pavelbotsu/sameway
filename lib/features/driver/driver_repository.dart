@@ -10,6 +10,7 @@ class RideRequest {
   // Joined from users + ratings on the backend so the driver UI never has to
   // fall back to "Passenger <uuid prefix>…" placeholder text.
   final String? passengerName;
+  final String? passengerPhotoUrl;
   final double? passengerAvgRating;
   final int? passengerRatingCount;
   // Pickup-handshake fields. `pickupCode` is the shared 4-digit code (empty
@@ -17,6 +18,10 @@ class RideRequest {
   // side confirms via POST /pickup/confirm.
   final String? pickupCode;
   final DateTime? pickedUpAt;
+  // Server-stamped ranker tag — see services/ranker. "geometric" by default,
+  // "ai-<model>" when AI re-ranked the candidate list, "geometric_fallback"
+  // when AI was requested but failed. Null on payloads from older servers.
+  final String? matchMethod;
 
   const RideRequest({
     required this.id,
@@ -26,10 +31,12 @@ class RideRequest {
     required this.pickupLng,
     required this.status,
     this.passengerName,
+    this.passengerPhotoUrl,
     this.passengerAvgRating,
     this.passengerRatingCount,
     this.pickupCode,
     this.pickedUpAt,
+    this.matchMethod,
   });
 
   factory RideRequest.fromJson(Map<String, dynamic> j) => RideRequest(
@@ -40,6 +47,7 @@ class RideRequest {
         pickupLng: (j['pickup_lng'] as num).toDouble(),
         status: j['status'] as String,
         passengerName: j['passenger_name'] as String?,
+        passengerPhotoUrl: j['passenger_photo_url'] as String?,
         passengerAvgRating:
             (j['passenger_avg_rating'] as num?)?.toDouble(),
         passengerRatingCount:
@@ -50,12 +58,14 @@ class RideRequest {
         pickedUpAt: j['picked_up_at'] == null
             ? null
             : DateTime.tryParse(j['picked_up_at'] as String),
+        matchMethod: j['match_method'] as String?,
       );
 
   RideRequest copyWith({
     String? status,
     String? pickupCode,
     DateTime? pickedUpAt,
+    String? matchMethod,
   }) =>
       RideRequest(
         id: id,
@@ -65,11 +75,18 @@ class RideRequest {
         pickupLng: pickupLng,
         status: status ?? this.status,
         passengerName: passengerName,
+        passengerPhotoUrl: passengerPhotoUrl,
         passengerAvgRating: passengerAvgRating,
         passengerRatingCount: passengerRatingCount,
         pickupCode: pickupCode ?? this.pickupCode,
         pickedUpAt: pickedUpAt ?? this.pickedUpAt,
+        matchMethod: matchMethod ?? this.matchMethod,
       );
+
+  /// True when this match was re-ranked by the AI layer. Used by UI badges
+  /// to differentiate from the geometric default.
+  bool get matchedByAI =>
+      matchMethod != null && matchMethod!.startsWith('ai-');
 }
 
 class RouteResult {
@@ -88,6 +105,11 @@ class PickupRoute {
   final double pickupDistanceKm;
   final String continuationWkt;
   final double continuationDistanceKm;
+  // Walking leg from the passenger's actual position to the pickup point on
+  // the driver's road. Populated for both driver and passenger consumers so
+  // the mini-map can show all three legs.
+  final String walkWkt;
+  final double walkDistanceKm;
 
   PickupRoute.fromJson(Map<String, dynamic> j)
       : pickupWkt = (j['pickup_wkt'] as String?) ?? '',
@@ -95,9 +117,13 @@ class PickupRoute {
             (j['pickup_distance_km'] as num?)?.toDouble() ?? 0,
         continuationWkt = (j['continuation_wkt'] as String?) ?? '',
         continuationDistanceKm =
-            (j['continuation_distance_km'] as num?)?.toDouble() ?? 0;
+            (j['continuation_distance_km'] as num?)?.toDouble() ?? 0,
+        walkWkt = (j['walk_wkt'] as String?) ?? '',
+        walkDistanceKm =
+            (j['walk_distance_km'] as num?)?.toDouble() ?? 0;
 
-  bool get isEmpty => pickupWkt.isEmpty && continuationWkt.isEmpty;
+  bool get isEmpty =>
+      pickupWkt.isEmpty && continuationWkt.isEmpty && walkWkt.isEmpty;
 }
 
 class DriverRepository {
@@ -111,6 +137,7 @@ class DriverRepository {
     required double destLng,
     required double corridorKm,
     required int seats,
+    bool preferAI = false,
   }) async {
     final data = await _api.post(
       '/driver/route',
@@ -121,6 +148,7 @@ class DriverRepository {
         'destination_lng': destLng,
         'corridor_km': corridorKm,
         'seats': seats,
+        'prefer_ai': preferAI,
       },
       auth: true,
     );
@@ -163,7 +191,9 @@ class DriverRepository {
   }
 
   Future<PickupRoute> getPickupRoute(String requestId) async {
-    final data = await _api.get('/driver/pickup-route/$requestId', auth: true);
+    // Now lives at /pickup-route/:id under participant auth — works for both
+    // driver and passenger of the row.
+    final data = await _api.get('/pickup-route/$requestId', auth: true);
     return PickupRoute.fromJson(data as Map<String, dynamic>);
   }
 

@@ -1,8 +1,17 @@
 import '../../core/api_client.dart';
+import '../driver/driver_repository.dart' show PickupRoute;
 
 class PassengerRepository {
   final ApiClient _api;
   PassengerRepository(this._api);
+
+  /// Fetches the three-leg pickup route (driver→pickup driving,
+  /// pickup→destination driving, passenger→pickup walking). Shares the
+  /// `PickupRoute` model with the driver side — same backend endpoint.
+  Future<PickupRoute> getPickupRoute(String requestId) async {
+    final data = await _api.get('/pickup-route/$requestId', auth: true);
+    return PickupRoute.fromJson(data as Map<String, dynamic>);
+  }
 
   Future<void> updateLocation(double lat, double lng) async {
     await _api.put(
@@ -34,10 +43,15 @@ class PassengerRepository {
   Future<Map<String, dynamic>> search({
     required double destLat,
     required double destLng,
+    bool preferAI = false,
   }) {
     return _api.post(
       '/passenger/search',
-      {'dest_lat': destLat, 'dest_lng': destLng},
+      {
+        'dest_lat': destLat,
+        'dest_lng': destLng,
+        'prefer_ai': preferAI,
+      },
       auth: true,
     );
   }

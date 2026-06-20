@@ -13,11 +13,19 @@ class WebSocketClient {
 
   String? _token;
   Timer? _reconnect;
+  Timer? _heartbeat;
   int _attempt = 0;
   WsState _current = WsState.disconnected;
 
   // Backoff schedule in seconds, capped at 30s.
   static const _backoff = [1, 2, 4, 8, 16, 30];
+
+  // Application-level keepalive. Free ngrok tunnels (and most proxies/load
+  // balancers) silently close a WebSocket that has had no traffic for ~60s of
+  // idle time; that drop is what surfaced the perpetual "Reconnecting…" pill.
+  // A lightweight ping every 25s keeps the tunnel "active" so the socket is
+  // not reaped. The server is expected to ignore unknown message types.
+  static const _pingInterval = Duration(seconds: 25);
 
   Stream<Map<String, dynamic>> get messages => _controller.stream;
   Stream<WsState> get state => _state.stream;
@@ -46,7 +54,11 @@ class WebSocketClient {
           _emit(WsState.connected);
         }
         try {
-          _controller.add(jsonDecode(data as String) as Map<String, dynamic>);
+          final decoded = jsonDecode(data as String) as Map<String, dynamic>;
+          // Swallow heartbeat acks — they exist only to keep the tunnel warm
+          // and must not reach feature listeners.
+          if (decoded['type'] == 'pong') return;
+          _controller.add(decoded);
         } catch (_) {}
       },
       onDone: _scheduleReconnect,
@@ -55,9 +67,21 @@ class WebSocketClient {
     );
     // Optimistically mark connected; the first frame or onDone refines it.
     _emit(WsState.connected);
+    _startHeartbeat();
+  }
+
+  void _startHeartbeat() {
+    _heartbeat?.cancel();
+    _heartbeat = Timer.periodic(_pingInterval, (_) {
+      try {
+        _channel?.sink.add(jsonEncode({'type': 'ping'}));
+      } catch (_) {/* sink already closed — reconnect will handle it */}
+    });
   }
 
   void _scheduleReconnect() {
+    _heartbeat?.cancel();
+    _heartbeat = null;
     _emit(WsState.disconnected);
     if (_token == null) return; // explicit disconnect
     final delay = _backoff[_attempt.clamp(0, _backoff.length - 1)];
@@ -76,6 +100,8 @@ class WebSocketClient {
     _token = null;
     _reconnect?.cancel();
     _reconnect = null;
+    _heartbeat?.cancel();
+    _heartbeat = null;
     try {
       _channel?.sink.close();
     } catch (_) {}

@@ -49,4 +49,48 @@ class AuthRepository {
     final data = await _api.post('/auth/switch-role', {'role': role}, auth: true);
     return AuthResult.fromJson(data);
   }
+
+  /// Fires a synthetic ranking request and returns the server's verdict.
+  /// Keys: `ok` (bool), `ai_configured` (bool), `ranker_name` (String),
+  /// `model_name` (String), `latency_ms` (int), `used_fallback` (bool),
+  /// optional `error` (String), and `top_*` fields on success.
+  Future<Map<String, dynamic>> testAIRanker() async {
+    final data = await _api.post('/auth/test-ai', {}, auth: true);
+    return Map<String, dynamic>.from(data as Map);
+  }
+
+  Future<void> submitBugReport({
+    required String title,
+    required String body,
+    String? appVersion,
+    String? deviceInfo,
+  }) async {
+    await _api.post(
+      '/auth/bug-report',
+      {
+        'title': title,
+        'body': body,
+        if (appVersion != null) 'app_version': appVersion,
+        if (deviceInfo != null) 'device_info': deviceInfo,
+      },
+      auth: true,
+    );
+  }
+
+  Future<void> requestPasswordReset(String email) async {
+    await _api.post('/auth/forgot-password', {'email': email});
+  }
+
+  Future<AuthResult> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    final data = await _api.post('/auth/reset-password', {
+      'email': email,
+      'code': code,
+      'new_password': newPassword,
+    });
+    return AuthResult.fromJson(data);
+  }
 }

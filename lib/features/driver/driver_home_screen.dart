@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show HapticFeedback, SystemSound, SystemSoundType;
+import 'package:flutter/services.dart' show SystemSound, SystemSoundType;
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,7 +12,19 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/fcm_service.dart';
+import '../../core/haptics.dart';
+import '../../core/map_centering.dart';
+import '../../core/wkt.dart';
 import '../../core/map_style_provider.dart';
+import '../../core/matching_preference_provider.dart';
+import '../../core/widgets/ai_matching_toggle_tile.dart';
+import '../../core/widgets/bug_report_sheet.dart';
+import '../../core/widgets/connectivity_pill.dart';
+import '../../core/widgets/map_recenter_button.dart';
+import '../../core/widgets/pre_permission_sheet.dart';
+import '../../core/widgets/test_ai_tile.dart';
+import '../onboarding/onboarding_screen.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
@@ -42,6 +54,8 @@ class DriverHomeScreen extends StatefulWidget {
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
   final _mapController = MapController();
+  final DraggableScrollableController _sheetCtrl =
+      DraggableScrollableController();
   LatLng? _myPos;
   Timer? _locationTimer;
   String? _lastNotifiedRequestId;
@@ -59,11 +73,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       if (newId != null && newId != _lastNotifiedRequestId) {
         _lastNotifiedRequestId = newId;
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('A passenger accepted your ride offer!'),
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).passengerAcceptedRide),
             backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
-            duration: Duration(seconds: 4),
+            duration: const Duration(seconds: 4),
           ));
         }
       }
@@ -107,13 +121,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         provider.addListener(_ratingListener);
         _incomingSub = provider.incomingRequests.listen((info) {
           if (!mounted) return;
-          HapticFeedback.heavyImpact();
+          Haptics.heavy();
           SystemSound.play(SystemSoundType.click);
+          final l = AppLocalizations.of(context);
           final name = (info.name?.trim().isNotEmpty == true)
               ? info.name!
-              : 'A passenger';
+              : l.passenger;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('$name sent you a ride request'),
+            content: Text(l.passengerSentRequest(name)),
             backgroundColor: AppColors.teal,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 6),
@@ -123,6 +138,24 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       _locationTimer =
           Timer.periodic(const Duration(seconds: 15), (_) => _sendLocation());
     });
+  }
+
+  /// Re-centers the map on the driver, accounting for how far the bottom sheet
+  /// is currently dragged so the marker lands in the visible map area. Falls
+  /// back to a fresh location fetch if we don't have a fix yet.
+  Future<void> _recenterOnUser() async {
+    Haptics.light();
+    if (_myPos == null) {
+      await _initLocation();
+      return;
+    }
+    final fraction = _sheetCtrl.isAttached ? _sheetCtrl.size : 0.55;
+    centerOnUserAdjustedForSheet(
+      context: context,
+      mapController: _mapController,
+      pos: _myPos!,
+      sheetCoverFraction: fraction,
+    );
   }
 
   Future<void> _initLocation() async {
@@ -135,12 +168,20 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       if (!mounted) return;
       final latlng = LatLng(pos.latitude, pos.longitude);
       setState(() => _myPos = latlng);
-      _mapController.move(latlng, 14);
+      centerOnUserAdjustedForSheet(
+        context: context,
+        mapController: _mapController,
+        pos: latlng,
+      );
       if (!widget.isGuest) {
         await context.read<DriverProvider>().updateLocation(
               pos.latitude,
               pos.longitude,
             );
+      }
+      // Phase 1.7: notification rationale + prompt, once per install.
+      if (mounted) {
+        await FcmService.maybeRequestPermissionWithRationale(context);
       }
     } catch (_) {}
   }
@@ -207,6 +248,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     }
     var perm = await Geolocator.checkPermission();
     if (perm == LocationPermission.denied) {
+      // Phase 1.7: rationale sheet before the OS prompt — once per install.
+      final storage = TokenStorage();
+      final shown = await storage.hasShownLocationRationale();
+      if (!shown && mounted) {
+        final accepted = await PrePermissionSheet.askLocation(context);
+        await storage.markLocationRationaleShown();
+        if (!accepted) throw Exception('Location permission deferred');
+      }
       perm = await Geolocator.requestPermission();
     }
     if (perm == LocationPermission.deniedForever) {
@@ -232,6 +281,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         originPos: _myPos,
         onSubmit: (destLat, destLng, corridorKm, seats) {
           if (_myPos == null) return;
+          final preferAI = context.read<MatchingPreferenceProvider>().useAI;
           context.read<DriverProvider>().setRoute(
                 originLat: _myPos!.latitude,
                 originLng: _myPos!.longitude,
@@ -239,6 +289,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 destLng: destLng,
                 corridorKm: corridorKm,
                 seats: seats,
+                preferAI: preferAI,
               );
         },
       ),
@@ -255,6 +306,17 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   void _showLanguageSheet() {
     LanguageSheet.show(context);
+  }
+
+  void _showBugReportSheet() {
+    BugReportSheet.show(context);
+  }
+
+  void _showOnboardingReplay() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const OnboardingScreen(replay: true)),
+    );
   }
 
   void _showMapStyleSheet() {
@@ -317,6 +379,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             Future.delayed(const Duration(milliseconds: 200),
                 () => _openAccountSecurity(name, email));
           },
+          onReportBug: () {
+            Navigator.pop(context);
+            Future.delayed(
+                const Duration(milliseconds: 200), _showBugReportSheet);
+          },
+          onShowTutorial: () {
+            Navigator.pop(context);
+            Future.delayed(
+                const Duration(milliseconds: 200), _showOnboardingReplay);
+          },
           onSignOut: _logout,
         ),
       ),
@@ -378,20 +450,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     );
   }
 
-  List<LatLng> _parseWKT(String wkt) {
-    try {
-      final inner = wkt
-          .replaceAll('LINESTRING(', '')
-          .replaceAll('LINESTRING (', '')
-          .replaceAll(')', '');
-      return inner.split(',').map((pair) {
-        final parts = pair.trim().split(' ');
-        return LatLng(double.parse(parts[1]), double.parse(parts[0]));
-      }).toList();
-    } catch (_) {
-      return [];
-    }
-  }
+  List<LatLng> _parseWKT(String wkt) => parseLineStringWKT(wkt);
 
   @override
   void dispose() {
@@ -400,6 +459,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     provider.removeListener(_ratingListener);
     _incomingSub?.cancel();
     _locationTimer?.cancel();
+    _sheetCtrl.dispose();
     super.dispose();
   }
 
@@ -473,6 +533,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     builder: (_, mapStyle, __) => TileLayer(
                       urlTemplate: mapStyle.urlTemplate,
                       userAgentPackageName: 'com.example.sameway',
+                      tileBuilder: mapStyle.tileBuilder,
                     ),
                   ),
                   if (routePoints.isNotEmpty ||
@@ -617,7 +678,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                             onPressed: _showLanguageSheet,
                             icon: const Icon(Icons.translate_rounded,
                                 color: AppColors.textSecondary, size: 20),
-                            tooltip: 'Language',
+                            tooltip: AppLocalizations.of(context).language,
                             constraints: const BoxConstraints(
                                 minWidth: 48, minHeight: 48),
                             padding: EdgeInsets.zero,
@@ -626,7 +687,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                             onPressed: _showAccountSheet,
                             icon: const Icon(Icons.manage_accounts_rounded,
                                 color: AppColors.textSecondary, size: 22),
-                            tooltip: 'Account',
+                            tooltip: AppLocalizations.of(context).account,
                             constraints: const BoxConstraints(
                                 minWidth: 48, minHeight: 48),
                             padding: EdgeInsets.zero,
@@ -660,23 +721,37 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             },
           ),
 
+          // Connectivity / WS status pill — surfaces network problems so the
+          // driver isn't left wondering why their location pings aren't
+          // landing.
+          Consumer<DriverProvider>(
+            builder: (_, driver, __) =>
+                ConnectivityPill(wsState: driver.wsState),
+          ),
+
           // Bottom panel
           DraggableScrollableSheet(
-            initialChildSize: 0.28,
+            controller: _sheetCtrl,
+            initialChildSize: 0.55,
             minChildSize: 0.07,
             maxChildSize: 0.85,
             snap: true,
-            snapSizes: const [0.28],
+            snapSizes: const [0.28, 0.55],
             builder: (_, scrollController) => Consumer<DriverProvider>(
               builder: (_, driver, __) => DriverBottomPanel(
                 driver: driver,
                 scrollController: scrollController,
+                sheetCtrl: _sheetCtrl,
                 isGuest: widget.isGuest,
                 myPos: _myPos,
                 onSetRoute: _showSetRouteSheet,
                 onPlanTrip: _showPlanTripSheet,
                 onFindTrips: _showFindTripsSheet,
                 onDeleteRoute: () => driver.deleteRoute(),
+                onRefresh: () {
+                  Haptics.light();
+                  return driver.loadRequests();
+                },
               ),
             ),
           ),
@@ -697,6 +772,14 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 ),
               );
             },
+          ),
+
+          // Floating "center on me" button — rides just above the sheet and
+          // slides with it as it's dragged.
+          MapRecenterButton(
+            sheetController: _sheetCtrl,
+            accentColor: AppColors.primary,
+            onPressed: _recenterOnUser,
           ),
         ],
       ),
@@ -1280,6 +1363,8 @@ class _AccountSheet extends StatefulWidget {
   final VoidCallback onShowMapStyle;
   final void Function(String? name, String? email) onShowAccountSecurity;
   final VoidCallback onSignOut;
+  final VoidCallback onReportBug;
+  final VoidCallback onShowTutorial;
 
   const _AccountSheet({
     required this.scrollController,
@@ -1290,6 +1375,8 @@ class _AccountSheet extends StatefulWidget {
     required this.onShowMapStyle,
     required this.onShowAccountSecurity,
     required this.onSignOut,
+    required this.onReportBug,
+    required this.onShowTutorial,
     this.currentPos,
   });
 
@@ -1590,6 +1677,16 @@ class _AccountSheetState extends State<_AccountSheet> {
             onTap: widget.onShowMapStyle,
           ),
           _SheetTile(
+            icon: Icons.help_outline_rounded,
+            label: l.showTutorialAgain,
+            onTap: widget.onShowTutorial,
+          ),
+          AIMatchingToggleTile(
+            label: l.aiMatchingLabel,
+            subtitle: l.aiMatchingSubtitle,
+          ),
+          const TestAITile(),
+          _SheetTile(
             icon: Icons.local_offer_rounded,
             label: l.promotionsAndRewards,
             onTap: () {
@@ -1655,6 +1752,12 @@ class _AccountSheetState extends State<_AccountSheet> {
           const SizedBox(height: 4),
           const Divider(color: AppColors.border),
           const SizedBox(height: 4),
+          if (!widget.isGuest)
+            _SheetTile(
+              icon: Icons.bug_report_rounded,
+              label: l.reportABug,
+              onTap: widget.onReportBug,
+            ),
           _SheetTile(
             icon: Icons.logout_rounded,
             label: l.signOut,
@@ -1698,15 +1801,19 @@ class _SheetTile extends StatelessWidget {
           children: [
             Icon(icon, color: c, size: 20),
             const SizedBox(width: 16),
-            Text(
-              label,
-              style: TextStyle(
-                color: c,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: c,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: 8),
             trailing ??
                 Icon(Icons.chevron_right_rounded,
                     color: AppColors.textSecondary, size: 20),

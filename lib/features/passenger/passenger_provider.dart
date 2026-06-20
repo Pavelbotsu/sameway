@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import '../../core/haptics.dart';
 import '../../core/websocket_client.dart';
+import '../driver/driver_repository.dart' show PickupRoute;
 import 'passenger_repository.dart';
 
 class RideOffer {
   final String requestId;
   final String driverId;
   final String? driverName;
+  final String? driverPhotoUrl;
   final double? driverAvgRating;
   final int? driverRatingCount;
   final String? carMake;
@@ -24,11 +27,15 @@ class RideOffer {
   final double? pickupLng;
   final double? walkDistanceM;
   final double? driverDistanceToPickupM;
+  // Server-stamped ranker tag (see services/ranker on the backend). Null on
+  // payloads from older servers.
+  final String? matchMethod;
 
   const RideOffer({
     required this.requestId,
     required this.driverId,
     this.driverName,
+    this.driverPhotoUrl,
     this.driverAvgRating,
     this.driverRatingCount,
     this.carMake,
@@ -43,7 +50,11 @@ class RideOffer {
     this.pickupLng,
     this.walkDistanceM,
     this.driverDistanceToPickupM,
+    this.matchMethod,
   });
+
+  bool get matchedByAI =>
+      matchMethod != null && matchMethod!.startsWith('ai-');
 
   String? get carSummary => _carSummary(carColor, carMake, carModel, carPlate);
 }
@@ -121,12 +132,28 @@ class PassengerProvider extends ChangeNotifier {
   double? acceptedDriverAvgRating;
   int? acceptedDriverRatingCount;
   String? acceptedCarSummary;
+  // License plate broken out so the AcceptedCard can render it on a plate
+  // chip (Phase 1.1) — distinct from carSummary which mixes color/make/model.
+  String? acceptedCarPlate;
+  // Driver's profile photo URL — populated by accept WS / acceptRide so the
+  // AcceptedCard can render the same UserAvatar (Phase 1.3c).
+  String? acceptedDriverPhotoUrl;
   // Pickup handshake: the 4-digit code the server attached to this ride.
   // Cleared on entering inRide/looking; populated from the driver_response WS
   // payload or from /passenger/my-requests on reconnect.
   String? acceptedPickupCode;
   double? peerLat;
   double? peerLng;
+  // Pickup point — projection of the passenger onto the driver's road.
+  // Surfaced when the WS `ride_request`/`driver_response` payload carries it
+  // and used by the accepted card to render a flag marker + walk polyline.
+  double? pickupLat;
+  double? pickupLng;
+  double? walkDistanceM;
+  // Real road route for the mini-map. Fetched lazily on accept; null until
+  // the GET completes or stays null on OSRM failure (UI falls back to a
+  // straight line between driver and pickup point).
+  PickupRoute? pickupRoute;
   List<OutstandingRequest> outstandingRequests = [];
   WsState wsState = WsState.disconnected;
   int unreadMessages = 0;
@@ -141,7 +168,7 @@ class PassengerProvider extends ChangeNotifier {
   double? plannedDistanceKm;
   bool isSearching = false;
 
-  Future<void> setSearchDestination(LatLng dest) async {
+  Future<void> setSearchDestination(LatLng dest, {bool preferAI = false}) async {
     destinationPos = dest;
     isSearching = true;
     notifyListeners();
@@ -149,6 +176,7 @@ class PassengerProvider extends ChangeNotifier {
       final data = await _repo.search(
         destLat: dest.latitude,
         destLng: dest.longitude,
+        preferAI: preferAI,
       );
       plannedRouteWkt = (data['route_wkt'] as String?) ?? '';
       plannedDistanceKm = (data['distance_km'] as num?)?.toDouble() ?? 0;
@@ -239,6 +267,7 @@ class PassengerProvider extends ChangeNotifier {
       notifyListeners();
     } else if (type == 'ride_request') {
       pendingOffer = RideOffer(
+        driverPhotoUrl: p['driver_photo_url'] as String?,
         requestId: p['request_id'] as String? ?? '',
         driverId: p['driver_id'] as String? ?? '',
         driverName: p['driver_name'] as String?,
@@ -257,6 +286,7 @@ class PassengerProvider extends ChangeNotifier {
         walkDistanceM: (p['walk_distance_m'] as num?)?.toDouble(),
         driverDistanceToPickupM:
             (p['driver_distance_to_pickup_m'] as num?)?.toDouble(),
+        matchMethod: p['match_method'] as String?,
       );
       state = PassengerStatus.offered;
       notifyListeners();
@@ -278,11 +308,20 @@ class PassengerProvider extends ChangeNotifier {
           p['car_model'] as String?,
           p['car_plate'] as String?,
         );
+        acceptedCarPlate = (p['car_plate'] as String?)?.trim();
+        acceptedDriverPhotoUrl = (p['driver_photo_url'] as String?)?.trim();
         final code = (p['pickup_code'] as String?)?.trim();
         acceptedPickupCode = (code == null || code.isEmpty) ? null : code;
+        // Pickup geometry carried on the driver_response payload — used by
+        // the mini-map to render the flag marker + walk leg before the
+        // road-route fetch returns.
+        pickupLat = (p['pickup_lat'] as num?)?.toDouble();
+        pickupLng = (p['pickup_lng'] as num?)?.toDouble();
+        walkDistanceM = (p['walk_distance_m'] as num?)?.toDouble();
         outstandingRequests = const [];
         state = PassengerStatus.accepted;
         notifyListeners();
+        _fetchPickupRoute(reqId);
       } else if (status == 'declined') {
         outstandingRequests =
             outstandingRequests.where((r) => r.requestId != reqId).toList();
@@ -319,10 +358,12 @@ class PassengerProvider extends ChangeNotifier {
       state = PassengerStatus.inRide;
       acceptedPickupCode = null;
       notifyListeners();
+      Haptics.confirm();
       return true;
     } catch (e) {
       error = e.toString();
       notifyListeners();
+      Haptics.reject();
       return false;
     }
   }
@@ -385,6 +426,7 @@ class PassengerProvider extends ChangeNotifier {
 
   Future<void> acceptRide() async {
     if (pendingOffer == null) return;
+    Haptics.confirm();
     try {
       await _repo.respond(
           requestId: pendingOffer!.requestId, status: 'accepted');
@@ -394,16 +436,35 @@ class PassengerProvider extends ChangeNotifier {
       acceptedDriverAvgRating = pendingOffer!.driverAvgRating;
       acceptedDriverRatingCount = pendingOffer!.driverRatingCount;
       acceptedCarSummary = pendingOffer!.carSummary;
+      acceptedCarPlate = pendingOffer!.carPlate;
+      acceptedDriverPhotoUrl = pendingOffer!.driverPhotoUrl;
+      pickupLat = pendingOffer!.pickupLat;
+      pickupLng = pendingOffer!.pickupLng;
+      walkDistanceM = pendingOffer!.walkDistanceM;
       state = PassengerStatus.accepted;
       notifyListeners();
+      _fetchPickupRoute(pendingOffer!.requestId);
     } catch (e) {
       error = e.toString();
       notifyListeners();
     }
   }
 
+  /// Fetches the three-leg road route in the background and stores it on
+  /// `pickupRoute`. Failure is silent — the mini-map falls back to a straight
+  /// line if `pickupRoute` stays null.
+  Future<void> _fetchPickupRoute(String requestId) async {
+    try {
+      final r = await _repo.getPickupRoute(requestId);
+      if (acceptedRequestId != requestId) return; // user moved on
+      pickupRoute = r.isEmpty ? null : r;
+      notifyListeners();
+    } catch (_) {/* silent — straight-line fallback */}
+  }
+
   Future<void> cancelRide() async {
     if (acceptedRequestId == null) return;
+    Haptics.tap();
     try {
       await _repo.cancelRide(acceptedRequestId!);
       acceptedRequestId = null;
@@ -411,6 +472,10 @@ class PassengerProvider extends ChangeNotifier {
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
+      pickupLat = null;
+      pickupLng = null;
+      walkDistanceM = null;
+      pickupRoute = null;
       state = PassengerStatus.looking;
       notifyListeners();
     } catch (e) {
@@ -421,6 +486,7 @@ class PassengerProvider extends ChangeNotifier {
 
   Future<void> declineRide() async {
     if (pendingOffer == null) return;
+    Haptics.tap();
     try {
       await _repo.respond(
           requestId: pendingOffer!.requestId, status: 'declined');

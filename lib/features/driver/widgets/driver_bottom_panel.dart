@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,12 @@ import 'package:provider/provider.dart';
 import '../../../core/app_colors.dart';
 import '../../../core/app_localizations.dart';
 import '../../../core/geo.dart';
+import '../../../core/widgets/animated_map_marker.dart';
 import '../../../core/widgets/m3_expressive/m3_expressive.dart';
+import '../../../core/widgets/sheet_grab_handle.dart';
+import '../../../core/widgets/sos_button.dart';
+import '../../../core/widgets/user_avatar.dart';
+import '../../../core/wkt.dart';
 import '../../chat/chat_screen.dart';
 import '../driver_provider.dart';
 import '../driver_repository.dart';
@@ -21,10 +27,12 @@ class DriverBottomPanel extends StatelessWidget {
   final DriverProvider driver;
   final bool isGuest;
   final ScrollController scrollController;
+  final DraggableScrollableController sheetCtrl;
   final VoidCallback onSetRoute;
   final VoidCallback onPlanTrip;
   final VoidCallback onFindTrips;
   final VoidCallback onDeleteRoute;
+  final Future<void> Function() onRefresh;
   final LatLng? myPos;
 
   const DriverBottomPanel({
@@ -32,10 +40,12 @@ class DriverBottomPanel extends StatelessWidget {
     required this.driver,
     required this.isGuest,
     required this.scrollController,
+    required this.sheetCtrl,
     required this.onSetRoute,
     required this.onPlanTrip,
     required this.onFindTrips,
     required this.onDeleteRoute,
+    required this.onRefresh,
     this.myPos,
   });
 
@@ -76,42 +86,46 @@ class DriverBottomPanel extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-              decoration: BoxDecoration(
-                color: AppColors.border,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+          SheetGrabHandle(
+            controller: sheetCtrl,
+            minChildSize: 0.07,
+            maxChildSize: 0.85,
+            snapSizes: const [0.28, 0.55],
           ),
           const Divider(color: AppColors.border, height: 1),
           Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              padding: EdgeInsets.fromLTRB(
-                20,
-                12,
-                20,
-                MediaQuery.of(context).padding.bottom + 36,
-              ),
-              child: AnimatedSwitcher(
-                duration: _kSwitchDuration,
-                switchInCurve: _kSwitchCurve,
-                switchOutCurve: _kSwitchCurve,
-                transitionBuilder: (child, anim) => FadeTransition(
-                  opacity: anim,
-                  child: SizeTransition(
-                    axisAlignment: -1,
-                    sizeFactor: anim,
-                    child: child,
-                  ),
+            // Pull-to-refresh re-runs the driver's GET /driver/requests so
+            // a stuck request list can be force-refreshed without waiting
+            // for the polling timer.
+            child: RefreshIndicator(
+              color: AppColors.teal,
+              backgroundColor: AppColors.surface,
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  12,
+                  20,
+                  MediaQuery.of(context).padding.bottom + 36,
                 ),
-                child: KeyedSubtree(
-                  key: ValueKey(_stateKey()),
-                  child: _stateBody(context),
+                child: AnimatedSwitcher(
+                  duration: _kSwitchDuration,
+                  switchInCurve: _kSwitchCurve,
+                  switchOutCurve: _kSwitchCurve,
+                  transitionBuilder: (child, anim) => FadeTransition(
+                    opacity: anim,
+                    child: SizeTransition(
+                      axisAlignment: -1,
+                      sizeFactor: anim,
+                      child: child,
+                    ),
+                  ),
+                  child: KeyedSubtree(
+                    key: ValueKey(_stateKey()),
+                    child: _stateBody(context),
+                  ),
                 ),
               ),
             ),
@@ -274,9 +288,21 @@ class _ActivePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final hasActivePassenger = driver.requests.any(
+        (r) => r.status == 'accepted' || r.status == 'in_progress');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (hasActivePassenger) ...[
+          Align(
+            alignment: Alignment.centerRight,
+            child: SosButton(
+              lat: myPos?.latitude,
+              lng: myPos?.longitude,
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
         _RouteActiveCard(
           route: driver.activeRoute!,
           onDelete: () async {
@@ -449,6 +475,7 @@ class _RouteActiveCard extends StatelessWidget {
             ),
           ),
           IconButton(
+            tooltip: AppLocalizations.of(context).cancel,
             icon: const Icon(Icons.close_rounded,
                 color: AppColors.error, size: 20),
             onPressed: onDelete,
@@ -573,12 +600,7 @@ class _RequestTile extends StatelessWidget {
             if (request.status == 'accepted' &&
                 request.pickupCode != null) ...[
               const SizedBox(height: 10),
-              _DriverPickupCodeBlock(
-                code: request.pickupCode!,
-                onConfirm: (entered) => context
-                    .read<DriverProvider>()
-                    .confirmPickup(request.id, entered),
-              ),
+              _DriverPickupCodeBlock(code: request.pickupCode!),
             ],
             const SizedBox(height: 12),
             _AcceptedRideMap(
@@ -586,6 +608,8 @@ class _RequestTile extends StatelessWidget {
               peerPos: passengerLoc == null
                   ? null
                   : LatLng(passengerLoc!.lat, passengerLoc!.lng),
+              pickupPoint: LatLng(request.pickupLat, request.pickupLng),
+              pickupRoute: context.watch<DriverProvider>().pickupRoute,
             ),
             const SizedBox(height: 12),
             _buildAcceptedActions(context),
@@ -719,8 +743,15 @@ class _RequestTile extends StatelessWidget {
   Widget _buildHeaderRow(BuildContext context) {
     return Row(
         children: [
-          Icon(_statusIcon, color: _statusColor, size: 20),
+          UserAvatar(
+            photoUrl: request.passengerPhotoUrl,
+            name: request.passengerName,
+            size: 36,
+            ring: false,
+          ),
           const SizedBox(width: 10),
+          Icon(_statusIcon, color: _statusColor, size: 18),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -816,7 +847,14 @@ class _RequestTile extends StatelessWidget {
 class _AcceptedRideMap extends StatefulWidget {
   final LatLng? myPos;
   final LatLng? peerPos;
-  const _AcceptedRideMap({this.myPos, this.peerPos});
+  final LatLng? pickupPoint;
+  final PickupRoute? pickupRoute;
+  const _AcceptedRideMap({
+    this.myPos,
+    this.peerPos,
+    this.pickupPoint,
+    this.pickupRoute,
+  });
 
   @override
   State<_AcceptedRideMap> createState() => _AcceptedRideMapState();
@@ -846,14 +884,51 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       try {
+        final points = <LatLng>[a, b];
+        if (widget.pickupPoint != null) points.add(widget.pickupPoint!);
         _ctrl.fitCamera(
           CameraFit.bounds(
-            bounds: LatLngBounds.fromPoints([a, b]),
+            bounds: LatLngBounds.fromPoints(points),
             padding: const EdgeInsets.all(36),
           ),
         );
       } catch (_) {}
     });
+  }
+
+  /// Builds the polyline list. With a `pickupRoute` we render three legs:
+  /// driver → pickup (solid teal), pickup → continuation (lighter teal),
+  /// passenger → pickup (dashed teal). On OSRM failure (route empty) we
+  /// fall back to a single straight line so users still see something.
+  List<Polyline> _buildPolylines(LatLng driverPos, LatLng peerPos) {
+    final route = widget.pickupRoute;
+    if (route == null) {
+      return [
+        Polyline(points: [driverPos, peerPos], strokeWidth: 2, color: AppColors.teal),
+      ];
+    }
+    final out = <Polyline>[];
+    final pickup = parseLineStringWKT(route.pickupWkt);
+    final continuation = parseLineStringWKT(route.continuationWkt);
+    final walk = parseLineStringWKT(route.walkWkt);
+    if (pickup.length >= 2) {
+      out.add(Polyline(points: pickup, strokeWidth: 4, color: AppColors.teal));
+    }
+    if (continuation.length >= 2) {
+      out.add(Polyline(
+          points: continuation, strokeWidth: 3,
+          color: AppColors.teal.withValues(alpha: 0.55)));
+    }
+    if (walk.length >= 2) {
+      out.add(Polyline(
+          points: walk, strokeWidth: 3, color: AppColors.teal,
+          pattern: StrokePattern.dashed(segments: [6, 6])));
+    }
+    if (out.isEmpty) {
+      out.add(Polyline(
+          points: [driverPos, peerPos], strokeWidth: 2, color: AppColors.teal));
+    }
+    return out;
   }
 
   @override
@@ -906,43 +981,55 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
                       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   userAgentPackageName: 'com.sameway.app',
                 ),
-                PolylineLayer(polylines: [
-                  Polyline(
-                    points: [a, b],
-                    strokeWidth: 2,
-                    color: AppColors.teal,
-                  ),
-                ]),
-                MarkerLayer(markers: [
-                  Marker(
-                    point: a,
-                    width: 28,
-                    height: 28,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.success,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                PolylineLayer(polylines: _buildPolylines(a, b)),
+                AnimatedMarkerPosition(
+                  target: b,
+                  builder: (ctx, passengerP) => MarkerLayer(markers: [
+                    Marker(
+                      point: a,
+                      width: 28,
+                      height: 28,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.success,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(Icons.directions_car_rounded,
+                            size: 14, color: Colors.white),
                       ),
-                      child: const Icon(Icons.directions_car_rounded,
-                          size: 14, color: Colors.white),
                     ),
-                  ),
-                  Marker(
-                    point: b,
-                    width: 28,
-                    height: 28,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.teal,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                    Marker(
+                      point: passengerP,
+                      width: 28,
+                      height: 28,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.teal,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(Icons.person_rounded,
+                            size: 16, color: Colors.white),
                       ),
-                      child: const Icon(Icons.person_rounded,
-                          size: 16, color: Colors.white),
                     ),
-                  ),
-                ]),
+                    if (widget.pickupPoint != null)
+                      Marker(
+                        point: widget.pickupPoint!,
+                        width: 28,
+                        height: 28,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                          child: const Icon(Icons.flag_rounded,
+                              size: 14, color: Colors.white),
+                        ),
+                      ),
+                  ]),
+                ),
               ],
             ),
           ),
@@ -961,48 +1048,29 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
   }
 }
 
-// _DriverPickupCodeBlock displays the shared 4-digit code and lets the driver
-// type it in to confirm pickup. The passenger sees the same code on their
-// _AcceptedCard; either side can submit first — the backend is idempotent.
-class _DriverPickupCodeBlock extends StatefulWidget {
+// _DriverPickupCodeBlock displays the 4-digit pickup code prominently. The
+// driver tells the code to the passenger verbally when they meet at the
+// pickup point; the passenger types it in on their side. The driver never
+// has an input field — that's the whole point of the asymmetric handshake
+// (proves the parties physically met). See D3 in the pickup-handshake plan.
+class _DriverPickupCodeBlock extends StatelessWidget {
   final String code;
-  final Future<bool> Function(String entered) onConfirm;
-  const _DriverPickupCodeBlock({
-    required this.code,
-    required this.onConfirm,
-  });
+  const _DriverPickupCodeBlock({required this.code});
 
-  @override
-  State<_DriverPickupCodeBlock> createState() => _DriverPickupCodeBlockState();
-}
-
-class _DriverPickupCodeBlockState extends State<_DriverPickupCodeBlock> {
-  final _ctrl = TextEditingController();
-  bool _submitting = false;
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    if (_ctrl.text.length != 4) return;
-    setState(() => _submitting = true);
-    final ok = await widget.onConfirm(_ctrl.text);
-    if (!mounted) return;
-    setState(() => _submitting = false);
-    if (!ok) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Wrong code'),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+  Future<void> _copy(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(l.codeCopied),
+      backgroundColor: AppColors.success,
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
@@ -1013,71 +1081,43 @@ class _DriverPickupCodeBlockState extends State<_DriverPickupCodeBlock> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Ask passenger for their pickup code',
-            style: TextStyle(
+          Text(
+            l.tellCodeToPassenger,
+            style: const TextStyle(
               color: AppColors.textSecondary,
               fontSize: 11,
               fontWeight: FontWeight.w500,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _ctrl,
-                  enabled: !_submitting,
-                  keyboardType: TextInputType.number,
-                  maxLength: 4,
+                child: Text(
+                  code,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 6,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 10,
+                    fontFeatures: [FontFeature.tabularFigures()],
                   ),
-                  decoration: const InputDecoration(
-                    counterText: '',
-                    hintText: '____',
-                    hintStyle: TextStyle(color: AppColors.textSecondary),
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 8),
-                  ),
-                  onSubmitted: (_) => _submit(),
-                  onChanged: (_) => setState(() {}),
                 ),
               ),
-              const SizedBox(width: 10),
-              FilledButton(
-                onPressed:
-                    (_ctrl.text.length == 4 && !_submitting) ? _submit : null,
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.teal,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 12),
+              const SizedBox(width: 8),
+              IconButton(
+                tooltip: l.copyCode,
+                onPressed: () => _copy(context),
+                icon: const Icon(Icons.copy_rounded,
+                    color: AppColors.teal, size: 20),
+                style: IconButton.styleFrom(
+                  backgroundColor: AppColors.teal.withValues(alpha: 0.15),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(10)),
                 ),
-                child: _submitting
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white))
-                    : const Text('Confirm',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 12)),
               ),
             ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'or share this code with them: ${widget.code}',
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 11,
-            ),
           ),
         ],
       ),

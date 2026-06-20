@@ -5,11 +5,14 @@ import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../language_provider.dart';
 
+// Alphabetical by label (Latin scripts cluster, Cyrillic sorts after them).
 const _languages = <_LanguageOption>[
-  _LanguageOption(code: 'en', label: 'English', flag: '🇬🇧'),
-  _LanguageOption(code: 'uk', label: 'Українська', flag: '🇺🇦'),
-  _LanguageOption(code: 'es', label: 'Español', flag: '🇪🇸'),
   _LanguageOption(code: 'de', label: 'Deutsch', flag: '🇩🇪'),
+  _LanguageOption(code: 'en', label: 'English', flag: '🇬🇧'),
+  _LanguageOption(code: 'es', label: 'Español', flag: '🇪🇸'),
+  _LanguageOption(code: 'fr', label: 'Français', flag: '🇫🇷'),
+  _LanguageOption(code: 'it', label: 'Italiano', flag: '🇮🇹'),
+  _LanguageOption(code: 'uk', label: 'Українська', flag: '🇺🇦'),
 ];
 
 class _LanguageOption {

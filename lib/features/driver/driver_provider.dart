@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
 import '../../core/geo.dart';
+import '../../core/haptics.dart';
 import '../../core/websocket_client.dart';
 import 'driver_repository.dart';
 
@@ -229,6 +230,7 @@ class DriverProvider extends ChangeNotifier {
     required double destLng,
     required double corridorKm,
     required int seats,
+    bool preferAI = false,
   }) async {
     isLoading = true;
     error = null;
@@ -241,6 +243,7 @@ class DriverProvider extends ChangeNotifier {
         destLng: destLng,
         corridorKm: corridorKm,
         seats: seats,
+        preferAI: preferAI,
       );
       destinationPos = LatLng(destLat, destLng);
       await loadRequests();
@@ -261,6 +264,13 @@ class DriverProvider extends ChangeNotifier {
 
   Future<bool> respondToRequest(String requestId,
       {required bool accepted}) async {
+    // Tactile cue fires at function entry so user feels feedback the
+    // instant they tap Accept/Decline — before the network round-trip.
+    if (accepted) {
+      Haptics.confirm();
+    } else {
+      Haptics.tap();
+    }
     try {
       await _repo.respond(
         requestId: requestId,
@@ -295,6 +305,7 @@ class DriverProvider extends ChangeNotifier {
   }
 
   Future<void> cancelRide(String requestId) async {
+    Haptics.tap();
     try {
       await _repo.cancelRide(requestId);
       acceptedRequestId = null;
@@ -375,10 +386,12 @@ class DriverProvider extends ChangeNotifier {
           r.id == requestId ? r.copyWith(status: 'in_progress') : r,
       ];
       notifyListeners();
+      Haptics.confirm();
       return true;
     } catch (e) {
       error = e.toString();
       notifyListeners();
+      Haptics.reject();
       return false;
     }
   }
@@ -388,10 +401,12 @@ class DriverProvider extends ChangeNotifier {
       await _repo.dropoff(requestId: requestId, distanceKm: distanceKm);
       // The ride_done WS event will arrive and trigger _surgicalRemoveRide
       // and the rating sheet — no local optimistic patch needed here.
+      Haptics.confirm();
       return true;
     } catch (e) {
       error = e.toString();
       notifyListeners();
+      Haptics.reject();
       return false;
     }
   }

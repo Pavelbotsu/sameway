@@ -10,12 +10,31 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/fcm_service.dart';
 import '../../core/geo.dart';
+import '../../core/haptics.dart';
 import '../../core/app_localizations.dart';
+import '../../core/map_centering.dart';
 import '../../core/map_style_provider.dart';
+import '../../core/matching_preference_provider.dart';
 import '../../core/token_storage.dart';
 import 'package:geocoding/geocoding.dart';
+import '../../core/widgets/ai_match_chip.dart';
+import '../../core/widgets/animated_map_marker.dart';
+import '../../core/widgets/ai_matching_toggle_tile.dart';
+import '../../core/widgets/bug_report_sheet.dart';
 import '../../core/widgets/car_edit_sheet.dart';
+import '../../core/widgets/connectivity_pill.dart';
+import '../../core/widgets/license_plate_chip.dart';
+import '../../core/widgets/map_recenter_button.dart';
+import '../../core/widgets/pre_permission_sheet.dart';
+import '../../core/widgets/sos_button.dart';
+import '../../core/widgets/user_avatar.dart';
+import '../../core/widgets/sheet_grab_handle.dart';
+import '../../core/widgets/test_ai_tile.dart';
+import '../../core/widgets/walk_to_pickup_banner.dart';
+import '../../core/wkt.dart';
+import '../onboarding/onboarding_screen.dart';
 import '../../core/widgets/glass_card.dart';
 import '../../core/widgets/language_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
@@ -152,8 +171,9 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
     final provider = context.read<PassengerProvider>();
     final ok = await provider.sendRequestToDriver(driver.driverId);
     if (!mounted) return;
+    final l = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(ok ? 'Ride request sent!' : (provider.error ?? 'Failed')),
+      content: Text(ok ? l.rideRequestSent : (provider.error ?? l.requestFailed)),
       backgroundColor: ok ? AppColors.success : AppColors.error,
       behavior: SnackBarBehavior.floating,
     ));
@@ -161,20 +181,43 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
 
   void _showDriverInfo(_NearbyDriverInfo driver) {
     setState(() => _selectedDriver = driver);
+    // Intentionally NOT clearing `_selectedDriver` when the sheet dismisses:
+    // users dismiss it to peek at the map and then want to come back to the
+    // driver they were viewing. The selection persists until they tap a
+    // different driver or change destination. A floating chip on the map
+    // ([_SelectedDriverChip] below) lets them re-open the info sheet.
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (_) => _DriverInfoSheet(
         driver: driver,
+        destination: _destPos,
         onRequest: () {
           Navigator.pop(context);
           _requestRide(driver);
         },
       ),
-    ).then((_) {
-      if (mounted) setState(() => _selectedDriver = null);
-    });
+    );
+  }
+
+  /// Re-centers the map on the user, accounting for however far the bottom
+  /// sheet is currently dragged so the marker lands in the middle of the
+  /// *visible* map area rather than behind the sheet. Falls back to a fresh
+  /// location fetch if we don't have a fix yet.
+  Future<void> _recenterOnUser() async {
+    Haptics.light();
+    if (_myPos == null) {
+      await _initLocation();
+      return;
+    }
+    final fraction = _sheetCtrl.isAttached ? _sheetCtrl.size : 0.55;
+    centerOnUserAdjustedForSheet(
+      context: context,
+      mapController: _mapController,
+      pos: _myPos!,
+      sheetCoverFraction: fraction,
+    );
   }
 
   Future<void> _initLocation() async {
@@ -187,11 +230,21 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       if (!mounted) return;
       final latlng = LatLng(pos.latitude, pos.longitude);
       setState(() => _myPos = latlng);
-      _mapController.move(latlng, 14);
+      centerOnUserAdjustedForSheet(
+        context: context,
+        mapController: _mapController,
+        pos: latlng,
+      );
       if (!widget.isGuest) {
         await context
             .read<PassengerProvider>()
             .updateLocation(pos.latitude, pos.longitude);
+      }
+      // Phase 1.7: now that location is sorted, prompt for notifications
+      // (once per install). Done after location so users understand why we
+      // want to ping them.
+      if (mounted) {
+        await FcmService.maybeRequestPermissionWithRationale(context);
       }
     } catch (_) {}
   }
@@ -257,6 +310,17 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
     }
     var perm = await Geolocator.checkPermission();
     if (perm == LocationPermission.denied) {
+      // Phase 1.7: show our in-app rationale before the OS prompt. Only
+      // once per install so we don't nag — the flag survives across
+      // permission resets, which is fine: returning users have already
+      // accepted/declined the OS prompt itself by then.
+      final storage = TokenStorage();
+      final shown = await storage.hasShownLocationRationale();
+      if (!shown && mounted) {
+        final accepted = await PrePermissionSheet.askLocation(context);
+        await storage.markLocationRationaleShown();
+        if (!accepted) throw Exception('Location permission deferred');
+      }
       perm = await Geolocator.requestPermission();
     }
     if (perm == LocationPermission.deniedForever) {
@@ -268,23 +332,21 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
     );
   }
 
-  List<LatLng> _parseWKT(String wkt) {
-    try {
-      final inner = wkt
-          .replaceAll('LINESTRING(', '')
-          .replaceAll('LINESTRING (', '')
-          .replaceAll(')', '');
-      return inner.split(',').map((pair) {
-        final parts = pair.trim().split(' ');
-        return LatLng(double.parse(parts[1]), double.parse(parts[0]));
-      }).toList();
-    } catch (_) {
-      return [];
-    }
-  }
+  List<LatLng> _parseWKT(String wkt) => parseLineStringWKT(wkt);
 
   void _showLanguageSheet() {
     LanguageSheet.show(context);
+  }
+
+  void _showBugReportSheet() {
+    BugReportSheet.show(context);
+  }
+
+  void _showOnboardingReplay() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const OnboardingScreen(replay: true)),
+    );
   }
 
   void _showMapStyleSheet() {
@@ -339,6 +401,16 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
             Navigator.pop(context);
             Future.delayed(const Duration(milliseconds: 200),
                 () => _openAccountSecurity(name, email));
+          },
+          onReportBug: () {
+            Navigator.pop(context);
+            Future.delayed(
+                const Duration(milliseconds: 200), _showBugReportSheet);
+          },
+          onShowTutorial: () {
+            Navigator.pop(context);
+            Future.delayed(
+                const Duration(milliseconds: 200), _showOnboardingReplay);
           },
           onSignOut: _logout,
         ),
@@ -457,6 +529,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                   builder: (_, mapStyle, __) => TileLayer(
                     urlTemplate: mapStyle.urlTemplate,
                     userAgentPackageName: 'com.example.sameway',
+                    tileBuilder: mapStyle.tileBuilder,
                   ),
                 ),
                 if (_selectedDriver != null &&
@@ -544,17 +617,38 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 ),
                 if (_nearbyDrivers.isNotEmpty)
                   MarkerLayer(
+                    // `matched` = the backend returned this driver because the
+                    // passenger has a destination set AND the driver's
+                    // corridor covers it. Without a destination the list is
+                    // just "drivers nearby" — informational, not picked by
+                    // the matching algorithm — so they render as small
+                    // subtle dots instead of the big green pin.
+                    //
+                    // Tapping a driver solo-focuses them: everyone else is
+                    // hidden until the user clears the selection. Stops the
+                    // "cluster of overlapping pins" mess.
                     markers: _nearbyDrivers
-                        .map((d) => Marker(
-                              point: d.origin,
-                              width: 40,
-                              height: 40,
-                              child: GestureDetector(
-                                onTap: () => _showDriverInfo(d),
-                                child: _DriverMarker(),
-                              ),
-                            ))
-                        .toList(),
+                        .where((d) =>
+                            _selectedDriver == null ||
+                            _selectedDriver!.driverId == d.driverId)
+                        .map((d) {
+                      final isSelected =
+                          _selectedDriver?.driverId == d.driverId;
+                      final matched = _destPos != null;
+                      final size = isSelected || matched ? 56.0 : 24.0;
+                      return Marker(
+                        point: d.origin,
+                        width: size,
+                        height: size,
+                        child: GestureDetector(
+                          onTap: () => _showDriverInfo(d),
+                          child: _DriverMarker(
+                            selected: isSelected,
+                            matched: matched,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 if (_destPos != null)
                   MarkerLayer(
@@ -667,7 +761,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                               onPressed: _showLanguageSheet,
                               icon: const Icon(Icons.translate_rounded,
                                   color: AppColors.textSecondary, size: 20),
-                              tooltip: 'Language',
+                              tooltip: AppLocalizations.of(context).language,
                               constraints: const BoxConstraints(
                                   minWidth: 48, minHeight: 48),
                               padding: EdgeInsets.zero,
@@ -678,7 +772,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                                   Icons.manage_accounts_rounded,
                                   color: AppColors.textSecondary,
                                   size: 22),
-                              tooltip: 'Account',
+                              tooltip: AppLocalizations.of(context).account,
                               constraints: const BoxConstraints(
                                   minWidth: 48, minHeight: 48),
                               padding: EdgeInsets.zero,
@@ -756,9 +850,27 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 ),
               ),
 
+            // Connectivity / WS status pill — auto-hides when both healthy.
+            ConnectivityPill(wsState: p.wsState),
+
+            if (_selectedDriver != null)
+              Positioned(
+                top: MediaQuery.of(context).viewPadding.top + 72,
+                left: 16,
+                right: 16,
+                child: Center(
+                  child: _SelectedDriverChip(
+                    name: _selectedDriver!.driverName,
+                    onTap: () => _showDriverInfo(_selectedDriver!),
+                    onClear: () =>
+                        setState(() => _selectedDriver = null),
+                  ),
+                ),
+              ),
+
             DraggableScrollableSheet(
               controller: _sheetCtrl,
-              initialChildSize: 0.28,
+              initialChildSize: 0.55,
               minChildSize: 0.07,
               maxChildSize: 0.85,
               snap: true,
@@ -766,6 +878,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               builder: (_, scrollController) => _StatusPanel(
                 provider: p,
                 scrollController: scrollController,
+                sheetCtrl: _sheetCtrl,
                 isGuest: widget.isGuest,
                 currentPos: _myPos,
                 destName: _destName.isEmpty ? null : _destName,
@@ -773,6 +886,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                   setState(() {
                     _destPos = pos;
                     _destName = name;
+                    _selectedDriver = null; // new search invalidates selection
                   });
                   _fetchNearbyDrivers();
                 },
@@ -780,6 +894,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                   setState(() {
                     _destPos = null;
                     _destName = '';
+                    _selectedDriver = null;
                   });
                   if (!widget.isGuest) {
                     context
@@ -788,7 +903,19 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                   }
                   _fetchNearbyDrivers();
                 },
+                onRefresh: () {
+                  Haptics.light();
+                  return _fetchNearbyDrivers();
+                },
               ),
+            ),
+
+            // Floating "center on me" button — rides just above the sheet and
+            // slides with it as it's dragged. Placed last so it sits on top.
+            MapRecenterButton(
+              sheetController: _sheetCtrl,
+              accentColor: AppColors.teal,
+              onPressed: _recenterOnUser,
             ),
           ],
         ),
@@ -798,25 +925,59 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   }
 }
 
+/// Marker for matched drivers on the passenger map. Uses a vibrant green
+/// (success color) and a larger footprint so it stays distinguishable when
+/// several markers overlap. Tap target matches the marker size so even with
+/// other passengers' devices nearby it is the easy hit.
+///
+/// When [selected] is true (user has opened this driver's info sheet), the
+/// marker gets a brighter outer ring so the chosen driver is obvious on the
+/// map even after the info sheet is dismissed.
 class _DriverMarker extends StatelessWidget {
+  /// True when the passenger tapped this driver — gets a tighter ring and
+  /// a stronger glow so it pops on the otherwise empty (others-hidden) map.
+  final bool selected;
+  /// True when the backend returned this driver because their corridor
+  /// covers the passenger's chosen destination. Drives the big-green vs
+  /// small-grey-dot split: unmatched drivers are just nearby observers.
+  final bool matched;
+  const _DriverMarker({this.selected = false, this.matched = false});
+
   @override
   Widget build(BuildContext context) {
+    if (!matched && !selected) {
+      // Subtle informational dot. No glow, no icon — just a presence
+      // signal so the passenger sees there's activity without confusing
+      // it for an algorithm pick.
+      return Container(
+        width: 14,
+        height: 14,
+        decoration: BoxDecoration(
+          color: AppColors.textSecondary.withValues(alpha: 0.6),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.6)),
+        ),
+      );
+    }
     return Container(
-      width: 40,
-      height: 40,
+      width: 52,
+      height: 52,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: AppColors.success,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2.5),
+        border: Border.all(
+          color: Colors.white,
+          width: selected ? 4 : 3,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.45),
-            blurRadius: 10,
-            spreadRadius: 1,
+            color: AppColors.success.withValues(alpha: selected ? 0.9 : 0.55),
+            blurRadius: selected ? 22 : 14,
+            spreadRadius: selected ? 4 : 2,
           ),
         ],
       ),
-      child: const Icon(Icons.drive_eta_rounded, color: Colors.white, size: 20),
+      child: const Icon(Icons.drive_eta_rounded, color: Colors.white, size: 26),
     );
   }
 }
@@ -827,14 +988,18 @@ class _StatusPanel extends StatelessWidget {
   final LatLng? currentPos;
   final String? destName;
   final ScrollController scrollController;
+  final DraggableScrollableController sheetCtrl;
   final void Function(LatLng pos, String name) onDestinationSet;
   final VoidCallback onClearDestination;
+  final Future<void> Function() onRefresh;
 
   const _StatusPanel({
     required this.provider,
     required this.scrollController,
+    required this.sheetCtrl,
     required this.onDestinationSet,
     required this.onClearDestination,
+    required this.onRefresh,
     this.isGuest = false,
     this.currentPos,
     this.destName,
@@ -850,30 +1015,35 @@ class _StatusPanel extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-              decoration: BoxDecoration(
-                color: AppColors.border,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+          SheetGrabHandle(
+            controller: sheetCtrl,
+            minChildSize: 0.07,
+            maxChildSize: 0.85,
+            snapSizes: const [0.28, 0.55],
           ),
           const Divider(color: AppColors.border, height: 1),
           Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              padding: EdgeInsets.fromLTRB(
-                20,
-                12,
-                20,
-                MediaQuery.of(context).viewInsets.bottom + 16,
-              ),
-              child: isGuest
-                  ? const _GuestPassengerCard()
-                  : AnimatedSwitcher(
+            // Pull-to-refresh kicks the periodic nearby-drivers fetch — gives
+            // the user explicit control instead of waiting 10 s for the
+            // polling timer. RefreshIndicator needs an inner scrollable that
+            // can overscroll, which SingleChildScrollView does once we set
+            // its physics to AlwaysScrollable.
+            child: RefreshIndicator(
+              color: AppColors.teal,
+              backgroundColor: AppColors.surface,
+              onRefresh: onRefresh,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  12,
+                  20,
+                  MediaQuery.of(context).viewInsets.bottom + 16,
+                ),
+                child: isGuest
+                    ? const _GuestPassengerCard()
+                    : AnimatedSwitcher(
                       duration: const Duration(milliseconds: 280),
                       switchInCurve: Curves.easeOutCubic,
                       switchOutCurve: Curves.easeOutCubic,
@@ -905,8 +1075,11 @@ class _StatusPanel extends StatelessWidget {
                             ),
                           PassengerStatus.accepted => _AcceptedCard(
                               requestId: provider.acceptedRequestId,
+                              driverId: provider.acceptedDriverId,
                               driverName: provider.acceptedDriverName,
+                              driverPhotoUrl: provider.acceptedDriverPhotoUrl,
                               carSummary: provider.acceptedCarSummary,
+                              carPlate: provider.acceptedCarPlate,
                               driverAvgRating:
                                   provider.acceptedDriverAvgRating,
                               driverRatingCount:
@@ -925,8 +1098,11 @@ class _StatusPanel extends StatelessWidget {
                             ),
                           PassengerStatus.inRide => _AcceptedCard(
                               requestId: provider.acceptedRequestId,
+                              driverId: provider.acceptedDriverId,
                               driverName: provider.acceptedDriverName,
+                              driverPhotoUrl: provider.acceptedDriverPhotoUrl,
                               carSummary: provider.acceptedCarSummary,
+                              carPlate: provider.acceptedCarPlate,
                               driverAvgRating:
                                   provider.acceptedDriverAvgRating,
                               driverRatingCount:
@@ -947,6 +1123,7 @@ class _StatusPanel extends StatelessWidget {
                         },
                       ),
                     ),
+              ),
             ),
           ),
         ],
@@ -1184,7 +1361,8 @@ class _LookingCardState extends State<_LookingCard> {
     setState(() => _suggestions = []);
     final pos = LatLng(s.lat, s.lng);
     widget.onDestinationSet(pos, s.name);
-    context.read<PassengerProvider>().setSearchDestination(pos);
+    final preferAI = context.read<MatchingPreferenceProvider>().useAI;
+    context.read<PassengerProvider>().setSearchDestination(pos, preferAI: preferAI);
   }
 
   @override
@@ -1266,6 +1444,7 @@ class _LookingCardState extends State<_LookingCard> {
                 color: AppColors.teal, size: 18),
             suffixIcon: hasDestination
                 ? IconButton(
+                    tooltip: AppLocalizations.of(context).clear,
                     icon: const Icon(Icons.close_rounded,
                         color: AppColors.textSecondary, size: 18),
                     onPressed: () {
@@ -1648,24 +1827,22 @@ class _OfferCardState extends State<_OfferCard>
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    return Column(
+    return Semantics(
+      container: true,
+      label: l.semOffer(offer.driverName ?? l.passenger),
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: const Icon(Icons.drive_eta_rounded,
-                  color: Colors.white, size: 24),
+            // Driver avatar — photo or initials (Phase 1.3c). The Hero
+            // tag is keyed by driverId so the avatar morphs smoothly when
+            // the AnimatedSwitcher swaps offer → accepted card.
+            UserAvatar(
+              photoUrl: offer.driverPhotoUrl,
+              name: offer.driverName,
+              size: 48,
+              heroTag: 'driver-avatar-${offer.driverId}',
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -1709,6 +1886,10 @@ class _OfferCardState extends State<_OfferCard>
                             fontSize: 11,
                           ),
                         ),
+                      ],
+                      if (offer.matchedByAI) ...[
+                        const SizedBox(width: 8),
+                        const AIMatchChip(),
                       ],
                     ],
                   ),
@@ -1816,6 +1997,7 @@ class _OfferCardState extends State<_OfferCard>
           ],
         ),
       ],
+      ),
     );
   }
 }
@@ -1860,8 +2042,13 @@ class _PickupPill extends StatelessWidget {
 
 class _AcceptedCard extends StatefulWidget {
   final String? requestId;
+  // Used to seed the Hero tag so the avatar morphs smoothly when the card
+  // animates in/out of the AnimatedSwitcher.
+  final String? driverId;
   final String? driverName;
+  final String? driverPhotoUrl;
   final String? carSummary;
+  final String? carPlate;
   final double? driverAvgRating;
   final int? driverRatingCount;
   final LatLng? passengerPos;
@@ -1875,8 +2062,11 @@ class _AcceptedCard extends StatefulWidget {
   final VoidCallback? onCancel;
   const _AcceptedCard({
     this.requestId,
+    this.driverId,
     this.driverName,
+    this.driverPhotoUrl,
     this.carSummary,
+    this.carPlate,
     this.driverAvgRating,
     this.driverRatingCount,
     this.passengerPos,
@@ -1937,6 +2127,45 @@ class _AcceptedCardState extends State<_AcceptedCard>
     return 2 * r * math.asin(math.min(1.0, math.sqrt(h)));
   }
 
+  /// Builds the three-leg polyline list (driver→pickup, pickup→destination,
+  /// passenger→pickup walking) from the provider's road route. Falls back to
+  /// a single straight line if the route fetch hasn't returned yet or
+  /// failed.
+  List<Polyline> _buildAcceptedPolylines({
+    required LatLng passenger,
+    required LatLng driver,
+    required PassengerProvider provider,
+  }) {
+    final route = provider.pickupRoute;
+    if (route == null) {
+      return [
+        Polyline(points: [passenger, driver], strokeWidth: 2, color: AppColors.teal),
+      ];
+    }
+    final out = <Polyline>[];
+    final pickup = parseLineStringWKT(route.pickupWkt);
+    final continuation = parseLineStringWKT(route.continuationWkt);
+    final walk = parseLineStringWKT(route.walkWkt);
+    if (pickup.length >= 2) {
+      out.add(Polyline(points: pickup, strokeWidth: 4, color: AppColors.teal));
+    }
+    if (continuation.length >= 2) {
+      out.add(Polyline(
+          points: continuation, strokeWidth: 3,
+          color: AppColors.teal.withValues(alpha: 0.55)));
+    }
+    if (walk.length >= 2) {
+      out.add(Polyline(
+          points: walk, strokeWidth: 3, color: AppColors.teal,
+          pattern: StrokePattern.dashed(segments: [6, 6])));
+    }
+    if (out.isEmpty) {
+      out.add(Polyline(
+          points: [passenger, driver], strokeWidth: 2, color: AppColors.teal));
+    }
+    return out;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -1976,8 +2205,26 @@ class _AcceptedCardState extends State<_AcceptedCard>
     final l = AppLocalizations.of(context);
     final hasRating = (widget.driverRatingCount ?? 0) > 0 &&
         widget.driverAvgRating != null;
-    return Column(
+    final driverLabel = widget.driverName ?? l.passenger;
+    return Semantics(
+      container: true,
+      label: widget.inRide
+          ? l.semInRide(driverLabel)
+          : l.semAccepted(driverLabel),
+      child: Column(
       children: [
+        // SOS pill — always visible while a ride is accepted / in progress,
+        // anchored top-right of the card so it's reachable mid-ride.
+        Align(
+          alignment: Alignment.centerRight,
+          child: SosButton(
+            lat: widget.passengerPos?.latitude,
+            lng: widget.passengerPos?.longitude,
+            driverName: widget.driverName,
+            plate: widget.carPlate,
+          ),
+        ),
+        const SizedBox(height: 8),
         SizedBox(
           width: 96,
           height: 96,
@@ -2006,20 +2253,20 @@ class _AcceptedCardState extends State<_AcceptedCard>
                   );
                 },
               ),
-              // Bloom check icon (scale + slight rotate).
+              // Bloom: driver's profile photo (or initials fallback). Same
+              // scale/rotate transition as the previous check icon so the
+              // arrival moment still has weight (Phase 1.3c).
               RotationTransition(
                 turns: _rotation,
                 child: ScaleTransition(
                   scale: _scale,
-                  child: Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: AppColors.success.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(Icons.check_circle_rounded,
-                        color: AppColors.success, size: 28),
+                  child: UserAvatar(
+                    photoUrl: widget.driverPhotoUrl,
+                    name: widget.driverName,
+                    size: 64,
+                    heroTag: widget.driverId != null
+                        ? 'driver-avatar-${widget.driverId}'
+                        : null,
                   ),
                 ),
               ),
@@ -2035,12 +2282,12 @@ class _AcceptedCardState extends State<_AcceptedCard>
             fontWeight: FontWeight.w600,
           ),
         ),
-        if (!widget.inRide && widget.pickupCode != null) ...[
+        // The passenger always types in the code (asymmetric handshake) — so
+        // the block renders whenever we're in the `accepted` state, signaled
+        // by a wired-up `onConfirmPickup` callback.
+        if (!widget.inRide && widget.onConfirmPickup != null) ...[
           const SizedBox(height: 14),
-          _PickupCodeBlock(
-            code: widget.pickupCode!,
-            onConfirm: widget.onConfirmPickup,
-          ),
+          _PickupCodeBlock(onConfirm: widget.onConfirmPickup!),
         ],
         if (widget.driverName != null &&
             widget.driverName!.trim().isNotEmpty) ...[
@@ -2072,29 +2319,55 @@ class _AcceptedCardState extends State<_AcceptedCard>
             ],
           ),
         ],
-        if (widget.carSummary != null) ...[
-          const SizedBox(height: 4),
+        if (widget.carSummary != null || widget.carPlate != null) ...[
+          const SizedBox(height: 8),
+          // Structured "you're getting into this car" row. The plate chip is
+          // the largest single element so it's the first thing a passenger
+          // can match against the vehicle they see (Phase 1.1).
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.directions_car_rounded,
-                  color: AppColors.textSecondary, size: 12),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  widget.carSummary!,
-                  style: const TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 11,
+              if (widget.carSummary != null) ...[
+                const Icon(Icons.directions_car_rounded,
+                    color: AppColors.textSecondary, size: 14),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    widget.carSummary!,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
+                if (widget.carPlate != null) const SizedBox(width: 10),
+              ],
+              if (widget.carPlate != null)
+                LicensePlateChip(plate: widget.carPlate!),
             ],
           ),
         ],
         if (widget.passengerPos != null && widget.driverPos != null) ...[
           const SizedBox(height: 14),
+          // Walk banner — only renders when the user has a non-trivial walk
+          // ahead of them. Sticks out above the mini-map so the message is
+          // unmissable.
+          Builder(builder: (context) {
+            final p = context.watch<PassengerProvider>();
+            if (p.pickupLat == null ||
+                p.pickupLng == null ||
+                p.walkDistanceM == null) {
+              return const SizedBox.shrink();
+            }
+            return WalkToPickupBanner(
+              passengerLat: widget.passengerPos!.latitude,
+              passengerLng: widget.passengerPos!.longitude,
+              pickupLat: p.pickupLat!,
+              pickupLng: p.pickupLng!,
+              walkDistanceM: p.walkDistanceM!,
+            );
+          }),
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: SizedBox(
@@ -2122,50 +2395,71 @@ class _AcceptedCardState extends State<_AcceptedCard>
                     userAgentPackageName: 'com.sameway.app',
                   ),
                   PolylineLayer(
-                    polylines: [
-                      Polyline(
-                        points: [
-                          widget.passengerPos!,
-                          widget.driverPos!,
-                        ],
-                        strokeWidth: 2,
-                        color: AppColors.teal,
-                      ),
-                    ],
+                    polylines: _buildAcceptedPolylines(
+                      passenger: widget.passengerPos!,
+                      driver: widget.driverPos!,
+                      provider: context.watch<PassengerProvider>(),
+                    ),
                   ),
-                  MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: widget.passengerPos!,
-                        width: 28,
-                        height: 28,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.teal,
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Colors.white, width: 2),
+                  AnimatedMarkerPosition(
+                    target: widget.driverPos!,
+                    builder: (ctx, driverP) => MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: widget.passengerPos!,
+                          width: 28,
+                          height: 28,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.teal,
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: const Icon(Icons.person_rounded,
+                                size: 16, color: Colors.white),
                           ),
-                          child: const Icon(Icons.person_rounded,
-                              size: 16, color: Colors.white),
                         ),
-                      ),
-                      Marker(
-                        point: widget.driverPos!,
-                        width: 28,
-                        height: 28,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.success,
-                            shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Colors.white, width: 2),
+                        Marker(
+                          point: driverP,
+                          width: 28,
+                          height: 28,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.success,
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: const Icon(Icons.directions_car_rounded,
+                                size: 14, color: Colors.white),
                           ),
-                          child: const Icon(Icons.directions_car_rounded,
-                              size: 14, color: Colors.white),
                         ),
-                      ),
-                    ],
+                        if (context.watch<PassengerProvider>().pickupLat != null &&
+                            context.watch<PassengerProvider>().pickupLng != null)
+                          Marker(
+                            point: LatLng(
+                              context.watch<PassengerProvider>().pickupLat!,
+                              context.watch<PassengerProvider>().pickupLng!,
+                            ),
+                            width: 44,
+                            height: 44,
+                            child: _PulsingPickupFlag(
+                              // Pulse only when the passenger is within
+                              // arrival range so the visual reward lands at
+                              // the moment they're stepping up to the car.
+                              active: _haversineKm(
+                                    widget.passengerPos!,
+                                    LatLng(
+                                      context.read<PassengerProvider>().pickupLat!,
+                                      context.read<PassengerProvider>().pickupLng!,
+                                    ),
+                                  ) <
+                                  0.05,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -2272,6 +2566,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
         ],
         const SizedBox(height: 4),
       ],
+      ),
     );
   }
 }
@@ -2309,6 +2604,90 @@ class _DeclinedCard extends StatelessWidget {
           style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
         ),
         const SizedBox(height: 4),
+      ],
+    );
+  }
+}
+
+/// Pickup-point flag with an optional gentle pulse halo. Pulses only when
+/// `active` is true (passenger within ~50 m). Visual reward for arriving.
+class _PulsingPickupFlag extends StatefulWidget {
+  final bool active;
+  const _PulsingPickupFlag({required this.active});
+
+  @override
+  State<_PulsingPickupFlag> createState() => _PulsingPickupFlagState();
+}
+
+class _PulsingPickupFlagState extends State<_PulsingPickupFlag>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 1500));
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.active) _ctrl.repeat();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PulsingPickupFlag old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !_ctrl.isAnimating) {
+      _ctrl.repeat();
+    } else if (!widget.active && _ctrl.isAnimating) {
+      _ctrl.stop();
+      _ctrl.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final flag = Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 2.5),
+      ),
+      alignment: Alignment.center,
+      child: const Icon(Icons.flag_rounded, size: 16, color: Colors.white),
+    );
+    if (!widget.active) {
+      return Center(child: flag);
+    }
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        AnimatedBuilder(
+          animation: _ctrl,
+          builder: (_, __) {
+            final t = _ctrl.value;
+            return Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: (1 - t) * 0.55),
+                  width: 2,
+                ),
+              ),
+              transform: Matrix4.identity()
+                ..scaleByDouble(
+                    0.55 + t * 0.45, 0.55 + t * 0.45, 1.0, 1.0),
+              transformAlignment: Alignment.center,
+            );
+          },
+        ),
+        flag,
       ],
     );
   }
@@ -2457,6 +2836,8 @@ class _AccountSheet extends StatefulWidget {
   final VoidCallback onShowMapStyle;
   final void Function(String? name, String? email) onShowAccountSecurity;
   final VoidCallback onSignOut;
+  final VoidCallback onReportBug;
+  final VoidCallback onShowTutorial;
 
   const _AccountSheet({
     required this.role,
@@ -2467,6 +2848,8 @@ class _AccountSheet extends StatefulWidget {
     required this.onShowMapStyle,
     required this.onShowAccountSecurity,
     required this.onSignOut,
+    required this.onReportBug,
+    required this.onShowTutorial,
     this.currentPos,
   });
 
@@ -2559,8 +2942,8 @@ class _AccountSheetState extends State<_AccountSheet> {
       if (ok && mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Network error'),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context).networkError),
           backgroundColor: AppColors.error,
           behavior: SnackBarBehavior.floating,
         ));
@@ -2705,7 +3088,8 @@ class _AccountSheetState extends State<_AccountSheet> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'You saved ${(_co2Saved ?? 18.7).toStringAsFixed(1)} kg CO₂',
+                          AppLocalizations.of(context).savedCO2(
+                              (_co2Saved ?? 18.7).toStringAsFixed(1)),
                           style: const TextStyle(
                               color: AppColors.success,
                               fontSize: 14,
@@ -2764,6 +3148,16 @@ class _AccountSheetState extends State<_AccountSheet> {
               onTap: widget.onShowMapStyle,
             ),
             _SheetTile(
+              icon: Icons.help_outline_rounded,
+              label: l.showTutorialAgain,
+              onTap: widget.onShowTutorial,
+            ),
+            AIMatchingToggleTile(
+              label: l.aiMatchingLabel,
+              subtitle: l.aiMatchingSubtitle,
+            ),
+            const TestAITile(),
+            _SheetTile(
               icon: Icons.local_offer_rounded,
               label: l.promotionsAndRewards,
               onTap: () {
@@ -2815,6 +3209,12 @@ class _AccountSheetState extends State<_AccountSheet> {
             const SizedBox(height: 4),
             const Divider(color: AppColors.border),
             const SizedBox(height: 4),
+            if (!widget.isGuest)
+              _SheetTile(
+                icon: Icons.bug_report_rounded,
+                label: l.reportABug,
+                onTap: widget.onReportBug,
+              ),
             _SheetTile(
               icon: Icons.logout_rounded,
               label: l.signOut,
@@ -2858,15 +3258,19 @@ class _SheetTile extends StatelessWidget {
           children: [
             Icon(icon, color: c, size: 20),
             const SizedBox(width: 16),
-            Text(
-              label,
-              style: TextStyle(
-                color: c,
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: c,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: 8),
             trailing ??
                 Icon(Icons.chevron_right_rounded,
                     color: AppColors.textSecondary, size: 20),
@@ -3145,9 +3549,16 @@ class _NearbyDriverInfo {
 
 class _DriverInfoSheet extends StatefulWidget {
   final _NearbyDriverInfo driver;
+  // Passenger's chosen destination, if any. When set we estimate the walk from
+  // the driver's no-detour drop-off (nearest point on their route) to here.
+  final LatLng? destination;
   final VoidCallback onRequest;
 
-  const _DriverInfoSheet({required this.driver, required this.onRequest});
+  const _DriverInfoSheet({
+    required this.driver,
+    required this.onRequest,
+    this.destination,
+  });
 
   @override
   State<_DriverInfoSheet> createState() => _DriverInfoSheetState();
@@ -3175,7 +3586,16 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final driver = widget.driver;
+    // Walk left over after a no-detour drop-off: distance from the passenger's
+    // destination to the nearest point on the driver's fixed route. Null when
+    // no destination is set or the driver's route geometry is missing.
+    final dest = widget.destination;
+    final routePts = parseLineStringWKT(driver.routeWkt);
+    final walkKm = (dest != null && routePts.isNotEmpty)
+        ? distanceToRouteKm(dest, routePts)
+        : null;
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.surface,
@@ -3249,6 +3669,19 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
             value: _destAddress ??
                 '${driver.destination.latitude.toStringAsFixed(4)}, ${driver.destination.longitude.toStringAsFixed(4)}',
           ),
+          if (walkKm != null) ...[
+            const SizedBox(height: 14),
+            _InfoRow(
+              icon: Icons.directions_walk_rounded,
+              color: const Color(0xFFFF9800),
+              label: l.walkToDestination,
+              value: l.walkEstimate(
+                minutesAt(walkKm * 1000, walkSpeedKmh),
+                (walkKm * 1000).round(),
+              ),
+              hint: l.walkToDestinationHint,
+            ),
+          ],
           const SizedBox(height: 14),
           _InfoRow(
             icon: Icons.directions_car_rounded,
@@ -3292,12 +3725,15 @@ class _InfoRow extends StatelessWidget {
   final Color color;
   final String label;
   final String value;
+  // Optional secondary line under the value (e.g. an explanatory note).
+  final String? hint;
 
   const _InfoRow({
     required this.icon,
     required this.color,
     required this.label,
     required this.value,
+    this.hint,
   });
 
   @override
@@ -3331,6 +3767,14 @@ class _InfoRow extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w500)),
+              if (hint != null) ...[
+                const SizedBox(height: 3),
+                Text(hint!,
+                    style: const TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 11,
+                        height: 1.35)),
+              ],
             ],
           ),
         ),
@@ -3348,16 +3792,16 @@ class _PlaceSuggestion {
   const _PlaceSuggestion({required this.name, required this.lat, required this.lng});
 }
 
-// _PickupCodeBlock renders the 4-digit pickup code prominently and provides a
-// secondary affordance for the passenger to *enter* a code (in case the
-// driver was the one displaying it). Either side can submit — the backend
-// idempotently treats the first valid submission as the source of truth.
+// _PickupCodeBlock renders the prompt "Ask your driver for the pickup code"
+// and a button that opens a 4-digit entry dialog. The passenger never sees
+// the code — they have to ask the driver verbally (asymmetric handshake,
+// see D3 in the pickup-code plan).
 class _PickupCodeBlock extends StatelessWidget {
-  final String code;
-  final Future<bool> Function(String code)? onConfirm;
-  const _PickupCodeBlock({required this.code, this.onConfirm});
+  final Future<bool> Function(String code) onConfirm;
+  const _PickupCodeBlock({required this.onConfirm});
 
   Future<void> _showEntryDialog(BuildContext context) async {
+    final l = AppLocalizations.of(context);
     final ctrl = TextEditingController();
     final entered = await showDialog<String>(
       context: context,
@@ -3365,8 +3809,8 @@ class _PickupCodeBlock extends StatelessWidget {
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
-        title: const Text('Enter driver\'s code',
-            style: TextStyle(
+        title: Text(l.askDriverForCode,
+            style: const TextStyle(
                 color: Colors.white, fontWeight: FontWeight.w700)),
         content: TextField(
           controller: ctrl,
@@ -3390,8 +3834,8 @@ class _PickupCodeBlock extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(l.cancel,
+                style: const TextStyle(color: AppColors.textSecondary)),
           ),
           TextButton(
             onPressed: () {
@@ -3399,18 +3843,18 @@ class _PickupCodeBlock extends StatelessWidget {
                 Navigator.pop(ctx, ctrl.text);
               }
             },
-            child: const Text('Confirm',
-                style: TextStyle(
+            child: Text(l.submit,
+                style: const TextStyle(
                     color: AppColors.teal, fontWeight: FontWeight.w700)),
           ),
         ],
       ),
     );
-    if (entered == null || onConfirm == null) return;
-    final ok = await onConfirm!(entered);
+    if (entered == null) return;
+    final ok = await onConfirm(entered);
     if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Wrong code'),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context).invalidCode),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
@@ -3419,6 +3863,7 @@ class _PickupCodeBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
@@ -3429,48 +3874,122 @@ class _PickupCodeBlock extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'Show this code to your driver',
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            code,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 38,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 10,
-              fontFeatures: [FontFeature.tabularFigures()],
-            ),
+          Row(
+            children: [
+              const Icon(Icons.pin_rounded,
+                  color: AppColors.teal, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  l.askDriverForCode,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
-          TextButton.icon(
-            onPressed: onConfirm == null
-                ? null
-                : () => _showEntryDialog(context),
-            icon: const Icon(Icons.keyboard_rounded,
-                size: 16, color: AppColors.teal),
-            label: const Text(
-              'I have a code from the driver — enter',
-              style: TextStyle(
-                color: AppColors.teal,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              onPressed: () => _showEntryDialog(context),
+              icon: const Icon(Icons.keyboard_rounded, size: 18),
+              label: Text(l.submit),
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.teal,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
               ),
-            ),
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 4),
-              minimumSize: const Size(0, 32),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Pill that floats near the top of the map when a driver has been selected
+/// but the info sheet is currently dismissed. Tapping it re-opens the info
+/// sheet for the same driver — the user can swipe the bottom sheet down to
+/// see the map, then come back to the chosen driver without losing context.
+class _SelectedDriverChip extends StatelessWidget {
+  final String name;
+  final VoidCallback onTap;
+  // Tapped to drop the selection and bring back the other drivers on the map.
+  // Without it the user is stuck in solo-focus mode until they change destination.
+  final VoidCallback onClear;
+
+  const _SelectedDriverChip({
+    required this.name,
+    required this.onTap,
+    required this.onClear,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
+        decoration: BoxDecoration(
+          color: AppColors.surface.withValues(alpha: 0.95),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.success.withValues(alpha: 0.6)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.3),
+              blurRadius: 14,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(20),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.drive_eta_rounded,
+                        color: AppColors.success, size: 18),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            InkWell(
+              onTap: onClear,
+              customBorder: const CircleBorder(),
+              child: Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                child: const Icon(Icons.close_rounded,
+                    color: AppColors.textSecondary, size: 18),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

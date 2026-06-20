@@ -47,10 +47,10 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
   }
 
   Future<bool> _confirmEndLiveState(String reason) async {
+    final l = AppLocalizations.of(context);
     final isDriver = widget.currentRole == 'driver';
-    final actionLabel = isDriver
-        ? 'End route & switch'
-        : 'Cancel requests & switch';
+    final actionLabel =
+        isDriver ? l.endRouteAndSwitch : l.cancelRequestsAndSwitch;
     final result = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -58,7 +58,7 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
         title: Text(
-          isDriver ? 'End your driver route?' : 'Cancel passenger search?',
+          isDriver ? l.endDriverRouteQ : l.cancelPassengerSearchQ,
           style: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.w700),
         ),
@@ -71,7 +71,7 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              isDriver ? 'Stay as driver' : 'Stay as passenger',
+              isDriver ? l.stayAsDriver : l.stayAsPassenger,
               style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
