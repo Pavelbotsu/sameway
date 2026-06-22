@@ -26,6 +26,7 @@ import '../../core/widgets/bug_report_sheet.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/connectivity_pill.dart';
 import '../../core/widgets/license_plate_chip.dart';
+import '../../core/widgets/map_destination_picker.dart';
 import '../../core/widgets/map_recenter_button.dart';
 import '../../core/widgets/pre_permission_sheet.dart';
 import '../../core/widgets/sos_button.dart';
@@ -72,6 +73,9 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   _NearbyDriverInfo? _selectedDriver;
   LatLng? _destPos;
   String _destName = '';
+  // True while the user is picking a destination by panning the map under the
+  // centre pin (entered from the destination field's location button).
+  bool _pickingDest = false;
   late VoidCallback _ratingListener;
 
   @override
@@ -218,6 +222,82 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       pos: _myPos!,
       sheetCoverFraction: fraction,
     );
+  }
+
+  // ── Pick-destination-on-map mode ───────────────────────────────────────────
+
+  /// Enter map-pick mode: shrink the sheet to ~30% so the map is exposed, and
+  /// centre on a sensible start point. The fixed centre pin (MapDestinationPicker)
+  /// then tracks the map centre; confirm reads it back.
+  void _enterDestPickMode() {
+    setState(() => _pickingDest = true);
+    final start = _destPos ?? _myPos;
+    if (start != null) {
+      _mapController.move(start, _mapController.camera.zoom);
+    }
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.3,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+  }
+
+  Future<void> _confirmDestPick() async {
+    Haptics.light();
+    final center = _mapController.camera.center;
+    final name = await _reverseGeocode(center);
+    if (!mounted) return;
+    setState(() => _pickingDest = false);
+    _applyDestination(center, name);
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.55,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+  }
+
+  void _cancelDestPick() {
+    setState(() => _pickingDest = false);
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.55,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+  }
+
+  /// Apply a chosen destination — the shared path for both the search-suggestion
+  /// tap and the map pick: store it, drop any solo-focused driver, kick off the
+  /// search + nearby refresh.
+  void _applyDestination(LatLng pos, String name) {
+    setState(() {
+      _destPos = pos;
+      _destName = name;
+      _selectedDriver = null;
+    });
+    if (!widget.isGuest) {
+      final preferAI = context.read<MatchingPreferenceProvider>().useAI;
+      context
+          .read<PassengerProvider>()
+          .setSearchDestination(pos, preferAI: preferAI);
+    }
+    _fetchNearbyDrivers();
+  }
+
+  /// Reverse-geocode a pinned point into a short label, falling back to
+  /// coordinates when the lookup fails.
+  Future<String> _reverseGeocode(LatLng p) async {
+    try {
+      final places = await placemarkFromCoordinates(p.latitude, p.longitude);
+      if (places.isNotEmpty) {
+        final pm = places.first;
+        final parts = [pm.street, pm.locality, pm.administrativeArea, pm.country]
+            .where((s) => s != null && s.isNotEmpty)
+            .take(2)
+            .join(', ');
+        if (parts.isNotEmpty) return parts;
+      }
+    } catch (_) {}
+    return '${p.latitude.toStringAsFixed(4)}, ${p.longitude.toStringAsFixed(4)}';
   }
 
   Future<void> _initLocation() async {
@@ -881,6 +961,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 sheetCtrl: _sheetCtrl,
                 isGuest: widget.isGuest,
                 currentPos: _myPos,
+                nearbyCount: _nearbyDrivers.length,
                 destName: _destName.isEmpty ? null : _destName,
                 onDestinationSet: (pos, name) {
                   setState(() {
@@ -907,16 +988,30 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                   Haptics.light();
                   return _fetchNearbyDrivers();
                 },
+                onPickOnMap: _enterDestPickMode,
               ),
             ),
 
             // Floating "center on me" button — rides just above the sheet and
-            // slides with it as it's dragged. Placed last so it sits on top.
-            MapRecenterButton(
-              sheetController: _sheetCtrl,
-              accentColor: AppColors.teal,
-              onPressed: _recenterOnUser,
-            ),
+            // slides with it as it's dragged. Hidden while picking on the map
+            // (the picker has its own action bar in that spot).
+            if (!_pickingDest)
+              MapRecenterButton(
+                sheetController: _sheetCtrl,
+                accentColor: AppColors.teal,
+                onPressed: _recenterOnUser,
+              ),
+
+            // Map-pick overlay: fixed centre pin + confirm/cancel bar.
+            if (_pickingDest)
+              MapDestinationPicker(
+                sheetController: _sheetCtrl,
+                accent: AppColors.teal,
+                title: AppLocalizations.of(context).moveMapToDestination,
+                confirmLabel: AppLocalizations.of(context).setDestinationHere,
+                onConfirm: _confirmDestPick,
+                onCancel: _cancelDestPick,
+              ),
           ],
         ),
       );
@@ -987,11 +1082,16 @@ class _StatusPanel extends StatelessWidget {
   final bool isGuest;
   final LatLng? currentPos;
   final String? destName;
+  // Count of nearby drivers; when a destination is set these are the
+  // same-way drivers, surfaced on the destination card.
+  final int nearbyCount;
   final ScrollController scrollController;
   final DraggableScrollableController sheetCtrl;
   final void Function(LatLng pos, String name) onDestinationSet;
   final VoidCallback onClearDestination;
   final Future<void> Function() onRefresh;
+  // Enter "pick destination on the map" mode (from the search field's button).
+  final VoidCallback onPickOnMap;
 
   const _StatusPanel({
     required this.provider,
@@ -1000,9 +1100,11 @@ class _StatusPanel extends StatelessWidget {
     required this.onDestinationSet,
     required this.onClearDestination,
     required this.onRefresh,
+    required this.onPickOnMap,
     this.isGuest = false,
     this.currentPos,
     this.destName,
+    this.nearbyCount = 0,
   });
 
   @override
@@ -1061,8 +1163,11 @@ class _StatusPanel extends StatelessWidget {
                           PassengerStatus.looking => _LookingCard(
                               currentPos: currentPos,
                               destName: destName,
+                              distanceKm: provider.plannedDistanceKm,
+                              nearbyCount: nearbyCount,
                               onDestinationSet: onDestinationSet,
                               onClearDestination: onClearDestination,
+                              onPickOnMap: onPickOnMap,
                               outstandingRequests:
                                   provider.outstandingRequests,
                               onCancelOutstanding: (id) =>
@@ -1273,18 +1378,26 @@ class _PassengerNavBar extends StatelessWidget {
 class _LookingCard extends StatefulWidget {
   final LatLng? currentPos;
   final String? destName;
+  // Planned route distance to the destination (km) and the count of nearby
+  // same-way drivers — shown as ride info on the destination card.
+  final double? distanceKm;
+  final int nearbyCount;
   final void Function(LatLng pos, String name) onDestinationSet;
   final VoidCallback onClearDestination;
+  final VoidCallback onPickOnMap;
   final List<OutstandingRequest> outstandingRequests;
   final void Function(String requestId) onCancelOutstanding;
 
   const _LookingCard({
     required this.onDestinationSet,
     required this.onClearDestination,
+    required this.onPickOnMap,
     required this.outstandingRequests,
     required this.onCancelOutstanding,
     this.currentPos,
     this.destName,
+    this.distanceKm,
+    this.nearbyCount = 0,
   });
 
   @override
@@ -1369,6 +1482,12 @@ class _LookingCardState extends State<_LookingCard> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final hasDestination = widget.destName != null;
+    // Only genuinely-awaiting-driver requests belong in this panel. Accepted /
+    // in-progress rides are represented by the accepted-ride card; showing them
+    // here made them look like history / available offers.
+    final pending = widget.outstandingRequests
+        .where((r) => r.status == 'pending')
+        .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1440,8 +1559,13 @@ class _LookingCardState extends State<_LookingCard> {
               borderSide:
                   const BorderSide(color: AppColors.teal, width: 1.5),
             ),
-            prefixIcon: const Icon(Icons.location_on_rounded,
-                color: AppColors.teal, size: 18),
+            // Location icon doubles as the "pick a point on the map" button.
+            prefixIcon: IconButton(
+              tooltip: AppLocalizations.of(context).pickOnMap,
+              icon: const Icon(Icons.location_on_rounded,
+                  color: AppColors.teal, size: 20),
+              onPressed: widget.onPickOnMap,
+            ),
             suffixIcon: hasDestination
                 ? IconButton(
                     tooltip: AppLocalizations.of(context).clear,
@@ -1496,13 +1620,20 @@ class _LookingCardState extends State<_LookingCard> {
               },
             ),
           ),
+        if (hasDestination) ...[
+          const SizedBox(height: 14),
+          _DestinationCard(
+            name: widget.destName!,
+            distanceKm: widget.distanceKm,
+            driversNearby: widget.nearbyCount,
+          ),
+        ],
         // "Searching for drivers heading your way" copy + wave indicator.
         Consumer<PassengerProvider>(
           builder: (_, p, __) {
-            if (!p.isSearching || widget.outstandingRequests.isNotEmpty) {
+            if (!p.isSearching || pending.isNotEmpty) {
               return const SizedBox.shrink();
             }
-            final km = p.plannedDistanceKm;
             return Padding(
               padding: const EdgeInsets.only(top: 14),
               child: Container(
@@ -1533,17 +1664,6 @@ class _LookingCardState extends State<_LookingCard> {
                         ),
                       ],
                     ),
-                    if (km != null && km > 0) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        '${km.toStringAsFixed(1)} km route · '
-                        "we'll notify you when one is found.",
-                        style: const TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
                     const SizedBox(height: 10),
                     const WaveProgressIndicator(height: 4),
                   ],
@@ -1552,9 +1672,38 @@ class _LookingCardState extends State<_LookingCard> {
             );
           },
         ),
-        if (widget.outstandingRequests.isNotEmpty) ...[
-          const SizedBox(height: 16),
-          ...widget.outstandingRequests.map(
+        if (pending.isNotEmpty) ...[
+          const SizedBox(height: 18),
+          // Header so these tiles aren't mistaken for available rides — they
+          // are the passenger's own pending requests, awaiting a driver, which
+          // look visually similar to driver offer cards.
+          Row(
+            children: [
+              const Icon(Icons.outbox_rounded,
+                  color: AppColors.textSecondary, size: 15),
+              const SizedBox(width: 6),
+              Text(
+                l.yourRequests,
+                style: const TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 2),
+          Padding(
+            padding: const EdgeInsets.only(left: 21),
+            child: Text(
+              l.yourRequestsHint,
+              style: const TextStyle(
+                  color: AppColors.textSecondary, fontSize: 11),
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...pending.map(
             (r) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _OutstandingRequestTile(
@@ -1564,9 +1713,134 @@ class _LookingCardState extends State<_LookingCard> {
             ),
           ),
         ],
-        const SizedBox(height: 12),
-        const _Co2MiniCard(),
         const SizedBox(height: 4),
+      ],
+    );
+  }
+}
+
+/// Compact summary of the passenger's chosen destination, shown near the top
+/// of the "looking" panel once a destination is set. Replaces the old CO₂/trip
+/// stats card — in the ride-choosing flow what matters is *where you're going*
+/// and the ride info for it (distance, est. time, same-way drivers), not
+/// historical totals.
+class _DestinationCard extends StatelessWidget {
+  final String name;
+  final double? distanceKm;
+  final int driversNearby;
+  const _DestinationCard({
+    required this.name,
+    this.distanceKm,
+    this.driversNearby = 0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final hasDistance = distanceKm != null && distanceKm! > 0;
+    // No server-side duration; estimate from distance at the assumed driver
+    // speed — same helper the walk/pickup ETAs use.
+    final mins =
+        hasDistance ? minutesAt(distanceKm! * 1000, assumedDriverKmh) : null;
+    final stats = <Widget>[
+      if (hasDistance)
+        _DestStat(
+            icon: Icons.straighten_rounded,
+            label: '${distanceKm!.toStringAsFixed(1)} km'),
+      if (mins != null)
+        _DestStat(icon: Icons.schedule_rounded, label: '~$mins min'),
+      if (driversNearby > 0)
+        _DestStat(
+          icon: Icons.directions_car_rounded,
+          label: l.driversHeadingYourWay(driversNearby),
+          accent: true,
+        ),
+    ];
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.teal.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: AppColors.teal.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(Icons.flag_rounded,
+                color: AppColors.teal, size: 18),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l.yourDestination,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (stats.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Wrap(spacing: 14, runSpacing: 6, children: stats),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One labelled stat chip on the destination card (distance / est. time /
+/// same-way driver count). [accent] tints it teal to draw the eye to the
+/// driver count.
+class _DestStat extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool accent;
+  const _DestStat(
+      {required this.icon, required this.label, this.accent = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = accent ? AppColors.teal : AppColors.textSecondary;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 13, color: color),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: accent ? AppColors.teal : Colors.white,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -1701,85 +1975,6 @@ class _OutstandingRequestTile extends StatelessWidget {
             const WaveProgressIndicator(height: 4),
           ],
         ],
-      ),
-    );
-  }
-}
-
-class _Co2MiniCard extends StatefulWidget {
-  const _Co2MiniCard();
-
-  @override
-  State<_Co2MiniCard> createState() => _Co2MiniCardState();
-}
-
-class _Co2MiniCardState extends State<_Co2MiniCard> {
-  double? _co2;
-  int? _trips;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.get(
-        Uri.parse('$kApiBase/auth/stats'),
-        headers: {'Authorization': 'Bearer $jwt'},
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final data = jsonDecode(resp.body) as Map<String, dynamic>;
-        setState(() {
-          _co2 = (data['co2_saved_kg'] as num?)?.toDouble() ?? 0;
-          _trips = (data['trips_count'] as num?)?.toInt() ?? 0;
-        });
-      }
-    } catch (_) {}
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final loading = _co2 == null;
-    final co2Display = (_co2 ?? 12.3).toStringAsFixed(1);
-    final tripsDisplay = _trips ?? 4;
-    return Skeletonizer(
-      enabled: loading,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0A1F10),
-          borderRadius: BorderRadius.circular(12),
-          border:
-              Border.all(color: AppColors.success.withValues(alpha: 0.2)),
-        ),
-        child: Row(
-          children: [
-            const Icon(Icons.eco_rounded,
-                color: AppColors.success, size: 18),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                '$co2Display kg CO₂ saved',
-                style: const TextStyle(
-                  color: AppColors.success,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            if (loading || (_trips != null && _trips! > 0))
-              Text(
-                '$tripsDisplay trip${tripsDisplay == 1 ? '' : 's'}',
-                style: const TextStyle(
-                    color: AppColors.textSecondary, fontSize: 11),
-              ),
-          ],
-        ),
       ),
     );
   }

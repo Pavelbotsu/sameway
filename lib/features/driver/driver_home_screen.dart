@@ -21,6 +21,7 @@ import '../../core/matching_preference_provider.dart';
 import '../../core/widgets/ai_matching_toggle_tile.dart';
 import '../../core/widgets/bug_report_sheet.dart';
 import '../../core/widgets/connectivity_pill.dart';
+import '../../core/widgets/map_destination_picker.dart';
 import '../../core/widgets/map_recenter_button.dart';
 import '../../core/widgets/pre_permission_sheet.dart';
 import '../../core/widgets/test_ai_tile.dart';
@@ -63,6 +64,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   late VoidCallback _ratingListener;
   StreamSubscription<PassengerMatchInfo>? _incomingSub;
   bool _hasFitPickupCamera = false;
+  // True while the driver is picking their destination by panning the map.
+  bool _pickingDest = false;
 
   @override
   void initState() {
@@ -268,7 +271,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     );
   }
 
-  void _showSetRouteSheet() {
+  void _showSetRouteSheet({String? initialDestName, LatLng? initialDestLatLng}) {
     if (widget.isGuest) {
       _showGuestSignInPrompt();
       return;
@@ -279,6 +282,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       backgroundColor: Colors.transparent,
       builder: (_) => _SetRouteSheet(
         originPos: _myPos,
+        initialDestName: initialDestName,
+        initialDestLatLng: initialDestLatLng,
+        onPickOnMap: _enterDestPickMode,
         onSubmit: (destLat, destLng, corridorKm, seats) {
           if (_myPos == null) return;
           final preferAI = context.read<MatchingPreferenceProvider>().useAI;
@@ -294,6 +300,64 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         },
       ),
     );
+  }
+
+  // ── Pick-destination-on-map mode ───────────────────────────────────────────
+
+  /// Enter map-pick mode: shrink the sheet to ~30% and expose the map with a
+  /// fixed centre pin. Invoked from the Set-Route sheet's location button (which
+  /// closes itself first); confirm re-opens that sheet with the picked point.
+  void _enterDestPickMode() {
+    setState(() => _pickingDest = true);
+    if (_myPos != null) {
+      _mapController.move(_myPos!, _mapController.camera.zoom);
+    }
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.3,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+  }
+
+  Future<void> _confirmDestPick() async {
+    Haptics.light();
+    final center = _mapController.camera.center;
+    final name = await _reverseGeocode(center);
+    if (!mounted) return;
+    setState(() => _pickingDest = false);
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.55,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+    _showSetRouteSheet(initialDestName: name, initialDestLatLng: center);
+  }
+
+  void _cancelDestPick() {
+    setState(() => _pickingDest = false);
+    if (_sheetCtrl.isAttached) {
+      _sheetCtrl.animateTo(0.55,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+    _showSetRouteSheet();
+  }
+
+  /// Reverse-geocode a pinned point into a short label, falling back to
+  /// coordinates when the lookup fails.
+  Future<String> _reverseGeocode(LatLng p) async {
+    try {
+      final places = await placemarkFromCoordinates(p.latitude, p.longitude);
+      if (places.isNotEmpty) {
+        final pm = places.first;
+        final parts = [pm.street, pm.locality, pm.administrativeArea, pm.country]
+            .where((s) => s != null && s.isNotEmpty)
+            .take(2)
+            .join(', ');
+        if (parts.isNotEmpty) return parts;
+      }
+    } catch (_) {}
+    return '${p.latitude.toStringAsFixed(4)}, ${p.longitude.toStringAsFixed(4)}';
   }
 
   void _showGuestSignInPrompt() {
@@ -744,7 +808,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 sheetCtrl: _sheetCtrl,
                 isGuest: widget.isGuest,
                 myPos: _myPos,
-                onSetRoute: _showSetRouteSheet,
+                onSetRoute: () => _showSetRouteSheet(),
                 onPlanTrip: _showPlanTripSheet,
                 onFindTrips: _showFindTripsSheet,
                 onDeleteRoute: () => driver.deleteRoute(),
@@ -775,12 +839,24 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           ),
 
           // Floating "center on me" button — rides just above the sheet and
-          // slides with it as it's dragged.
-          MapRecenterButton(
-            sheetController: _sheetCtrl,
-            accentColor: AppColors.primary,
-            onPressed: _recenterOnUser,
-          ),
+          // slides with it as it's dragged. Hidden during map-pick mode.
+          if (!_pickingDest)
+            MapRecenterButton(
+              sheetController: _sheetCtrl,
+              accentColor: AppColors.primary,
+              onPressed: _recenterOnUser,
+            ),
+
+          // Map-pick overlay: fixed centre pin + confirm/cancel bar.
+          if (_pickingDest)
+            MapDestinationPicker(
+              sheetController: _sheetCtrl,
+              accent: AppColors.primary,
+              title: AppLocalizations.of(context).moveMapToDestination,
+              confirmLabel: AppLocalizations.of(context).setDestinationHere,
+              onConfirm: _confirmDestPick,
+              onCancel: _cancelDestPick,
+            ),
         ],
       ),
     );
@@ -900,6 +976,12 @@ class _DriverNavBar extends StatelessWidget {
 
 class _SetRouteSheet extends StatefulWidget {
   final LatLng? originPos;
+  // Pre-fill from a map-picked destination (name + coords), when returning from
+  // pick-on-map mode.
+  final String? initialDestName;
+  final LatLng? initialDestLatLng;
+  // Close this sheet and let the driver pick the destination on the map.
+  final VoidCallback onPickOnMap;
   final void Function(
     double destLat,
     double destLng,
@@ -907,7 +989,13 @@ class _SetRouteSheet extends StatefulWidget {
     int seats,
   ) onSubmit;
 
-  const _SetRouteSheet({required this.originPos, required this.onSubmit});
+  const _SetRouteSheet({
+    required this.originPos,
+    required this.onSubmit,
+    required this.onPickOnMap,
+    this.initialDestName,
+    this.initialDestLatLng,
+  });
 
   @override
   State<_SetRouteSheet> createState() => _SetRouteSheetState();
@@ -924,6 +1012,17 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
   bool _loadingSuggestions = false;
   Timer? _debounce;
   LatLng? _selectedLatLng;
+
+  @override
+  void initState() {
+    super.initState();
+    // Returning from map-pick: pre-fill the field + skip re-geocoding by
+    // seeding the resolved coordinates.
+    if (widget.initialDestLatLng != null) {
+      _dest.text = widget.initialDestName ?? '';
+      _selectedLatLng = widget.initialDestLatLng;
+    }
+  }
 
   void _onDestChanged(String v) {
     _selectedLatLng = null;
@@ -1065,8 +1164,17 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
               onChanged: _onDestChanged,
               decoration: InputDecoration(
                 hintText: l.destination,
-                prefixIcon: const Icon(Icons.location_on_rounded,
-                    color: AppColors.textSecondary, size: 20),
+                // Location icon doubles as the "pick on map" button: close this
+                // sheet and drop into map-pick mode.
+                prefixIcon: IconButton(
+                  tooltip: l.pickOnMap,
+                  icon: const Icon(Icons.location_on_rounded,
+                      color: AppColors.primary, size: 20),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    widget.onPickOnMap();
+                  },
+                ),
                 suffixIcon: _loadingSuggestions
                     ? const Padding(
                         padding: EdgeInsets.all(12),

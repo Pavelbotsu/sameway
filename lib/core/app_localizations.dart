@@ -346,6 +346,62 @@ class AppLocalizations {
         fr: 'Adresse de destination',
         it: 'Indirizzo di destinazione',
       );
+  String get yourDestination => _t(
+        en: 'Your destination',
+        uk: 'Ваше призначення',
+        es: 'Tu destino',
+        de: 'Dein Ziel',
+        fr: 'Votre destination',
+        it: 'La tua destinazione',
+      );
+  String get yourRequests => _t(
+        en: 'YOUR REQUESTS',
+        uk: 'ВАШІ ЗАПИТИ',
+        es: 'TUS SOLICITUDES',
+        de: 'DEINE ANFRAGEN',
+        fr: 'VOS DEMANDES',
+        it: 'LE TUE RICHIESTE',
+      );
+  String get yourRequestsHint => _t(
+        en: 'Rides you\'ve asked for — waiting for the driver.',
+        uk: 'Поїздки, які ви запросили — очікують водія.',
+        es: 'Viajes que has pedido: esperando al conductor.',
+        de: 'Von dir angefragte Fahrten — warten auf den Fahrer.',
+        fr: 'Trajets demandés — en attente du conducteur.',
+        it: 'Corse richieste — in attesa del conducente.',
+      );
+  String driversHeadingYourWay(int n) => _t(
+        en: '$n heading your way',
+        uk: '$n їдуть у ваш бік',
+        es: '$n van hacia ti',
+        de: '$n unterwegs zu dir',
+        fr: '$n vont dans ta direction',
+        it: '$n in arrivo verso di te',
+      );
+  String get pickOnMap => _t(
+        en: 'Pick on map',
+        uk: 'Вибрати на карті',
+        es: 'Elegir en el mapa',
+        de: 'Auf Karte wählen',
+        fr: 'Choisir sur la carte',
+        it: 'Scegli sulla mappa',
+      );
+  String get moveMapToDestination => _t(
+        en: 'Move the map to your destination',
+        uk: 'Перемістіть карту до місця призначення',
+        es: 'Mueve el mapa hasta tu destino',
+        de: 'Bewege die Karte zu deinem Ziel',
+        fr: 'Déplace la carte vers ta destination',
+        it: 'Sposta la mappa sulla destinazione',
+      );
+  String get setDestinationHere => _t(
+        en: 'Set destination here',
+        uk: 'Призначити сюди',
+        es: 'Fijar destino aquí',
+        de: 'Ziel hier festlegen',
+        fr: 'Définir la destination ici',
+        it: 'Imposta destinazione qui',
+      );
   String get corridorRadius => _t(
         en: 'Corridor radius',
         uk: 'Радіус коридору',
