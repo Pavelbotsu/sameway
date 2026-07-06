@@ -312,12 +312,12 @@ class PassengerProvider extends ChangeNotifier {
         acceptedDriverPhotoUrl = (p['driver_photo_url'] as String?)?.trim();
         final code = (p['pickup_code'] as String?)?.trim();
         acceptedPickupCode = (code == null || code.isEmpty) ? null : code;
-        // Pickup geometry carried on the driver_response payload — used by
-        // the mini-map to render the flag marker + walk leg before the
-        // road-route fetch returns.
-        pickupLat = (p['pickup_lat'] as num?)?.toDouble();
-        pickupLng = (p['pickup_lng'] as num?)?.toDouble();
-        walkDistanceM = (p['walk_distance_m'] as num?)?.toDouble();
+        // Pickup geometry: the corridor handshake stashed it from the offer at
+        // accept time, so only overwrite when this payload actually carries it
+        // — never null out a good value.
+        pickupLat = (p['pickup_lat'] as num?)?.toDouble() ?? pickupLat;
+        pickupLng = (p['pickup_lng'] as num?)?.toDouble() ?? pickupLng;
+        walkDistanceM = (p['walk_distance_m'] as num?)?.toDouble() ?? walkDistanceM;
         outstandingRequests = const [];
         state = PassengerStatus.accepted;
         notifyListeners();
@@ -374,6 +374,16 @@ class PassengerProvider extends ChangeNotifier {
     } catch (_) {}
   }
 
+  /// Fetches match-advice (why am I not matching + tips). Best-effort; returns
+  /// null on any error so the UI just hides the tips.
+  Future<Map<String, dynamic>?> fetchMatchAdvice() async {
+    try {
+      return await _repo.matchAdvice();
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> loadOutstandingRequests() async {
     try {
       final raw = await _repo.getMyRequests();
@@ -424,26 +434,27 @@ class PassengerProvider extends ChangeNotifier {
     }
   }
 
+  // Accepting a driver's broadcast offer no longer confirms the ride — it only
+  // *requests* it. The backend promotes the offer to 'pending' (awaiting the
+  // driver's confirm) and notifies the driver. We drop back to the looking
+  // state and surface the request in the "waiting for the driver" outstanding
+  // list. The driver's confirm arrives as a driver_response(accepted) WS event,
+  // which promotes us to the accepted state (see _onMessage).
   Future<void> acceptRide() async {
     if (pendingOffer == null) return;
     Haptics.confirm();
     try {
       await _repo.respond(
           requestId: pendingOffer!.requestId, status: 'accepted');
-      acceptedRequestId = pendingOffer!.requestId;
-      acceptedDriverId = pendingOffer!.driverId;
-      acceptedDriverName = pendingOffer!.driverName;
-      acceptedDriverAvgRating = pendingOffer!.driverAvgRating;
-      acceptedDriverRatingCount = pendingOffer!.driverRatingCount;
-      acceptedCarSummary = pendingOffer!.carSummary;
-      acceptedCarPlate = pendingOffer!.carPlate;
-      acceptedDriverPhotoUrl = pendingOffer!.driverPhotoUrl;
+      // Stash the offer's pickup geometry so it survives into the accepted
+      // state — the driver's confirm event doesn't re-send it.
       pickupLat = pendingOffer!.pickupLat;
       pickupLng = pendingOffer!.pickupLng;
       walkDistanceM = pendingOffer!.walkDistanceM;
-      state = PassengerStatus.accepted;
+      pendingOffer = null;
+      state = PassengerStatus.looking;
       notifyListeners();
-      _fetchPickupRoute(pendingOffer!.requestId);
+      await loadOutstandingRequests();
     } catch (e) {
       error = e.toString();
       notifyListeners();

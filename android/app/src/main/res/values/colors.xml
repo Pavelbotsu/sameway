@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App background (AppColors.background) — used by the native splash and
+         the window behind the Flutter UI so there's no white flash on launch. -->
+    <color name="brand_background">#FF08080F</color>
+</resources>

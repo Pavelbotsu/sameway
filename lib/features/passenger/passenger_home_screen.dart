@@ -1627,6 +1627,8 @@ class _LookingCardState extends State<_LookingCard> {
             distanceKm: widget.distanceKm,
             driversNearby: widget.nearbyCount,
           ),
+          const SizedBox(height: 10),
+          _MatchTipsCard(destName: widget.destName!),
         ],
         // "Searching for drivers heading your way" copy + wave indicator.
         Consumer<PassengerProvider>(
@@ -1842,6 +1844,127 @@ class _DestStat extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// "Tips to get matched" card. Fetches the backend match-advice diagnostic
+/// (POST /passenger/match-advice) and renders its ordered suggestion codes as
+/// localized tips. Hidden when there are no suggestions. Re-fetches when the
+/// destination changes.
+class _MatchTipsCard extends StatefulWidget {
+  final String destName;
+  const _MatchTipsCard({required this.destName});
+
+  @override
+  State<_MatchTipsCard> createState() => _MatchTipsCardState();
+}
+
+class _MatchTipsCardState extends State<_MatchTipsCard> {
+  List<String> _codes = const [];
+  double _tripKm = 0;
+  int _nearestM = 0;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fetch());
+  }
+
+  @override
+  void didUpdateWidget(_MatchTipsCard old) {
+    super.didUpdateWidget(old);
+    if (old.destName != widget.destName) _fetch();
+  }
+
+  Future<void> _fetch() async {
+    final advice = await context.read<PassengerProvider>().fetchMatchAdvice();
+    if (!mounted) return;
+    setState(() {
+      _loaded = true;
+      _codes = (advice?['suggestions'] as List?)?.cast<String>() ?? const [];
+      _tripKm = (advice?['trip_distance_km'] as num?)?.toDouble() ?? 0;
+      _nearestM =
+          ((advice?['nearest_route_m'] as num?)?.toDouble() ?? 0).round();
+    });
+  }
+
+  String? _text(AppLocalizations l, String code) {
+    switch (code) {
+      case 'trip_too_short':
+        return l.adviceTripTooShort(_tripKm.toStringAsFixed(1));
+      case 'walk_closer':
+        return l.adviceWalkCloser(_nearestM);
+      case 'enable_long_walk':
+        return l.adviceEnableLongWalk;
+      case 'no_same_way_drivers':
+        return l.adviceNoSameWayDrivers;
+      case 'no_drivers':
+        return l.adviceNoDrivers;
+      case 'set_destination':
+        return l.adviceSetDestination;
+      default:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loaded || _codes.isEmpty) return const SizedBox.shrink();
+    final l = AppLocalizations.of(context);
+    final tips = _codes.map((c) => _text(l, c)).whereType<String>().toList();
+    if (tips.isEmpty) return const SizedBox.shrink();
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1606),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFFFC857).withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.lightbulb_outline_rounded,
+                  color: Color(0xFFFFC857), size: 16),
+              const SizedBox(width: 6),
+              Text(
+                l.adviceTitle,
+                style: const TextStyle(
+                  color: Color(0xFFFFC857),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ],
+          ),
+          for (final tip in tips) ...[
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('•  ',
+                    style: TextStyle(
+                        color: AppColors.textSecondary, fontSize: 13)),
+                Expanded(
+                  child: Text(
+                    tip,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      height: 1.35,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

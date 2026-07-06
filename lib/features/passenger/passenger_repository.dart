@@ -56,6 +56,12 @@ class PassengerRepository {
     );
   }
 
+  /// Diagnoses why the passenger may not be matching and returns concrete
+  /// numbers + ordered suggestion codes the UI turns into tips.
+  Future<Map<String, dynamic>> matchAdvice() {
+    return _api.post('/passenger/match-advice', {}, auth: true);
+  }
+
   Future<Map<String, dynamic>> requestDriver(String driverId) async {
     return _api.post(
       '/passenger/request-driver',

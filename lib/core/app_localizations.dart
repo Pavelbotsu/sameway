@@ -402,6 +402,62 @@ class AppLocalizations {
         fr: 'Définir la destination ici',
         it: 'Imposta destinazione qui',
       );
+  String get adviceTitle => _t(
+        en: 'Tips to get matched',
+        uk: 'Поради, щоб знайти поїздку',
+        es: 'Consejos para encontrar viaje',
+        de: 'Tipps für ein Match',
+        fr: 'Conseils pour être jumelé',
+        it: 'Consigli per trovare un passaggio',
+      );
+  String adviceTripTooShort(String km) => _t(
+        en: 'Short trip (~$km km) — walking may be faster, or arrange directly.',
+        uk: 'Коротка поїздка (~$km км) — пішки може бути швидше, або домовтесь напряму.',
+        es: 'Viaje corto (~$km km): caminar puede ser más rápido, o coordina directamente.',
+        de: 'Kurze Strecke (~$km km) — zu Fuß ist evtl. schneller, oder direkt absprechen.',
+        fr: 'Trajet court (~$km km) — la marche peut être plus rapide, ou arrange-toi directement.',
+        it: 'Tragitto breve (~$km km): a piedi può essere più veloce, o accordati direttamente.',
+      );
+  String adviceWalkCloser(int meters) => _t(
+        en: 'A driver passes ~$meters m away — walking toward the road could get you a match (if it\'s safe).',
+        uk: 'Водій проїжджає за ~$meters м — підійдіть ближче до дороги, щоб знайти поїздку (якщо це безпечно).',
+        es: 'Un conductor pasa a ~$meters m: acercarte a la vía podría darte un viaje (si es seguro).',
+        de: 'Ein Fahrer fährt ~$meters m entfernt vorbei — näher zur Straße zu gehen kann ein Match bringen (wenn sicher).',
+        fr: 'Un conducteur passe à ~$meters m — te rapprocher de la route pourrait te jumeler (si c\'est sûr).',
+        it: 'Un conducente passa a ~$meters m: avvicinarti alla strada potrebbe farti trovare un passaggio (se è sicuro).',
+      );
+  String get adviceEnableLongWalk => _t(
+        en: 'Allow a longer walk to reach more drivers heading your way.',
+        uk: 'Дозвольте довшу прогулянку, щоб охопити більше водіїв.',
+        es: 'Permite caminar más para llegar a más conductores.',
+        de: 'Längeren Fußweg erlauben, um mehr Fahrer zu erreichen.',
+        fr: 'Autorise une marche plus longue pour atteindre plus de conducteurs.',
+        it: 'Consenti una camminata più lunga per raggiungere più conducenti.',
+      );
+  String get adviceNoSameWayDrivers => _t(
+        en: 'No drivers heading your exact way yet — try again shortly.',
+        uk: 'Поки немає водіїв саме у вашому напрямку — спробуйте трохи згодом.',
+        es: 'Aún no hay conductores en tu dirección exacta: inténtalo en breve.',
+        de: 'Noch keine Fahrer genau in deine Richtung — versuch es gleich nochmal.',
+        fr: 'Pas encore de conducteurs dans ta direction exacte — réessaie bientôt.',
+        it: 'Ancora nessun conducente nella tua direzione esatta: riprova a breve.',
+      );
+  String get adviceNoDrivers => _t(
+        en: 'No drivers nearby right now — try later or check planned trips.',
+        uk: 'Поблизу зараз немає водіїв — спробуйте пізніше або перегляньте заплановані поїздки.',
+        es: 'No hay conductores cerca ahora: prueba más tarde o mira viajes planificados.',
+        de: 'Gerade keine Fahrer in der Nähe — später versuchen oder geplante Fahrten ansehen.',
+        fr: 'Aucun conducteur à proximité — réessaie plus tard ou vois les trajets planifiés.',
+        it: 'Nessun conducente nelle vicinanze: riprova più tardi o guarda i viaggi pianificati.',
+      );
+  String get adviceSetDestination => _t(
+        en: 'Set a destination to find drivers going your way.',
+        uk: 'Вкажіть призначення, щоб знайти водіїв у вашому напрямку.',
+        es: 'Indica un destino para encontrar conductores en tu dirección.',
+        de: 'Lege ein Ziel fest, um Fahrer in deine Richtung zu finden.',
+        fr: 'Définis une destination pour trouver des conducteurs dans ta direction.',
+        it: 'Imposta una destinazione per trovare conducenti nella tua direzione.',
+      );
   String get corridorRadius => _t(
         en: 'Corridor radius',
         uk: 'Радіус коридору',
