@@ -10,7 +10,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
+import '../../core/error_handling.dart';
 import '../../core/fcm_service.dart';
+import '../../core/feature_flags.dart';
 import '../../core/geo.dart';
 import '../../core/haptics.dart';
 import '../../core/app_localizations.dart';
@@ -20,6 +22,7 @@ import '../../core/matching_preference_provider.dart';
 import '../../core/token_storage.dart';
 import 'package:geocoding/geocoding.dart';
 import '../../core/widgets/ai_match_chip.dart';
+import '../../core/widgets/map_pick_button.dart';
 import '../../core/widgets/animated_map_marker.dart';
 import '../../core/widgets/ai_matching_toggle_tile.dart';
 import '../../core/widgets/bug_report_sheet.dart';
@@ -28,6 +31,7 @@ import '../../core/widgets/connectivity_pill.dart';
 import '../../core/widgets/license_plate_chip.dart';
 import '../../core/widgets/map_destination_picker.dart';
 import '../../core/widgets/map_recenter_button.dart';
+import '../../core/widgets/match_state_banner.dart';
 import '../../core/widgets/pre_permission_sheet.dart';
 import '../../core/widgets/sos_button.dart';
 import '../../core/widgets/user_avatar.dart';
@@ -39,6 +43,7 @@ import '../onboarding/onboarding_screen.dart';
 import '../../core/widgets/glass_card.dart';
 import '../../core/widgets/language_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
+import '../../core/widgets/ride_check_in_sheet.dart';
 import '../../core/widgets/m3_expressive/wave_progress_indicator.dart';
 import '../../core/widgets/role_switch_sheet.dart';
 import '../driver/driver_home_screen.dart';
@@ -46,6 +51,7 @@ import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
 import '../account/account_security_screen.dart';
 import '../chat/chat_screen.dart';
+import '../chat/conversations_screen.dart';
 import '../onboarding/role_selection_screen.dart';
 import '../promotions/promotions_screen.dart';
 import '../trips/trip_history_screen.dart';
@@ -76,7 +82,76 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   // True while the user is picking a destination by panning the map under the
   // centre pin (entered from the destination field's location button).
   bool _pickingDest = false;
-  late VoidCallback _ratingListener;
+
+  /// Captured here rather than read in [dispose].
+  ///
+  /// By the time `State.dispose()` runs, `StatefulElement.unmount()` has already
+  /// marked the element defunct and nulled its inherited-element map, so
+  /// `context.read<T>()` throws — an assert ("Looking up a deactivated widget's
+  /// ancestor is unsafe") in debug, `ProviderNotFoundException` in release.
+  /// Either way `dispose()` aborts before `super.dispose()`, the exception
+  /// escapes `_InactiveElements._unmountAll`, and every element still queued
+  /// for unmount is left half torn down — which is what surfaced as the
+  /// `InheritedElement` assertion storm on role switch.
+  ///
+  /// Non-`final`: `didChangeDependencies` may run more than once.
+  late PassengerProvider _provider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _provider = context.read<PassengerProvider>();
+  }
+
+  /// A plain method rather than a closure stored in a `late` field: the field
+  /// was assigned inside the post-frame callback that registered it, so a screen
+  /// torn down before that frame landed made [dispose] throw
+  /// `LateInitializationError`, corrupting teardown the same way [_provider]
+  /// describes. Dart gives instance-method tear-offs value equality, so
+  /// `removeListener(_onRatingPending)` still matches the `addListener` call.
+  void _onRatingPending() {
+    final provider = _provider;
+    if (provider.pendingRatingRequestId == null ||
+        provider.pendingRatingDriverId == null ||
+        !mounted) {
+      return;
+    }
+    final reqId = provider.pendingRatingRequestId!;
+    final driverId = provider.pendingRatingDriverId!;
+    provider.clearPendingRating();
+    showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => RatingSheet(
+        rideRequestId: reqId,
+        ratedUserId: driverId,
+        ratedUserLabel: 'driver',
+        accentColor: AppColors.teal,
+      ),
+    ).then((rated) {
+      if (rated == true) {
+        provider.markAwaitingDriverRating(reqId);
+      }
+    });
+  }
+
+  /// Mid-ride safety check-in. Same shape as [_onRatingPending]: clear the
+  /// provider flag BEFORE showing, so a rebuild mid-sheet can't re-open it.
+  void _onCheckInPrompt() {
+    final provider = _provider;
+    if (!provider.checkInPrompt || !mounted) return;
+    provider.clearCheckInPrompt();
+    RideCheckInSheet.show(
+      context,
+      otherPartyLabel: AppLocalizations.of(context).driver,
+      lat: _myPos?.latitude,
+      lng: _myPos?.longitude,
+      driverName: provider.acceptedDriverName,
+      plate: provider.acceptedCarPlate,
+      onNeedHelp: provider.flagSafety,
+    );
+  }
 
   @override
   void initState() {
@@ -91,8 +166,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
           provider.connectWS(token);
         }
       }
+      // Mirrors the driver-side interval; active_passengers rows are filtered
+      // on `updated_at > NOW() - 10 minutes` in the corridor query, but a
+      // tighter ping also keeps the reverse-trigger match responsive.
       _locationTimer = Timer.periodic(
-        const Duration(seconds: 15),
+        const Duration(seconds: 10),
         (_) => _sendLocation(),
       );
       _driversTimer = Timer.periodic(
@@ -101,31 +179,8 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       );
       _fetchNearbyDrivers();
 
-      _ratingListener = () {
-        if (provider.pendingRatingRequestId != null &&
-            provider.pendingRatingDriverId != null &&
-            mounted) {
-          final reqId = provider.pendingRatingRequestId!;
-          final driverId = provider.pendingRatingDriverId!;
-          provider.clearPendingRating();
-          showModalBottomSheet<bool>(
-            context: context,
-            isScrollControlled: true,
-            backgroundColor: Colors.transparent,
-            builder: (_) => RatingSheet(
-              rideRequestId: reqId,
-              ratedUserId: driverId,
-              ratedUserLabel: 'driver',
-              accentColor: AppColors.teal,
-            ),
-          ).then((rated) {
-            if (rated == true) {
-              provider.markAwaitingDriverRating(reqId);
-            }
-          });
-        }
-      };
-      provider.addListener(_ratingListener);
+      provider.addListener(_onRatingPending);
+      provider.addListener(_onCheckInPrompt);
     });
   }
 
@@ -133,41 +188,55 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   void dispose() {
     _locationTimer?.cancel();
     _driversTimer?.cancel();
+    // The rating listener was never removed. PassengerProvider is root-scoped
+    // and outlives this screen, so every navigation away and back stacked
+    // another listener holding a dead BuildContext — the rating sheet fired
+    // once per past visit and eventually threw on an unmounted context.
+    //
+    // Uses the captured _provider, never context.read: see the field's doc.
+    _provider.removeListener(_onRatingPending);
+    _provider.removeListener(_onCheckInPrompt);
+    // Detach from the shared socket, but do NOT disconnect it — DriverProvider
+    // uses the same one.
+    _provider.detachWS();
     _sheetCtrl.dispose();
     super.dispose();
   }
 
+  /// Guards against overlapping polls. The timer fires every 10s but this call
+  /// hits the heaviest PostGIS query in the app; without the guard a slow
+  /// response let requests pile up on top of each other.
+  bool _fetchingNearby = false;
+
   Future<void> _fetchNearbyDrivers() async {
-    if (_myPos == null) return;
+    if (_myPos == null || _fetchingNearby) return;
+    _fetchingNearby = true;
     try {
-      final jwt = await TokenStorage().getToken();
-      if (jwt == null) return;
-      final resp = await http.post(
-        Uri.parse('$kApiBase/passenger/nearby-drivers'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'latitude': _myPos!.latitude,
-          'longitude': _myPos!.longitude,
-          'radius_km': 10.0,
-          if (_destPos != null) ...{
-            'dest_lat': _destPos!.latitude,
-            'dest_lng': _destPos!.longitude,
-            'dest_radius_km': 1.0,
-          },
-        }),
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        setState(() {
-          _nearbyDrivers = list
-              .map((e) => _NearbyDriverInfo.fromJson(e as Map<String, dynamic>))
-              .toList();
-        });
+      // Via the repository/ApiClient rather than a raw http.post: that path had
+      // no timeout at all and skipped the 401 → session-expiry handling, so an
+      // expired token here just failed silently forever.
+      final list = await context.read<PassengerProvider>().nearbyDrivers(
+            lat: _myPos!.latitude,
+            lng: _myPos!.longitude,
+            destLat: _destPos?.latitude,
+            destLng: _destPos?.longitude,
+          );
+      if (!mounted) return;
+      setState(() {
+        _nearbyDrivers = list.map(_NearbyDriverInfo.fromJson).toList();
+      });
+      // The provider owns the match-state machine; feed it the count of
+      // algorithm-endorsed (likely_match) drivers, not raw proximity.
+      if (!widget.isGuest) {
+        context.read<PassengerProvider>().setNearbyLikelyCount(
+            _nearbyDrivers.where((d) => d.likelyMatch).length);
       }
-    } catch (_) {}
+    } catch (_) {
+      // Transient: the next tick retries. Session expiry is already surfaced
+      // globally by ApiClient.
+    } finally {
+      _fetchingNearby = false;
+    }
   }
 
   Future<void> _requestRide(_NearbyDriverInfo driver) async {
@@ -181,6 +250,48 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       backgroundColor: ok ? AppColors.success : AppColors.error,
       behavior: SnackBarBehavior.floating,
     ));
+  }
+
+  /// Row keys for the candidate list, so a map-marker tap can scroll the
+  /// matching row into view. Keyed by driver id and reused across rebuilds.
+  final Map<String, GlobalKey> _candidateRowKeys = {};
+
+  /// Marker tap: select, raise the sheet, and scroll the list to the row.
+  /// The mirror of [_onCandidateRowTap].
+  void _onDriverMarkerTap(_NearbyDriverInfo driver) {
+    Haptics.light();
+    setState(() => _selectedDriver = driver);
+    if (_sheetCtrl.isAttached && _sheetCtrl.size < 0.55) {
+      _sheetCtrl.animateTo(0.55,
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic);
+    }
+    // After the frame the sheet has laid out at its new height, so the row's
+    // context exists and ensureVisible can measure it.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _candidateRowKeys[driver.driverId]?.currentContext;
+      if (ctx == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        alignment: 0.3,
+      );
+    });
+  }
+
+  /// Row tap: select and centre the map on that driver. The mirror of
+  /// [_onDriverMarkerTap]; both write the same `_selectedDriver`.
+  void _onCandidateRowTap(_NearbyDriverInfo driver) {
+    Haptics.light();
+    setState(() => _selectedDriver = driver);
+    final fraction = _sheetCtrl.isAttached ? _sheetCtrl.size : 0.55;
+    centerOnUserAdjustedForSheet(
+      context: context,
+      mapController: _mapController,
+      pos: driver.origin,
+      sheetCoverFraction: fraction,
+    );
   }
 
   void _showDriverInfo(_NearbyDriverInfo driver) {
@@ -203,6 +314,18 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
         },
       ),
     );
+  }
+
+  /// Match-state banner tap: raise the bottom sheet to the detail that
+  /// matches the state (offer card / request list / accepted card all live
+  /// in the sheet). Already-raised sheet goes to full height.
+  void _onMatchBannerTap() {
+    Haptics.light();
+    if (!_sheetCtrl.isAttached) return;
+    final target = _sheetCtrl.size >= 0.5 ? 0.85 : 0.55;
+    _sheetCtrl.animateTo(target,
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutCubic);
   }
 
   /// Re-centers the map on the user, accounting for however far the bottom
@@ -587,18 +710,41 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                     MaterialPageRoute(
                       builder: (_) => ChatScreen(
                         rideRequestId: p.acceptedRequestId!,
-                        otherPartyName: 'Driver',
+                        otherPartyName: AppLocalizations.of(context).driver,
                       ),
                     ),
                   )
               : null,
           onShowTrips: _showTripSearch,
           onShowPromotions: _showPromotions,
+          onReportBug: _showBugReportSheet,
           onShowAccount: _showAccountSheet,
         ),
         body: Stack(
+          // Every direct child below carries a stable key, and that is
+          // load-bearing — do not "tidy" them away.
+          //
+          // Three children are conditional and sit ABOVE the sheet, and the last
+          // two swap type (recenter button <-> map picker). Element.updateChildren
+          // matches UNKEYED children by position: it scans top-down until a
+          // mismatch, then bottom-up until a mismatch, and destroys whatever
+          // unkeyed children are left in the middle. Confirming a map pick
+          // inserts the match banner (idle -> searching) AND flips the tail in
+          // the same frame, so the bottom-up scan stops immediately and the
+          // DraggableScrollableSheet lands in that middle range.
+          //
+          // Destroying it is fatal: the replacement sheet's initState calls
+          // _sheetCtrl._attach() before the old sheet's dispose() detaches,
+          // which trips `assert(_attachedController == null)`, and the old
+          // dispose() then runs _detach(disposeExtent: true) against the LIVE
+          // sheet — leaving _sheetCtrl.isAttached false forever, so dragging,
+          // snapping and every animateTo silently stop working.
+          //
+          // With keys, the sheet is matched by key instead of position and its
+          // element (and _LookingCard's text field) survives.
           children: [
             FlutterMap(
+              key: const ValueKey('map'),
               mapController: _mapController,
               options: MapOptions(
                 initialCenter: _myPos ?? const LatLng(50.0647, 19.9450),
@@ -697,31 +843,37 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 ),
                 if (_nearbyDrivers.isNotEmpty)
                   MarkerLayer(
-                    // `matched` = the backend returned this driver because the
-                    // passenger has a destination set AND the driver's
-                    // corridor covers it. Without a destination the list is
-                    // just "drivers nearby" — informational, not picked by
-                    // the matching algorithm — so they render as small
-                    // subtle dots instead of the big green pin.
+                    // `matched` = the server flagged this driver likely_match:
+                    // the same forward-projection + carry filters corridor
+                    // push uses consider them same-way for the passenger's
+                    // destination. Everyone else — including drivers who are
+                    // merely nearby while a destination IS set — renders as a
+                    // small subtle dot, so the big green pin now means
+                    // "algorithm-endorsed", not "close by".
                     //
-                    // Tapping a driver solo-focuses them: everyone else is
-                    // hidden until the user clears the selection. Stops the
-                    // "cluster of overlapping pins" mess.
-                    markers: _nearbyDrivers
-                        .where((d) =>
-                            _selectedDriver == null ||
-                            _selectedDriver!.driverId == d.driverId)
-                        .map((d) {
+                    // Selection HIGHLIGHTS rather than solo-focuses.
+                    //
+                    // This used to hide every unselected driver, to stop a
+                    // cluster of overlapping pins being unreadable. The
+                    // candidate list in the sheet now does that
+                    // disambiguation, and hiding the others actively fights
+                    // it: tapping a row should show you where that driver sits
+                    // AMONG the rest, not blank the map. _DriverMarker already
+                    // draws a brighter ring when selected.
+                    markers: _nearbyDrivers.map((d) {
                       final isSelected =
                           _selectedDriver?.driverId == d.driverId;
-                      final matched = _destPos != null;
+                      final matched = d.likelyMatch;
                       final size = isSelected || matched ? 56.0 : 24.0;
                       return Marker(
                         point: d.origin,
                         width: size,
                         height: size,
                         child: GestureDetector(
-                          onTap: () => _showDriverInfo(d),
+                          // Selects + scrolls the list to this driver, instead
+                          // of opening a modal over the map. The row's chevron
+                          // is the way into the details sheet.
+                          onTap: () => _onDriverMarkerTap(d),
                           child: _DriverMarker(
                             selected: isSelected,
                             matched: matched,
@@ -768,6 +920,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
 
             // Top bar
             Positioned(
+              key: const ValueKey('topBar'),
               top: 0,
               left: 0,
               right: 0,
@@ -793,7 +946,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                               Text(
                                 l.passenger,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.mapLabelText,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
                                 ),
@@ -866,61 +1019,9 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               ),
             ),
 
-            if (!widget.isGuest &&
-                _nearbyDrivers.isEmpty &&
-                p.state == PassengerStatus.looking)
-              Positioned(
-                left: 20,
-                right: 20,
-                bottom: MediaQuery.of(context).size.height * 0.32,
-                child: GlassCard(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 14),
-                  borderRadius: 16,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: AppColors.teal.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(Icons.directions_car_outlined,
-                            color: AppColors.teal, size: 18),
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'No drivers nearby',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                              'Try adjusting your destination or check back soon.',
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 11,
-                                height: 1.4,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
             if (p.awaitingRatingRequestId != null)
               Positioned(
+                key: const ValueKey('ratingWaitBanner'),
                 top: MediaQuery.of(context).viewPadding.top + 8,
                 left: 0,
                 right: 0,
@@ -931,11 +1032,37 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               ),
 
             // Connectivity / WS status pill — auto-hides when both healthy.
-            ConnectivityPill(wsState: p.wsState),
+            ConnectivityPill(
+              key: const ValueKey('connectivityPill'),
+              wsState: p.wsState,
+              locationFailing: p.locationSyncFailing,
+            ),
+
+            // Match-state banner (Round 2 §6): the one prominent, tappable
+            // surface for searching → candidates → offer → requested →
+            // matched → in-progress. Pinned under the top bar so every
+            // transition is visible without touching the sheet.
+            if (!widget.isGuest && p.matchUiState != MatchUiState.idle)
+              Positioned(
+                key: const ValueKey('matchStateBanner'),
+                top: MediaQuery.of(context).viewPadding.top + 64,
+                left: 16,
+                right: 16,
+                child: MatchStateBanner(
+                  state: p.matchUiState,
+                  likelyCount: p.likelyMatchCount,
+                  driverName: p.acceptedDriverName,
+                  relayLeg2: p.relayLeg2Search,
+                  onTap: _onMatchBannerTap,
+                ),
+              ),
 
             if (_selectedDriver != null)
               Positioned(
-                top: MediaQuery.of(context).viewPadding.top + 72,
+                key: const ValueKey('selectedDriverChip'),
+                // Sits below the match-state banner when one is showing.
+                top: MediaQuery.of(context).viewPadding.top +
+                    (p.matchUiState != MatchUiState.idle ? 156 : 72),
                 left: 16,
                 right: 16,
                 child: Center(
@@ -949,19 +1076,29 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
               ),
 
             DraggableScrollableSheet(
+              // The key that matters most — see the note on `children:` above.
+              key: const ValueKey('statusSheet'),
               controller: _sheetCtrl,
               initialChildSize: 0.55,
-              minChildSize: 0.07,
+              minChildSize: 0.26,
               maxChildSize: 0.85,
               snap: true,
-              snapSizes: const [0.28, 0.55],
+              snapSizes: const [0.55],
               builder: (_, scrollController) => _StatusPanel(
                 provider: p,
                 scrollController: scrollController,
                 sheetCtrl: _sheetCtrl,
                 isGuest: widget.isGuest,
                 currentPos: _myPos,
-                nearbyCount: _nearbyDrivers.length,
+                // Same-way drivers only — consistent with what corridor push
+                // would offer, not raw proximity.
+                nearbyCount:
+                    _nearbyDrivers.where((d) => d.likelyMatch).length,
+                candidates: _nearbyDrivers,
+                selectedDriver: _selectedDriver,
+                candidateRowKeys: _candidateRowKeys,
+                onCandidateTap: _onCandidateRowTap,
+                onCandidateDetails: _showDriverInfo,
                 destName: _destName.isEmpty ? null : _destName,
                 onDestinationSet: (pos, name) {
                   setState(() {
@@ -997,6 +1134,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
             // (the picker has its own action bar in that spot).
             if (!_pickingDest)
               MapRecenterButton(
+                key: const ValueKey('recenterButton'),
                 sheetController: _sheetCtrl,
                 accentColor: AppColors.teal,
                 onPressed: _recenterOnUser,
@@ -1005,6 +1143,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
             // Map-pick overlay: fixed centre pin + confirm/cancel bar.
             if (_pickingDest)
               MapDestinationPicker(
+                key: const ValueKey('mapDestinationPicker'),
                 sheetController: _sheetCtrl,
                 accent: AppColors.teal,
                 title: AppLocalizations.of(context).moveMapToDestination,
@@ -1092,6 +1231,12 @@ class _StatusPanel extends StatelessWidget {
   final Future<void> Function() onRefresh;
   // Enter "pick destination on the map" mode (from the search field's button).
   final VoidCallback onPickOnMap;
+  // Live candidate drivers + the map/list selection they share.
+  final List<_NearbyDriverInfo> candidates;
+  final _NearbyDriverInfo? selectedDriver;
+  final Map<String, GlobalKey> candidateRowKeys;
+  final void Function(_NearbyDriverInfo) onCandidateTap;
+  final void Function(_NearbyDriverInfo) onCandidateDetails;
 
   const _StatusPanel({
     required this.provider,
@@ -1101,6 +1246,11 @@ class _StatusPanel extends StatelessWidget {
     required this.onClearDestination,
     required this.onRefresh,
     required this.onPickOnMap,
+    required this.candidates,
+    required this.candidateRowKeys,
+    required this.onCandidateTap,
+    required this.onCandidateDetails,
+    this.selectedDriver,
     this.isGuest = false,
     this.currentPos,
     this.destName,
@@ -1119,9 +1269,9 @@ class _StatusPanel extends StatelessWidget {
         children: [
           SheetGrabHandle(
             controller: sheetCtrl,
-            minChildSize: 0.07,
+            minChildSize: 0.26,
             maxChildSize: 0.85,
-            snapSizes: const [0.28, 0.55],
+            snapSizes: const [0.55],
           ),
           const Divider(color: AppColors.border, height: 1),
           Expanded(
@@ -1165,6 +1315,7 @@ class _StatusPanel extends StatelessWidget {
                               destName: destName,
                               distanceKm: provider.plannedDistanceKm,
                               nearbyCount: nearbyCount,
+                              sheetCtrl: sheetCtrl,
                               onDestinationSet: onDestinationSet,
                               onClearDestination: onClearDestination,
                               onPickOnMap: onPickOnMap,
@@ -1172,6 +1323,11 @@ class _StatusPanel extends StatelessWidget {
                                   provider.outstandingRequests,
                               onCancelOutstanding: (id) =>
                                   provider.cancelOutstandingRequest(id),
+                              candidates: candidates,
+                              selectedDriver: selectedDriver,
+                              candidateRowKeys: candidateRowKeys,
+                              onCandidateTap: onCandidateTap,
+                              onCandidateDetails: onCandidateDetails,
                             ),
                           PassengerStatus.offered => _OfferCard(
                               offer: provider.pendingOffer!,
@@ -1195,7 +1351,6 @@ class _StatusPanel extends StatelessWidget {
                                   ? LatLng(
                                       provider.peerLat!, provider.peerLng!)
                                   : null,
-                              pickupCode: provider.acceptedPickupCode,
                               inRide: false,
                               onConfirmPickup: (code) =>
                                   provider.confirmPickup(code),
@@ -1218,10 +1373,13 @@ class _StatusPanel extends StatelessWidget {
                                   ? LatLng(
                                       provider.peerLat!, provider.peerLng!)
                                   : null,
-                              pickupCode: null,
                               inRide: true,
                               onConfirmPickup: null,
-                              onCancel: () => provider.cancelRide(),
+                              // No cancel once on board: PassengerCancelRide
+                              // filters on `status = 'accepted'`, so this button
+                              // only ever produced a 400 here. The mid-ride
+                              // escape is the SOS pill / check-in prompt.
+                              onCancel: null,
                             ),
                           PassengerStatus.declined =>
                             const _DeclinedCard(),
@@ -1321,6 +1479,7 @@ class _PassengerNavBar extends StatelessWidget {
   final VoidCallback? onShowChat;
   final VoidCallback onShowTrips;
   final VoidCallback onShowPromotions;
+  final VoidCallback onReportBug;
   final VoidCallback onShowAccount;
 
   const _PassengerNavBar({
@@ -1328,12 +1487,14 @@ class _PassengerNavBar extends StatelessWidget {
     required this.isGuest,
     required this.onShowTrips,
     required this.onShowPromotions,
+    required this.onReportBug,
     required this.onShowAccount,
     this.onShowChat,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.surface,
@@ -1346,26 +1507,34 @@ class _PassengerNavBar extends StatelessWidget {
         children: [
           _NavIconBtn(
             icon: Icons.forum_rounded,
-            label: 'Chat',
+            label: l.navChat,
             color: AppColors.teal,
             badge: unreadMessages > 0 ? unreadMessages : null,
             onTap: onShowChat,
           ),
+          if (FeatureFlags.plannedTrips)
+            _NavIconBtn(
+              icon: Icons.search_rounded,
+              label: l.navFindTrips,
+              color: AppColors.teal,
+              onTap: isGuest ? null : onShowTrips,
+            ),
+          if (FeatureFlags.promotions)
+            _NavIconBtn(
+              icon: Icons.local_offer_rounded,
+              label: l.navOffers,
+              color: AppColors.teal,
+              onTap: onShowPromotions,
+            ),
           _NavIconBtn(
-            icon: Icons.search_rounded,
-            label: 'Find Trips',
+            icon: Icons.bug_report_rounded,
+            label: l.navReportBug,
             color: AppColors.teal,
-            onTap: isGuest ? null : onShowTrips,
-          ),
-          _NavIconBtn(
-            icon: Icons.local_offer_rounded,
-            label: 'Offers',
-            color: AppColors.teal,
-            onTap: onShowPromotions,
+            onTap: isGuest ? null : onReportBug,
           ),
           _NavIconBtn(
             icon: Icons.manage_accounts_rounded,
-            label: 'Account',
+            label: l.navAccount,
             color: AppColors.teal,
             onTap: onShowAccount,
           ),
@@ -1382,11 +1551,20 @@ class _LookingCard extends StatefulWidget {
   // same-way drivers — shown as ride info on the destination card.
   final double? distanceKm;
   final int nearbyCount;
+  // The persistent sheet's controller — used to lift the sheet above the
+  // keyboard when the destination field gains focus.
+  final DraggableScrollableController sheetCtrl;
   final void Function(LatLng pos, String name) onDestinationSet;
   final VoidCallback onClearDestination;
   final VoidCallback onPickOnMap;
   final List<OutstandingRequest> outstandingRequests;
   final void Function(String requestId) onCancelOutstanding;
+  // Live candidate drivers, and the selection shared with the map markers.
+  final List<_NearbyDriverInfo> candidates;
+  final _NearbyDriverInfo? selectedDriver;
+  final Map<String, GlobalKey> candidateRowKeys;
+  final void Function(_NearbyDriverInfo) onCandidateTap;
+  final void Function(_NearbyDriverInfo) onCandidateDetails;
 
   const _LookingCard({
     required this.onDestinationSet,
@@ -1394,6 +1572,12 @@ class _LookingCard extends StatefulWidget {
     required this.onPickOnMap,
     required this.outstandingRequests,
     required this.onCancelOutstanding,
+    required this.sheetCtrl,
+    required this.candidates,
+    required this.candidateRowKeys,
+    required this.onCandidateTap,
+    required this.onCandidateDetails,
+    this.selectedDriver,
     this.currentPos,
     this.destName,
     this.distanceKm,
@@ -1406,9 +1590,37 @@ class _LookingCard extends StatefulWidget {
 
 class _LookingCardState extends State<_LookingCard> {
   final _ctrl = TextEditingController();
+  final _focus = FocusNode();
   List<_PlaceSuggestion> _suggestions = [];
   bool _loading = false;
   Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    // Rebuild so the clear (X) button toggles live as the user types.
+    _ctrl.addListener(_onCtrlChanged);
+    _focus.addListener(_onFocusChanged);
+  }
+
+  void _onCtrlChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _onFocusChanged() {
+    // The passenger Scaffold has resizeToAvoidBottomInset:false, so the sheet
+    // won't move on its own when the keyboard opens. Lift it near-fullscreen so
+    // the destination field stays visible above the keyboard.
+    if (_focus.hasFocus &&
+        widget.sheetCtrl.isAttached &&
+        widget.sheetCtrl.size < 0.85) {
+      widget.sheetCtrl.animateTo(
+        0.85,
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutCubic,
+      );
+    }
+  }
 
   @override
   void didUpdateWidget(_LookingCard old) {
@@ -1426,7 +1638,10 @@ class _LookingCardState extends State<_LookingCard> {
   @override
   void dispose() {
     _debounce?.cancel();
+    _ctrl.removeListener(_onCtrlChanged);
     _ctrl.dispose();
+    _focus.removeListener(_onFocusChanged);
+    _focus.dispose();
     super.dispose();
   }
 
@@ -1534,10 +1749,11 @@ class _LookingCardState extends State<_LookingCard> {
         const SizedBox(height: 14),
         TextField(
           controller: _ctrl,
+          focusNode: _focus,
           style: const TextStyle(color: Colors.white, fontSize: 14),
           onChanged: _onChanged,
           decoration: InputDecoration(
-            hintText: 'Where do you want to go?',
+            hintText: l.whereDoYouWantToGo,
             hintStyle: const TextStyle(
                 color: AppColors.textSecondary, fontSize: 13),
             filled: true,
@@ -1559,33 +1775,37 @@ class _LookingCardState extends State<_LookingCard> {
               borderSide:
                   const BorderSide(color: AppColors.teal, width: 1.5),
             ),
-            // Location icon doubles as the "pick a point on the map" button.
-            prefixIcon: IconButton(
-              tooltip: AppLocalizations.of(context).pickOnMap,
-              icon: const Icon(Icons.location_on_rounded,
-                  color: AppColors.teal, size: 20),
+            // Location icon doubles as the "pick a point on the map" button —
+            // the tinted circle makes it read as tappable.
+            prefixIcon: MapPickButton(
+              accent: AppColors.teal,
+              tooltip: l.pickOnMap,
               onPressed: widget.onPickOnMap,
             ),
-            suffixIcon: hasDestination
-                ? IconButton(
-                    tooltip: AppLocalizations.of(context).clear,
-                    icon: const Icon(Icons.close_rounded,
-                        color: AppColors.textSecondary, size: 18),
-                    onPressed: () {
-                      _ctrl.clear();
-                      setState(() => _suggestions = []);
-                      widget.onClearDestination();
-                    },
+            prefixIconConstraints:
+                const BoxConstraints(minWidth: 48, minHeight: 48),
+            // Clear (X) shows whenever there is text — while typing, not only
+            // after a destination is committed.
+            suffixIcon: _loading
+                ? const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: AppColors.teal),
+                    ),
                   )
-                : _loading
-                    ? const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(
-                              strokeWidth: 2, color: AppColors.teal),
-                        ),
+                : _ctrl.text.isNotEmpty
+                    ? IconButton(
+                        tooltip: l.clear,
+                        icon: const Icon(Icons.close_rounded,
+                            color: AppColors.textSecondary, size: 18),
+                        onPressed: () {
+                          _ctrl.clear();
+                          setState(() => _suggestions = []);
+                          if (hasDestination) widget.onClearDestination();
+                        },
                       )
                     : null,
           ),
@@ -1630,50 +1850,22 @@ class _LookingCardState extends State<_LookingCard> {
           const SizedBox(height: 10),
           _MatchTipsCard(destName: widget.destName!),
         ],
-        // "Searching for drivers heading your way" copy + wave indicator.
-        Consumer<PassengerProvider>(
-          builder: (_, p, __) {
-            if (!p.isSearching || pending.isNotEmpty) {
-              return const SizedBox.shrink();
-            }
-            return Padding(
-              padding: const EdgeInsets.only(top: 14),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                decoration: BoxDecoration(
-                  color: AppColors.card,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                      color: AppColors.teal.withValues(alpha: 0.35)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.travel_explore_rounded,
-                            color: AppColors.teal, size: 18),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'Searching for drivers heading your way…',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    const WaveProgressIndicator(height: 4),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+        // Where the match banner's tap now lands. Only shown once a
+        // destination is set — without one there is no same-way verdict to
+        // report and the list would just be "every car near you".
+        if (hasDestination) ...[
+          const SizedBox(height: 18),
+          _CandidateDriversList(
+            drivers: widget.candidates,
+            selected: widget.selectedDriver,
+            passengerPos: widget.currentPos,
+            rowKeys: widget.candidateRowKeys,
+            onSelect: widget.onCandidateTap,
+            onOpenDetails: widget.onCandidateDetails,
+          ),
+        ],
+        // The old inline "Searching…" tile lived here; the pinned
+        // MatchStateBanner on the map (Round 2 §6) is the state surface now.
         if (pending.isNotEmpty) ...[
           const SizedBox(height: 18),
           // Header so these tiles aren't mistaken for available rides — they
@@ -2016,7 +2208,7 @@ class _OutstandingRequestTile extends StatelessWidget {
                           child: Text(
                             req.driverName?.trim().isNotEmpty == true
                                 ? req.driverName!
-                                : 'Driver',
+                                : AppLocalizations.of(context).driver,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -2068,8 +2260,8 @@ class _OutstandingRequestTile extends StatelessWidget {
               const SizedBox(width: 4),
               Text(
                 isPending
-                    ? 'Waiting for driver…'
-                    : 'Driver accepted',
+                    ? AppLocalizations.of(context).waitingForDriver
+                    : AppLocalizations.of(context).driverAccepted,
                 style: TextStyle(
                   color: isPending ? AppColors.teal : AppColors.success,
                   fontSize: 11,
@@ -2087,8 +2279,8 @@ class _OutstandingRequestTile extends StatelessWidget {
                     minimumSize: const Size(0, 28),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text('Cancel',
-                      style: TextStyle(
+                  child: Text(AppLocalizations.of(context).cancel,
+                      style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w600)),
                 ),
             ],
@@ -2254,8 +2446,9 @@ class _OfferCardState extends State<_OfferCard>
                 _PickupPill(
                   icon: Icons.directions_walk_rounded,
                   color: AppColors.teal,
-                  label: 'Walk ${offer.walkDistanceM!.round()} m · '
-                      '${minutesAt(offer.walkDistanceM!, walkSpeedKmh)} min',
+                  label: AppLocalizations.of(context).walkPill(
+                      '${offer.walkDistanceM!.round()}',
+                      '${minutesAt(offer.walkDistanceM!, walkSpeedKmh)}'),
                 ),
               if (offer.walkDistanceM != null &&
                   offer.driverDistanceToPickupM != null)
@@ -2264,10 +2457,70 @@ class _OfferCardState extends State<_OfferCard>
                 _PickupPill(
                   icon: Icons.drive_eta_rounded,
                   color: AppColors.primary,
-                  label: 'Driver in '
-                      '${minutesAt(offer.driverDistanceToPickupM!, assumedDriverKmh)} min',
+                  label: AppLocalizations.of(context).driverInMin(
+                      '${minutesAt(offer.driverDistanceToPickupM!, assumedDriverKmh)}'),
                 ),
             ],
+          ),
+        ],
+        // Partial relay (Round 2 §1): the passenger explicitly opts into
+        // "ride to the driver's route end, then continue" BEFORE accepting.
+        // Never hidden in a sub-line — this changes what they're agreeing to.
+        if (offer.isPartialRelay) ...[
+          const SizedBox(height: 12),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF9800).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                  color: const Color(0xFFFF9800).withValues(alpha: 0.45)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.alt_route_rounded,
+                        color: Color(0xFFFF9800), size: 16),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        l.partialRideTitle,
+                        style: const TextStyle(
+                          color: Color(0xFFFF9800),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  (offer.transitStopName?.isNotEmpty == true)
+                      ? l.relayStopInfo(offer.transitStopName!,
+                          (offer.transitStopDistM ?? 0).round())
+                      : l.relayFallbackInfo,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        // Micro-detour (Round 2 §2): tell the passenger the driver comes to
+        // their location — no walk needed.
+        if (offer.isMicroDetour) ...[
+          const SizedBox(height: 12),
+          _PickupPill(
+            icon: Icons.emoji_people_rounded,
+            color: AppColors.success,
+            label: l.microDetourPassengerNote,
           ),
         ],
         const SizedBox(height: 16),
@@ -2306,7 +2559,11 @@ class _OfferCardState extends State<_OfferCard>
                       ),
                       minimumSize: Size.zero,
                     ),
-                    child: Text(l.accept,
+                    child: Text(
+                        // Relay accepts are labeled distinctly — the tap IS
+                        // the opt-in to the two-leg plan.
+                        offer.isPartialRelay ? l.acceptPartialRide : l.accept,
+                        textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.w600)),
                   ),
                 ),
@@ -2374,7 +2631,6 @@ class _AcceptedCard extends StatefulWidget {
   // Pickup handshake: present when the row is `accepted` and we haven't met
   // yet. When inRide is true, the card switches to the "on board" variant
   // and these are ignored.
-  final String? pickupCode;
   final bool inRide;
   final Future<bool> Function(String code)? onConfirmPickup;
   final VoidCallback? onCancel;
@@ -2389,7 +2645,6 @@ class _AcceptedCard extends StatefulWidget {
     this.driverRatingCount,
     this.passengerPos,
     this.driverPos,
-    this.pickupCode,
     this.inRide = false,
     this.onConfirmPickup,
     this.onCancel,
@@ -2593,7 +2848,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
         ),
         const SizedBox(height: 14),
         Text(
-          widget.inRide ? "You're in the ride" : l.rideAccepted,
+          widget.inRide ? l.youAreInTheRide : l.rideAccepted,
           style: const TextStyle(
             color: Colors.white,
             fontSize: 17,
@@ -2666,18 +2921,27 @@ class _AcceptedCardState extends State<_AcceptedCard>
             ],
           ),
         ],
-        if (widget.passengerPos != null && widget.driverPos != null) ...[
+        // Walk guidance. Deliberately NOT gated on driverPos: the pickup point
+        // and walk distance arrive on the offer payload, long before the first
+        // driver_location frame, and whether the passenger has to walk has
+        // nothing to do with whether we've seen the car move yet. The mini-map
+        // below still needs driverPos and keeps its own guard.
+        if (widget.passengerPos != null) ...[
           const SizedBox(height: 14),
-          // Walk banner — only renders when the user has a non-trivial walk
-          // ahead of them. Sticks out above the mini-map so the message is
-          // unmissable.
           Builder(builder: (context) {
             final p = context.watch<PassengerProvider>();
             if (p.pickupLat == null ||
                 p.pickupLng == null ||
-                p.walkDistanceM == null) {
+                p.walkDistanceM == null ||
+                p.walkDistanceM! < WalkToPickupBanner.kStayPutMetres) {
+              // Tier 1 — the "stay where you are" line below covers this.
               return const SizedBox.shrink();
             }
+            // Tier 2 — worth saying, not worth a maps hand-off.
+            if (p.walkDistanceM! < WalkToPickupBanner.minMetersForBanner) {
+              return WalkToPickupCompact(walkDistanceM: p.walkDistanceM!);
+            }
+            // Tier 3 — full banner with walking directions.
             return WalkToPickupBanner(
               passengerLat: widget.passengerPos!.latitude,
               passengerLng: widget.passengerPos!.longitude,
@@ -2686,6 +2950,8 @@ class _AcceptedCardState extends State<_AcceptedCard>
               walkDistanceM: p.walkDistanceM!,
             );
           }),
+        ],
+        if (widget.passengerPos != null && widget.driverPos != null) ...[
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: SizedBox(
@@ -2794,15 +3060,24 @@ class _AcceptedCardState extends State<_AcceptedCard>
           ),
         ],
         const SizedBox(height: 6),
-        Text(
-          l.driverNotified,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 13,
-            height: 1.5,
-          ),
-        ),
+        // Tier 1 ONLY. This used to render unconditionally, so a passenger with
+        // a 400 m walk was shown the walk banner and "stay at your location"
+        // at the same time. Exactly one of the three tiers may appear.
+        Builder(builder: (context) {
+          final walk = context.watch<PassengerProvider>().walkDistanceM;
+          if (walk != null && walk >= WalkToPickupBanner.kStayPutMetres) {
+            return const SizedBox.shrink();
+          }
+          return Text(
+            l.driverNotified,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+              height: 1.5,
+            ),
+          );
+        }),
         const SizedBox(height: 14),
         if (widget.requestId != null)
           SizedBox(
@@ -3253,7 +3528,12 @@ class _AccountSheetState extends State<_AccountSheet> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
             ? l.testNotificationSent
-            : (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed'),
+            : friendlyError(
+                context,
+                ApiException(
+                  (jsonDecode(resp.body) as Map)['error'] as String? ?? '',
+                  statusCode: resp.statusCode,
+                ))),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
@@ -3436,6 +3716,19 @@ class _AccountSheetState extends State<_AccountSheet> {
               ),
             if (!widget.isGuest)
               _SheetTile(
+                icon: Icons.forum_rounded,
+                label: l.messagesTitle,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const ConversationsScreen()),
+                  );
+                },
+              ),
+            if (!widget.isGuest)
+              _SheetTile(
                 icon: Icons.history_rounded,
                 label: l.tripHistory,
                 onTap: () {
@@ -3470,21 +3763,24 @@ class _AccountSheetState extends State<_AccountSheet> {
               label: l.showTutorialAgain,
               onTap: widget.onShowTutorial,
             ),
-            AIMatchingToggleTile(
-              label: l.aiMatchingLabel,
-              subtitle: l.aiMatchingSubtitle,
-            ),
-            const TestAITile(),
-            _SheetTile(
-              icon: Icons.local_offer_rounded,
-              label: l.promotionsAndRewards,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const PromotionsScreen()));
-              },
-            ),
-            if (!widget.isGuest)
+            if (FeatureFlags.aiControls) ...[
+              AIMatchingToggleTile(
+                label: l.aiMatchingLabel,
+                subtitle: l.aiMatchingSubtitle,
+              ),
+              const TestAITile(),
+            ],
+            if (FeatureFlags.promotions)
+              _SheetTile(
+                icon: Icons.local_offer_rounded,
+                label: l.promotionsAndRewards,
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const PromotionsScreen()));
+                },
+              ),
+            if (FeatureFlags.plannedTrips && !widget.isGuest)
               _SheetTile(
                 icon: Icons.search_rounded,
                 label: l.findPlannedTrips,
@@ -3636,21 +3932,21 @@ class _MapStyleSheet extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           _MapOption(
-            label: 'Standard',
+            label: AppLocalizations.of(context).mapStyleStandard,
             icon: Icons.map_rounded,
             style: MapStyle.osm,
             selected: provider.style == MapStyle.osm,
           ),
           const SizedBox(height: 10),
           _MapOption(
-            label: 'Satellite',
+            label: AppLocalizations.of(context).mapStyleSatellite,
             icon: Icons.satellite_alt_rounded,
             style: MapStyle.satellite,
             selected: provider.style == MapStyle.satellite,
           ),
           const SizedBox(height: 10),
           _MapOption(
-            label: 'Dark',
+            label: AppLocalizations.of(context).mapStyleDark,
             icon: Icons.dark_mode_rounded,
             style: MapStyle.dark,
             selected: provider.style == MapStyle.dark,
@@ -3819,8 +4115,28 @@ class _NearbyDriverInfo {
   final String carMake;
   final String carModel;
   final String carColor;
-  final String carPlate;
+  // No carPlate here on purpose. /passenger/nearby-drivers no longer returns
+  // one: browsing drivers on the map is pre-match, and name + plate identifies
+  // a specific person's car to anyone who can call the endpoint. The plate
+  // arrives on the driver_response WS payload once a ride is accepted, which is
+  // when it's actually needed to spot the arriving vehicle.
   final String routeWkt;
+  // Server-side same-way hint (Round 2 §7): true when the corridor-push
+  // filters (forward projection + walk cap + carry gate) would consider this
+  // driver for the passenger's declared destination. False on old servers.
+  final bool likelyMatch;
+  // Off-route walk to this driver's route (m); -1 when unknown.
+  final double walkM;
+  // On-route distance carried toward the passenger's destination (m); 0 when
+  // no destination is declared. Returned by the server all along, previously
+  // discarded here.
+  final double carryM;
+  // Driver reputation. Count is 0 for an unrated driver — show "new", never
+  // a 0.0 star average.
+  final double avgRating;
+  final int ratingCount;
+
+  bool get hasRating => ratingCount > 0;
 
   const _NearbyDriverInfo({
     required this.driverId,
@@ -3832,8 +4148,12 @@ class _NearbyDriverInfo {
     required this.carMake,
     required this.carModel,
     required this.carColor,
-    required this.carPlate,
     required this.routeWkt,
+    required this.likelyMatch,
+    required this.walkM,
+    required this.carryM,
+    required this.avgRating,
+    required this.ratingCount,
   });
 
   factory _NearbyDriverInfo.fromJson(Map<String, dynamic> j) =>
@@ -3853,14 +4173,251 @@ class _NearbyDriverInfo {
         carMake: j['car_make'] as String? ?? '',
         carModel: j['car_model'] as String? ?? '',
         carColor: j['car_color'] as String? ?? '',
-        carPlate: j['car_plate'] as String? ?? '',
         routeWkt: j['route_wkt'] as String? ?? '',
+        likelyMatch: j['likely_match'] as bool? ?? false,
+        walkM: (j['walk_m'] as num?)?.toDouble() ?? -1,
+        carryM: (j['carry_m'] as num?)?.toDouble() ?? 0,
+        avgRating: (j['driver_avg_rating'] as num?)?.toDouble() ?? 0,
+        ratingCount: (j['driver_rating_count'] as num?)?.toInt() ?? 0,
       );
 
+  // Empty when no car info — display sites substitute the localized
+  // "No car info" copy (l.noCarInfo); a model class has no BuildContext.
   String get carSummary {
     final parts = [carColor, carMake, carModel].where((s) => s.isNotEmpty);
-    return parts.isEmpty ? 'No car info' : parts.join(' ');
+    return parts.join(' ');
   }
+}
+
+/// Live list of the drivers currently heading the passenger's way.
+///
+/// Replaces a dead end: the match banner said "N drivers heading your way" and
+/// tapping it only raised the sheet onto nothing. The data was already on the
+/// client — `_nearbyDrivers` refreshes on the same 10 s poll that drives the map
+/// markers — it simply had no list to render into.
+///
+/// Selection is bidirectional with the map: tapping a row highlights that
+/// driver's pin, and tapping a pin scrolls this list to the matching row. Both
+/// directions write the same `_selectedDriver` state.
+class _CandidateDriversList extends StatelessWidget {
+  final List<_NearbyDriverInfo> drivers;
+  final _NearbyDriverInfo? selected;
+  final LatLng? passengerPos;
+
+  /// Per-row keys so a marker tap can `Scrollable.ensureVisible` the row.
+  final Map<String, GlobalKey> rowKeys;
+  final void Function(_NearbyDriverInfo) onSelect;
+  final void Function(_NearbyDriverInfo) onOpenDetails;
+
+  const _CandidateDriversList({
+    required this.drivers,
+    required this.rowKeys,
+    required this.onSelect,
+    required this.onOpenDetails,
+    this.selected,
+    this.passengerPos,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    // Same-way drivers first — that flag is the server's own corridor-push
+    // verdict, so it is a better ordering than raw proximity. Ties break on
+    // the shorter walk.
+    final sorted = [...drivers]..sort((a, b) {
+        if (a.likelyMatch != b.likelyMatch) return a.likelyMatch ? -1 : 1;
+        final aw = a.walkM < 0 ? double.infinity : a.walkM;
+        final bw = b.walkM < 0 ? double.infinity : b.walkM;
+        return aw.compareTo(bw);
+      });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l.candidateDriversTitle,
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.5,
+          ),
+        ),
+        const SizedBox(height: 8),
+        if (sorted.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Text(
+              l.candidateDriversEmpty,
+              style: const TextStyle(
+                  color: AppColors.textSecondary, fontSize: 13, height: 1.4),
+            ),
+          )
+        else
+          ...sorted.map((d) => Padding(
+                key: rowKeys.putIfAbsent(d.driverId, () => GlobalKey()),
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _CandidateDriverRow(
+                  driver: d,
+                  isSelected: selected?.driverId == d.driverId,
+                  passengerPos: passengerPos,
+                  onTap: () => onSelect(d),
+                  onDetails: () => onOpenDetails(d),
+                ),
+              )),
+      ],
+    );
+  }
+}
+
+class _CandidateDriverRow extends StatelessWidget {
+  final _NearbyDriverInfo driver;
+  final bool isSelected;
+  final LatLng? passengerPos;
+  final VoidCallback onTap;
+  final VoidCallback onDetails;
+
+  const _CandidateDriverRow({
+    required this.driver,
+    required this.isSelected,
+    required this.onTap,
+    required this.onDetails,
+    this.passengerPos,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    // Estimated from the driver's origin: their live position is not exposed
+    // pre-match, and would identify where a specific person is right now.
+    final eta = passengerPos == null
+        ? null
+        : estimateDriverEtaMinutes(driver.origin, passengerPos!);
+    return Material(
+      color: isSelected
+          ? AppColors.teal.withValues(alpha: 0.14)
+          : AppColors.card,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: isSelected ? AppColors.teal : AppColors.border,
+              width: isSelected ? 1.6 : 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              UserAvatar(name: driver.driverName, size: 38),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            driver.driverName,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        if (driver.hasRating) ...[
+                          const Icon(Icons.star_rounded,
+                              color: Color(0xFFFFC107), size: 14),
+                          Text(
+                            driver.avgRating.toStringAsFixed(1),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary, fontSize: 12),
+                          ),
+                        ] else
+                          _Pill(text: l.newDriverBadge,
+                              color: AppColors.textSecondary),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      driver.carSummary.isEmpty
+                          ? l.noCarInfo
+                          : driver.carSummary,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          color: AppColors.textSecondary, fontSize: 12),
+                    ),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 2,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        if (driver.likelyMatch)
+                          _Pill(text: l.sameWayBadge, color: AppColors.success),
+                        if (eta != null)
+                          Text(l.etaApprox(eta),
+                              style: const TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 11)),
+                        if (driver.walkM >= 0)
+                          Text(
+                            l.walkShort(
+                                WalkToPickupBanner.formatDistance(driver.walkM)),
+                            style: const TextStyle(
+                                color: AppColors.textSecondary, fontSize: 11),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: onDetails,
+                icon: const Icon(Icons.chevron_right_rounded,
+                    color: AppColors.textSecondary),
+                tooltip: l.driverDetails,
+                constraints:
+                    const BoxConstraints(minWidth: 40, minHeight: 40),
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Pill extends StatelessWidget {
+  final String text;
+  final Color color;
+  const _Pill({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.3,
+          ),
+        ),
+      );
 }
 
 // ── Driver info bottom sheet ──────────────────────────────────────────────────
@@ -3958,17 +4515,49 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      driver.driverName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            driver.driverName,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        if (driver.likelyMatch) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color:
+                                  AppColors.success.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: AppColors.success
+                                      .withValues(alpha: 0.5)),
+                            ),
+                            child: Text(
+                              l.likelyMatchChip,
+                              style: const TextStyle(
+                                color: AppColors.success,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${driver.seats} seat${driver.seats == 1 ? '' : 's'} · ${driver.corridorKm.toStringAsFixed(1)} km corridor',
+                      l.seatsCorridorSummary('${driver.seats}',
+                          driver.corridorKm.toStringAsFixed(1)),
                       style: const TextStyle(
                           color: AppColors.textSecondary, fontSize: 13),
                     ),
@@ -3983,7 +4572,7 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
           _InfoRow(
             icon: Icons.location_on_rounded,
             color: AppColors.error,
-            label: 'Destination',
+            label: l.destination,
             value: _destAddress ??
                 '${driver.destination.latitude.toStringAsFixed(4)}, ${driver.destination.longitude.toStringAsFixed(4)}',
           ),
@@ -4004,18 +4593,12 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
           _InfoRow(
             icon: Icons.directions_car_rounded,
             color: AppColors.primary,
-            label: 'Car',
-            value: driver.carSummary,
+            label: l.carLabel,
+            value: driver.carSummary.isEmpty ? l.noCarInfo : driver.carSummary,
           ),
-          if (driver.carPlate.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            _InfoRow(
-              icon: Icons.badge_rounded,
-              color: AppColors.teal,
-              label: 'Plate',
-              value: driver.carPlate,
-            ),
-          ],
+          // Plate intentionally not shown pre-match — the server no longer
+          // sends one here. It appears on the accepted-ride card, which is when
+          // the passenger needs it to identify the arriving car.
           const SizedBox(height: 28),
           SizedBox(
             width: double.infinity,
@@ -4023,10 +4606,44 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
             child: ElevatedButton.icon(
               onPressed: widget.onRequest,
               icon: const Icon(Icons.hail_rounded, size: 20),
-              label: const Text('Request this ride',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              label: Text(l.requestThisRide,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Pre-match chat (Round 2 §3): "I saw them on the map — let's
+          // confirm before requesting." Server-side gate allows it because
+          // this driver is in the caller's nearby candidate list.
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: OutlinedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ChatScreen(
+                      peerId: widget.driver.driverId,
+                      otherPartyName: widget.driver.driverName,
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
+              label: Text(l.messageDriver,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600)),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.teal,
+                side: BorderSide(
+                    color: AppColors.teal.withValues(alpha: 0.6)),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16)),
               ),

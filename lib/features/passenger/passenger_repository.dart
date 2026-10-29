@@ -36,6 +36,20 @@ class PassengerRepository {
     await _api.delete('/passenger/ride/$requestId', auth: true);
   }
 
+  /// Records a "something is wrong" answer to the mid-ride check-in. The route
+  /// is role-agnostic (either party may flag) and the handler enforces
+  /// participant-of-the-row.
+  Future<void> flagSafety({
+    required String requestId,
+    required String reason,
+  }) async {
+    await _api.post(
+      '/safety/flag',
+      {'request_id': requestId, 'reason': reason},
+      auth: true,
+    );
+  }
+
   Future<void> goOffline() async {
     await _api.delete('/passenger/active', auth: true);
   }
@@ -68,6 +82,31 @@ class PassengerRepository {
       {'driver_id': driverId},
       auth: true,
     );
+  }
+
+  /// Nearby drivers for the map. Goes through ApiClient so it inherits the
+  /// request timeout and the 401 → session-expiry hook; it used to be a raw
+  /// http.post in the home screen with neither.
+  Future<List<Map<String, dynamic>>> nearbyDrivers({
+    required double lat,
+    required double lng,
+    double radiusKm = 10.0,
+    double? destLat,
+    double? destLng,
+    double destRadiusKm = 1.0,
+  }) async {
+    final data = await _api.postRaw('/passenger/nearby-drivers', {
+      'latitude': lat,
+      'longitude': lng,
+      'radius_km': radiusKm,
+      if (destLat != null && destLng != null) ...{
+        'dest_lat': destLat,
+        'dest_lng': destLng,
+        'dest_radius_km': destRadiusKm,
+      },
+    }, auth: true);
+    if (data is! List) return const [];
+    return data.cast<Map<String, dynamic>>();
   }
 
   Future<List<Map<String, dynamic>>> getMyRequests() async {

@@ -7,6 +7,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../api_client.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
+import '../error_handling.dart';
 import '../token_storage.dart';
 import '../../features/auth/auth_repository.dart';
 
@@ -102,7 +103,7 @@ class _BugReportSheetState extends State<BugReportSheet> {
       if (!mounted) return;
       setState(() => _sending = false);
       messenger.showSnackBar(SnackBar(
-        content: Text('$e'),
+        content: Text(friendlyError(context, e)),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));

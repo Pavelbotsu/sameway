@@ -7,12 +7,18 @@ class AuthResult {
   final String? name;
   final String? email;
 
+  /// Server says this account still has to accept the current Terms/Privacy
+  /// version and confirm 18+ (accounts older than consent, or after a version
+  /// bump). Absent → false (older backends).
+  final bool needsConsent;
+
   AuthResult.fromJson(Map<String, dynamic> j)
       : token = j['token'] as String,
         userId = j['user_id'] as String,
         role = j['role'] as String,
         name = j['name'] as String?,
-        email = j['email'] as String?;
+        email = j['email'] as String?,
+        needsConsent = j['needs_consent'] as bool? ?? false;
 }
 
 class AuthRepository {
@@ -24,14 +30,34 @@ class AuthRepository {
     required String email,
     required String password,
     required String role,
+    required bool acceptTerms,
+    required bool ageConfirmed,
   }) async {
     final data = await _api.post('/auth/register', {
       'name': name,
       'email': email,
       'password': password,
       'role': role,
+      'accept_terms': acceptTerms,
+      'age_confirmed': ageConfirmed,
     });
     return AuthResult.fromJson(data);
+  }
+
+  /// Records acceptance of the current Terms/Privacy + the 18+ attestation
+  /// for an account that predates them.
+  Future<void> acceptTerms() async {
+    await _api.post(
+      '/auth/consent',
+      {'accept_terms': true, 'age_confirmed': true},
+      auth: true,
+    );
+  }
+
+  /// Permanently deletes the account. Throws ApiException with statusCode
+  /// 403 (wrong password) or 409 (ride in progress).
+  Future<void> deleteAccount(String password) async {
+    await _api.post('/auth/delete-account', {'password': password}, auth: true);
   }
 
   Future<AuthResult> login({

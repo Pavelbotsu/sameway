@@ -8,12 +8,16 @@ import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/haptics.dart';
 import '../../core/token_storage.dart';
+import '../../core/widgets/branded_snack_bar.dart';
 
 class ChatMessage {
   final String id;
   final String senderID;
   final String content;
   final DateTime createdAt;
+  // Persistent pair-conversation this message belongs to (Round 2 §3).
+  // Null only on payloads from very old servers.
+  final String? conversationId;
   // Server-stamped when the *other* party's MarkRead runs against this row.
   // Drives the ✓ → ✓✓ flip on the sender's outbound bubbles. Null = unread.
   final DateTime? readAt;
@@ -22,6 +26,7 @@ class ChatMessage {
     required this.senderID,
     required this.content,
     required this.createdAt,
+    this.conversationId,
     this.readAt,
   });
   factory ChatMessage.fromJson(Map<String, dynamic> j) => ChatMessage(
@@ -29,6 +34,9 @@ class ChatMessage {
         senderID: j['sender_id'] as String,
         content: j['content'] as String,
         createdAt: DateTime.parse(j['created_at'] as String),
+        conversationId: (j['conversation_id'] as String?)?.isEmpty == true
+            ? null
+            : j['conversation_id'] as String?,
         readAt: j['read_at'] == null
             ? null
             : DateTime.tryParse(j['read_at'] as String),
@@ -39,6 +47,7 @@ class ChatMessage {
         senderID: senderID,
         content: content,
         createdAt: createdAt,
+        conversationId: conversationId,
         readAt: when,
       );
 
@@ -52,15 +61,28 @@ class ChatMessage {
       );
 }
 
+/// Chat is conversation-first (persistent per user pair). Open it with any
+/// ONE of:
+///   - [conversationId] — from the conversations list;
+///   - [peerId]         — pre-match flow (map view / offer card): the
+///                        conversation is created server-side, gated on the
+///                        peer being in the caller's candidate list;
+///   - [rideRequestId]  — legacy ride-scoped entry points; the server
+///                        resolves the ride to the pair's conversation.
 class ChatScreen extends StatefulWidget {
-  final String rideRequestId;
+  final String? rideRequestId;
+  final String? conversationId;
+  final String? peerId;
   final String otherPartyName;
 
   const ChatScreen({
     super.key,
-    required this.rideRequestId,
+    this.rideRequestId,
+    this.conversationId,
+    this.peerId,
     required this.otherPartyName,
-  });
+  }) : assert(rideRequestId != null || conversationId != null || peerId != null,
+            'ChatScreen needs a conversation, peer, or ride id');
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -86,13 +108,55 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       DateTime.fromMillisecondsSinceEpoch(0);
   bool _lastEmittedTypingState = false;
 
+  // Resolved conversation + peer. Either comes straight from the widget or
+  // is discovered from the open call / message history / inbound WS frames.
+  String? _convId;
+  String? _peerId;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _ctrl.addListener(_onTextChanged);
+    _convId = widget.conversationId;
+    _peerId = widget.peerId;
     _loadMyId();
-    _loadHistory();
+    _openThenLoad();
+  }
+
+  /// Pre-match entry (peer id only): mint/fetch the conversation first, then
+  /// load history. All other entries go straight to history.
+  Future<void> _openThenLoad() async {
+    if (_convId == null && _peerId != null) {
+      try {
+        final jwt = await TokenStorage().getToken();
+        if (jwt == null) return;
+        final resp = await http.post(
+          Uri.parse('$kApiBase/chat/conversations'),
+          headers: {
+            'Authorization': 'Bearer $jwt',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({'peer_id': _peerId}),
+        );
+        if (!mounted) return;
+        if (resp.statusCode == 200) {
+          final body = jsonDecode(resp.body) as Map<String, dynamic>;
+          _convId = body['conversation_id'] as String?;
+        } else {
+          // Gate refused (not a current candidate) or blocked: show the
+          // empty state with an explanatory snack and bail out.
+          setState(() => _historyLoaded = true);
+          BrandedSnack.showError(
+              context, AppLocalizations.of(context).chatUnavailable);
+          return;
+        }
+      } catch (_) {
+        if (mounted) setState(() => _historyLoaded = true);
+        return;
+      }
+    }
+    await _loadHistory();
   }
 
   @override
@@ -124,17 +188,30 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     try {
       final jwt = await TokenStorage().getToken();
       if (jwt == null) return;
+      final path = _convId != null
+          ? '$kApiBase/chat/conversations/$_convId/messages'
+          : '$kApiBase/chat/${widget.rideRequestId}';
       final resp = await http.get(
-        Uri.parse('$kApiBase/chat/${widget.rideRequestId}'),
+        Uri.parse(path),
         headers: {'Authorization': 'Bearer $jwt'},
       );
       if (resp.statusCode == 200 && mounted) {
         final list = jsonDecode(resp.body) as List;
+        final parsed = list
+            .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
+            .toList();
         setState(() {
-          _messages = list
-              .map((e) => ChatMessage.fromJson(e as Map<String, dynamic>))
-              .toList();
+          _messages = parsed;
           _historyLoaded = true;
+          // Ride-scoped entry: learn the conversation + peer from history so
+          // subsequent sends/reads go conversation-first and the app-bar
+          // menu (block/report) has a target.
+          for (final m in parsed) {
+            _convId ??= m.conversationId;
+            if (_peerId == null && _myId != null && m.senderID != _myId) {
+              _peerId = m.senderID;
+            }
+          }
         });
         _scrollToBottom();
         _markRead();
@@ -152,11 +229,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final type = msg['type'];
       final payload = msg['payload'] as Map<String, dynamic>?;
       if (payload == null) return;
-      if (payload['ride_request_id'] != widget.rideRequestId) return;
+      // Accept frames for this thread by conversation (new servers) or by
+      // ride (compat) — either key may be absent on a given frame.
+      final sameConv =
+          _convId != null && payload['conversation_id'] == _convId;
+      final sameRide = widget.rideRequestId != null &&
+          payload['ride_request_id'] == widget.rideRequestId;
+      if (!sameConv && !sameRide) return;
       switch (type) {
         case 'chat_message':
+          final incoming = ChatMessage.fromJson(payload);
+          _convId ??= incoming.conversationId;
+          if (_peerId == null && incoming.senderID != _myId) {
+            _peerId = incoming.senderID;
+          }
           setState(() {
-            _messages.add(ChatMessage.fromJson(payload));
+            _messages.add(incoming);
           });
           _scrollToBottom();
           _markRead();
@@ -227,9 +315,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  /// Thread reference for POST bodies: conversation-first, ride as fallback.
+  Map<String, dynamic> get _threadRef => _convId != null
+      ? {'conversation_id': _convId}
+      : {'ride_request_id': widget.rideRequestId};
+
   Future<void> _emitTyping(bool typing) async {
     _lastEmittedTypingState = typing;
     _lastTypingSent = DateTime.now();
+    if (_convId == null && widget.rideRequestId == null) return;
     try {
       final jwt = await TokenStorage().getToken();
       if (jwt == null) return;
@@ -239,15 +333,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           'Authorization': 'Bearer $jwt',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'ride_request_id': widget.rideRequestId,
-          'typing': typing,
-        }),
+        body: jsonEncode({..._threadRef, 'typing': typing}),
       );
     } catch (_) {/* silent — best-effort UX hint */}
   }
 
   Future<void> _markRead() async {
+    if (_convId == null && widget.rideRequestId == null) return;
     try {
       final jwt = await TokenStorage().getToken();
       if (jwt == null) return;
@@ -257,7 +349,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           'Authorization': 'Bearer $jwt',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'ride_request_id': widget.rideRequestId}),
+        body: jsonEncode(_threadRef),
       );
     } catch (_) {/* silent — server will retry-flip on next message */}
   }
@@ -282,22 +374,145 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           'Authorization': 'Bearer $jwt',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({
-          'ride_request_id': widget.rideRequestId,
-          'content': text,
-        }),
+        body: jsonEncode({..._threadRef, 'content': text}),
       );
-      if (resp.statusCode == 200 && mounted) {
+      if (!mounted) return;
+      if (resp.statusCode == 200) {
         final msg = ChatMessage.fromJson(
             jsonDecode(resp.body) as Map<String, dynamic>);
+        _convId ??= msg.conversationId;
         setState(() {
           _messages.add(msg);
           _ctrl.clear();
         });
         _scrollToBottom();
+      } else if (resp.statusCode == 429) {
+        // Pre-ride anti-spam limit — keep the draft, tell the user.
+        BrandedSnack.showInfo(
+            context, AppLocalizations.of(context).chatSlowDown);
       }
     } catch (_) {}
     if (mounted) setState(() => _sending = false);
+  }
+
+  // ── Abuse controls (Round 2 §3) ────────────────────────────────────────────
+
+  Future<void> _blockPeer() async {
+    final peer = _peerId;
+    if (peer == null) return;
+    final l = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(l.blockUserQ(widget.otherPartyName),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w700)),
+        content: Text(l.blockUserBody,
+            style: const TextStyle(
+                color: AppColors.textSecondary, height: 1.5)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l.cancel,
+                style: const TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l.blockAction,
+                style: const TextStyle(
+                    color: AppColors.error, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final jwt = await TokenStorage().getToken();
+      if (jwt == null) return;
+      final resp = await http.post(
+        Uri.parse('$kApiBase/chat/block'),
+        headers: {
+          'Authorization': 'Bearer $jwt',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'user_id': peer}),
+      );
+      if (!mounted) return;
+      if (resp.statusCode == 200) {
+        Navigator.pop(context);
+        BrandedSnack.showSuccess(context, l.userBlocked);
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _reportPeer() async {
+    final peer = _peerId;
+    if (peer == null) return;
+    final l = AppLocalizations.of(context);
+    final reasonCtrl = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(l.reportUserQ(widget.otherPartyName),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w700)),
+        content: TextField(
+          controller: reasonCtrl,
+          maxLines: 3,
+          maxLength: 500,
+          style: const TextStyle(color: AppColors.textPrimary),
+          decoration: InputDecoration(
+            hintText: l.reportReasonHint,
+            hintStyle: const TextStyle(
+                color: AppColors.textSecondary, fontSize: 13),
+            filled: true,
+            fillColor: AppColors.background,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l.cancel,
+                style: const TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l.reportAction,
+                style: const TextStyle(
+                    color: AppColors.error, fontWeight: FontWeight.w600)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    try {
+      final jwt = await TokenStorage().getToken();
+      if (jwt == null) return;
+      final resp = await http.post(
+        Uri.parse('$kApiBase/chat/report'),
+        headers: {
+          'Authorization': 'Bearer $jwt',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'user_id': peer,
+          if (_convId != null) 'conversation_id': _convId,
+          'reason': reasonCtrl.text.trim(),
+        }),
+      );
+      if (!mounted) return;
+      if (resp.statusCode == 200) {
+        BrandedSnack.showSuccess(context, l.userReported);
+      }
+    } catch (_) {}
   }
 
   @override
@@ -324,12 +539,35 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   fontWeight: FontWeight.w700),
             ),
             Text(
-              l.activeTrip,
+              widget.rideRequestId != null ? l.activeTrip : l.chatConversation,
               style: const TextStyle(
                   color: AppColors.textSecondary, fontSize: 12),
             ),
           ],
         ),
+        actions: [
+          if (_peerId != null)
+            PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert_rounded, color: Colors.white),
+              color: AppColors.surface,
+              onSelected: (v) {
+                if (v == 'block') _blockPeer();
+                if (v == 'report') _reportPeer();
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'report',
+                  child: Text(l.reportAction,
+                      style: const TextStyle(color: Colors.white)),
+                ),
+                PopupMenuItem(
+                  value: 'block',
+                  child: Text(l.blockAction,
+                      style: const TextStyle(color: AppColors.error)),
+                ),
+              ],
+            ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(height: 1, color: AppColors.border),

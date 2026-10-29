@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ backup/transfer rules.
+
+  The session JWT lives in SharedPreferences; Android's default is to include
+  app data in cloud backup and device-to-device transfer, which would copy a
+  live session token off the device. Nothing here needs to survive a reinstall —
+  the user signs in again — so both channels are emptied.
+
+  android:allowBackup="false" covers Android 11 and below; these rules cover 12+.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" />
+        <exclude domain="database" />
+        <exclude domain="file" />
+        <exclude domain="root" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" />
+        <exclude domain="database" />
+        <exclude domain="file" />
+        <exclude domain="root" />
+    </device-transfer>
+</data-extraction-rules>

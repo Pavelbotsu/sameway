@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../core/app_colors.dart';
+import '../../core/consent_service.dart';
 import '../../core/fcm_service.dart';
+import '../../core/legal.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/language_sheet.dart';
-import '../driver/driver_home_screen.dart';
-import '../passenger/passenger_home_screen.dart';
+import '../legal/analytics_consent_screen.dart';
+import '../legal/terms_gate_screen.dart';
 import 'onboarding_screen.dart';
 import 'role_selection_screen.dart';
 
@@ -38,20 +40,36 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> _checkAuth() async {
     await Future.delayed(const Duration(milliseconds: 2600));
     if (!mounted) return;
+    // Optional analytics/crash reporting is off until the user answers, once
+    // per device (see ConsentService). Asked before anything else so no
+    // later screen runs with an undecided state.
+    if (await ConsentService.get() == AnalyticsConsent.undecided) {
+      if (!mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AnalyticsConsentScreen()),
+      );
+      if (!mounted) return;
+    }
     final storage = TokenStorage();
     final token = await storage.getToken();
     final role = await storage.getRole();
+    final userId = await storage.getUserId();
     final onboardingDone = await storage.hasCompletedOnboarding();
     if (!mounted) return;
     if (token != null && role != null) {
       FcmService.sendTokenToBackend(); // refresh token on every app start
+      // Sessions from before consent existed (or after a terms version bump)
+      // go through the terms gate first.
+      final accepted =
+          userId == null ? 0 : await storage.getAcceptedTermsVersion(userId);
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        _route(
-          role == 'driver'
-              ? const DriverHomeScreen()
-              : const PassengerHomeScreen(),
-        ),
+        _route(TermsGateScreen.destination(
+          role: role,
+          needsConsent: accepted < kTermsVersion,
+        )),
       );
     } else if (!onboardingDone) {
       Navigator.pushReplacement(

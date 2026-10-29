@@ -51,10 +51,10 @@ class TokenStorage {
     await p.remove(_email);
   }
 
-  // First-run onboarding flag. `_v1` lets us re-show the carousel after a
-  // major UX change by bumping the key to `_v2` in code — old installs see
-  // the new tutorial once, then never again.
-  static const _onboardingDone = 'onboarding_completed_v1';
+  // First-run onboarding flag. Bumping the version suffix re-shows the carousel
+  // after a major UX change — old installs see the new tutorial once, then
+  // never again. Bumped to _v2 when the passenger/driver safety pages were added.
+  static const _onboardingDone = 'onboarding_completed_v2';
 
   Future<bool> hasCompletedOnboarding() async {
     final p = await SharedPreferences.getInstance();
@@ -90,5 +90,22 @@ class TokenStorage {
   Future<void> markNotificationRationaleShown() async {
     final p = await SharedPreferences.getInstance();
     await p.setBool(_notifRationaleShown, true);
+  }
+
+  // Terms/Privacy version this user is known (from the server) to have
+  // accepted on this device. Lets the splash screen gate a stored session
+  // without a network call; the server stays the source of truth (login and
+  // register report needs_consent). Keyed by user so a second account on the
+  // same phone is asked separately. Survives logout on purpose.
+  static String _termsKey(String userId) => 'terms_version_$userId';
+
+  Future<int> getAcceptedTermsVersion(String userId) async {
+    final p = await SharedPreferences.getInstance();
+    return p.getInt(_termsKey(userId)) ?? 0;
+  }
+
+  Future<void> setAcceptedTermsVersion(String userId, int version) async {
+    final p = await SharedPreferences.getInstance();
+    await p.setInt(_termsKey(userId), version);
   }
 }

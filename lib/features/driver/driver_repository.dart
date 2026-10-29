@@ -22,6 +22,27 @@ class RideRequest {
   // "ai-<model>" when AI re-ranked the candidate list, "geometric_fallback"
   // when AI was requested but failed. Null on payloads from older servers.
   final String? matchMethod;
+  // Round 2 match labeling. detourAdded* are set only for micro_detour
+  // requests: the driver's tile shows "adds ~X m / Y s" before they confirm
+  // (the never-silent disclosure).
+  final String? matchKind;
+  final double? detourAddedM;
+  final double? detourAddedS;
+  // Where this passenger gets OUT and how far they ride, so the driver can
+  // judge a pending request before accepting. Server-computed on read.
+  //
+  // This is the ON-ROUTE drop-off — the projection of the passenger's
+  // destination onto the driver's existing route — not their true final
+  // address. All three are null when the passenger declared no destination
+  // (match_kind 'corridor_weak'), and on older servers.
+  final double? dropoffLat;
+  final double? dropoffLng;
+  final double? carryM;
+
+  /// True when accepting costs the driver no extra driving. Corridor and
+  /// relay matches ride the existing route by construction; only micro_detour
+  /// adds distance, and it discloses exactly how much via [detourAddedM].
+  bool get isZeroDetour => matchKind != 'micro_detour';
 
   const RideRequest({
     required this.id,
@@ -37,6 +58,12 @@ class RideRequest {
     this.pickupCode,
     this.pickedUpAt,
     this.matchMethod,
+    this.matchKind,
+    this.detourAddedM,
+    this.detourAddedS,
+    this.dropoffLat,
+    this.dropoffLng,
+    this.carryM,
   });
 
   factory RideRequest.fromJson(Map<String, dynamic> j) => RideRequest(
@@ -59,6 +86,12 @@ class RideRequest {
             ? null
             : DateTime.tryParse(j['picked_up_at'] as String),
         matchMethod: j['match_method'] as String?,
+        matchKind: j['match_kind'] as String?,
+        detourAddedM: (j['detour_added_m'] as num?)?.toDouble(),
+        detourAddedS: (j['detour_added_s'] as num?)?.toDouble(),
+        dropoffLat: (j['dropoff_lat'] as num?)?.toDouble(),
+        dropoffLng: (j['dropoff_lng'] as num?)?.toDouble(),
+        carryM: (j['carry_m'] as num?)?.toDouble(),
       );
 
   RideRequest copyWith({
@@ -81,12 +114,21 @@ class RideRequest {
         pickupCode: pickupCode ?? this.pickupCode,
         pickedUpAt: pickedUpAt ?? this.pickedUpAt,
         matchMethod: matchMethod ?? this.matchMethod,
+        matchKind: matchKind,
+        detourAddedM: detourAddedM,
+        detourAddedS: detourAddedS,
+        dropoffLat: dropoffLat,
+        dropoffLng: dropoffLng,
+        carryM: carryM,
       );
 
   /// True when this match was re-ranked by the AI layer. Used by UI badges
   /// to differentiate from the geometric default.
   bool get matchedByAI =>
       matchMethod != null && matchMethod!.startsWith('ai-');
+
+  /// True when accepting means driving a small, disclosed detour.
+  bool get isMicroDetour => matchKind == 'micro_detour';
 }
 
 class RouteResult {
@@ -215,6 +257,20 @@ class DriverRepository {
     await _api.post(
       '/driver/dropoff/$requestId',
       {'distance_km': distanceKm},
+      auth: true,
+    );
+  }
+
+  /// Records a "something is wrong" answer to the mid-ride check-in. The route
+  /// is role-agnostic (either party may flag) and the handler enforces
+  /// participant-of-the-row.
+  Future<void> flagSafety({
+    required String requestId,
+    required String reason,
+  }) async {
+    await _api.post(
+      '/safety/flag',
+      {'request_id': requestId, 'reason': reason},
       auth: true,
     );
   }

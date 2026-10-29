@@ -10,6 +10,9 @@ abstract class AppColors {
   static const tealDark = Color(0xFF00A896);
   static const textPrimary = Colors.white;
   static const textSecondary = Color(0xFF8794B0);
+  // Dark slate gray for labels rendered over the light map (e.g. the role
+  // pill), where white text washes out. Intentionally gray, not pure black.
+  static const mapLabelText = Color(0xFF3A3F52);
   static const border = Color(0xFF1E2038);
   static const error = Color(0xFFFF5E5E);
   static const success = Color(0xFF4DC987);

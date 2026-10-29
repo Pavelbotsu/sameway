@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../core/app_colors.dart';
 import '../../../core/app_localizations.dart';
+import '../../../core/feature_flags.dart';
 import '../../../core/geo.dart';
 import '../../../core/widgets/animated_map_marker.dart';
 import '../../../core/widgets/m3_expressive/m3_expressive.dart';
@@ -88,9 +89,9 @@ class DriverBottomPanel extends StatelessWidget {
         children: [
           SheetGrabHandle(
             controller: sheetCtrl,
-            minChildSize: 0.07,
+            minChildSize: 0.26,
             maxChildSize: 0.85,
-            snapSizes: const [0.28, 0.55],
+            snapSizes: const [0.55],
           ),
           const Divider(color: AppColors.border, height: 1),
           Expanded(
@@ -174,27 +175,47 @@ class _IdlePanel extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         // Split CTA — primary "Set Route" + dropdown with Plan / Find Planned.
+        // With planned trips hidden (test build) it degrades to a plain
+        // full-width button.
         Center(
-          child: SplitButton(
-            label: l.setRoute,
-            icon: Icons.add_road_rounded,
-            height: 54,
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
-            onPressed: driver.isLoading ? null : onSetRoute,
-            menuItems: [
-              SplitMenuItem(
-                label: l.planATrip,
-                icon: Icons.event_available_rounded,
-                onPressed: onPlanTrip,
-              ),
-              SplitMenuItem(
-                label: l.findPlannedTrips,
-                icon: Icons.search_rounded,
-                onPressed: onFindTrips,
-              ),
-            ],
-          ),
+          child: FeatureFlags.plannedTrips
+              ? SplitButton(
+                  label: l.setRoute,
+                  icon: Icons.add_road_rounded,
+                  height: 54,
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  onPressed: driver.isLoading ? null : onSetRoute,
+                  menuItems: [
+                    SplitMenuItem(
+                      label: l.planATrip,
+                      icon: Icons.event_available_rounded,
+                      onPressed: onPlanTrip,
+                    ),
+                    SplitMenuItem(
+                      label: l.findPlannedTrips,
+                      icon: Icons.search_rounded,
+                      onPressed: onFindTrips,
+                    ),
+                  ],
+                )
+              : SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: FilledButton.icon(
+                    onPressed: driver.isLoading ? null : onSetRoute,
+                    icon: const Icon(Icons.add_road_rounded, size: 20),
+                    label: Text(l.setRoute),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      textStyle: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
         ),
         AnimatedSize(
           duration: const Duration(milliseconds: 220),
@@ -305,6 +326,8 @@ class _ActivePanel extends StatelessWidget {
         ],
         _RouteActiveCard(
           route: driver.activeRoute!,
+          notifiedCount: driver.totalNotified,
+          pendingCount: driver.activePendingCount,
           onDelete: () async {
             // If there are any active rides (accepted or in_progress),
             // confirm and end the route via the bulk done flow — that emits
@@ -323,15 +346,14 @@ class _ActivePanel extends StatelessWidget {
                 backgroundColor: AppColors.surface,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
-                title: const Text(
-                  'End route?',
-                  style: TextStyle(
+                title: Text(
+                  l.endRouteQ,
+                  style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w700),
                 ),
-                content: const Text(
-                  'Every passenger currently on board will be dropped off '
-                  "and you'll stop receiving new matches.",
-                  style: TextStyle(
+                content: Text(
+                  l.endRouteBody,
+                  style: const TextStyle(
                       color: AppColors.textSecondary, height: 1.5),
                 ),
                 actions: [
@@ -343,8 +365,8 @@ class _ActivePanel extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(ctx, true),
-                    child: const Text('End route',
-                        style: TextStyle(
+                    child: Text(l.endRouteAction,
+                        style: const TextStyle(
                             color: AppColors.error,
                             fontWeight: FontWeight.w600)),
                   ),
@@ -427,8 +449,17 @@ class _ActivePanel extends StatelessWidget {
 
 class _RouteActiveCard extends StatelessWidget {
   final RouteResult route;
+  // Live counters from DriverProvider (corridor_stats WS) — NOT the frozen
+  // notified_count baked into the route-set response.
+  final int notifiedCount;
+  final int pendingCount;
   final VoidCallback onDelete;
-  const _RouteActiveCard({required this.route, required this.onDelete});
+  const _RouteActiveCard({
+    required this.route,
+    required this.notifiedCount,
+    required this.pendingCount,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -466,11 +497,19 @@ class _RouteActiveCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${route.distanceKm.toStringAsFixed(1)} km · '
-                  '${route.notifiedCount} passenger${route.notifiedCount == 1 ? '' : 's'} notified',
+                  l.routeSummary(
+                      route.distanceKm.toStringAsFixed(1), notifiedCount),
                   style: const TextStyle(
                       color: AppColors.textSecondary, fontSize: 12),
                 ),
+                if (pendingCount > 0)
+                  Text(
+                    l.pendingOffersCount(pendingCount),
+                    style: const TextStyle(
+                        color: AppColors.teal,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
+                  ),
               ],
             ),
           ),
@@ -506,7 +545,7 @@ class _RequestsList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Ride requests (${requests.length})',
+          AppLocalizations.of(context).rideRequestsCount('${requests.length}'),
           style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,
@@ -522,10 +561,19 @@ class _RequestsList extends StatelessWidget {
               passengerLoc:
                   context.watch<DriverProvider>().passengerLocations[r.id],
               myPos: myPos,
+              // Cancel is genuinely accepted-only: DriverCancelRide filters on
+              // `status = 'accepted'`, so offering it mid-ride would just 400.
               onCancel: r.status == 'accepted'
                   ? () => onCancelRide(r.id)
                   : null,
-              onComplete: r.status == 'accepted'
+              // Drop-off must cover in_progress — that IS the normal case, once
+              // the passenger has entered the pickup code. This used to be
+              // 'accepted'-only while _buildAcceptedActions renders the button
+              // only for in_progress, so the two conditions never overlapped and
+              // the button was permanently disabled: a ride that completed its
+              // handshake could not be ended at all except by killing the whole
+              // route. DropoffPassenger accepts both statuses.
+              onComplete: (r.status == 'accepted' || r.status == 'in_progress')
                   ? () => onCompleteRide(r.id, r.passengerID)
                   : null,
               onRespond: r.status == 'pending'
@@ -591,6 +639,39 @@ class _RequestTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildHeaderRow(context),
+          // Micro-detour disclosure (Round 2 §2): the driver sees exactly
+          // what accepting costs BEFORE tapping Accept — never silent.
+          if (request.isMicroDetour &&
+              request.detourAddedM != null &&
+              request.detourAddedS != null) ...[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Icon(Icons.alt_route_rounded,
+                    color: Color(0xFFFF9800), size: 15),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context).detourAddsLabel(
+                        request.detourAddedM!.round(),
+                        request.detourAddedS!.round()),
+                    style: const TextStyle(
+                      color: Color(0xFFFF9800),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          // Pre-accept disclosure. Accept/Decline used to sit under a name and
+          // a rating and nothing else — the driver was committing a seat with
+          // no idea where this person got on, got off, or how far they rode.
+          if (request.status == 'pending') ...[
+            const SizedBox(height: 10),
+            _buildPreAcceptDisclosure(context),
+          ],
           if (request.status == 'pending' && onRespond != null) ...[
             const SizedBox(height: 10),
             _buildAcceptDeclineRow(context),
@@ -633,7 +714,10 @@ class _RequestTile extends StatelessWidget {
             onPressed: onComplete == null ? null : () => onComplete!.call(),
             icon: const Icon(Icons.check_circle_outline_rounded, size: 18),
             label: Text(
-              'Drop off ${request.passengerName?.trim().isNotEmpty == true ? request.passengerName : "passenger"}',
+              dialogL.dropOffName(
+                  request.passengerName?.trim().isNotEmpty == true
+                      ? request.passengerName!
+                      : dialogL.passenger),
               style: const TextStyle(fontWeight: FontWeight.w600),
             ),
             style: FilledButton.styleFrom(
@@ -645,69 +729,158 @@ class _RequestTile extends StatelessWidget {
             ),
           ),
         if (isInRide) const SizedBox(height: 6),
-        Center(
-          child: TextButton(
-            onPressed: onCancel == null
-                ? null
-                : () async {
-                    final confirmed = await showDialog<bool>(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        backgroundColor: AppColors.surface,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        title: Text(dialogL.cancelRideQ,
+        // Hidden rather than disabled when unavailable: the backend rejects
+        // cancel once a ride is in_progress, and a permanently greyed-out
+        // button reads as a broken app rather than as "not applicable".
+        if (onCancel != null)
+          Center(
+            child: TextButton(
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    backgroundColor: AppColors.surface,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    title: Text(dialogL.cancelRideQ,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700)),
+                    content: Text(
+                      dialogL.cancelRideMessageDriver,
+                      style: const TextStyle(
+                          color: AppColors.textSecondary, height: 1.5),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: Text(dialogL.keepRide,
                             style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700)),
-                        content: Text(
-                          dialogL.cancelRideMessageDriver,
-                          style: const TextStyle(
-                              color: AppColors.textSecondary, height: 1.5),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx, false),
-                            child: Text(dialogL.keepRide,
-                                style: const TextStyle(
-                                    color: AppColors.textSecondary)),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx, true),
-                            child: Text(dialogL.cancel,
-                                style: const TextStyle(
-                                    color: AppColors.error,
-                                    fontWeight: FontWeight.w600)),
-                          ),
-                        ],
+                                color: AppColors.textSecondary)),
                       ),
-                    );
-                    if (confirmed == true) onCancel?.call();
-                  },
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.error,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              minimumSize: const Size(0, 32),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: Text(dialogL.cancel,
+                            style: const TextStyle(
+                                color: AppColors.error,
+                                fontWeight: FontWeight.w600)),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirmed == true) onCancel?.call();
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.error,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                minimumSize: const Size(0, 32),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(dialogL.cancelRide,
+                  style: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.w600)),
             ),
-            child: const Text('Cancel ride',
-                style:
-                    TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
           ),
-        ),
       ],
     );
   }
 
+  /// What accepting this request actually costs, shown BEFORE Accept/Decline.
+  ///
+  /// Everything here comes from the request row itself — `GetDriverRequests`
+  /// projects the passenger's destination onto the driver's route on read, so
+  /// this stays correct for corridor pushes, map-browse requests and
+  /// micro-detours alike without three creation sites having to agree.
+  Widget _buildPreAcceptDisclosure(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final routeWkt =
+        context.watch<DriverProvider>().activeRoute?.routeWkt ?? '';
+    final dropoff = (request.dropoffLat != null && request.dropoffLng != null)
+        ? LatLng(request.dropoffLat!, request.dropoffLng!)
+        : null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _PreAcceptRouteMap(
+          pickup: LatLng(request.pickupLat, request.pickupLng),
+          dropoff: dropoff,
+          routeWkt: routeWkt,
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            const _StopLegendDot(color: AppColors.success),
+            const SizedBox(width: 5),
+            Text(l.pickupPointLabel,
+                style: const TextStyle(
+                    color: AppColors.textSecondary, fontSize: 11)),
+            const SizedBox(width: 12),
+            if (dropoff != null) ...[
+              const _StopLegendDot(color: Color(0xFFFF9800)),
+              const SizedBox(width: 5),
+              Text(l.dropoffPointLabel,
+                  style: const TextStyle(
+                      color: AppColors.textSecondary, fontSize: 11)),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        // Carry distance is the honest headline: it is the whole reason to
+        // take this passenger, and it is what the matcher optimised for.
+        if (request.carryM != null)
+          Text(
+            l.ridesWithYou(_formatKm(request.carryM!)),
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
+          )
+        else
+          // corridor_weak: matched on direction alone, no destination declared.
+          Text(
+            l.noDestinationDeclared,
+            style: const TextStyle(
+                color: AppColors.textSecondary, fontSize: 12),
+          ),
+        // Only micro_detour costs extra driving, and it already discloses the
+        // delta above. Everything else rides the existing route by
+        // construction — say so rather than leaving the driver to assume.
+        if (request.isZeroDetour) ...[
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              const Icon(Icons.check_circle_outline_rounded,
+                  color: AppColors.success, size: 14),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  l.zeroDetourLabel,
+                  style: const TextStyle(
+                      color: AppColors.success, fontSize: 11),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  static String _formatKm(double m) => m < 1000
+      ? '${m.toStringAsFixed(0)} m'
+      : '${(m / 1000).toStringAsFixed(1)} km';
+
   Widget _buildAcceptDeclineRow(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Row(
       children: [
         Expanded(
           child: OutlinedButton.icon(
             onPressed: () => onRespond?.call(false),
             icon: const Icon(Icons.close_rounded, size: 16),
-            label: const Text('Decline'),
+            label: Text(l.decline),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.error,
               side: const BorderSide(color: AppColors.error),
@@ -724,7 +897,7 @@ class _RequestTile extends StatelessWidget {
           child: FilledButton.icon(
             onPressed: () => onRespond?.call(true),
             icon: const Icon(Icons.check_rounded, size: 16),
-            label: const Text('Accept'),
+            label: Text(l.accept),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.success,
               foregroundColor: Colors.white,
@@ -765,7 +938,7 @@ class _RequestTile extends StatelessWidget {
                       ? request.passengerName!
                       : (info?.name?.trim().isNotEmpty == true)
                           ? info!.name!
-                          : 'Passenger';
+                          : AppLocalizations.of(context).passenger;
                   return Text(
                     name,
                     style: const TextStyle(
@@ -807,7 +980,7 @@ class _RequestTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              request.status,
+              AppLocalizations.of(context).rideStatusLabel(request.status),
               style: TextStyle(
                 color: _statusColor,
                 fontSize: 11,
@@ -823,7 +996,7 @@ class _RequestTile extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => ChatScreen(
                     rideRequestId: acceptedRequestId ?? request.id,
-                    otherPartyName: 'Passenger',
+                    otherPartyName: AppLocalizations.of(context).passenger,
                   ),
                 ),
               ),
@@ -842,6 +1015,126 @@ class _RequestTile extends StatelessWidget {
         ],
     );
   }
+}
+
+/// Pre-accept disclosure map: where this passenger gets ON and OFF, drawn
+/// against the driver's own route.
+///
+/// Separate from [_AcceptedRideMap] rather than a flag on it, because that
+/// widget requires the passenger's LIVE position and renders "waiting for
+/// passenger location" without it — and live location is only relayed for
+/// accepted/in_progress rides (see the status filter in handlers/passenger.go).
+/// A pending row would therefore have shown a permanent waiting box.
+///
+/// Draws the driver's full route faintly rather than clipping the segment
+/// between the two stops: the client has no route-substring helper, and seeing
+/// both pins sitting ON the existing line is exactly the "this costs me
+/// nothing" signal the driver needs.
+class _PreAcceptRouteMap extends StatelessWidget {
+  final LatLng pickup;
+  final LatLng? dropoff;
+  final String routeWkt;
+
+  const _PreAcceptRouteMap({
+    required this.pickup,
+    required this.routeWkt,
+    this.dropoff,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final routePts = parseLineStringWKT(routeWkt);
+    final fitPts = <LatLng>[pickup, if (dropoff != null) dropoff!];
+    final center = dropoff == null
+        ? pickup
+        : LatLng((pickup.latitude + dropoff!.latitude) / 2,
+            (pickup.longitude + dropoff!.longitude) / 2);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: SizedBox(
+        height: 160,
+        child: FlutterMap(
+          options: MapOptions(
+            initialCenter: center,
+            initialZoom: 13,
+            initialCameraFit: fitPts.length > 1
+                ? CameraFit.bounds(
+                    bounds: LatLngBounds.fromPoints(fitPts),
+                    padding: const EdgeInsets.all(32),
+                  )
+                : null,
+            interactionOptions: const InteractionOptions(
+              flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+            ),
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.sameway.app',
+            ),
+            if (routePts.length >= 2)
+              PolylineLayer(polylines: [
+                Polyline(
+                  points: routePts,
+                  strokeWidth: 4,
+                  color: AppColors.primary.withValues(alpha: 0.55),
+                ),
+              ]),
+            MarkerLayer(markers: [
+              Marker(
+                point: pickup,
+                width: 30,
+                height: 30,
+                child: const _StopDot(
+                  color: AppColors.success,
+                  icon: Icons.arrow_upward_rounded,
+                ),
+              ),
+              if (dropoff != null)
+                Marker(
+                  point: dropoff!,
+                  width: 30,
+                  height: 30,
+                  child: const _StopDot(
+                    color: Color(0xFFFF9800),
+                    icon: Icons.arrow_downward_rounded,
+                  ),
+                ),
+            ]),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Small colour swatch tying the legend row to the markers on the map above.
+class _StopLegendDot extends StatelessWidget {
+  final Color color;
+  const _StopLegendDot({required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 9,
+        height: 9,
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      );
+}
+
+class _StopDot extends StatelessWidget {
+  final Color color;
+  final IconData icon;
+  const _StopDot({required this.color, required this.icon});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: Icon(icon, size: 16, color: Colors.white),
+      );
 }
 
 class _AcceptedRideMap extends StatefulWidget {
@@ -947,8 +1240,8 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
         child: Center(
           child: Text(
             a == null
-                ? 'Waiting for your location…'
-                : 'Waiting for passenger location…',
+                ? AppLocalizations.of(context).waitingForYourLocation
+                : AppLocalizations.of(context).waitingForPassengerLocation,
             style: const TextStyle(
                 color: AppColors.textSecondary, fontSize: 12),
           ),
@@ -1036,7 +1329,8 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
         ),
         const SizedBox(height: 6),
         Text(
-          '${distance.toStringAsFixed(1)} km between you',
+          AppLocalizations.of(context)
+              .kmBetweenYou(distance.toStringAsFixed(1)),
           style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,

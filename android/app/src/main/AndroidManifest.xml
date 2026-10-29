@@ -1,10 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <application
         android:label="sameway"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:enableOnBackInvokedCallback="true">
+        android:enableOnBackInvokedCallback="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -32,11 +36,83 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        
+
+        <!--
+          Driver background location (lib/core/location_service.dart).
+          flutter_foreground_task does NOT declare its service itself; the app
+          must, and on Android 14+ (targetSdk 34+) a foreground service without
+          a declared foregroundServiceType cannot start at all — startService
+          failed and the error was swallowed, so drivers still dropped out of
+          matching whenever the screen locked. "location" requires
+          FOREGROUND_SERVICE_LOCATION (below) plus a granted while-in-use
+          location permission, and the service must be started while the app
+          is in the foreground (it is: from DriverProvider.setRoute).
+          Play Console: declare the "location" FGS type with a short video.
+        -->
+        <service
+            android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
+            android:foregroundServiceType="location"
+            android:exported="false" />
+
+        <!--
+          The plugin merges in a boot receiver for its autoRunOnBoot option.
+          LocationService sets autoRunOnBoot=false, so the receiver (and the
+          RECEIVE_BOOT_COMPLETED permission removed below) is dead surface —
+          and an exported receiver Play review will ask about.
+        -->
+        <receiver
+            android:name="com.pravera.flutter_foreground_task.service.RebootReceiver"
+            tools:node="remove" />
+
+        <!--
+          Analytics, crash reporting and performance monitoring stay OFF until
+          the user consents (lib/core/consent_service.dart turns them on).
+          These defaults apply before any Dart code runs, so nothing is sent
+          during startup either.
+        -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <meta-data
+            android:name="firebase_performance_collection_enabled"
+            android:value="false" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!--
+      Background location for active drivers.
+
+      Server-side matching only considers a driver whose last GPS fix is inside
+      MATCH_LOC_FRESH_S. Without a foreground service the app can only refresh
+      that from a foreground timer, so a driver who locked their phone — i.e.
+      almost every driver, almost all the time — silently disappeared from
+      matching. The service runs only while a route is active (see
+      LocationService, started from DriverProvider.setRoute).
+
+      ACCESS_BACKGROUND_LOCATION is deliberately NOT requested. A location
+      foreground service started while the app is visible keeps receiving
+      fixes after the screen locks with only while-in-use permission, and
+      declaring the background permission triggers Play's separate
+      background-location review (declaration form + video) for no benefit.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- Only used by the plugin's boot receiver, which is removed above. -->
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED"
+        tools:node="remove" />
+    <!-- Android 13+: required for the service's own ongoing notification and
+         for FCM ride alerts to be shown at all. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.

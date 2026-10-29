@@ -10,7 +10,13 @@ import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
 
 class _PlannedTrip {
+  /// The planned_trips row id. NOT the driver — see [driverId].
   final String id;
+
+  /// The trip owner's user id. Required to request a ride: the backend's
+  /// /passenger/request-driver looks the driver up in active_drivers by user
+  /// id, so passing the trip id here silently 409s every time.
+  final String driverId;
   final String driverName;
   final String carSummary;
   final String originName;
@@ -22,6 +28,7 @@ class _PlannedTrip {
 
   const _PlannedTrip({
     required this.id,
+    required this.driverId,
     required this.driverName,
     required this.carSummary,
     required this.originName,
@@ -34,6 +41,7 @@ class _PlannedTrip {
 
   factory _PlannedTrip.fromJson(Map<String, dynamic> j) => _PlannedTrip(
         id: j['id'] as String,
+        driverId: j['driver_id'] as String? ?? '',
         driverName: j['driver_name'] as String? ?? 'Driver',
         carSummary: j['car_summary'] as String? ?? '',
         originName: j['origin_name'] as String,
@@ -47,6 +55,7 @@ class _PlannedTrip {
   /// Sentinel placeholder for Skeletonizer.
   factory _PlannedTrip.skeleton() => _PlannedTrip(
         id: '',
+        driverId: '',
         driverName: 'Loading driver',
         carSummary: 'Toyota Corolla · White',
         originName: 'Origin location',
@@ -139,7 +148,7 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
           'Authorization': 'Bearer $jwt',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'driver_id': trip.id}),
+        body: jsonEncode({'driver_id': trip.driverId}),
       );
       if (!mounted) return;
       final ok = resp.statusCode == 200;

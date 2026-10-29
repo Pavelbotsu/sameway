@@ -6,8 +6,8 @@ import '../../core/fcm_service.dart';
 import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
 import 'forgot_password_screen.dart';
-import '../driver/driver_home_screen.dart';
-import '../passenger/passenger_home_screen.dart';
+import '../legal/legal_consent_checks.dart';
+import '../legal/terms_gate_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   final String role;
@@ -21,6 +21,11 @@ class _AuthScreenState extends State<AuthScreen>
     with SingleTickerProviderStateMixin {
   bool _isLogin = true;
   bool _obscure = true;
+  // Signup only: 18+ attestation and Terms/Privacy acceptance. Never
+  // pre-checked — consent has to be an explicit action.
+  bool _ageConfirmed = false;
+  bool _termsAccepted = false;
+  bool _showConsentError = false;
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _email = TextEditingController();
@@ -51,7 +56,10 @@ class _AuthScreenState extends State<AuthScreen>
   }
 
   Future<void> _submit() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
+    final formOk = _formKey.currentState?.validate() ?? false;
+    final consentOk = _isLogin || (_ageConfirmed && _termsAccepted);
+    if (!consentOk) setState(() => _showConsentError = true);
+    if (!formOk || !consentOk) return;
     final auth = context.read<AuthProvider>();
     final email = TextSanitizer.sanitize(_email.text).toLowerCase();
     final name = TextSanitizer.sanitize(_name.text);
@@ -65,17 +73,22 @@ class _AuthScreenState extends State<AuthScreen>
             email: email,
             password: _password.text,
             role: widget.role,
+            acceptTerms: _termsAccepted,
+            ageConfirmed: _ageConfirmed,
           );
     if (ok && mounted) {
       // Re-issue JWT with the role chosen on this screen (login may return DB role).
       await context.read<AuthProvider>().switchRole(widget.role);
       if (!mounted) return;
       FcmService.sendTokenToBackend();
+      // Accounts from before consent existed land on the terms gate first.
+      final needsConsent = context.read<AuthProvider>().needsConsent;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => _isDriver
-              ? const DriverHomeScreen()
-              : const PassengerHomeScreen(),
+          builder: (_) => TermsGateScreen.destination(
+            role: widget.role,
+            needsConsent: needsConsent,
+          ),
         ),
         (_) => false,
       );
@@ -83,7 +96,10 @@ class _AuthScreenState extends State<AuthScreen>
   }
 
   void _toggleMode() {
-    setState(() => _isLogin = !_isLogin);
+    setState(() {
+      _isLogin = !_isLogin;
+      _showConsentError = false;
+    });
     context.read<AuthProvider>().clearError();
     _anim.forward(from: 0);
   }
@@ -176,6 +192,17 @@ class _AuthScreenState extends State<AuthScreen>
                     ],
                   ),
                 ),
+                if (!_isLogin) ...[
+                  const SizedBox(height: 12),
+                  LegalConsentChecks(
+                    ageConfirmed: _ageConfirmed,
+                    termsAccepted: _termsAccepted,
+                    onAgeChanged: (v) => setState(() => _ageConfirmed = v),
+                    onTermsChanged: (v) => setState(() => _termsAccepted = v),
+                    showError: _showConsentError,
+                    accent: _roleColor,
+                  ),
+                ],
                 if (_isLogin)
                   Align(
                     alignment: Alignment.centerRight,

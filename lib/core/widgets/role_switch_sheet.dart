@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../analytics.dart';
 import '../api_client.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
+import '../error_handling.dart';
 import '../token_storage.dart';
 import '../../features/auth/auth_repository.dart';
 import '../../features/driver/driver_provider.dart';
@@ -26,22 +28,24 @@ class RoleSwitchSheet extends StatefulWidget {
 class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
   bool _loading = false;
 
-  // Returns null if no confirmation is needed, otherwise the human-readable
-  // reason the current role has live state that will be terminated.
+  // Returns null if no confirmation is needed, otherwise the localized
+  // human-readable reason the current role has live state that will be
+  // terminated.
   String? _liveStateReason() {
+    final l = AppLocalizations.of(context);
     if (widget.currentRole == 'driver') {
       final driver = context.read<DriverProvider?>();
       if (driver == null) return null;
-      if (driver.activeRoute != null) return 'active driver route';
-      if (driver.acceptedRequestId != null) return 'accepted passenger ride';
+      if (driver.activeRoute != null) return l.reasonActiveDriverRoute;
+      if (driver.acceptedRequestId != null) return l.reasonAcceptedPassengerRide;
     } else {
       final passenger = context.read<PassengerProvider?>();
       if (passenger == null) return null;
-      if (passenger.acceptedRequestId != null) return 'accepted driver ride';
+      if (passenger.acceptedRequestId != null) return l.reasonAcceptedDriverRide;
       if (passenger.outstandingRequests.isNotEmpty) {
-        return 'pending ride requests';
+        return l.reasonPendingRideRequests;
       }
-      if (passenger.isSearching) return 'active destination search';
+      if (passenger.isSearching) return l.reasonActiveDestinationSearch;
     }
     return null;
   }
@@ -63,7 +67,7 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
               color: Colors.white, fontWeight: FontWeight.w700),
         ),
         content: Text(
-          'You have an $reason. Switching will end it and notify the other party.',
+          l.switchWillEnd(reason),
           style: const TextStyle(
               color: AppColors.textSecondary, height: 1.5),
         ),
@@ -121,6 +125,8 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
         role: result.role,
         userId: result.userId,
       );
+      // This path bypasses AuthProvider._run, so re-tag the user here too.
+      Analytics.setUser(result.userId, result.role);
       if (!mounted) return;
       Navigator.pop(context);
       widget.onSwitched();
@@ -128,7 +134,7 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
       if (!mounted) return;
       setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Failed to switch role: $e'),
+        content: Text(friendlyError(context, e)),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));

@@ -5,15 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/consent_service.dart';
+import '../../core/error_handling.dart';
+import '../../core/fcm_service.dart';
 import '../../core/forms/app_form.dart';
+import '../../core/legal.dart';
 import '../../core/token_storage.dart';
 import '../../core/validators/validators.dart';
 import '../../core/widgets/branded_snack_bar.dart';
 import '../../core/widgets/user_avatar.dart';
+import '../auth/auth_provider.dart';
+import '../onboarding/role_selection_screen.dart';
 
 class AccountSecurityScreen extends StatefulWidget {
   final String? initialName;
@@ -102,7 +109,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         BrandedSnack.showSuccess(context, l.profileUpdated);
       }
     } catch (e) {
-      if (mounted) BrandedSnack.showError(context, '$e');
+      if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _savingExtras = false);
     }
@@ -128,10 +135,11 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       } else {
         final msg =
             (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        BrandedSnack.showError(context, msg);
+        BrandedSnack.showError(context,
+            friendlyError(context, ApiException(msg, statusCode: resp.statusCode)));
       }
     } catch (e) {
-      if (mounted) BrandedSnack.showError(context, '$e');
+      if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _sendingVerifyCode = false);
     }
@@ -201,7 +209,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       BrandedSnack.showSuccess(
           context, AppLocalizations.of(context).photoUpdated);
     } catch (e) {
-      if (mounted) BrandedSnack.showError(context, '$e');
+      if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _uploadingPhoto = false);
     }
@@ -215,7 +223,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       if (!mounted) return;
       setState(() => _photoUrl = null);
     } catch (e) {
-      if (mounted) BrandedSnack.showError(context, '$e');
+      if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _uploadingPhoto = false);
     }
@@ -571,8 +579,218 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           ),
           const SizedBox(height: 14),
           const _ChangePasswordSection(),
+          const SizedBox(height: 28),
+          const Divider(color: AppColors.border),
+          const SizedBox(height: 20),
+          const _LegalAndPrivacySection(),
         ],
       ),
+    );
+  }
+}
+
+/// Optional-data consent toggle, links to the legal documents, and account
+/// deletion (required in-app by Google Play and App Store 5.1.1(v)).
+class _LegalAndPrivacySection extends StatefulWidget {
+  const _LegalAndPrivacySection();
+
+  @override
+  State<_LegalAndPrivacySection> createState() => _LegalAndPrivacySectionState();
+}
+
+class _LegalAndPrivacySectionState extends State<_LegalAndPrivacySection> {
+  bool? _analyticsOn;
+
+  @override
+  void initState() {
+    super.initState();
+    ConsentService.get().then((c) {
+      if (mounted) setState(() => _analyticsOn = c == AnalyticsConsent.granted);
+    });
+  }
+
+  Future<void> _setAnalytics(bool on) async {
+    setState(() => _analyticsOn = on);
+    await ConsentService.set(on);
+  }
+
+  Future<void> _deleteAccount() async {
+    final deleted = await showDialog<bool>(
+      context: context,
+      builder: (_) => const _DeleteAccountDialog(),
+    );
+    if (deleted != true || !mounted) return;
+    final l = AppLocalizations.of(context);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const RoleSelectionScreen()),
+      (_) => false,
+    );
+    final messenger = FcmService.scaffoldMessengerKey.currentState;
+    messenger?.showSnackBar(SnackBar(
+      content: Text(l.accountDeleted),
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    Widget linkTile(IconData icon, String label, String url) => ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(icon, color: AppColors.textSecondary),
+          title: Text(label,
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+          trailing: const Icon(Icons.open_in_new_rounded,
+              color: AppColors.textSecondary, size: 18),
+          onTap: () => openLegalUrl(url),
+        );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          l.legalAndPrivacy,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 6),
+        SwitchListTile(
+          contentPadding: EdgeInsets.zero,
+          value: _analyticsOn ?? false,
+          onChanged: _analyticsOn == null ? null : _setAnalytics,
+          activeThumbColor: AppColors.teal,
+          title: Text(l.analyticsSettingTitle,
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+          subtitle: Text(l.analyticsSettingSubtitle,
+              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+        ),
+        linkTile(Icons.privacy_tip_outlined, l.privacyPolicy, kPrivacyPolicyUrl),
+        linkTile(Icons.description_outlined, l.termsOfService, kTermsUrl),
+        const SizedBox(height: 16),
+        OutlinedButton.icon(
+          onPressed: _deleteAccount,
+          icon: const Icon(Icons.delete_forever_outlined),
+          label: Text(l.deleteAccount),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.error,
+            side: const BorderSide(color: AppColors.error),
+            minimumSize: const Size.fromHeight(48),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Explains what deletion does, re-asks for the password, and calls the
+/// server. Pops `true` once the account is gone.
+class _DeleteAccountDialog extends StatefulWidget {
+  const _DeleteAccountDialog();
+
+  @override
+  State<_DeleteAccountDialog> createState() => _DeleteAccountDialogState();
+}
+
+class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
+  final _password = TextEditingController();
+  bool _busy = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> _confirm() async {
+    final l = AppLocalizations.of(context);
+    if (_password.text.isEmpty) {
+      setState(() => _error = l.deleteAccountPasswordLabel);
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await context.read<AuthProvider>().deleteAccount(_password.text);
+      if (mounted) Navigator.of(context).pop(true);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _error = switch (e.statusCode) {
+          403 => l.errCurrentPasswordWrong,
+          409 => l.deleteAccountActiveRide,
+          _ => friendlyError(context, e),
+        };
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _busy = false;
+        _error = friendlyError(context, e);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return AlertDialog(
+      backgroundColor: AppColors.surface,
+      title: Text(l.deleteAccountTitle,
+          style: const TextStyle(color: AppColors.textPrimary)),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l.deleteAccountBody,
+                style: const TextStyle(
+                    color: AppColors.textSecondary, fontSize: 14, height: 1.4)),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _password,
+              obscureText: true,
+              enabled: !_busy,
+              autofocus: true,
+              style: const TextStyle(color: AppColors.textPrimary),
+              decoration: InputDecoration(
+                labelText: l.deleteAccountPasswordLabel,
+                labelStyle: const TextStyle(color: AppColors.textSecondary),
+                errorText: _error,
+                errorMaxLines: 3,
+              ),
+              onSubmitted: (_) => _busy ? null : _confirm(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _busy ? null : () => Navigator.of(context).pop(false),
+          child: Text(l.cancel,
+              style: const TextStyle(color: AppColors.textSecondary)),
+        ),
+        TextButton(
+          onPressed: _busy ? null : _confirm,
+          child: _busy
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: AppColors.error),
+                )
+              : Text(l.deleteAccountConfirm,
+                  style: const TextStyle(
+                      color: AppColors.error, fontWeight: FontWeight.w700)),
+        ),
+      ],
     );
   }
 }
@@ -729,7 +947,7 @@ class _VerifyEmailSheetState extends State<_VerifyEmailSheet> {
   Future<void> _submit() async {
     final code = widget.codeCtrl.text.trim();
     if (code.length != 6) {
-      setState(() => _err = 'Enter the 6-digit code');
+      setState(() => _err = AppLocalizations.of(context).enterSixDigitCode);
       return;
     }
     setState(() {
@@ -755,10 +973,11 @@ class _VerifyEmailSheetState extends State<_VerifyEmailSheet> {
       } else {
         final msg =
             (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        setState(() => _err = msg);
+        setState(() => _err = friendlyError(
+            context, ApiException(msg, statusCode: resp.statusCode)));
       }
     } catch (e) {
-      if (mounted) setState(() => _err = '$e');
+      if (mounted) setState(() => _err = friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -912,6 +1131,26 @@ class _ChangePasswordSectionState extends State<_ChangePasswordSection> {
           'new_password': _newCtrl.text,
         }),
       );
+      if (resp.statusCode == 200) {
+        // The server bumps users.token_version on a password change, which
+        // kills every outstanding token INCLUDING this device's. It hands back
+        // a replacement in the response — persist it or the next request 401s
+        // and drops the user to the login screen.
+        try {
+          final body = jsonDecode(resp.body) as Map<String, dynamic>;
+          final fresh = body['token'] as String?;
+          if (fresh != null && fresh.isNotEmpty) {
+            final storage = TokenStorage();
+            await storage.save(
+              token: fresh,
+              role: await storage.getRole() ?? '',
+              userId: await storage.getUserId() ?? '',
+              name: await storage.getName(),
+              email: await storage.getEmail(),
+            );
+          }
+        } catch (_) {/* keep the old token; user re-logs in if it 401s */}
+      }
       if (!mounted) return;
       if (resp.statusCode == 200) {
         _currentCtrl.clear();

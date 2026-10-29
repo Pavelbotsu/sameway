@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../api_client.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
+import '../error_handling.dart';
 import '../token_storage.dart';
 import '../../features/auth/auth_repository.dart';
 
@@ -63,7 +64,7 @@ class _TestAITileState extends State<TestAITile> {
     } catch (e) {
       if (!mounted) return;
       messenger.showSnackBar(SnackBar(
-        content: Text('${l.testAIFailed}: $e'),
+        content: Text('${l.testAIFailed}: ${friendlyError(context, e)}'),
         backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));

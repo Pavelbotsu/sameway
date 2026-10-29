@@ -46,9 +46,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           title: l.onboardTitle4,
           subtitle: l.onboardSubtitle4,
         ),
+        // Safety disclaimers — one per role, shown to everyone on first run.
+        _PageData(
+          scene: OnboardingScene.safety,
+          accent: AppColors.teal,
+          title: l.safetyPassengerTitle,
+          subtitle: l.safetyPassengerBody,
+        ),
+        _PageData(
+          scene: OnboardingScene.safety,
+          accent: AppColors.primary,
+          title: l.safetyDriverTitle,
+          subtitle: l.safetyDriverBody,
+        ),
       ];
 
-  static const int _pageCount = 4;
+  static const int _pageCount = 6;
 
   Future<void> _finishOnboarding() async {
     if (!widget.replay) {
@@ -116,7 +129,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 48),
+              padding: const EdgeInsets.fromLTRB(24, 12, 24, 48),
               child: Column(
                 children: [
                   Row(
@@ -199,35 +212,44 @@ class _OnboardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          OnboardingArt(scene: data.scene, accent: data.accent),
-          const SizedBox(height: 32),
-          Text(
-            data.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
-              letterSpacing: -1.0,
-              height: 1.15,
+    // Center short pages, but let long ones (the safety pages) scroll within
+    // their own area instead of overflowing into the page-indicator dots below.
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(32, 16, 32, 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OnboardingArt(scene: data.scene, accent: data.accent),
+                const SizedBox(height: 32),
+                Text(
+                  data.title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -1.0,
+                    height: 1.15,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  data.subtitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 15,
+                    height: 1.6,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            data.subtitle,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 15,
-              height: 1.6,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

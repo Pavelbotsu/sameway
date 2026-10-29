@@ -44,9 +44,23 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
   String? _error;
 
   @override
+  void initState() {
+    super.initState();
+    // Rebuild so the clear (X) buttons toggle live as the user types.
+    _originCtrl.addListener(_onCtrlChanged);
+    _destCtrl.addListener(_onCtrlChanged);
+  }
+
+  void _onCtrlChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
   void dispose() {
     _debounceOrigin?.cancel();
     _debounceDest?.cancel();
+    _originCtrl.removeListener(_onCtrlChanged);
+    _destCtrl.removeListener(_onCtrlChanged);
     _originCtrl.dispose();
     _destCtrl.dispose();
     super.dispose();
@@ -251,7 +265,25 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
                             strokeWidth: 2,
                             color: AppColors.textSecondary)),
                   )
-                : null,
+                : ctrl.text.isNotEmpty
+                    ? IconButton(
+                        tooltip: AppLocalizations.of(context).clear,
+                        icon: const Icon(Icons.close_rounded,
+                            color: AppColors.textSecondary, size: 18),
+                        onPressed: () {
+                          ctrl.clear();
+                          setState(() {
+                            if (isOrigin) {
+                              _originSug = null;
+                              _originSuggestions = [];
+                            } else {
+                              _destSug = null;
+                              _destSuggestions = [];
+                            }
+                          });
+                        },
+                      )
+                    : null,
           ),
         ),
         if (suggestions.isNotEmpty)

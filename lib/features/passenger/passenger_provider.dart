@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import '../../core/analytics.dart';
 import '../../core/haptics.dart';
+import '../../core/ride_check_in.dart';
 import '../../core/websocket_client.dart';
 import '../driver/driver_repository.dart' show PickupRoute;
 import 'passenger_repository.dart';
@@ -30,6 +32,20 @@ class RideOffer {
   // Server-stamped ranker tag (see services/ranker on the backend). Null on
   // payloads from older servers.
   final String? matchMethod;
+  // Round 2: labeled match kind — 'corridor' | 'corridor_weak' |
+  // 'partial_relay' | 'micro_detour'. Null on payloads from older servers.
+  final String? matchKind;
+  // Partial relay: dropoff = the driver's route end the passenger rides to,
+  // then continues by transit (stop name/distance) or a fresh search
+  // (relayFallback). The passenger opts in BEFORE accepting.
+  final double? dropoffLat;
+  final double? dropoffLng;
+  final String? transitStopName;
+  final double? transitStopDistM;
+  final bool relayFallback;
+  // Micro-detour: the disclosed delta the driver accepts to come to you.
+  final double? detourAddedM;
+  final double? detourAddedS;
 
   const RideOffer({
     required this.requestId,
@@ -51,10 +67,20 @@ class RideOffer {
     this.walkDistanceM,
     this.driverDistanceToPickupM,
     this.matchMethod,
+    this.matchKind,
+    this.dropoffLat,
+    this.dropoffLng,
+    this.transitStopName,
+    this.transitStopDistM,
+    this.relayFallback = false,
+    this.detourAddedM,
+    this.detourAddedS,
   });
 
   bool get matchedByAI =>
       matchMethod != null && matchMethod!.startsWith('ai-');
+  bool get isPartialRelay => matchKind == 'partial_relay';
+  bool get isMicroDetour => matchKind == 'micro_detour';
 
   String? get carSummary => _carSummary(carColor, carMake, carModel, carPlate);
 }
@@ -120,6 +146,22 @@ String? _carSummary(String? color, String? make, String? model, String? plate) {
 
 enum PassengerStatus { looking, offered, accepted, inRide, declined }
 
+/// The passenger-facing match lifecycle (Round 2 §6):
+///   searching → candidatesAvailable → offerReceived → requested → matched →
+///   inProgress
+/// Derived from existing signals ([PassengerStatus], the pending offer, the
+/// outstanding-request list, and the likely-match count from the nearby
+/// list) rather than stored — the backend already carries all of it.
+enum MatchUiState {
+  idle, // no destination set — not in the match flow at all
+  searching,
+  candidatesAvailable,
+  offerReceived,
+  requested,
+  matched,
+  inProgress,
+}
+
 class PassengerProvider extends ChangeNotifier {
   final PassengerRepository _repo;
   final WebSocketClient _ws;
@@ -138,12 +180,68 @@ class PassengerProvider extends ChangeNotifier {
   // Driver's profile photo URL — populated by accept WS / acceptRide so the
   // AcceptedCard can render the same UserAvatar (Phase 1.3c).
   String? acceptedDriverPhotoUrl;
-  // Pickup handshake: the 4-digit code the server attached to this ride.
-  // Cleared on entering inRide/looking; populated from the driver_response WS
-  // payload or from /passenger/my-requests on reconnect.
-  String? acceptedPickupCode;
   double? peerLat;
   double? peerLng;
+  // When the peer fix above arrived. Required by the mid-ride check-in: a stale
+  // position is no evidence at all, so distance alone must never be trusted.
+  DateTime? peerAt;
+
+  // ── Mid-ride safety check-in ─────────────────────────────────────────────
+  // Set true once per ride when this passenger and their driver have been
+  // provably apart for ~30s while the ride is in_progress. The home screen
+  // watches it and opens RideCheckInSheet. See core/ride_check_in.dart.
+  bool checkInPrompt = false;
+  LatLng? _selfPos;
+  DateTime? _selfAt;
+  final RideCheckInTracker _checkIn = RideCheckInTracker();
+
+  void clearCheckInPrompt() {
+    if (!checkInPrompt) return;
+    checkInPrompt = false;
+    notifyListeners();
+  }
+
+  /// Called wherever a ride ends, alongside the existing peer-location clears,
+  /// so a streak or a "already asked" latch can never leak into the next ride.
+  void _resetCheckIn() {
+    _checkIn.reset();
+    checkInPrompt = false;
+  }
+
+  /// Re-evaluates togetherness after either side's position moves. Only runs
+  /// while in_progress — before pickup the two being apart is the normal case
+  /// (that is the whole point of the walk-to-pickup leg).
+  void _evaluateCheckIn() {
+    if (state != PassengerStatus.inRide) {
+      _checkIn.observe(null, CheckInVerdict.unknown);
+      return;
+    }
+    final verdict = evaluateCheckIn(
+      self: _selfPos,
+      selfAt: _selfAt,
+      peer: (peerLat != null && peerLng != null)
+          ? LatLng(peerLat!, peerLng!)
+          : null,
+      peerAt: peerAt,
+      now: DateTime.now(),
+    );
+    if (_checkIn.observe(acceptedRequestId, verdict)) {
+      checkInPrompt = true;
+      Analytics.logEvent('ride_check_in_prompted', {'role': 'passenger'});
+      notifyListeners();
+    }
+  }
+
+  /// Flags the ride server-side after a "something is wrong" answer. Never
+  /// throws: the caller's next step is opening the SOS sheet, and a failed
+  /// bookkeeping write must not stand between a frightened user and that.
+  Future<void> flagSafety(String reason) async {
+    final reqId = acceptedRequestId;
+    if (reqId == null) return;
+    try {
+      await _repo.flagSafety(requestId: reqId, reason: reason);
+    } catch (_) {/* best effort — SOS is the real escalation */}
+  }
   // Pickup point — projection of the passenger onto the driver's road.
   // Surfaced when the WS `ride_request`/`driver_response` payload carries it
   // and used by the accepted card to render a flag marker + walk polyline.
@@ -168,6 +266,40 @@ class PassengerProvider extends ChangeNotifier {
   double? plannedDistanceKm;
   bool isSearching = false;
 
+  // Count of nearby drivers the server flagged likely_match (same-way hint).
+  // Fed by the home screen after each nearby-drivers fetch; drives the
+  // candidatesAvailable UI state.
+  int likelyMatchCount = 0;
+
+  // True between a partial-relay dropoff (relay_leg2_search WS event) and
+  // the next offer: the banner shows "looking for your next leg" instead of
+  // the generic searching copy.
+  bool relayLeg2Search = false;
+
+  void setNearbyLikelyCount(int n) {
+    if (likelyMatchCount == n) return;
+    likelyMatchCount = n;
+    notifyListeners();
+  }
+
+  /// Single source of truth for the match-state banner. Priority order runs
+  /// from "furthest along" backwards so a stale lower state never masks a
+  /// live ride.
+  MatchUiState get matchUiState {
+    if (state == PassengerStatus.inRide) return MatchUiState.inProgress;
+    if (state == PassengerStatus.accepted) return MatchUiState.matched;
+    if (pendingOffer != null ||
+        outstandingRequests.any((r) => r.status == 'offered')) {
+      return MatchUiState.offerReceived;
+    }
+    if (outstandingRequests.any((r) => r.status == 'pending')) {
+      return MatchUiState.requested;
+    }
+    if (!isSearching) return MatchUiState.idle;
+    if (likelyMatchCount > 0) return MatchUiState.candidatesAvailable;
+    return MatchUiState.searching;
+  }
+
   Future<void> setSearchDestination(LatLng dest, {bool preferAI = false}) async {
     destinationPos = dest;
     isSearching = true;
@@ -191,6 +323,7 @@ class PassengerProvider extends ChangeNotifier {
     plannedRouteWkt = null;
     plannedDistanceKm = null;
     isSearching = false;
+    relayLeg2Search = false;
     notifyListeners();
   }
   StreamSubscription? _wsSub;
@@ -215,6 +348,20 @@ class PassengerProvider extends ChangeNotifier {
   }
 
   PassengerProvider(this._repo, this._ws);
+
+  // Several paths call notifyListeners() after an await — declineRide waits two
+  // seconds before clearing the banner, _fetchPickupRoute waits on the network.
+  // If the user logs out or switches role in that window the provider is gone,
+  // and notifyListeners() on a disposed ChangeNotifier throws. That lands in
+  // PlatformDispatcher.onError, which main.dart reports to Crashlytics as
+  // FATAL — a crash report for what is really just a late callback.
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
 
   void connectWS(String token) {
     _ws.connect(token);
@@ -244,19 +391,26 @@ class PassengerProvider extends ChangeNotifier {
       pendingRatingDriverId = p['driver_id'] as String?;
       acceptedRequestId = null;
       acceptedDriverId = null;
-      acceptedPickupCode = null;
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
+      peerAt = null;
+      _resetCheckIn();
       state = PassengerStatus.looking;
       notifyListeners();
     } else if (type == 'ride_cancelled') {
+      // The backend tags why: 'driver_passed' means the ETA-window logic
+      // expired the match because the driver drove past the pickup.
+      if (p['cancelled_by'] == 'driver_passed') {
+        Analytics.logEvent('ride_expired_passed', {'role': 'passenger'});
+      }
       acceptedRequestId = null;
       acceptedDriverId = null;
-      acceptedPickupCode = null;
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
+      peerAt = null;
+      _resetCheckIn();
       state = PassengerStatus.looking;
       // Also drop any matching outstanding entry.
       final reqId = p['request_id'] as String?;
@@ -287,8 +441,25 @@ class PassengerProvider extends ChangeNotifier {
         driverDistanceToPickupM:
             (p['driver_distance_to_pickup_m'] as num?)?.toDouble(),
         matchMethod: p['match_method'] as String?,
+        matchKind: p['match_kind'] as String?,
+        dropoffLat: (p['dropoff_lat'] as num?)?.toDouble(),
+        dropoffLng: (p['dropoff_lng'] as num?)?.toDouble(),
+        transitStopName: p['transit_stop_name'] as String?,
+        transitStopDistM: (p['transit_stop_dist_m'] as num?)?.toDouble(),
+        relayFallback: p['relay_fallback'] == true,
+        detourAddedM: (p['detour_added_m'] as num?)?.toDouble(),
+        detourAddedS: (p['detour_added_s'] as num?)?.toDouble(),
       );
+      relayLeg2Search = false; // a concrete offer supersedes leg-2 waiting
       state = PassengerStatus.offered;
+      notifyListeners();
+    } else if (type == 'relay_leg2_search') {
+      // Partial-relay dropoff: leg 1 done, we're now looking for the next
+      // leg from here. Destination is still set server-side, so the search
+      // continues; the banner switches to "looking for your next leg".
+      relayLeg2Search = true;
+      isSearching = true;
+      Analytics.logEvent('relay_leg2_search_started', {'role': 'passenger'});
       notifyListeners();
     } else if (type == 'driver_response') {
       final reqId = p['request_id'] as String?;
@@ -310,8 +481,6 @@ class PassengerProvider extends ChangeNotifier {
         );
         acceptedCarPlate = (p['car_plate'] as String?)?.trim();
         acceptedDriverPhotoUrl = (p['driver_photo_url'] as String?)?.trim();
-        final code = (p['pickup_code'] as String?)?.trim();
-        acceptedPickupCode = (code == null || code.isEmpty) ? null : code;
         // Pickup geometry: the corridor handshake stashed it from the offer at
         // accept time, so only overwrite when this payload actually carries it
         // — never null out a good value.
@@ -332,13 +501,16 @@ class PassengerProvider extends ChangeNotifier {
       if (reqId != null && reqId == acceptedRequestId) {
         peerLat = (p['lat'] as num?)?.toDouble();
         peerLng = (p['lng'] as num?)?.toDouble();
+        // Stamped on arrival, not from the payload: the relay carries no
+        // timestamp, and arrival time is what "how current is this" means here.
+        peerAt = DateTime.now();
+        _evaluateCheckIn();
         notifyListeners();
       }
     } else if (type == 'pickup_confirmed') {
       final reqId = p['request_id'] as String?;
       if (reqId != null && reqId == acceptedRequestId) {
         state = PassengerStatus.inRide;
-        acceptedPickupCode = null; // No longer needed; ride is in progress.
         notifyListeners();
       }
     } else if (type == 'rating_submitted') {
@@ -356,7 +528,6 @@ class PassengerProvider extends ChangeNotifier {
       await _repo.confirmPickup(requestId: reqId, code: code);
       // Optimistic local flip — the WS event will land too and is a no-op.
       state = PassengerStatus.inRide;
-      acceptedPickupCode = null;
       notifyListeners();
       Haptics.confirm();
       return true;
@@ -368,10 +539,49 @@ class PassengerProvider extends ChangeNotifier {
     }
   }
 
+  /// True when several consecutive location pings have failed. A passenger
+  /// whose location never reaches the server is invisible to the corridor
+  /// match while their UI still says "searching".
+  bool locationSyncFailing = false;
+  int _locationFailures = 0;
+  static const _locationFailureThreshold = 3;
+
   Future<void> updateLocation(double lat, double lng) async {
+    // Recorded before the round trip: this is our own GPS fix, and its
+    // freshness has nothing to do with whether the POST succeeded.
+    _selfPos = LatLng(lat, lng);
+    _selfAt = DateTime.now();
+    _evaluateCheckIn();
     try {
       await _repo.updateLocation(lat, lng);
-    } catch (_) {}
+      if (locationSyncFailing) {
+        _locationFailures = 0;
+        locationSyncFailing = false;
+        notifyListeners();
+      }
+    } catch (_) {
+      _locationFailures++;
+      if (_locationFailures >= _locationFailureThreshold && !locationSyncFailing) {
+        locationSyncFailing = true;
+        notifyListeners();
+      }
+    }
+  }
+
+  /// Nearby drivers for the map overlay. Thin pass-through so the screen goes
+  /// through the repository (timeouts, 401 handling) instead of raw http.
+  Future<List<Map<String, dynamic>>> nearbyDrivers({
+    required double lat,
+    required double lng,
+    double? destLat,
+    double? destLng,
+  }) {
+    return _repo.nearbyDrivers(
+      lat: lat,
+      lng: lng,
+      destLat: destLat,
+      destLng: destLng,
+    );
   }
 
   /// Fetches match-advice (why am I not matching + tips). Best-effort; returns
@@ -410,6 +620,8 @@ class PassengerProvider extends ChangeNotifier {
   Future<bool> sendRequestToDriver(String driverId) async {
     try {
       await _repo.requestDriver(driverId);
+      // Logged only after the backend confirmed the request row exists.
+      Analytics.logEvent('ride_request_created', {'role': 'passenger'});
       await loadOutstandingRequests();
       return true;
     } catch (e) {
@@ -446,6 +658,9 @@ class PassengerProvider extends ChangeNotifier {
     try {
       await _repo.respond(
           requestId: pendingOffer!.requestId, status: 'accepted');
+      // The offer came from the ETA-window corridor matching; accepting it
+      // is the passenger-side "match accepted" moment (driver confirms later).
+      Analytics.logEvent('match_accepted', {'role': 'passenger'});
       // Stash the offer's pickup geometry so it survives into the accepted
       // state — the driver's confirm event doesn't re-send it.
       pickupLat = pendingOffer!.pickupLat;
@@ -483,6 +698,8 @@ class PassengerProvider extends ChangeNotifier {
       pendingOffer = null;
       peerLat = null;
       peerLng = null;
+      peerAt = null;
+      _resetCheckIn();
       pickupLat = null;
       pickupLng = null;
       walkDistanceM = null;
@@ -531,12 +748,25 @@ class PassengerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Stops listening to the shared WebSocket without closing it.
+  ///
+  /// The socket is shared with [DriverProvider] (see main.dart), so a provider
+  /// leaving the screen must NOT disconnect it — that would tear down the
+  /// other role's event stream. It also must not keep listening: after a role
+  /// switch both providers would otherwise stay subscribed and each handle
+  /// every message, double-counting things like the unread-chat badge.
+  void detachWS() {
+    _wsSub?.cancel();
+    _wsSub = null;
+    _wsStateSub?.cancel();
+    _wsStateSub = null;
+  }
+
   @override
   void dispose() {
-    _wsSub?.cancel();
-    _wsStateSub?.cancel();
+    _disposed = true;
+    detachWS();
     _ratingWaitTimeout?.cancel();
-    _ws.disconnect();
     super.dispose();
   }
 }

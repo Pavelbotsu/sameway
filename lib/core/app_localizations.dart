@@ -378,6 +378,301 @@ class AppLocalizations {
         fr: '$n vont dans ta direction',
         it: '$n in arrivo verso di te',
       );
+
+  String get likelyMatchChip => _t(
+        en: 'Heading your way',
+        uk: 'Їде у ваш бік',
+        es: 'Va hacia ti',
+        de: 'In deine Richtung',
+        fr: 'Dans ta direction',
+        it: 'Nella tua direzione',
+      );
+
+  // ─── Persistent chat (Round 2 §3) ───────────────────────────────────────
+  String get chatConversation => _t(
+        en: 'Conversation',
+        uk: 'Розмова',
+        es: 'Conversación',
+        de: 'Unterhaltung',
+        fr: 'Conversation',
+        it: 'Conversazione',
+      );
+  String get chatUnavailable => _t(
+        en: 'You can only message your current match candidates',
+        uk: 'Писати можна лише поточним кандидатам на поїздку',
+        es: 'Solo puedes escribir a tus candidatos de viaje actuales',
+        de: 'Du kannst nur aktuellen Mitfahr-Kandidaten schreiben',
+        fr: 'Tu ne peux écrire qu’à tes candidats de trajet actuels',
+        it: 'Puoi scrivere solo ai tuoi attuali candidati di viaggio',
+      );
+  String get chatSlowDown => _t(
+        en: 'Sending too fast — wait a moment',
+        uk: 'Занадто швидко — зачекайте хвилинку',
+        es: 'Demasiado rápido — espera un momento',
+        de: 'Zu schnell — warte einen Moment',
+        fr: 'Trop rapide — attends un instant',
+        it: 'Troppo veloce — aspetta un attimo',
+      );
+  String get messagesTitle => _t(
+        en: 'Messages',
+        uk: 'Повідомлення',
+        es: 'Mensajes',
+        de: 'Nachrichten',
+        fr: 'Messages',
+        it: 'Messaggi',
+      );
+  String get noConversations => _t(
+        en: 'No conversations yet',
+        uk: 'Ще немає розмов',
+        es: 'Aún no hay conversaciones',
+        de: 'Noch keine Unterhaltungen',
+        fr: 'Pas encore de conversations',
+        it: 'Ancora nessuna conversazione',
+      );
+  String get noConversationsDesc => _t(
+        en: 'Chats with your drivers and passengers appear here',
+        uk: 'Тут з’являться чати з вашими водіями та пасажирами',
+        es: 'Aquí aparecerán los chats con tus conductores y pasajeros',
+        de: 'Chats mit deinen Fahrern und Fahrgästen erscheinen hier',
+        fr: 'Les discussions avec tes conducteurs et passagers apparaissent ici',
+        it: 'Le chat con i tuoi conducenti e passeggeri appaiono qui',
+      );
+  String blockUserQ(String name) => _t(
+        en: 'Block $name?',
+        uk: 'Заблокувати $name?',
+        es: '¿Bloquear a $name?',
+        de: '$name blockieren?',
+        fr: 'Bloquer $name ?',
+        it: 'Bloccare $name?',
+      );
+  String get blockUserBody => _t(
+        en: 'Neither of you will be able to message the other. You can undo this later.',
+        uk: 'Ви обоє не зможете писати одне одному. Це можна скасувати пізніше.',
+        es: 'Ninguno de los dos podrá escribir al otro. Puedes deshacerlo más tarde.',
+        de: 'Ihr könnt euch gegenseitig nicht mehr schreiben. Das lässt sich später rückgängig machen.',
+        fr: 'Aucun de vous deux ne pourra écrire à l’autre. Tu pourras annuler plus tard.',
+        it: 'Nessuno dei due potrà scrivere all’altro. Puoi annullare più tardi.',
+      );
+  String get blockAction => _t(
+        en: 'Block',
+        uk: 'Заблокувати',
+        es: 'Bloquear',
+        de: 'Blockieren',
+        fr: 'Bloquer',
+        it: 'Blocca',
+      );
+  String get userBlocked => _t(
+        en: 'User blocked',
+        uk: 'Користувача заблоковано',
+        es: 'Usuario bloqueado',
+        de: 'Nutzer blockiert',
+        fr: 'Utilisateur bloqué',
+        it: 'Utente bloccato',
+      );
+  String reportUserQ(String name) => _t(
+        en: 'Report $name?',
+        uk: 'Поскаржитися на $name?',
+        es: '¿Denunciar a $name?',
+        de: '$name melden?',
+        fr: 'Signaler $name ?',
+        it: 'Segnalare $name?',
+      );
+  String get reportReasonHint => _t(
+        en: 'What happened? (optional)',
+        uk: 'Що сталося? (необов’язково)',
+        es: '¿Qué pasó? (opcional)',
+        de: 'Was ist passiert? (optional)',
+        fr: 'Que s’est-il passé ? (facultatif)',
+        it: 'Cosa è successo? (facoltativo)',
+      );
+  String get reportAction => _t(
+        en: 'Report',
+        uk: 'Поскаржитися',
+        es: 'Denunciar',
+        de: 'Melden',
+        fr: 'Signaler',
+        it: 'Segnala',
+      );
+  String get userReported => _t(
+        en: 'Report sent — thank you',
+        uk: 'Скаргу надіслано — дякуємо',
+        es: 'Denuncia enviada — gracias',
+        de: 'Meldung gesendet — danke',
+        fr: 'Signalement envoyé — merci',
+        it: 'Segnalazione inviata — grazie',
+      );
+
+  // ─── Partial relay + micro-detour (Round 2 §1–2) ────────────────────────
+  String get partialRideTitle => _t(
+        en: 'Partial ride — you continue after drop-off',
+        uk: 'Часткова поїздка — далі ви їдете самі',
+        es: 'Viaje parcial: continúas después de bajarte',
+        de: 'Teilfahrt — nach dem Aussteigen geht es weiter',
+        fr: 'Trajet partiel — tu continues après la dépose',
+        it: 'Corsa parziale — prosegui dopo la discesa',
+      );
+  String relayStopInfo(String stop, int meters) => _t(
+        en: 'Drops you ~$meters m from stop "$stop"',
+        uk: 'Висадить вас за ~$meters м від зупинки «$stop»',
+        es: 'Te deja a ~$meters m de la parada "$stop"',
+        de: 'Setzt dich ~$meters m von der Haltestelle „$stop“ ab',
+        fr: 'Te dépose à ~$meters m de l’arrêt « $stop »',
+        it: 'Ti lascia a ~$meters m dalla fermata "$stop"',
+      );
+  String get relayFallbackInfo => _t(
+        en: "After drop-off we'll immediately search for your next ride from there",
+        uk: 'Після висадки ми одразу шукатимемо вашу наступну поїздку звідти',
+        es: 'Después de bajarte, buscaremos de inmediato tu siguiente viaje desde allí',
+        de: 'Nach dem Aussteigen suchen wir sofort deine nächste Mitfahrt von dort',
+        fr: 'Après la dépose, on cherche aussitôt ton prochain trajet depuis là',
+        it: 'Dopo la discesa cercheremo subito il tuo prossimo passaggio da lì',
+      );
+  String get acceptPartialRide => _t(
+        en: 'Accept partial ride',
+        uk: 'Прийняти часткову поїздку',
+        es: 'Aceptar viaje parcial',
+        de: 'Teilfahrt annehmen',
+        fr: 'Accepter le trajet partiel',
+        it: 'Accetta corsa parziale',
+      );
+  String get relayLeg2Searching => _t(
+        en: 'Leg 1 done — looking for your next ride…',
+        uk: 'Перший етап завершено — шукаємо наступну поїздку…',
+        es: 'Primera etapa lista — buscando tu siguiente viaje…',
+        de: 'Etappe 1 geschafft — suche deine nächste Mitfahrt…',
+        fr: 'Étape 1 terminée — recherche de ton prochain trajet…',
+        it: 'Prima tappa fatta — cerchiamo il tuo prossimo passaggio…',
+      );
+  String get microDetourPassengerNote => _t(
+        en: 'Driver picks you up at your location',
+        uk: 'Водій забере вас з вашого місця',
+        es: 'El conductor te recoge en tu ubicación',
+        de: 'Der Fahrer holt dich an deinem Standort ab',
+        fr: 'Le conducteur vient te chercher où tu es',
+        it: 'Il conducente ti viene a prendere dove sei',
+      );
+  String detourAddsLabel(int meters, int seconds) => _t(
+        en: 'adds ~$meters m / $seconds s to your route',
+        uk: 'додає ~$meters м / $seconds с до вашого маршруту',
+        es: 'añade ~$meters m / $seconds s a tu ruta',
+        de: 'verlängert deine Route um ~$meters m / $seconds s',
+        fr: 'ajoute ~$meters m / $seconds s à ton itinéraire',
+        it: 'aggiunge ~$meters m / $seconds s al tuo percorso',
+      );
+  String get allowMicroDetourTitle => _t(
+        en: 'Allow small detours',
+        uk: 'Дозволити невеликі об’їзди',
+        es: 'Permitir pequeños desvíos',
+        de: 'Kleine Umwege erlauben',
+        fr: 'Autoriser les petits détours',
+        it: 'Consenti piccole deviazioni',
+      );
+  String get allowMicroDetourSubtitle => _t(
+        en: 'Pick up passengers up to ~300 m / 90 s off your route — always shown before you confirm',
+        uk: 'Забирати пасажирів до ~300 м / 90 с від маршруту — завжди показуємо перед підтвердженням',
+        es: 'Recoger pasajeros hasta ~300 m / 90 s fuera de tu ruta — siempre se muestra antes de confirmar',
+        de: 'Fahrgäste bis ~300 m / 90 s abseits der Route abholen — wird vor der Bestätigung immer angezeigt',
+        fr: 'Prendre des passagers jusqu’à ~300 m / 90 s hors itinéraire — toujours affiché avant confirmation',
+        it: 'Raccogli passeggeri fino a ~300 m / 90 s fuori rotta — sempre mostrato prima della conferma',
+      );
+
+  // ─── Match-state banner (Round 2 §6) ────────────────────────────────────
+  String get matchStateSearching => _t(
+        en: 'Searching for drivers heading your way…',
+        uk: 'Шукаємо водіїв у вашому напрямку…',
+        es: 'Buscando conductores que van hacia ti…',
+        de: 'Suche Fahrer in deine Richtung…',
+        fr: 'Recherche de conducteurs dans ta direction…',
+        it: 'Cerchiamo conducenti nella tua direzione…',
+      );
+  String get matchStateSearchingDesc => _t(
+        en: "We'll notify you the moment one appears",
+        uk: 'Повідомимо, щойно хтось з’явиться',
+        es: 'Te avisaremos en cuanto aparezca uno',
+        de: 'Wir melden uns, sobald einer auftaucht',
+        fr: 'On te prévient dès qu’un apparaît',
+        it: 'Ti avvisiamo appena ne compare uno',
+      );
+  String get matchStateCandidatesDesc => _t(
+        en: 'Tap to see them on the map',
+        uk: 'Торкніться, щоб побачити на мапі',
+        es: 'Toca para verlos en el mapa',
+        de: 'Tippen, um sie auf der Karte zu sehen',
+        fr: 'Touche pour les voir sur la carte',
+        it: 'Tocca per vederli sulla mappa',
+      );
+  String get matchStateOffer => _t(
+        en: 'Ride offer received',
+        uk: 'Отримано пропозицію поїздки',
+        es: 'Oferta de viaje recibida',
+        de: 'Mitfahr-Angebot erhalten',
+        fr: 'Offre de trajet reçue',
+        it: 'Offerta di passaggio ricevuta',
+      );
+  String get matchStateOfferDesc => _t(
+        en: 'Tap to review and accept',
+        uk: 'Торкніться, щоб переглянути та прийняти',
+        es: 'Toca para revisarla y aceptar',
+        de: 'Tippen zum Prüfen und Annehmen',
+        fr: 'Touche pour vérifier et accepter',
+        it: 'Tocca per esaminare e accettare',
+      );
+  String get matchStateRequested => _t(
+        en: 'Request sent',
+        uk: 'Запит надіслано',
+        es: 'Solicitud enviada',
+        de: 'Anfrage gesendet',
+        fr: 'Demande envoyée',
+        it: 'Richiesta inviata',
+      );
+  String get matchStateRequestedDesc => _t(
+        en: 'Waiting for the driver to confirm',
+        uk: 'Чекаємо підтвердження водія',
+        es: 'Esperando la confirmación del conductor',
+        de: 'Warte auf Bestätigung des Fahrers',
+        fr: 'En attente de la confirmation du conducteur',
+        it: 'In attesa della conferma del conducente',
+      );
+  String get matchStateMatched => _t(
+        en: 'Ride confirmed',
+        uk: 'Поїздку підтверджено',
+        es: 'Viaje confirmado',
+        de: 'Fahrt bestätigt',
+        fr: 'Trajet confirmé',
+        it: 'Passaggio confermato',
+      );
+  String matchStateMatchedWith(String name) => _t(
+        en: 'Matched with $name',
+        uk: 'Ваш водій — $name',
+        es: 'Emparejado con $name',
+        de: 'Fahrt mit $name bestätigt',
+        fr: 'Trajet confirmé avec $name',
+        it: 'Abbinato a $name',
+      );
+  String get matchStateMatchedDesc => _t(
+        en: 'Tap for pickup details',
+        uk: 'Торкніться для деталей посадки',
+        es: 'Toca para ver los detalles de recogida',
+        de: 'Tippen für Abhol-Details',
+        fr: 'Touche pour les détails de prise en charge',
+        it: 'Tocca per i dettagli del ritiro',
+      );
+  String get matchStateInProgress => _t(
+        en: 'Ride in progress',
+        uk: 'Поїздка триває',
+        es: 'Viaje en curso',
+        de: 'Fahrt läuft',
+        fr: 'Trajet en cours',
+        it: 'Viaggio in corso',
+      );
+  String get matchStateInProgressDesc => _t(
+        en: 'Enjoy the trip',
+        uk: 'Гарної поїздки',
+        es: 'Disfruta el viaje',
+        de: 'Gute Fahrt',
+        fr: 'Bon trajet',
+        it: 'Buon viaggio',
+      );
   String get pickOnMap => _t(
         en: 'Pick on map',
         uk: 'Вибрати на карті',
@@ -691,6 +986,40 @@ class AppLocalizations {
         it: 'Continua',
       );
 
+  // ─── First-run safety disclaimers (onboarding carousel) ──────────────────
+  String get safetyPassengerTitle => _t(
+        en: 'Ride smart, stay safe',
+        uk: 'Їдьте розумно й безпечно',
+        es: 'Viaja con cabeza, viaja seguro',
+        de: 'Clever mitfahren, sicher bleiben',
+        fr: 'Voyagez malin, restez en sécurité',
+        it: 'Viaggia furbo, viaggia sicuro',
+      );
+  String get safetyPassengerBody => _t(
+        en: "Sameway connects you with drivers already heading your way — it's not a taxi. Wait somewhere safe and easy to reach, near a spot a passing driver can pull over for. Only get in when you feel comfortable.",
+        uk: "Sameway з'єднує вас із водіями, які й так їдуть у вашому напрямку, — це не таксі. Чекайте в безпечному й легкодоступному місці, де водій, що проїжджає повз, зможе зупинитися. Сідайте лише тоді, коли почуваєтеся комфортно.",
+        es: 'Sameway te conecta con conductores que ya van en tu dirección; no es un taxi. Espera en un lugar seguro y de fácil acceso, donde un conductor de paso pueda detenerse. Súbete solo cuando te sientas cómodo.',
+        de: 'Sameway verbindet dich mit Fahrern, die ohnehin in deine Richtung fahren – es ist kein Taxi. Warte an einem sicheren, gut erreichbaren Ort, an dem ein vorbeifahrender Fahrer anhalten kann. Steig nur ein, wenn du dich wohlfühlst.',
+        fr: "Sameway vous met en relation avec des conducteurs qui vont déjà dans votre direction — ce n'est pas un taxi. Attendez dans un endroit sûr et facile d'accès, où un conducteur de passage peut s'arrêter. Ne montez que si vous vous sentez à l'aise.",
+        it: 'Sameway ti mette in contatto con automobilisti che stanno già andando nella tua direzione — non è un taxi. Aspetta in un luogo sicuro e facile da raggiungere, dove un conducente di passaggio possa fermarsi. Sali solo quando ti senti a tuo agio.',
+      );
+  String get safetyDriverTitle => _t(
+        en: 'Drive your own way',
+        uk: 'Їдьте своїм маршрутом',
+        es: 'Conduce a tu manera',
+        de: 'Fahr deinen eigenen Weg',
+        fr: 'Roulez à votre façon',
+        it: 'Guida a modo tuo',
+      );
+  String get safetyDriverBody => _t(
+        en: "You're sharing the road you're already on. Only stop for a passenger when it's safe and they're in a good, reachable spot. If they're not, it's okay to keep going — take a small detour only if you're comfortable. It's your call, not an obligation.",
+        uk: "Ви ділитеся дорогою, якою вже їдете. Зупиняйтеся заради пасажира лише тоді, коли це безпечно, а він у зручному й доступному місці. Якщо ні — можете спокійно їхати далі. Робіть невеликий об'їзд, лише якщо вам це зручно. Це ваш вибір, а не обов'язок.",
+        es: 'Compartes la carretera por la que ya vas. Detente por un pasajero solo cuando sea seguro y esté en un lugar accesible. Si no lo está, puedes seguir tu camino sin problema. Haz un pequeño desvío solo si te resulta cómodo. Es tu decisión, no una obligación.',
+        de: 'Du teilst die Strecke, auf der du ohnehin unterwegs bist. Halte nur für einen Fahrgast, wenn es sicher ist und er an einer gut erreichbaren Stelle steht. Wenn nicht, kannst du ruhig weiterfahren. Mach nur einen kleinen Umweg, wenn es für dich passt. Es ist deine Entscheidung, keine Pflicht.',
+        fr: "Vous partagez la route que vous empruntez déjà. Ne vous arrêtez pour un passager que si c'est sûr et qu'il se trouve à un endroit accessible. Sinon, vous pouvez continuer votre chemin sans souci. Ne faites un petit détour que si cela vous convient. C'est votre choix, pas une obligation.",
+        it: 'Condividi la strada che stai già percorrendo. Fermati per un passeggero solo quando è sicuro e si trova in un punto facilmente raggiungibile. In caso contrario, puoi tranquillamente proseguire. Fai una piccola deviazione solo se ti è comodo. È una tua scelta, non un obbligo.',
+      );
+
   // ─── Common buttons / dialogs ────────────────────────────────────────────
   String get save => _t(
         en: 'Save',
@@ -805,6 +1134,14 @@ class AppLocalizations {
         de: 'Fahrt angenommen!',
         fr: 'Trajet accepté !',
         it: 'Passaggio accettato!',
+      );
+  String get youAreInTheRide => _t(
+        en: "You're in the ride",
+        uk: 'Ви в поїздці',
+        es: 'Estás en el viaje',
+        de: 'Du bist in der Fahrt',
+        fr: 'Vous êtes dans le trajet',
+        it: 'Sei in viaggio',
       );
   String get driverNotified => _t(
         en: 'Your driver has been notified. Stay at your location.',
@@ -1365,6 +1702,116 @@ class AppLocalizations {
         fr: 'Marche $dist jusqu\'au point de prise en charge',
         it: 'Cammina $dist fino al punto di partenza',
       );
+  // ─── Candidate driver list (pre-match) ───────────────────────────────────
+  String get candidateDriversTitle => _t(
+        en: 'Drivers going your way',
+        uk: 'Водії, яким по дорозі',
+        es: 'Conductores que van en tu dirección',
+        de: 'Fahrer auf deinem Weg',
+        fr: 'Conducteurs qui vont dans votre direction',
+        it: 'Conducenti che vanno nella tua direzione',
+      );
+  String get candidateDriversEmpty => _t(
+        en: 'No drivers going your way yet. We\'ll keep looking.',
+        uk: 'Поки немає водіїв, яким по дорозі. Продовжуємо шукати.',
+        es: 'Aún no hay conductores en tu dirección. Seguiremos buscando.',
+        de: 'Noch keine Fahrer auf deinem Weg. Wir suchen weiter.',
+        fr: 'Aucun conducteur dans votre direction pour l\'instant. Nous continuons à chercher.',
+        it: 'Ancora nessun conducente nella tua direzione. Continuiamo a cercare.',
+      );
+  String get sameWayBadge => _t(
+        en: 'Same way',
+        uk: 'По дорозі',
+        es: 'Mismo camino',
+        de: 'Gleicher Weg',
+        fr: 'Même route',
+        it: 'Stessa strada',
+      );
+  String get newDriverBadge => _t(
+        en: 'New',
+        uk: 'Новий',
+        es: 'Nuevo',
+        de: 'Neu',
+        fr: 'Nouveau',
+        it: 'Nuovo',
+      );
+  String etaApprox(int min) => _t(
+        en: '~$min min away',
+        uk: '~$min хв їзди',
+        es: 'a ~$min min',
+        de: '~$min Min entfernt',
+        fr: 'à ~$min min',
+        it: 'a ~$min min',
+      );
+  String get driverDetails => _t(
+        en: 'Driver details',
+        uk: 'Деталі водія',
+        es: 'Detalles del conductor',
+        de: 'Fahrerdetails',
+        fr: 'Détails du conducteur',
+        it: 'Dettagli conducente',
+      );
+  String walkShort(String dist) => _t(
+        en: '$dist walk',
+        uk: '$dist пішки',
+        es: '$dist a pie',
+        de: '$dist Fußweg',
+        fr: '$dist à pied',
+        it: '$dist a piedi',
+      );
+
+  // ─── Driver pre-accept disclosure ────────────────────────────────────────
+  String get pickupPointLabel => _t(
+        en: 'Pick-up',
+        uk: 'Посадка',
+        es: 'Recogida',
+        de: 'Abholung',
+        fr: 'Prise en charge',
+        it: 'Salita',
+      );
+  String get dropoffPointLabel => _t(
+        en: 'Drop-off',
+        uk: 'Висадка',
+        es: 'Bajada',
+        de: 'Ausstieg',
+        fr: 'Dépose',
+        it: 'Discesa',
+      );
+  String ridesWithYou(String dist) => _t(
+        en: 'Rides $dist with you',
+        uk: 'Їде з вами $dist',
+        es: 'Viaja $dist contigo',
+        de: 'Fährt $dist mit dir',
+        fr: 'Roule $dist avec vous',
+        it: 'Viaggia $dist con te',
+      );
+  String get zeroDetourLabel => _t(
+        en: 'No detour — both stops are on your route',
+        uk: 'Без об\'їзду — обидві зупинки на вашому маршруті',
+        es: 'Sin desvío: ambas paradas están en tu ruta',
+        de: 'Kein Umweg — beide Stopps liegen auf deiner Route',
+        fr: 'Aucun détour — les deux arrêts sont sur votre itinéraire',
+        it: 'Nessuna deviazione: entrambe le fermate sono sul tuo percorso',
+      );
+  String get noDestinationDeclared => _t(
+        en: 'No destination set yet',
+        uk: 'Пункт призначення ще не вказано',
+        es: 'Aún sin destino',
+        de: 'Noch kein Ziel angegeben',
+        fr: 'Aucune destination définie',
+        it: 'Nessuna destinazione impostata',
+      );
+
+  /// Middle-tier walk copy (100-300 m): names the flag the user is walking to,
+  /// because at this distance it is already visible on the map.
+  String walkToPickupShort(String dist) => _t(
+        en: 'Walk $dist to the pickup flag',
+        uk: 'Пройдіть $dist до позначки посадки',
+        es: 'Camina $dist hasta el marcador de recogida',
+        de: 'Gehe $dist zur Abholmarkierung',
+        fr: 'Marchez $dist jusqu\'au repère de prise en charge',
+        it: 'Cammina $dist fino al segnaposto di partenza',
+      );
   String walkApproxMinutes(int min) => _t(
         en: 'about $min min',
         uk: 'близько $min хв',
@@ -1487,6 +1934,19 @@ class AppLocalizations {
         fr: 'Pas d\'internet',
         it: 'Nessuna connessione',
       );
+
+  /// Shown when the app has repeatedly failed to send the user's position to
+  /// the server. Matching keys off the last received fix, so a user in this
+  /// state is invisible to the other side while everything else looks normal —
+  /// worth telling them about explicitly.
+  String get locationNotSyncing => _t(
+        en: 'Location not syncing — you may be hidden',
+        uk: 'Локація не синхронізується — вас можуть не бачити',
+        es: 'Ubicación sin sincronizar: puede que no te vean',
+        de: 'Standort wird nicht übertragen – du bist evtl. unsichtbar',
+        fr: 'Position non synchronisée — vous pouvez être invisible',
+        it: 'Posizione non sincronizzata: potresti non essere visibile',
+      );
   String get reconnecting => _t(
         en: 'Reconnecting…',
         uk: 'Перепідключення…',
@@ -1576,6 +2036,46 @@ class AppLocalizations {
         de: 'Nicht jetzt',
         fr: 'Pas maintenant',
         it: 'Non ora',
+      );
+
+  // ─── Mid-ride safety check-in ────────────────────────────────────────────
+  String get checkInTitle => _t(
+        en: 'Everything OK?',
+        uk: 'Все гаразд?',
+        es: '¿Todo bien?',
+        de: 'Alles in Ordnung?',
+        fr: 'Tout va bien ?',
+        it: 'Tutto bene?',
+      );
+  String checkInBody(String otherParty) => _t(
+        en: "You and your $otherParty look like you're in different places. "
+            'If the ride is over, no action is needed.',
+        uk: 'Здається, ви та ваш $otherParty перебуваєте в різних місцях. '
+            'Якщо поїздку завершено, нічого робити не потрібно.',
+        es: 'Parece que tú y tu $otherParty estáis en lugares distintos. '
+            'Si el viaje ha terminado, no hace falta hacer nada.',
+        de: 'Du und dein $otherParty scheint an verschiedenen Orten zu sein. '
+            'Wenn die Fahrt vorbei ist, musst du nichts tun.',
+        fr: 'Vous et votre $otherParty semblez être à des endroits différents. '
+            "Si le trajet est terminé, aucune action n'est nécessaire.",
+        it: 'Tu e il tuo $otherParty sembrate trovarvi in luoghi diversi. '
+            'Se il viaggio è finito, non serve fare nulla.',
+      );
+  String get checkInAllGood => _t(
+        en: "Yes, I'm fine",
+        uk: 'Так, усе добре',
+        es: 'Sí, estoy bien',
+        de: 'Ja, mir geht es gut',
+        fr: 'Oui, tout va bien',
+        it: 'Sì, sto bene',
+      );
+  String get checkInNeedHelp => _t(
+        en: 'No, I need help',
+        uk: 'Ні, мені потрібна допомога',
+        es: 'No, necesito ayuda',
+        de: 'Nein, ich brauche Hilfe',
+        fr: "Non, j'ai besoin d'aide",
+        it: 'No, ho bisogno di aiuto',
       );
 
   // ─── SOS (Phase 1.2) ─────────────────────────────────────────────────────
@@ -2075,6 +2575,689 @@ class AppLocalizations {
         de: 'Fahrgast bleiben',
         fr: 'Rester passager',
         it: 'Resta passeggero',
+      );
+
+  // ─── Bottom navigation bars ───────────────────────────────────────────────
+  String get navRoute => _t(
+        en: 'Route',
+        uk: 'Маршрут',
+        es: 'Ruta',
+        de: 'Route',
+        fr: 'Trajet',
+        it: 'Percorso',
+      );
+  String get navPlan => _t(
+        en: 'Plan',
+        uk: 'План',
+        es: 'Plan',
+        de: 'Planen',
+        fr: 'Planifier',
+        it: 'Pianifica',
+      );
+  String get navFind => _t(
+        en: 'Find',
+        uk: 'Пошук',
+        es: 'Buscar',
+        de: 'Suchen',
+        fr: 'Chercher',
+        it: 'Cerca',
+      );
+  String get navChat => _t(
+        en: 'Chat',
+        uk: 'Чат',
+        es: 'Chat',
+        de: 'Chat',
+        fr: 'Chat',
+        it: 'Chat',
+      );
+  String get navFindTrips => _t(
+        en: 'Find Trips',
+        uk: 'Поїздки',
+        es: 'Viajes',
+        de: 'Fahrten',
+        fr: 'Trajets',
+        it: 'Viaggi',
+      );
+  String get navOffers => _t(
+        en: 'Offers',
+        uk: 'Акції',
+        es: 'Ofertas',
+        de: 'Angebote',
+        fr: 'Offres',
+        it: 'Offerte',
+      );
+  String get navReportBug => _t(
+        en: 'Report bug',
+        uk: 'Звіт про баг',
+        es: 'Reportar fallo',
+        de: 'Fehler melden',
+        fr: 'Signaler un bug',
+        it: 'Segnala bug',
+      );
+  String get navAccount => _t(
+        en: 'Account',
+        uk: 'Акаунт',
+        es: 'Cuenta',
+        de: 'Konto',
+        fr: 'Compte',
+        it: 'Account',
+      );
+
+  // ─── Driver: set-route validation ────────────────────────────────────────
+  String get errEnterDestination => _t(
+        en: 'Enter a destination',
+        uk: 'Введіть пункт призначення',
+        es: 'Introduce un destino',
+        de: 'Gib ein Ziel ein',
+        fr: 'Saisissez une destination',
+        it: 'Inserisci una destinazione',
+      );
+  String get errAddressNotFound => _t(
+        en: 'Address not found',
+        uk: 'Адресу не знайдено',
+        es: 'Dirección no encontrada',
+        de: 'Adresse nicht gefunden',
+        fr: 'Adresse introuvable',
+        it: 'Indirizzo non trovato',
+      );
+
+  // ─── Driver: bottom panel ────────────────────────────────────────────────
+  String get endRouteQ => _t(
+        en: 'End route?',
+        uk: 'Завершити маршрут?',
+        es: '¿Terminar la ruta?',
+        de: 'Route beenden?',
+        fr: 'Terminer le trajet ?',
+        it: 'Terminare il percorso?',
+      );
+  String get endRouteBody => _t(
+        en: 'Every passenger currently on board will be dropped off '
+            "and you'll stop receiving new matches.",
+        uk: 'Усі пасажири, що зараз у машині, будуть висаджені, '
+            'і ви більше не отримуватимете нові збіги.',
+        es: 'Todos los pasajeros a bordo serán dejados y dejarás de '
+            'recibir nuevas coincidencias.',
+        de: 'Alle Fahrgäste an Bord werden abgesetzt und du erhältst '
+            'keine neuen Treffer mehr.',
+        fr: 'Tous les passagers à bord seront déposés et vous ne '
+            'recevrez plus de nouvelles correspondances.',
+        it: 'Tutti i passeggeri a bordo verranno fatti scendere e non '
+            'riceverai più nuove corrispondenze.',
+      );
+  String get endRouteAction => _t(
+        en: 'End route',
+        uk: 'Завершити маршрут',
+        es: 'Terminar ruta',
+        de: 'Route beenden',
+        fr: 'Terminer le trajet',
+        it: 'Termina percorso',
+      );
+  String rideRequestsCount(String n) => _t(
+        en: 'Ride requests ($n)',
+        uk: 'Запити на поїздку ($n)',
+        es: 'Solicitudes de viaje ($n)',
+        de: 'Fahrtanfragen ($n)',
+        fr: 'Demandes de trajet ($n)',
+        it: 'Richieste di corsa ($n)',
+      );
+  String dropOffName(String name) => _t(
+        en: 'Drop off $name',
+        uk: 'Висадити $name',
+        es: 'Dejar a $name',
+        de: '$name absetzen',
+        fr: 'Déposer $name',
+        it: 'Fai scendere $name',
+      );
+  String get cancelRide => _t(
+        en: 'Cancel ride',
+        uk: 'Скасувати поїздку',
+        es: 'Cancelar viaje',
+        de: 'Fahrt stornieren',
+        fr: 'Annuler le trajet',
+        it: 'Annulla corsa',
+      );
+  String get waitingForYourLocation => _t(
+        en: 'Waiting for your location…',
+        uk: 'Очікуємо вашу геолокацію…',
+        es: 'Esperando tu ubicación…',
+        de: 'Warte auf deinen Standort…',
+        fr: 'En attente de votre position…',
+        it: 'In attesa della tua posizione…',
+      );
+  String get waitingForPassengerLocation => _t(
+        en: 'Waiting for passenger location…',
+        uk: 'Очікуємо геолокацію пасажира…',
+        es: 'Esperando la ubicación del pasajero…',
+        de: 'Warte auf den Standort des Fahrgasts…',
+        fr: 'En attente de la position du passager…',
+        it: 'In attesa della posizione del passeggero…',
+      );
+  String kmBetweenYou(String km) => _t(
+        en: '$km km between you',
+        uk: '$km км між вами',
+        es: '$km km entre vosotros',
+        de: '$km km zwischen euch',
+        fr: '$km km entre vous',
+        it: '$km km tra di voi',
+      );
+  String routeSummary(String km, int count) => _t(
+        en: '$km km · $count ${count == 1 ? 'passenger' : 'passengers'} notified',
+        uk: '$km км · сповіщено пасажирів: $count',
+        es: '$km km · $count ${count == 1 ? 'pasajero notificado' : 'pasajeros notificados'}',
+        de: '$km km · $count ${count == 1 ? 'Fahrgast' : 'Fahrgäste'} benachrichtigt',
+        fr: '$km km · $count ${count == 1 ? 'passager notifié' : 'passagers notifiés'}',
+        it: '$km km · $count ${count == 1 ? 'passeggero avvisato' : 'passeggeri avvisati'}',
+      );
+  String pendingOffersCount(int count) => _t(
+        en: '$count ${count == 1 ? 'offer' : 'offers'} awaiting reply',
+        uk: 'очікують відповіді: $count',
+        es: '$count ${count == 1 ? 'oferta pendiente' : 'ofertas pendientes'} de respuesta',
+        de: '$count ${count == 1 ? 'Angebot wartet' : 'Angebote warten'} auf Antwort',
+        fr: '$count ${count == 1 ? 'offre en attente' : 'offres en attente'} de réponse',
+        it: '$count ${count == 1 ? 'offerta in attesa' : 'offerte in attesa'} di risposta',
+      );
+
+  /// Localized label for a ride_request status code from the backend.
+  String rideStatusLabel(String status) => switch (status) {
+        'pending' => _t(
+            en: 'pending',
+            uk: 'очікує',
+            es: 'pendiente',
+            de: 'ausstehend',
+            fr: 'en attente',
+            it: 'in attesa'),
+        'accepted' => _t(
+            en: 'accepted',
+            uk: 'прийнято',
+            es: 'aceptado',
+            de: 'angenommen',
+            fr: 'accepté',
+            it: 'accettato'),
+        'in_progress' => _t(
+            en: 'in ride',
+            uk: 'у поїздці',
+            es: 'en viaje',
+            de: 'unterwegs',
+            fr: 'en cours',
+            it: 'in corsa'),
+        'declined' => _t(
+            en: 'declined',
+            uk: 'відхилено',
+            es: 'rechazado',
+            de: 'abgelehnt',
+            fr: 'refusé',
+            it: 'rifiutato'),
+        'done' => _t(
+            en: 'done',
+            uk: 'завершено',
+            es: 'completado',
+            de: 'abgeschlossen',
+            fr: 'terminé',
+            it: 'completata'),
+        'cancelled' => _t(
+            en: 'cancelled',
+            uk: 'скасовано',
+            es: 'cancelado',
+            de: 'storniert',
+            fr: 'annulé',
+            it: 'annullata'),
+        'offered' => _t(
+            en: 'offered',
+            uk: 'запропоновано',
+            es: 'ofrecido',
+            de: 'angeboten',
+            fr: 'proposé',
+            it: 'proposta'),
+        _ => status,
+      };
+
+  // ─── Passenger: home screen ──────────────────────────────────────────────
+  String get whereDoYouWantToGo => _t(
+        en: 'Where do you want to go?',
+        uk: 'Куди ви хочете поїхати?',
+        es: '¿A dónde quieres ir?',
+        de: 'Wohin möchtest du?',
+        fr: 'Où voulez-vous aller ?',
+        it: 'Dove vuoi andare?',
+      );
+  String get waitingForDriver => _t(
+        en: 'Waiting for driver…',
+        uk: 'Очікуємо водія…',
+        es: 'Esperando al conductor…',
+        de: 'Warte auf den Fahrer…',
+        fr: 'En attente du conducteur…',
+        it: 'In attesa del conducente…',
+      );
+  String get driverAccepted => _t(
+        en: 'Driver accepted',
+        uk: 'Водій прийняв',
+        es: 'El conductor aceptó',
+        de: 'Fahrer hat angenommen',
+        fr: 'Le conducteur a accepté',
+        it: 'Il conducente ha accettato',
+      );
+  String walkPill(String m, String min) => _t(
+        en: 'Walk $m m · $min min',
+        uk: 'Пішки $m м · $min хв',
+        es: 'A pie $m m · $min min',
+        de: 'Zu Fuß $m m · $min Min.',
+        fr: 'À pied $m m · $min min',
+        it: 'A piedi $m m · $min min',
+      );
+  String driverInMin(String min) => _t(
+        en: 'Driver in $min min',
+        uk: 'Водій за $min хв',
+        es: 'Conductor en $min min',
+        de: 'Fahrer in $min Min.',
+        fr: 'Conducteur dans $min min',
+        it: 'Conducente tra $min min',
+      );
+  String get mapStyleStandard => _t(
+        en: 'Standard',
+        uk: 'Стандартна',
+        es: 'Estándar',
+        de: 'Standard',
+        fr: 'Standard',
+        it: 'Standard',
+      );
+  String get mapStyleSatellite => _t(
+        en: 'Satellite',
+        uk: 'Супутник',
+        es: 'Satélite',
+        de: 'Satellit',
+        fr: 'Satellite',
+        it: 'Satellite',
+      );
+  String get mapStyleDark => _t(
+        en: 'Dark',
+        uk: 'Темна',
+        es: 'Oscuro',
+        de: 'Dunkel',
+        fr: 'Sombre',
+        it: 'Scuro',
+      );
+  String seatsCorridorSummary(String seats, String km) => _t(
+        en: 'Seats: $seats · corridor $km km',
+        uk: 'Місць: $seats · коридор $km км',
+        es: 'Asientos: $seats · corredor de $km km',
+        de: 'Sitze: $seats · Korridor $km km',
+        fr: 'Places : $seats · corridor $km km',
+        it: 'Posti: $seats · corridoio $km km',
+      );
+  String get carLabel => _t(
+        en: 'Car',
+        uk: 'Автомобіль',
+        es: 'Coche',
+        de: 'Auto',
+        fr: 'Voiture',
+        it: 'Auto',
+      );
+  String get plateLabel => _t(
+        en: 'Plate',
+        uk: 'Номерний знак',
+        es: 'Matrícula',
+        de: 'Kennzeichen',
+        fr: 'Plaque',
+        it: 'Targa',
+      );
+  String get requestThisRide => _t(
+        en: 'Request this ride',
+        uk: 'Запросити цю поїздку',
+        es: 'Solicitar este viaje',
+        de: 'Diese Fahrt anfragen',
+        fr: 'Demander ce trajet',
+        it: 'Richiedi questa corsa',
+      );
+
+  // ─── Role switch: live-state reasons ─────────────────────────────────────
+  String get reasonActiveDriverRoute => _t(
+        en: 'an active driver route',
+        uk: 'активний маршрут водія',
+        es: 'una ruta de conductor activa',
+        de: 'eine aktive Fahrtroute',
+        fr: 'un trajet conducteur actif',
+        it: 'un percorso conducente attivo',
+      );
+  String get reasonAcceptedPassengerRide => _t(
+        en: 'an accepted passenger ride',
+        uk: 'підтверджену поїздку з пасажиром',
+        es: 'un viaje de pasajero aceptado',
+        de: 'eine angenommene Fahrgast-Fahrt',
+        fr: 'une course passager acceptée',
+        it: 'una corsa passeggero accettata',
+      );
+  String get reasonAcceptedDriverRide => _t(
+        en: 'an accepted driver ride',
+        uk: 'підтверджену поїздку з водієм',
+        es: 'un viaje con conductor aceptado',
+        de: 'eine angenommene Fahrt',
+        fr: 'une course acceptée',
+        it: 'una corsa accettata',
+      );
+  String get reasonPendingRideRequests => _t(
+        en: 'pending ride requests',
+        uk: 'запити на поїздку в очікуванні',
+        es: 'solicitudes de viaje pendientes',
+        de: 'ausstehende Fahrtanfragen',
+        fr: 'des demandes de trajet en attente',
+        it: 'richieste di corsa in sospeso',
+      );
+  String get reasonActiveDestinationSearch => _t(
+        en: 'an active destination search',
+        uk: 'активний пошук поїздки',
+        es: 'una búsqueda de destino activa',
+        de: 'eine aktive Zielsuche',
+        fr: 'une recherche de destination active',
+        it: 'una ricerca destinazione attiva',
+      );
+  String switchWillEnd(String reason) => _t(
+        en: 'You have $reason. Switching will end it and notify the other party.',
+        uk: 'У вас є $reason. Перемикання завершить це та сповістить іншу сторону.',
+        es: 'Tienes $reason. Cambiar lo terminará y avisará a la otra parte.',
+        de: 'Du hast $reason. Beim Wechsel wird sie beendet und die Gegenseite benachrichtigt.',
+        fr: "Vous avez $reason. Le changement y mettra fin et en informera l'autre partie.",
+        it: "Hai $reason. Il cambio la terminerà e avviserà l'altra parte.",
+      );
+
+  // ─── Account: email verification ─────────────────────────────────────────
+  String get enterSixDigitCode => _t(
+        en: 'Enter the 6-digit code',
+        uk: 'Введіть 6-значний код',
+        es: 'Introduce el código de 6 dígitos',
+        de: 'Gib den 6-stelligen Code ein',
+        fr: 'Saisissez le code à 6 chiffres',
+        it: 'Inserisci il codice a 6 cifre',
+      );
+
+  // ─── Known backend error messages (kept in sync with the Go backend's
+  //     `error` strings; mapped in core/error_handling.dart) ────────────────
+  String get errDriverUnavailable => _t(
+        en: 'This driver is no longer available',
+        uk: 'Цей водій уже недоступний',
+        es: 'Este conductor ya no está disponible',
+        de: 'Dieser Fahrer ist nicht mehr verfügbar',
+        fr: "Ce conducteur n'est plus disponible",
+        it: 'Questo conducente non è più disponibile',
+      );
+  String get errTooFarFromRoute => _t(
+        en: "You're too far from the driver's route",
+        uk: 'Ви занадто далеко від маршруту водія',
+        es: 'Estás demasiado lejos de la ruta del conductor',
+        de: 'Du bist zu weit von der Route des Fahrers entfernt',
+        fr: "Vous êtes trop loin de l'itinéraire du conducteur",
+        it: 'Sei troppo lontano dal percorso del conducente',
+      );
+  String get errDriverPassedYou => _t(
+        en: 'The driver has already passed your pickup point',
+        uk: 'Водій уже проїхав повз вашу точку посадки',
+        es: 'El conductor ya pasó tu punto de recogida',
+        de: 'Der Fahrer ist bereits an deinem Abholpunkt vorbei',
+        fr: 'Le conducteur a déjà dépassé votre point de rencontre',
+        it: 'Il conducente ha già superato il tuo punto di ritiro',
+      );
+  String get errDriverPositionStale => _t(
+        en: "Driver's position is not up to date — try again shortly",
+        uk: 'Позиція водія не оновлена — спробуйте трохи пізніше',
+        es: 'La posición del conductor no está actualizada; inténtalo de nuevo en breve',
+        de: 'Die Position des Fahrers ist nicht aktuell – versuche es gleich noch einmal',
+        fr: "La position du conducteur n'est pas à jour — réessayez dans un instant",
+        it: 'La posizione del conducente non è aggiornata: riprova tra poco',
+      );
+  String get errUpdateLocationFirst => _t(
+        en: 'Update your location first',
+        uk: 'Спочатку оновіть свою геолокацію',
+        es: 'Primero actualiza tu ubicación',
+        de: 'Aktualisiere zuerst deinen Standort',
+        fr: "Mettez d'abord votre position à jour",
+        it: 'Aggiorna prima la tua posizione',
+      );
+  String get errOfferGone => _t(
+        en: 'This offer is no longer available',
+        uk: 'Ця пропозиція вже недоступна',
+        es: 'Esta oferta ya no está disponible',
+        de: 'Dieses Angebot ist nicht mehr verfügbar',
+        fr: "Cette offre n'est plus disponible",
+        it: 'Questa offerta non è più disponibile',
+      );
+  String get errRideFull => _t(
+        en: 'This ride is already full',
+        uk: 'У цій поїздці вже немає місць',
+        es: 'Este viaje ya está completo',
+        de: 'Diese Fahrt ist bereits voll',
+        fr: 'Ce trajet est déjà complet',
+        it: 'Questa corsa è già al completo',
+      );
+  String get errWrongCode => _t(
+        en: 'Wrong code — ask the driver again',
+        uk: 'Неправильний код — перепитайте водія',
+        es: 'Código incorrecto: vuelve a preguntar al conductor',
+        de: 'Falscher Code – frag den Fahrer noch einmal',
+        fr: 'Code incorrect — redemandez au conducteur',
+        it: 'Codice errato: richiedi di nuovo al conducente',
+      );
+  String get errRideNotAccepted => _t(
+        en: 'The ride is not in the accepted state',
+        uk: 'Поїздка не в статусі «прийнято»',
+        es: 'El viaje no está en estado aceptado',
+        de: 'Die Fahrt ist nicht im Status „angenommen“',
+        fr: "Le trajet n'est pas à l'état accepté",
+        it: 'La corsa non è nello stato accettato',
+      );
+  String get errInvalidCredentials => _t(
+        en: 'Wrong email or password',
+        uk: 'Неправильна електронна пошта або пароль',
+        es: 'Correo o contraseña incorrectos',
+        de: 'Falsche E-Mail oder falsches Passwort',
+        fr: 'E-mail ou mot de passe incorrect',
+        it: 'Email o password errati',
+      );
+  String get errEmailTaken => _t(
+        en: 'This email is already registered',
+        uk: 'Ця електронна пошта вже зареєстрована',
+        es: 'Este correo ya está registrado',
+        de: 'Diese E-Mail ist bereits registriert',
+        fr: 'Cet e-mail est déjà enregistré',
+        it: 'Questa email è già registrata',
+      );
+  String get errCodeInvalidOrExpired => _t(
+        en: 'Invalid or expired code',
+        uk: 'Неправильний або прострочений код',
+        es: 'Código no válido o caducado',
+        de: 'Ungültiger oder abgelaufener Code',
+        fr: 'Code invalide ou expiré',
+        it: 'Codice non valido o scaduto',
+      );
+  String get errCurrentPasswordWrong => _t(
+        en: 'Current password is incorrect',
+        uk: 'Поточний пароль неправильний',
+        es: 'La contraseña actual es incorrecta',
+        de: 'Das aktuelle Passwort ist falsch',
+        fr: 'Le mot de passe actuel est incorrect',
+        it: 'La password attuale non è corretta',
+      );
+
+  // ─── Background location (driver) ────────────────────────────────────────
+  String get backgroundLocationUnavailable => _t(
+        en: "Background location couldn't start. Keep Sameway open on screen while driving, or passengers won't find you.",
+        uk: 'Не вдалося запустити фонову геолокацію. Тримайте Sameway відкритим на екрані під час руху, інакше пасажири вас не знайдуть.',
+        es: 'No se pudo iniciar la ubicación en segundo plano. Mantén Sameway abierto en pantalla mientras conduces o los pasajeros no te encontrarán.',
+        de: 'Standort im Hintergrund konnte nicht gestartet werden. Lass Sameway während der Fahrt auf dem Bildschirm geöffnet, sonst finden dich Fahrgäste nicht.',
+        fr: "Impossible de lancer la localisation en arrière-plan. Garde Sameway ouvert à l'écran pendant que tu conduis, sinon les passagers ne te trouveront pas.",
+        it: 'Impossibile avviare la posizione in background. Tieni Sameway aperto sullo schermo mentre guidi, altrimenti i passeggeri non ti troveranno.',
+      );
+
+  // ─── Legal: age + terms consent ──────────────────────────────────────────
+  String get ageConfirmLabel => _t(
+        en: 'I confirm I am 18 or older',
+        uk: 'Підтверджую, що мені виповнилося 18 років',
+        es: 'Confirmo que tengo 18 años o más',
+        de: 'Ich bestätige, dass ich mindestens 18 Jahre alt bin',
+        fr: "Je confirme avoir 18 ans ou plus",
+        it: 'Confermo di avere almeno 18 anni',
+      );
+  String get acceptTermsLabel => _t(
+        en: 'I accept the Terms of Service and the Privacy Policy',
+        uk: 'Я приймаю Умови використання та Політику конфіденційності',
+        es: 'Acepto los Términos del servicio y la Política de privacidad',
+        de: 'Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung',
+        fr: "J'accepte les Conditions d'utilisation et la Politique de confidentialité",
+        it: "Accetto i Termini di servizio e l'Informativa sulla privacy",
+      );
+  String get termsOfService => _t(
+        en: 'Terms of Service',
+        uk: 'Умови використання',
+        es: 'Términos del servicio',
+        de: 'Nutzungsbedingungen',
+        fr: "Conditions d'utilisation",
+        it: 'Termini di servizio',
+      );
+  String get privacyPolicy => _t(
+        en: 'Privacy Policy',
+        uk: 'Політика конфіденційності',
+        es: 'Política de privacidad',
+        de: 'Datenschutzerklärung',
+        fr: 'Politique de confidentialité',
+        it: 'Informativa sulla privacy',
+      );
+  String get consentRequiredError => _t(
+        en: 'Confirm you are 18 or older and accept the terms to continue',
+        uk: 'Підтвердьте, що вам 18+, і прийміть умови, щоб продовжити',
+        es: 'Confirma que tienes 18 años o más y acepta los términos para continuar',
+        de: 'Bestätige, dass du mindestens 18 bist, und akzeptiere die Bedingungen, um fortzufahren',
+        fr: 'Confirme avoir 18 ans ou plus et accepte les conditions pour continuer',
+        it: 'Conferma di avere almeno 18 anni e accetta i termini per continuare',
+      );
+  String get termsGateTitle => _t(
+        en: 'Before you continue',
+        uk: 'Перш ніж продовжити',
+        es: 'Antes de continuar',
+        de: 'Bevor es weitergeht',
+        fr: 'Avant de continuer',
+        it: 'Prima di continuare',
+      );
+  String get termsGateBody => _t(
+        en: 'To keep using Sameway, please confirm your age and accept our Terms of Service and Privacy Policy.',
+        uk: 'Щоб і далі користуватися Sameway, підтвердьте свій вік і прийміть наші Умови використання та Політику конфіденційності.',
+        es: 'Para seguir usando Sameway, confirma tu edad y acepta nuestros Términos del servicio y nuestra Política de privacidad.',
+        de: 'Um Sameway weiter zu nutzen, bestätige bitte dein Alter und akzeptiere unsere Nutzungsbedingungen und Datenschutzerklärung.',
+        fr: "Pour continuer à utiliser Sameway, confirme ton âge et accepte nos Conditions d'utilisation et notre Politique de confidentialité.",
+        it: "Per continuare a usare Sameway, conferma la tua età e accetta i nostri Termini di servizio e l'Informativa sulla privacy.",
+      );
+
+  // ─── Legal: analytics consent ────────────────────────────────────────────
+  String get analyticsConsentTitle => _t(
+        en: 'Help us improve Sameway',
+        uk: 'Допоможіть нам покращити Sameway',
+        es: 'Ayúdanos a mejorar Sameway',
+        de: 'Hilf uns, Sameway zu verbessern',
+        fr: 'Aide-nous à améliorer Sameway',
+        it: 'Aiutaci a migliorare Sameway',
+      );
+  String get analyticsConsentBody => _t(
+        en: "Can we collect usage statistics, crash reports and performance data? It's optional — Sameway works the same either way, and you can change it any time in Account & Security.",
+        uk: "Чи можемо ми збирати статистику використання, звіти про збої та дані про продуктивність? Це необов'язково — Sameway працює однаково в будь-якому разі, і ви можете змінити це будь-коли в розділі «Акаунт і безпека».",
+        es: '¿Podemos recopilar estadísticas de uso, informes de fallos y datos de rendimiento? Es opcional: Sameway funciona igual en ambos casos y puedes cambiarlo cuando quieras en Cuenta y seguridad.',
+        de: 'Dürfen wir Nutzungsstatistiken, Absturzberichte und Leistungsdaten erfassen? Das ist freiwillig – Sameway funktioniert so oder so gleich, und du kannst es jederzeit unter Konto & Sicherheit ändern.',
+        fr: "Pouvons-nous collecter des statistiques d'utilisation, des rapports de plantage et des données de performance ? C'est facultatif : Sameway fonctionne de la même façon dans les deux cas, et tu peux changer d'avis à tout moment dans Compte et sécurité.",
+        it: 'Possiamo raccogliere statistiche di utilizzo, report sugli arresti anomali e dati sulle prestazioni? È facoltativo: Sameway funziona allo stesso modo in ogni caso e puoi cambiare idea in qualsiasi momento in Account e sicurezza.',
+      );
+  String get analyticsAllow => _t(
+        en: 'Allow',
+        uk: 'Дозволити',
+        es: 'Permitir',
+        de: 'Erlauben',
+        fr: 'Autoriser',
+        it: 'Consenti',
+      );
+  String get analyticsDeny => _t(
+        en: 'No thanks',
+        uk: 'Ні, дякую',
+        es: 'No, gracias',
+        de: 'Nein, danke',
+        fr: 'Non merci',
+        it: 'No, grazie',
+      );
+  String get analyticsSettingTitle => _t(
+        en: 'Usage statistics & crash reports',
+        uk: 'Статистика використання та звіти про збої',
+        es: 'Estadísticas de uso e informes de fallos',
+        de: 'Nutzungsstatistiken & Absturzberichte',
+        fr: "Statistiques d'utilisation et rapports de plantage",
+        it: 'Statistiche di utilizzo e report sugli arresti anomali',
+      );
+  String get analyticsSettingSubtitle => _t(
+        en: 'Optional. Helps us find bugs and improve the app.',
+        uk: "Необов'язково. Допомагає знаходити помилки та покращувати застосунок.",
+        es: 'Opcional. Nos ayuda a encontrar errores y mejorar la app.',
+        de: 'Freiwillig. Hilft uns, Fehler zu finden und die App zu verbessern.',
+        fr: "Facultatif. Nous aide à trouver des bugs et à améliorer l'app.",
+        it: "Facoltativo. Ci aiuta a trovare bug e migliorare l'app.",
+      );
+  String get legalAndPrivacy => _t(
+        en: 'Legal & privacy',
+        uk: 'Правова інформація та конфіденційність',
+        es: 'Legal y privacidad',
+        de: 'Rechtliches & Datenschutz',
+        fr: 'Mentions légales et confidentialité',
+        it: 'Note legali e privacy',
+      );
+
+  // ─── Account deletion ────────────────────────────────────────────────────
+  String get deleteAccount => _t(
+        en: 'Delete account',
+        uk: 'Видалити акаунт',
+        es: 'Eliminar cuenta',
+        de: 'Konto löschen',
+        fr: 'Supprimer le compte',
+        it: 'Elimina account',
+      );
+  String get deleteAccountTitle => _t(
+        en: 'Delete your account?',
+        uk: 'Видалити акаунт?',
+        es: '¿Eliminar tu cuenta?',
+        de: 'Konto löschen?',
+        fr: 'Supprimer ton compte ?',
+        it: 'Eliminare il tuo account?',
+      );
+  String get deleteAccountBody => _t(
+        en: "This permanently deletes your profile, chats, location and planned trips. Rides and ratings that involved other people are kept without your name. This can't be undone.",
+        uk: 'Це остаточно видалить ваш профіль, чати, геолокацію та заплановані поїздки. Поїздки й оцінки за участю інших людей збережуться без вашого імені. Цю дію не можна скасувати.',
+        es: 'Esto elimina para siempre tu perfil, chats, ubicación y viajes planificados. Los viajes y valoraciones en los que participaron otras personas se conservan sin tu nombre. No se puede deshacer.',
+        de: 'Dadurch werden dein Profil, deine Chats, dein Standort und geplante Fahrten endgültig gelöscht. Fahrten und Bewertungen mit anderen Personen bleiben ohne deinen Namen erhalten. Das kann nicht rückgängig gemacht werden.',
+        fr: 'Ton profil, tes discussions, ta position et tes trajets prévus seront définitivement supprimés. Les trajets et évaluations impliquant d\'autres personnes sont conservés sans ton nom. Cette action est irréversible.',
+        it: "Il tuo profilo, le chat, la posizione e i viaggi pianificati verranno eliminati definitivamente. I viaggi e le valutazioni che coinvolgono altre persone restano senza il tuo nome. L'operazione non può essere annullata.",
+      );
+  String get deleteAccountPasswordLabel => _t(
+        en: 'Enter your password to confirm',
+        uk: 'Введіть пароль для підтвердження',
+        es: 'Introduce tu contraseña para confirmar',
+        de: 'Gib zur Bestätigung dein Passwort ein',
+        fr: 'Saisis ton mot de passe pour confirmer',
+        it: 'Inserisci la password per confermare',
+      );
+  String get deleteAccountConfirm => _t(
+        en: 'Delete permanently',
+        uk: 'Видалити назавжди',
+        es: 'Eliminar para siempre',
+        de: 'Endgültig löschen',
+        fr: 'Supprimer définitivement',
+        it: 'Elimina definitivamente',
+      );
+  String get accountDeleted => _t(
+        en: 'Your account has been deleted',
+        uk: 'Ваш акаунт видалено',
+        es: 'Tu cuenta se ha eliminado',
+        de: 'Dein Konto wurde gelöscht',
+        fr: 'Ton compte a été supprimé',
+        it: 'Il tuo account è stato eliminato',
+      );
+  String get deleteAccountActiveRide => _t(
+        en: 'Finish or cancel your current ride before deleting your account',
+        uk: 'Завершіть або скасуйте поточну поїздку перед видаленням акаунта',
+        es: 'Termina o cancela tu viaje actual antes de eliminar tu cuenta',
+        de: 'Beende oder storniere deine aktuelle Fahrt, bevor du dein Konto löschst',
+        fr: 'Termine ou annule ton trajet en cours avant de supprimer ton compte',
+        it: 'Termina o annulla il viaggio in corso prima di eliminare il tuo account',
       );
 }
 

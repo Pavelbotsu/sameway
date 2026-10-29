@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../connectivity_provider.dart';
+import '../feature_flags.dart';
 import '../websocket_client.dart';
 
 /// Small top-anchored pill that surfaces network state to the user. Two
@@ -30,7 +31,19 @@ import '../websocket_client.dart';
 /// either.
 class ConnectivityPill extends StatefulWidget {
   final WsState wsState;
-  const ConnectivityPill({super.key, required this.wsState});
+
+  /// Set when several consecutive location pings have failed. Distinct from a
+  /// WS blip and NOT debounced or feature-flagged: the backend drops a user
+  /// from matching once their last fix ages out, so this is the difference
+  /// between "the realtime channel hiccuped" and "you are invisible to
+  /// everyone right now".
+  final bool locationFailing;
+
+  const ConnectivityPill({
+    super.key,
+    required this.wsState,
+    this.locationFailing = false,
+  });
 
   @override
   State<ConnectivityPill> createState() => _ConnectivityPillState();
@@ -85,16 +98,33 @@ class _ConnectivityPillState extends State<ConnectivityPill> {
     final offline = !isOnline;
     final wsHealthy = widget.wsState == WsState.connected;
 
-    // Red shows immediately; amber only after the grace window has elapsed.
-    final show = offline || (!wsHealthy && _graceElapsed);
+    // Red shows immediately; amber only after the grace window has elapsed —
+    // and only when the test-build flag allows it (the amber pill confused
+    // testers, so it's off; a real offline warning stays).
+    final showAmber =
+        FeatureFlags.reconnectingPill && !wsHealthy && _graceElapsed;
+    // Location failure outranks a WS blip: it means matching cannot see you.
+    final showLocation = widget.locationFailing && isOnline;
+    final show = offline || showLocation || showAmber;
     if (!show) return const SizedBox.shrink();
 
     final l = AppLocalizations.of(context);
-    final color = offline ? AppColors.error : const Color(0xFFFFB938);
-    final label = offline ? l.noInternet : l.reconnecting;
-    final icon = offline
-        ? Icons.signal_wifi_off_rounded
-        : Icons.sync_rounded;
+    final Color color;
+    final String label;
+    final IconData icon;
+    if (offline) {
+      color = AppColors.error;
+      label = l.noInternet;
+      icon = Icons.signal_wifi_off_rounded;
+    } else if (showLocation) {
+      color = AppColors.error;
+      label = l.locationNotSyncing;
+      icon = Icons.location_disabled_rounded;
+    } else {
+      color = const Color(0xFFFFB938);
+      label = l.reconnecting;
+      icon = Icons.sync_rounded;
+    }
 
     return Positioned(
       top: MediaQuery.of(context).viewPadding.top + 8,
@@ -104,7 +134,7 @@ class _ConnectivityPillState extends State<ConnectivityPill> {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 220),
           child: Container(
-            key: ValueKey(offline),
+            key: ValueKey('$offline-$showLocation'),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: AppColors.surface.withValues(alpha: 0.96),
