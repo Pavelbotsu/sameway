@@ -6,9 +6,15 @@ import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../haptics.dart';
 
+/// The European emergency number. It works in every EU/EEA country (Sameway
+/// launches in Poland) and on any phone, with or without a SIM. It depends on
+/// where the user IS, never on the UI language — it used to come from the
+/// translations, which sent English-speaking users in Kraków to 911.
+const kEmergencyNumber = '112';
+
 /// Compact red "SOS" pill the rider/driver can tap during an active ride.
 /// Tap opens [SosSheet] for confirmation — never auto-dials, so a butt
-/// press in a pocket can't accidentally call 911.
+/// press in a pocket can't accidentally call emergency services.
 class SosButton extends StatelessWidget {
   /// Lat/lng of the user firing the SOS — embedded in the share message so
   /// the contact can locate them.
@@ -67,8 +73,7 @@ class SosButton extends StatelessWidget {
 }
 
 /// Confirmation sheet with two CTAs:
-///   - **Call emergency services** — `tel:` URI to the local emergency
-///     number (from localized strings; 911 in en, 112 elsewhere by default).
+///   - **Call emergency services** — `tel:` URI to [kEmergencyNumber] (112).
 ///     Just opens the dialer — we do NOT auto-dial, the user still has to
 ///     press the green button.
 ///   - **Share trip with contact** — opens the system share sheet prefilled
@@ -109,8 +114,7 @@ class SosSheet extends StatelessWidget {
   }
 
   Future<void> _call(BuildContext context) async {
-    final number = AppLocalizations.of(context).sosEmergencyNumber;
-    final uri = Uri.parse('tel:$number');
+    final uri = Uri.parse('tel:$kEmergencyNumber');
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (_) {/* dialer unavailable — silently no-op */}

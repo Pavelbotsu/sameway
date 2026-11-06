@@ -2131,17 +2131,6 @@ class AppLocalizations {
       it: 'Sono in una corsa Sameway. La mia posizione: $mapsUrl  Conducente: $who · Targa: $p',
     );
   }
-  // Local emergency number. Best-effort default per region; users can dial
-  // a different number manually if needed.
-  String get sosEmergencyNumber => _t(
-        en: '911',
-        uk: '112',
-        es: '112',
-        de: '112',
-        fr: '112',
-        it: '112',
-      );
-
   // ─── Profile photo (Phase 1.3) ───────────────────────────────────────────
   String get profilePhoto => _t(
         en: 'Profile photo',
