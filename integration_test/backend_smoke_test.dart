@@ -14,6 +14,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:sameway/core/api_client.dart';
 import 'package:sameway/core/token_storage.dart';
 import 'package:sameway/core/websocket_client.dart';
+import 'package:sameway/features/auth/auth_provider.dart';
 import 'package:sameway/features/auth/auth_repository.dart';
 
 void main() {
@@ -82,6 +83,26 @@ void main() {
       throwsA(isA<ApiException>().having((e) => e.statusCode, 'status', 401)),
     );
     await storage.clear();
+  });
+
+  test('logout revokes the session on the server', () async {
+    final email2 = 'logout-${DateTime.now().millisecondsSinceEpoch}@example.com';
+    final res = await repo.register(
+      name: 'Logout Test',
+      email: email2,
+      password: password,
+      role: 'driver',
+      acceptTerms: true,
+      ageConfirmed: true,
+    );
+    await storage.save(token: res.token, role: res.role, userId: res.userId);
+    final auth = AuthProvider(repo, storage);
+    await auth.logout();
+
+    expect(await storage.getToken(), isNull);
+    final probe = await http.get(Uri.parse('$kApiBase/auth/profile'),
+        headers: {'Authorization': 'Bearer ${res.token}'});
+    expect(probe.statusCode, 401, reason: 'old token must be revoked');
   });
 
   test('legal pages are served', () async {

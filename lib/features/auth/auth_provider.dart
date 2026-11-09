@@ -1,10 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import '../../core/api_client.dart' show kApiBase;
 import '../../core/analytics.dart';
 import '../../core/legal.dart';
 import '../../core/location_service.dart';
 import '../../core/token_storage.dart';
+import '../../core/websocket_client.dart';
 import 'auth_repository.dart';
 
 enum AuthStatus { idle, loading, error }
@@ -25,7 +28,10 @@ class AuthProvider extends ChangeNotifier {
   /// current Terms/Privacy and confirm 18+ before using the app.
   bool needsConsent = false;
 
-  AuthProvider(this._repo, this._storage);
+  /// The shared socket, closed on sign-out. Optional so tests can omit it.
+  final WebSocketClient? _ws;
+
+  AuthProvider(this._repo, this._storage, {WebSocketClient? ws}) : _ws = ws;
 
   Future<bool> login({
     required String email,
@@ -111,7 +117,31 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Signs out: revokes the session on the server (best-effort), stops the
+  /// device receiving this account's pushes, then clears local state.
   Future<void> logout() async {
+    final token = await _storage.getToken();
+    if (token != null) {
+      // Raw http, not ApiClient: if the token is already invalid, the 401
+      // must not trigger the "session expired" flow in the middle of a
+      // deliberate sign-out. Offline is fine too — the token simply expires.
+      try {
+        await http.post(
+          Uri.parse('$kApiBase/auth/logout'),
+          headers: {'Authorization': 'Bearer $token'},
+        ).timeout(const Duration(seconds: 5));
+      } catch (_) {}
+    }
+    try {
+      await FirebaseMessaging.instance.deleteToken();
+    } catch (_) {}
+    await _clearLocalSession();
+  }
+
+  Future<void> _clearLocalSession() async {
+    // Without this the shared socket keeps reconnecting with the revoked
+    // token and ends in a bogus "session expired" message.
+    _ws?.disconnect();
     // A driver's background location service outlives the screen that
     // started it; signing out must not leave it running (and posting nothing
     // useful) behind an ongoing notification.
@@ -135,7 +165,8 @@ class AuthProvider extends ChangeNotifier {
       // already dropped the token; this invalidates it at FCM too).
       await FirebaseMessaging.instance.deleteToken();
     } catch (_) {}
-    await logout();
+    // Not logout(): the session is already revoked server-side.
+    await _clearLocalSession();
   }
 
   /// Profile photos live in Firebase Storage under `user_photos/{userId}/` and the

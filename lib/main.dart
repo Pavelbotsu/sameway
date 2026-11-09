@@ -95,7 +95,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => MatchingPreferenceProvider()),
         ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
         ChangeNotifierProvider(
-          create: (_) => AuthProvider(AuthRepository(api), storage),
+          create: (_) => AuthProvider(AuthRepository(api), storage, ws: ws),
         ),
         ChangeNotifierProvider(
           create: (_) => DriverProvider(DriverRepository(api), ws),
