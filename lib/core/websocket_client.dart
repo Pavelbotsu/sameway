@@ -5,12 +5,12 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'api_client.dart' show kApiBase, kApiHost;
+import 'api_client.dart' show kApiBase, kWsBase;
 import 'session.dart';
 
 // Derived from the same host as the HTTP base (see api_client.dart) so a
 // single --dart-define=API_HOST switches both transports together.
-const _wsBase = 'wss://$kApiHost';
+const _wsBase = kWsBase;
 
 enum WsState { disconnected, connecting, connected }
 

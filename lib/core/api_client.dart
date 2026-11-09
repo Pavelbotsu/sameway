@@ -1,23 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:http/http.dart' as http;
 import 'session.dart';
 import 'token_storage.dart';
 
-/// Backend hostname — the single source of truth for both HTTP and WebSocket
-/// bases. Always a bare host: schemes are added below (https) and in
-/// websocket_client.dart (wss), so the app never speaks plaintext.
-//
-// Defaults to PRODUCTION deliberately. It previously defaulted to a personal
-// ngrok tunnel, so a release build made without the --dart-define shipped
-// pointed at a dev machine — and nothing about the build failed to signal it.
-// Dev runs now pass the override instead:
-//   flutter run --dart-define=API_HOST=<your-tunnel>.ngrok-free.dev
-const kApiHost = String.fromEnvironment(
-  'API_HOST',
-  defaultValue: 'ibuprofen-dolly-prison.ngrok-free.dev',
-);
-const kApiBase = 'https://$kApiHost';
+/// Backend host (and optional port) — the single source of truth for both the
+/// HTTP and WebSocket bases (websocket_client.dart). Resolution:
+///   1. `--dart-define=API_HOST=...` always wins;
+///   2. debug builds: the local dev backend (sameway_backend/scripts/dev.sh)
+///      as seen from the Android emulator;
+///   3. release builds: the ngrok tunnel used for device testing until the
+///      service has a domain. Store builds refuse to run against it — see
+///      [kMisconfiguredStoreBuild].
+const _definedHost = String.fromEnvironment('API_HOST');
+const kLocalDevHost = '10.0.2.2:4040';
+const _testTunnelHost = 'ibuprofen-dolly-prison.ngrok-free.dev';
+const kApiHost = _definedHost != ''
+    ? _definedHost
+    : (kReleaseMode ? _testTunnelHost : kLocalDevHost);
+
+/// Plain http/ws only for the local dev backend (or when forced with
+/// `--dart-define=API_INSECURE=true`, e.g. a LAN IP). Everything else is TLS.
+/// Android blocks cleartext anyway except to the emulator host, and only in
+/// debug builds (android/app/src/debug/res/xml/network_security_config.xml).
+const kApiInsecure =
+    bool.fromEnvironment('API_INSECURE') || kApiHost == kLocalDevHost;
+const kApiBase = '${kApiInsecure ? 'http' : 'https'}://$kApiHost';
+const kWsBase = '${kApiInsecure ? 'ws' : 'wss'}://$kApiHost';
 const _base = kApiBase;
 
 // Timeouts are tiered by what the call actually does. A single blanket 120s
