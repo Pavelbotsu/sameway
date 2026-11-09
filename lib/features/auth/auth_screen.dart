@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/error_handling.dart';
 import '../../core/fcm_service.dart';
 import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
@@ -227,7 +228,10 @@ class _AuthScreenState extends State<AuthScreen>
                     children: [
                       if (auth.status == AuthStatus.error &&
                           auth.error != null)
-                        _ErrorBanner(message: auth.error!),
+                        _ErrorBanner(
+                            message: auth.lastError != null
+                                ? friendlyError(context, auth.lastError!)
+                                : auth.error!),
                       const SizedBox(height: 4),
                       SizedBox(
                         width: double.infinity,

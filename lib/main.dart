@@ -25,6 +25,7 @@ import 'features/auth/auth_provider.dart';
 import 'features/auth/auth_repository.dart';
 import 'features/driver/driver_provider.dart';
 import 'features/driver/driver_repository.dart';
+import 'features/legal/terms_gate_screen.dart';
 import 'features/onboarding/role_selection_screen.dart';
 import 'features/onboarding/splash_screen.dart';
 import 'features/passenger/passenger_provider.dart';
@@ -112,17 +113,24 @@ class _SamewayAppState extends State<SamewayApp> {
   /// BuildContext) can pop everything and route to RoleSelectionScreen.
   final _navKey = GlobalKey<NavigatorState>();
   StreamSubscription<void>? _expirySub;
+  StreamSubscription<void>? _consentSub;
+  StreamSubscription<void>? _suspendedSub;
 
   @override
   void initState() {
     super.initState();
-    _expirySub = SessionEvents.instance.onExpired.listen(_handleExpired);
+    final events = SessionEvents.instance;
+    _expirySub = events.onExpired.listen(
+        (_) => _signOut((l) => l.errSessionExpired));
+    _suspendedSub = events.onSuspended.listen(
+        (_) => _signOut((l) => l.accountSuspended));
+    _consentSub = events.onConsentRequired.listen(_handleConsentRequired);
   }
 
-  /// Clear stored credentials, route back to RoleSelectionScreen, show a
-  /// branded SnackBar telling the user their session ended. Decoupled from
-  /// any one widget so ApiClient can fire this from anywhere.
-  Future<void> _handleExpired(void _) async {
+  /// Clear stored credentials, route back to RoleSelectionScreen and tell the
+  /// user why. Decoupled from any one widget so ApiClient can fire it from
+  /// anywhere.
+  Future<void> _signOut(String Function(AppLocalizations) message) async {
     await LocationService.stop();
     await TokenStorage().clear();
     if (!mounted) return;
@@ -134,14 +142,27 @@ class _SamewayAppState extends State<SamewayApp> {
     );
     final ctx = _navKey.currentContext;
     if (ctx != null && ctx.mounted) {
-      BrandedSnack.showError(
-          ctx, AppLocalizations.of(ctx).errSessionExpired);
+      BrandedSnack.showError(ctx, message(AppLocalizations.of(ctx)));
     }
+  }
+
+  /// The server now refuses ride/chat calls until the current Terms are
+  /// accepted (a terms version bump, or an account the local check thought
+  /// had already accepted). Show the gate in place of whatever is open.
+  Future<void> _handleConsentRequired(void _) async {
+    final role = await TokenStorage().getRole();
+    if (!mounted || role == null) return;
+    _navKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => TermsGateScreen(role: role)),
+      (_) => false,
+    );
   }
 
   @override
   void dispose() {
     _expirySub?.cancel();
+    _consentSub?.cancel();
+    _suspendedSub?.cancel();
     super.dispose();
   }
 

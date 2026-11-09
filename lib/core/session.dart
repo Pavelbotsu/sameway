@@ -31,4 +31,33 @@ class SessionEvents {
     _lastFire = now;
     _ctrl.add(null);
   }
+
+  // Account-wide 403s from the backend (see ApiClient._error). Same burst
+  // throttle: every concurrent request fails the same way at once.
+  final _consentCtrl = StreamController<void>.broadcast();
+  final _suspendedCtrl = StreamController<void>.broadcast();
+  DateTime _lastConsent = DateTime.fromMillisecondsSinceEpoch(0);
+  DateTime _lastSuspended = DateTime.fromMillisecondsSinceEpoch(0);
+
+  /// The server refused a request until the current Terms/Privacy are
+  /// accepted (403 consent_required). main.dart shows TermsGateScreen.
+  Stream<void> get onConsentRequired => _consentCtrl.stream;
+
+  /// The account is suspended (403 account_suspended). main.dart signs the
+  /// user out with an explanation.
+  Stream<void> get onSuspended => _suspendedCtrl.stream;
+
+  void fireConsentRequired() {
+    final now = DateTime.now();
+    if (now.difference(_lastConsent) < const Duration(seconds: 5)) return;
+    _lastConsent = now;
+    _consentCtrl.add(null);
+  }
+
+  void fireSuspended() {
+    final now = DateTime.now();
+    if (now.difference(_lastSuspended) < const Duration(seconds: 5)) return;
+    _lastSuspended = now;
+    _suspendedCtrl.add(null);
+  }
 }

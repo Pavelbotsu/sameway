@@ -15,6 +15,10 @@ class AuthProvider extends ChangeNotifier {
 
   AuthStatus status = AuthStatus.idle;
   String? error;
+
+  /// The exception behind [error], so screens can show a localized message
+  /// (friendlyError) instead of raw exception text.
+  Object? lastError;
   String? role;
 
   /// The last successful auth call said this account must still accept the
@@ -53,6 +57,7 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> _run(Future<AuthResult> Function() call) async {
     status = AuthStatus.loading;
     error = null;
+    lastError = null;
     notifyListeners();
     try {
       final result = await call();
@@ -76,6 +81,7 @@ class AuthProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       error = e.toString();
+      lastError = e;
       status = AuthStatus.error;
       notifyListeners();
       return false;
@@ -100,6 +106,7 @@ class AuthProvider extends ChangeNotifier {
 
   void clearError() {
     error = null;
+    lastError = null;
     status = AuthStatus.idle;
     notifyListeners();
   }

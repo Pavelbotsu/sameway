@@ -62,7 +62,10 @@ class ApiException implements Exception {
   // `friendlyError` in core/error_handling.dart maps it to a user-facing
   // message; the 401 session-expiry hook lives in ApiClient itself.
   final int statusCode;
-  const ApiException(this.message, {this.statusCode = 0});
+  /// Machine-readable reason the backend attaches to some errors, e.g.
+  /// `consent_required`, `account_suspended`, `active_ride`, `wrong_password`.
+  final String? code;
+  const ApiException(this.message, {this.statusCode = 0, this.code});
   @override
   String toString() => message;
 }
@@ -132,17 +135,7 @@ class ApiClient {
           )
           .timeout(_timeoutFor(path));
       if (res.statusCode >= 400) {
-        if (res.statusCode == 401 && h.containsKey('Authorization')) {
-          SessionEvents.instance.fireExpired();
-        }
-        String msg = 'Request failed';
-        try {
-          final parsed = jsonDecode(res.body);
-          if (parsed is Map && parsed['error'] != null) {
-            msg = parsed['error'].toString();
-          }
-        } catch (_) {/* not JSON — keep default */}
-        throw ApiException(msg, statusCode: res.statusCode);
+        throw _error(res, authed: h.containsKey('Authorization'));
       }
       return jsonDecode(res.body);
     } on TimeoutException {
@@ -160,17 +153,7 @@ class ApiClient {
           )
           .timeout(_timeoutFor(path));
       if (res.statusCode >= 400) {
-        String msg = 'Request failed';
-        try {
-          final parsed = jsonDecode(res.body);
-          if (parsed is Map && parsed['error'] != null) {
-            msg = parsed['error'].toString();
-          }
-        } catch (_) {/* not JSON — keep default */}
-        if (res.statusCode == 401 && h.containsKey('Authorization')) {
-          SessionEvents.instance.fireExpired();
-        }
-        throw ApiException(msg, statusCode: res.statusCode);
+        throw _error(res, authed: h.containsKey('Authorization'));
       }
       return jsonDecode(res.body);
     } on TimeoutException {
@@ -215,22 +198,38 @@ class ApiClient {
   }
 
   Map<String, dynamic> _parse(http.Response res, {required bool authed}) {
-    final data = jsonDecode(res.body) as Map<String, dynamic>;
-    if (res.statusCode >= 400) {
-      // Only treat 401 from a request we actually authenticated as a session-
-      // expiry signal. 403 is the backend saying "you can't touch this
-      // specific resource" (e.g. wrong role, not part of this ride) — that
-      // doesn't invalidate the session. 401 on a request without an
-      // Authorization header just means the user is already logged out, and
-      // re-firing the expiry event would loop the SnackBar/navigation.
-      if (res.statusCode == 401 && authed) {
-        SessionEvents.instance.fireExpired();
+    if (res.statusCode >= 400) throw _error(res, authed: authed);
+    return jsonDecode(res.body) as Map<String, dynamic>;
+  }
+
+  /// Builds the ApiException for an error response and raises the
+  /// account-wide signals main.dart reacts to. Only for requests we actually
+  /// authenticated:
+  ///   - 401 → session expired (a 401 without a token just means the user is
+  ///     already logged out; re-firing would loop the navigation);
+  ///   - 403 `consent_required` → current Terms not accepted yet → terms gate;
+  ///   - 403 `account_suspended` → suspended → sign out with an explanation.
+  /// Any other 403 is "not allowed to touch this resource" (wrong role, not
+  /// part of this ride) and doesn't affect the session.
+  ApiException _error(http.Response res, {required bool authed}) {
+    String msg = 'Request failed';
+    String? code;
+    try {
+      final parsed = jsonDecode(res.body);
+      if (parsed is Map) {
+        if (parsed['error'] != null) msg = parsed['error'].toString();
+        code = parsed['code']?.toString();
       }
-      throw ApiException(
-        data['error']?.toString() ?? 'Request failed',
-        statusCode: res.statusCode,
-      );
+    } catch (_) {/* not JSON — keep default */}
+    if (authed) {
+      if (res.statusCode == 401) {
+        SessionEvents.instance.fireExpired();
+      } else if (res.statusCode == 403 && code == 'consent_required') {
+        SessionEvents.instance.fireConsentRequired();
+      } else if (res.statusCode == 403 && code == 'account_suspended') {
+        SessionEvents.instance.fireSuspended();
+      }
     }
-    return data;
+    return ApiException(msg, statusCode: res.statusCode, code: code);
   }
 }

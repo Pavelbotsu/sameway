@@ -3191,6 +3191,15 @@ class AppLocalizations {
         it: 'Note legali e privacy',
       );
 
+  String get accountSuspended => _t(
+        en: 'This account has been suspended. Contact support if you think this is a mistake.',
+        uk: 'Цей акаунт заблоковано. Зверніться до підтримки, якщо вважаєте це помилкою.',
+        es: 'Esta cuenta ha sido suspendida. Contacta con soporte si crees que es un error.',
+        de: 'Dieses Konto wurde gesperrt. Wende dich an den Support, wenn du das für einen Fehler hältst.',
+        fr: "Ce compte a été suspendu. Contacte le support si tu penses qu'il s'agit d'une erreur.",
+        it: "Questo account è stato sospeso. Contatta l'assistenza se pensi che sia un errore.",
+      );
+
   // ─── Account deletion ────────────────────────────────────────────────────
   String get deleteAccount => _t(
         en: 'Delete account',

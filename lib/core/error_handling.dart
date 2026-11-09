@@ -19,9 +19,19 @@ String friendlyError(BuildContext context, Object e) {
   final l = AppLocalizations.of(context);
   if (e is ApiException) {
     if (e.message == 'timeout') return l.errTimeout;
+    switch (e.code) {
+      case 'account_suspended':
+        return l.accountSuspended;
+      case 'consent_required':
+        return l.consentRequiredError;
+      case 'active_ride':
+        return l.deleteAccountActiveRide;
+    }
     switch (e.statusCode) {
+      // Only 401 means the session is gone. A 403 is "not allowed to do THIS"
+      // (wrong role, not your ride) and falls through to the message below —
+      // it used to read "session expired", which was simply wrong.
       case 401:
-      case 403:
         return l.errSessionExpired;
       case 404:
         return l.errNotFound;
