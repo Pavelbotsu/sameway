@@ -100,7 +100,16 @@ class ApiException implements Exception {
   /// Machine-readable reason the backend attaches to some errors, e.g.
   /// `consent_required`, `account_suspended`, `active_ride`, `wrong_password`.
   final String? code;
-  const ApiException(this.message, {this.statusCode = 0, this.code});
+  /// The whole JSON error body, for endpoint-specific fields.
+  final Map<String, dynamic> details;
+  const ApiException(this.message,
+      {this.statusCode = 0, this.code, this.details = const {}});
+
+  /// Pickup code: tries left before it locks (POST /pickup/confirm).
+  int? get attemptsLeft => (details['attempts_left'] as num?)?.toInt();
+
+  /// No-show reported too early: seconds still to wait.
+  int? get waitSeconds => (details['wait_s'] as num?)?.toInt();
   @override
   String toString() => message;
 }
@@ -249,9 +258,11 @@ class ApiClient {
   ApiException _error(http.Response res, {required bool authed}) {
     String msg = 'Request failed';
     String? code;
+    var details = const <String, dynamic>{};
     try {
       final parsed = jsonDecode(res.body);
       if (parsed is Map) {
+        details = Map<String, dynamic>.from(parsed);
         if (parsed['error'] != null) msg = parsed['error'].toString();
         code = parsed['code']?.toString();
       }
@@ -265,6 +276,7 @@ class ApiClient {
         SessionEvents.instance.fireSuspended();
       }
     }
-    return ApiException(msg, statusCode: res.statusCode, code: code);
+    return ApiException(msg,
+        statusCode: res.statusCode, code: code, details: details);
   }
 }

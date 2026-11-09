@@ -217,6 +217,19 @@ class DriverRepository {
     await _api.delete('/driver/ride/$requestId', auth: true);
   }
 
+  /// New pickup code after a lockout (5 wrong tries); returns the code.
+  Future<String> regeneratePickupCode(String requestId) async {
+    final data = await _api.post(
+        '/driver/pickup-code/$requestId/regenerate', {}, auth: true);
+    return data['pickup_code'] as String;
+  }
+
+  /// Passenger never came. Throws ApiException code `no_show_too_early`
+  /// (with waitSeconds) when reported before the wait is over.
+  Future<void> reportNoShow(String requestId) async {
+    await _api.post('/driver/no-show/$requestId', {}, auth: true);
+  }
+
   Future<void> deleteRoute() async {
     await _api.delete('/driver/route', auth: true);
   }

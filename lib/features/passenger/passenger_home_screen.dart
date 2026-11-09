@@ -181,13 +181,33 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
 
       provider.addListener(_onRatingPending);
       provider.addListener(_onCheckInPrompt);
+      _noticeSub = provider.notices.listen(_onNotice);
     });
+  }
+
+  StreamSubscription<PassengerNotice>? _noticeSub;
+
+  void _onNotice(PassengerNotice notice) {
+    if (!mounted) return;
+    final l = AppLocalizations.of(context);
+    final (text, color) = switch (notice) {
+      PassengerNotice.pickupCodeReset => (l.pickupCodeResetNotice, AppColors.teal),
+      PassengerNotice.cancelledNoShow => (l.rideCancelledNoShow, AppColors.error),
+      PassengerNotice.cancelledTimeout => (l.rideCancelledTimeout, AppColors.error),
+    };
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 6),
+    ));
   }
 
   @override
   void dispose() {
     _locationTimer?.cancel();
     _driversTimer?.cancel();
+    _noticeSub?.cancel();
     // The rating listener was never removed. PassengerProvider is root-scoped
     // and outlives this screen, so every navigation away and back stacked
     // another listener holding a dead BuildContext — the rating sheet fired
@@ -2632,7 +2652,7 @@ class _AcceptedCard extends StatefulWidget {
   // yet. When inRide is true, the card switches to the "on board" variant
   // and these are ignored.
   final bool inRide;
-  final Future<bool> Function(String code)? onConfirmPickup;
+  final Future<PickupAttempt> Function(String code)? onConfirmPickup;
   final VoidCallback? onCancel;
   const _AcceptedCard({
     this.requestId,
@@ -4732,7 +4752,7 @@ class _PlaceSuggestion {
 // the code — they have to ask the driver verbally (asymmetric handshake,
 // see D3 in the pickup-code plan).
 class _PickupCodeBlock extends StatelessWidget {
-  final Future<bool> Function(String code) onConfirm;
+  final Future<PickupAttempt> Function(String code) onConfirm;
   const _PickupCodeBlock({required this.onConfirm});
 
   Future<void> _showEntryDialog(BuildContext context) async {
@@ -4786,14 +4806,25 @@ class _PickupCodeBlock extends StatelessWidget {
       ),
     );
     if (entered == null) return;
-    final ok = await onConfirm(entered);
-    if (!ok && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context).invalidCode),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-      ));
-    }
+    final result = await onConfirm(entered);
+    if (result.ok || !context.mounted) return;
+    final l2 = AppLocalizations.of(context);
+    // Say exactly what happened: how many tries are left, that the code is
+    // locked (the driver can issue a new one), or the actual error — it
+    // used to be "invalid code" for every failure, lockout included.
+    final message = result.locked
+        ? l2.pickupLocked
+        : result.attemptsLeft != null
+            ? l2.wrongCodeAttemptsLeft(result.attemptsLeft!)
+            : result.error != null
+                ? friendlyError(context, result.error!)
+                : l2.invalidCode;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: AppColors.error,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: result.locked ? 8 : 4),
+    ));
   }
 
   @override

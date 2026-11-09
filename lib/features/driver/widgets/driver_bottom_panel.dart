@@ -4,8 +4,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/api_client.dart' show ApiException;
 import '../../../core/app_colors.dart';
 import '../../../core/app_localizations.dart';
+import '../../../core/error_handling.dart';
 import '../../../core/feature_flags.dart';
 import '../../../core/geo.dart';
 import '../../../core/widgets/animated_map_marker.dart';
@@ -681,7 +683,8 @@ class _RequestTile extends StatelessWidget {
             if (request.status == 'accepted' &&
                 request.pickupCode != null) ...[
               const SizedBox(height: 10),
-              _DriverPickupCodeBlock(code: request.pickupCode!),
+              _DriverPickupCodeBlock(
+                  requestId: request.id, code: request.pickupCode!),
             ],
             const SizedBox(height: 12),
             _AcceptedRideMap(
@@ -1348,8 +1351,69 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
 // has an input field — that's the whole point of the asymmetric handshake
 // (proves the parties physically met). See D3 in the pickup-handshake plan.
 class _DriverPickupCodeBlock extends StatelessWidget {
+  final String requestId;
   final String code;
-  const _DriverPickupCodeBlock({required this.code});
+  const _DriverPickupCodeBlock({required this.requestId, required this.code});
+
+  void _snack(BuildContext context, String text, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  /// Way out of a lockout: a fresh code, attempts reset on the server.
+  Future<void> _newCode(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    try {
+      await context.read<DriverProvider>().regeneratePickupCode(requestId);
+      if (context.mounted) _snack(context, l.newCodeIssued, AppColors.success);
+    } catch (e) {
+      if (context.mounted) _snack(context, friendlyError(context, e), AppColors.error);
+    }
+  }
+
+  Future<void> _noShow(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    final sure = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.surface,
+        title: Text(l.passengerNoShow,
+            style: const TextStyle(color: AppColors.textPrimary)),
+        content: Text(l.noShowConfirmBody,
+            style: const TextStyle(color: AppColors.textSecondary)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(l.cancel,
+                style: const TextStyle(color: AppColors.textSecondary)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(l.passengerNoShow,
+                style: const TextStyle(color: AppColors.error)),
+          ),
+        ],
+      ),
+    );
+    if (sure != true || !context.mounted) return;
+    try {
+      await context.read<DriverProvider>().reportNoShow(requestId);
+      if (context.mounted) _snack(context, l.noShowReported, AppColors.surface);
+    } on ApiException catch (e) {
+      if (!context.mounted) return;
+      if (e.code == 'no_show_too_early') {
+        final minutes = ((e.waitSeconds ?? 60) / 60).ceil();
+        _snack(context, l.noShowTooEarly(minutes), AppColors.surface);
+      } else {
+        _snack(context, friendlyError(context, e), AppColors.error);
+      }
+    } catch (e) {
+      if (context.mounted) _snack(context, friendlyError(context, e), AppColors.error);
+    }
+  }
 
   Future<void> _copy(BuildContext context) async {
     final l = AppLocalizations.of(context);
@@ -1365,6 +1429,10 @@ class _DriverPickupCodeBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final locked = context
+        .watch<DriverProvider>()
+        .lockedPickupRequestIds
+        .contains(requestId);
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
@@ -1410,6 +1478,37 @@ class _DriverPickupCodeBlock extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              // Highlighted once the passenger has locked the code.
+              locked
+                  ? FilledButton.icon(
+                      onPressed: () => _newCode(context),
+                      icon: const Icon(Icons.refresh_rounded, size: 18),
+                      label: Text(l.newPickupCode),
+                      style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.teal,
+                          foregroundColor: Colors.black),
+                    )
+                  : TextButton.icon(
+                      onPressed: () => _newCode(context),
+                      icon: const Icon(Icons.refresh_rounded,
+                          size: 18, color: AppColors.teal),
+                      label: Text(l.newPickupCode,
+                          style: const TextStyle(color: AppColors.teal)),
+                    ),
+              TextButton.icon(
+                onPressed: () => _noShow(context),
+                icon: const Icon(Icons.person_off_outlined,
+                    size: 18, color: AppColors.textSecondary),
+                label: Text(l.passengerNoShow,
+                    style: const TextStyle(color: AppColors.textSecondary)),
               ),
             ],
           ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
 import '../../core/analytics.dart';
+import '../../core/api_client.dart' show ApiException;
 import '../../core/haptics.dart';
 import '../../core/ride_check_in.dart';
 import '../../core/websocket_client.dart';
@@ -145,6 +146,30 @@ String? _carSummary(String? color, String? make, String? model, String? plate) {
 }
 
 enum PassengerStatus { looking, offered, accepted, inRide, declined }
+
+/// One-off things the passenger should be told about (shown as snackbars by
+/// the home screen). The ride state itself is already in [PassengerStatus].
+enum PassengerNotice {
+  /// The driver issued a new pickup code after a lockout.
+  pickupCodeReset,
+  /// The driver reported that the passenger didn't show up.
+  cancelledNoShow,
+  /// The accepted ride expired without a pickup.
+  cancelledTimeout,
+}
+
+/// Outcome of submitting a pickup code.
+class PickupAttempt {
+  final bool ok;
+  /// Wrong code; this many tries remain before the code locks.
+  final int? attemptsLeft;
+  /// Too many wrong codes — the driver must issue a new one.
+  final bool locked;
+  /// Any other failure (network, server), for friendlyError.
+  final Object? error;
+  const PickupAttempt._({this.ok = false, this.attemptsLeft, this.locked = false, this.error});
+  static const success = PickupAttempt._(ok: true);
+}
 
 /// The passenger-facing match lifecycle (Round 2 §6):
 ///   searching → candidatesAvailable → offerReceived → requested → matched →
@@ -398,11 +423,21 @@ class PassengerProvider extends ChangeNotifier {
       _resetCheckIn();
       state = PassengerStatus.looking;
       notifyListeners();
+    } else if (type == 'pickup_code_reset') {
+      if (!_disposed) _notices.add(PassengerNotice.pickupCodeReset);
     } else if (type == 'ride_cancelled') {
       // The backend tags why: 'driver_passed' means the ETA-window logic
       // expired the match because the driver drove past the pickup.
       if (p['cancelled_by'] == 'driver_passed') {
         Analytics.logEvent('ride_expired_passed', {'role': 'passenger'});
+      }
+      final wasAccepted = p['request_id'] == acceptedRequestId;
+      if (!_disposed && p['cancelled_by'] == 'no_show') {
+        _notices.add(PassengerNotice.cancelledNoShow);
+      } else if (!_disposed && wasAccepted && p['cancelled_by'] == 'timeout') {
+        // Offers also time out silently; only an accepted ride is worth
+        // telling the passenger about.
+        _notices.add(PassengerNotice.cancelledTimeout);
       }
       acceptedRequestId = null;
       acceptedDriverId = null;
@@ -521,23 +556,31 @@ class PassengerProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> confirmPickup(String code) async {
+  Future<PickupAttempt> confirmPickup(String code) async {
     final reqId = acceptedRequestId;
-    if (reqId == null) return false;
+    if (reqId == null) return const PickupAttempt._(error: 'no accepted ride');
     try {
       await _repo.confirmPickup(requestId: reqId, code: code);
       // Optimistic local flip — the WS event will land too and is a no-op.
       state = PassengerStatus.inRide;
       notifyListeners();
       Haptics.confirm();
-      return true;
-    } catch (e) {
-      error = e.toString();
-      notifyListeners();
+      return PickupAttempt.success;
+    } on ApiException catch (e) {
       Haptics.reject();
-      return false;
+      if (e.code == 'pickup_locked') return const PickupAttempt._(locked: true);
+      if (e.code == 'wrong_code') {
+        return PickupAttempt._(attemptsLeft: e.attemptsLeft);
+      }
+      return PickupAttempt._(error: e);
+    } catch (e) {
+      Haptics.reject();
+      return PickupAttempt._(error: e);
     }
   }
+
+  final _notices = StreamController<PassengerNotice>.broadcast();
+  Stream<PassengerNotice> get notices => _notices.stream;
 
   /// True when several consecutive location pings have failed. A passenger
   /// whose location never reaches the server is invisible to the corridor
@@ -767,6 +810,7 @@ class PassengerProvider extends ChangeNotifier {
     _disposed = true;
     detachWS();
     _ratingWaitTimeout?.cancel();
+    _notices.close();
     super.dispose();
   }
 }

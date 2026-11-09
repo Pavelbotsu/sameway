@@ -72,6 +72,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   bool _checkInSheetOpen = false;
   StreamSubscription<PassengerMatchInfo>? _incomingSub;
   StreamSubscription<void>? _bgLocationSub;
+  StreamSubscription<String>? _pickupLockedSub;
   bool _hasFitPickupCamera = false;
   // True while the driver is picking their destination by panning the map.
   bool _pickingDest = false;
@@ -188,6 +189,15 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             backgroundColor: AppColors.teal,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 6),
+          ));
+        });
+        _pickupLockedSub = provider.pickupLocked.listen((_) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).pickupLockedDriver),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 8),
           ));
         });
         _bgLocationSub = provider.backgroundLocationFailed.listen((_) {
@@ -593,6 +603,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     _provider.detachWS();
     _incomingSub?.cancel();
     _bgLocationSub?.cancel();
+    _pickupLockedSub?.cancel();
     _locationTimer?.cancel();
     _sheetCtrl.dispose();
     super.dispose();

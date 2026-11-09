@@ -222,6 +222,11 @@ class DriverProvider extends ChangeNotifier {
   final _backgroundLocationFailed = StreamController<void>.broadcast();
   Stream<void> get backgroundLocationFailed => _backgroundLocationFailed.stream;
 
+  // Emits a request id when its passenger has locked the pickup code, so the
+  // home screen can tell the driver to issue a new one.
+  final _pickupLocked = StreamController<String>.broadcast();
+  Stream<String> get pickupLocked => _pickupLocked.stream;
+
   StreamSubscription? _wsSub;
   StreamSubscription? _wsStateSub;
 
@@ -357,6 +362,13 @@ class DriverProvider extends ChangeNotifier {
       totalNotified =
           (p['total_notified'] as num?)?.toInt() ?? totalNotified;
       notifyListeners();
+    } else if (type == 'pickup_locked') {
+      final reqId = p['request_id'] as String?;
+      if (reqId != null) {
+        lockedPickupRequestIds.add(reqId);
+        if (!_disposed) _pickupLocked.add(reqId);
+        notifyListeners();
+      }
     } else if (type == 'chat_message') {
       unreadMessages++;
       notifyListeners();
@@ -471,6 +483,35 @@ class DriverProvider extends ChangeNotifier {
   void clearUnread() {
     unreadMessages = 0;
     notifyListeners();
+  }
+
+  /// Requests whose pickup code the passenger has locked (5 wrong tries).
+  /// The code block highlights "New code" for these.
+  final Set<String> lockedPickupRequestIds = {};
+
+  /// Issues a new pickup code after a lockout and refreshes the request list
+  /// so the new code shows. Throws on failure — the caller reports it.
+  Future<void> regeneratePickupCode(String requestId) async {
+    await _repo.regeneratePickupCode(requestId);
+    lockedPickupRequestIds.remove(requestId);
+    await loadRequests();
+  }
+
+  /// Cancels an accepted ride because the passenger never came. Throws
+  /// ApiException `no_show_too_early` (with waitSeconds) when it's too soon.
+  Future<void> reportNoShow(String requestId) async {
+    await _repo.reportNoShow(requestId);
+    if (acceptedRequestId == requestId) {
+      acceptedRequestId = null;
+      acceptedPassengerName = null;
+      acceptedPassengerAvgRating = null;
+      acceptedPassengerRatingCount = null;
+      _clearPickupRoute();
+    }
+    passengerInfo.remove(requestId);
+    passengerLocations.remove(requestId);
+    lockedPickupRequestIds.remove(requestId);
+    await loadRequests();
   }
 
   Future<void> cancelRide(String requestId) async {
@@ -683,6 +724,7 @@ class DriverProvider extends ChangeNotifier {
     _ratingWaitTimeout?.cancel();
     _incomingRequests.close();
     _backgroundLocationFailed.close();
+    _pickupLocked.close();
     super.dispose();
   }
 }

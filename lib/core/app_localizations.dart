@@ -3195,6 +3195,104 @@ class AppLocalizations {
         it: 'Note legali e privacy',
       );
 
+  // ─── Pickup code recovery / no-show ──────────────────────────────────────
+  String wrongCodeAttemptsLeft(int n) => _t(
+        en: 'Wrong code — $n ${n == 1 ? 'try' : 'tries'} left',
+        uk: 'Неправильний код — залишилось спроб: $n',
+        es: 'Código incorrecto — te quedan $n intentos',
+        de: 'Falscher Code — noch $n Versuche',
+        fr: 'Code incorrect — encore $n essais',
+        it: 'Codice errato — restano $n tentativi',
+      );
+  String get pickupLocked => _t(
+        en: 'Too many wrong codes. Ask the driver to tap "New code".',
+        uk: 'Забагато неправильних кодів. Попросіть водія натиснути «Новий код».',
+        es: 'Demasiados códigos incorrectos. Pide al conductor que pulse «Nuevo código».',
+        de: 'Zu viele falsche Codes. Bitte den Fahrer, auf „Neuer Code" zu tippen.',
+        fr: 'Trop de codes incorrects. Demande au conducteur d\'appuyer sur « Nouveau code ».',
+        it: 'Troppi codici errati. Chiedi al conducente di toccare «Nuovo codice».',
+      );
+  String get pickupCodeResetNotice => _t(
+        en: 'The driver made a new pickup code — ask them for it.',
+        uk: 'Водій створив новий код посадки — запитайте його.',
+        es: 'El conductor ha creado un nuevo código — pídeselo.',
+        de: 'Der Fahrer hat einen neuen Code erstellt — frag ihn danach.',
+        fr: 'Le conducteur a créé un nouveau code — demande-le-lui.',
+        it: 'Il conducente ha creato un nuovo codice — chiediglielo.',
+      );
+  String get rideCancelledNoShow => _t(
+        en: "The driver couldn't find you at the pickup and cancelled the ride.",
+        uk: 'Водій не знайшов вас на місці посадки та скасував поїздку.',
+        es: 'El conductor no te encontró en el punto de recogida y canceló el viaje.',
+        de: 'Der Fahrer hat dich am Treffpunkt nicht gefunden und die Fahrt storniert.',
+        fr: "Le conducteur ne t'a pas trouvé au point de rendez-vous et a annulé le trajet.",
+        it: 'Il conducente non ti ha trovato al punto di incontro e ha annullato il viaggio.',
+      );
+  String get rideCancelledTimeout => _t(
+        en: 'Your ride expired before pickup and was cancelled.',
+        uk: 'Час поїздки минув до посадки, її скасовано.',
+        es: 'Tu viaje caducó antes de la recogida y se canceló.',
+        de: 'Deine Fahrt ist vor dem Einsteigen abgelaufen und wurde storniert.',
+        fr: 'Ton trajet a expiré avant la prise en charge et a été annulé.',
+        it: 'Il tuo viaggio è scaduto prima della salita ed è stato annullato.',
+      );
+  String get newPickupCode => _t(
+        en: 'New code',
+        uk: 'Новий код',
+        es: 'Nuevo código',
+        de: 'Neuer Code',
+        fr: 'Nouveau code',
+        it: 'Nuovo codice',
+      );
+  String get pickupLockedDriver => _t(
+        en: 'The passenger entered a wrong code 5 times. Tap "New code" and tell them the new one.',
+        uk: 'Пасажир 5 разів ввів неправильний код. Натисніть «Новий код» і скажіть йому новий.',
+        es: 'El pasajero introdujo un código incorrecto 5 veces. Pulsa «Nuevo código» y díselo.',
+        de: 'Der Fahrgast hat 5-mal einen falschen Code eingegeben. Tippe auf „Neuer Code" und sag ihm den neuen.',
+        fr: 'Le passager a saisi un mauvais code 5 fois. Appuie sur « Nouveau code » et donne-lui le nouveau.',
+        it: 'Il passeggero ha inserito un codice errato 5 volte. Tocca «Nuovo codice» e diglielo.',
+      );
+  String get passengerNoShow => _t(
+        en: "Passenger didn't show",
+        uk: 'Пасажир не прийшов',
+        es: 'El pasajero no se presentó',
+        de: 'Fahrgast nicht erschienen',
+        fr: "Passager absent",
+        it: 'Passeggero non presentato',
+      );
+  String get noShowConfirmBody => _t(
+        en: "Cancel this ride because the passenger didn't show up? The seat becomes free again.",
+        uk: 'Скасувати поїздку, бо пасажир не прийшов? Місце знову стане вільним.',
+        es: '¿Cancelar este viaje porque el pasajero no se presentó? El asiento quedará libre.',
+        de: 'Diese Fahrt stornieren, weil der Fahrgast nicht erschienen ist? Der Platz wird wieder frei.',
+        fr: "Annuler ce trajet car le passager ne s'est pas présenté ? La place redevient libre.",
+        it: 'Annullare il viaggio perché il passeggero non si è presentato? Il posto torna libero.',
+      );
+  String noShowTooEarly(int minutes) => _t(
+        en: 'You can report a no-show in $minutes min.',
+        uk: 'Повідомити про неявку можна через $minutes хв.',
+        es: 'Podrás informar de la ausencia en $minutes min.',
+        de: 'Du kannst das Nichterscheinen in $minutes Min. melden.',
+        fr: "Tu pourras signaler l'absence dans $minutes min.",
+        it: "Potrai segnalare l'assenza tra $minutes min.",
+      );
+  String get noShowReported => _t(
+        en: "Ride cancelled — the passenger didn't show.",
+        uk: 'Поїздку скасовано — пасажир не прийшов.',
+        es: 'Viaje cancelado: el pasajero no se presentó.',
+        de: 'Fahrt storniert — der Fahrgast ist nicht erschienen.',
+        fr: "Trajet annulé — le passager ne s'est pas présenté.",
+        it: 'Viaggio annullato: il passeggero non si è presentato.',
+      );
+  String get newCodeIssued => _t(
+        en: 'New code ready — tell it to the passenger.',
+        uk: 'Новий код готовий — скажіть його пасажиру.',
+        es: 'Nuevo código listo: díselo al pasajero.',
+        de: 'Neuer Code bereit — sag ihn dem Fahrgast.',
+        fr: 'Nouveau code prêt — donne-le au passager.',
+        it: 'Nuovo codice pronto: dillo al passeggero.',
+      );
+
   String get accountSuspended => _t(
         en: 'This account has been suspended. Contact support if you think this is a mistake.',
         uk: 'Цей акаунт заблоковано. Зверніться до підтримки, якщо вважаєте це помилкою.',
