@@ -12,6 +12,7 @@ const _languages = <_LanguageOption>[
   _LanguageOption(code: 'es', label: 'Español', flag: '🇪🇸'),
   _LanguageOption(code: 'fr', label: 'Français', flag: '🇫🇷'),
   _LanguageOption(code: 'it', label: 'Italiano', flag: '🇮🇹'),
+  _LanguageOption(code: 'pl', label: 'Polski', flag: '🇵🇱'),
   _LanguageOption(code: 'uk', label: 'Українська', flag: '🇺🇦'),
 ];
 
@@ -94,9 +95,9 @@ class LanguageSheet extends StatelessWidget {
                       flag: lang.flag,
                       selected: currentCode == lang.code,
                       onTap: () {
-                        context
-                            .read<LanguageProvider>()
-                            .setLocale(Locale(lang.code));
+                        context.read<LanguageProvider>().setLocale(
+                          Locale(lang.code),
+                        );
                         Navigator.pop(context);
                       },
                     ),
@@ -154,15 +155,17 @@ class _LangTile extends StatelessWidget {
                 style: TextStyle(
                   color: selected ? Colors.white : AppColors.textSecondary,
                   fontSize: 15,
-                  fontWeight:
-                      selected ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             if (selected)
-              const Icon(Icons.check_rounded,
-                  color: AppColors.primary, size: 20),
+              const Icon(
+                Icons.check_rounded,
+                color: AppColors.primary,
+                size: 20,
+              ),
           ],
         ),
       ),

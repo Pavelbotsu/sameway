@@ -12,6 +12,8 @@ void main() {
         const Locale('uk'));
     expect(LanguageProvider(deviceLocale: const Locale('de', 'AT')).locale,
         const Locale('de'));
+    expect(LanguageProvider(deviceLocale: const Locale('pl', 'PL')).locale,
+        const Locale('pl'));
   });
 
   test('falls back to English for unsupported device languages', () {
