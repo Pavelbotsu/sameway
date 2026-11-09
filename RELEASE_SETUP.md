@@ -81,13 +81,26 @@ Rotation is the fix. Purging the keys from git history is cleanup — see the
 flutter run
 
 # Physical phone / testers: the ngrok tunnel. Release builds default to it
-# until there is a domain, so the define is optional.
+# until there is a domain, so the define is optional. Release builds need
+# android/key.properties; without it they fail on purpose. For a local test
+# build only, -PallowDebugSigning=true signs with the debug key (never
+# distribute that APK).
 flutter run --dart-define=API_HOST=<your-tunnel>.ngrok-free.dev
 flutter build apk --release
+flutter build apk --release -PallowDebugSigning=true   # local test only
 
 # STORE SUBMISSION — STORE_BUILD makes the app refuse to start (red
 # "Misconfigured build" screen) if API_HOST is ngrok, local or plain http.
-flutter build appbundle --release   --dart-define=STORE_BUILD=true   --dart-define=API_HOST=<production host>
+# --obfuscate needs --split-debug-info; keep build/symbols for every release
+# you ship, it is the only way to read Dart stack traces from that build.
+flutter build appbundle --release \
+  --dart-define=STORE_BUILD=true --dart-define=API_HOST=<production host> \
+  --obfuscate --split-debug-info=build/symbols/$(git rev-parse --short HEAD)
+
+# Upload the Dart symbols to Crashlytics (Firebase CLI, logged in). The app ID
+# is mobilesdk_app_id in android/app/google-services.json. The R8 mapping
+# file is uploaded by the Crashlytics Gradle plugin during the build.
+firebase crashlytics:symbols:upload --app=<FIREBASE_ANDROID_APP_ID> build/symbols/<commit>
 ```
 
 On-emulator integration tests (local backend must be running):
