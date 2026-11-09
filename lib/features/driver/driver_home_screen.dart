@@ -19,6 +19,8 @@ import '../../core/haptics.dart';
 import '../../core/map_centering.dart';
 import '../../core/wkt.dart';
 import '../../core/map_style_provider.dart';
+import '../../core/place_search.dart';
+import '../../core/widgets/map_attribution.dart';
 import '../../core/matching_preference_provider.dart';
 import '../../core/widgets/ai_matching_toggle_tile.dart';
 import '../../core/widgets/bug_report_sheet.dart';
@@ -689,7 +691,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   Consumer<MapStyleProvider>(
                     builder: (_, mapStyle, __) => TileLayer(
                       urlTemplate: mapStyle.urlTemplate,
-                      userAgentPackageName: 'com.example.sameway',
+                      userAgentPackageName: kMapUserAgentPackage,
                       tileBuilder: mapStyle.tileBuilder,
                     ),
                   ),
@@ -756,6 +758,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           ),
                       ],
                     ),
+                  // Licence credit for the current tile style (always visible).
+                  Consumer<MapStyleProvider>(
+                    builder: (_, mapStyle, __) =>
+                        MapAttribution(text: mapStyle.attribution),
+                  ),
                 ],
               );
             },
@@ -1126,6 +1133,7 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
   List<_PlaceSuggestion> _suggestions = [];
   bool _loadingSuggestions = false;
   Timer? _debounce;
+  final _placeSearch = PlaceSearch();
   LatLng? _selectedLatLng;
 
   @override
@@ -1160,32 +1168,18 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
 
   Future<void> _fetchSuggestions(String query) async {
     setState(() => _loadingSuggestions = true);
-    try {
-      final origin = widget.originPos;
-      final bbox = origin != null
-          ? '&viewbox=${origin.longitude - 0.5},${origin.latitude - 0.5}'
-            ',${origin.longitude + 0.5},${origin.latitude + 0.5}&bounded=1'
-          : '';
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&addressdetails=0$bbox',
-      );
-      final resp = await http.get(
-        uri,
-        headers: {'Accept-Language': 'en', 'User-Agent': 'sameway-app'},
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        setState(() => _suggestions = list
-            .map((e) => _PlaceSuggestion(
-                  name: e['display_name'] as String,
-                  lat: double.parse(e['lat'] as String),
-                  lng: double.parse(e['lon'] as String),
-                ))
-            .toList());
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _loadingSuggestions = false);
+    final found = await _placeSearch.search(
+      query,
+      near: widget.originPos,
+      languageCode: Localizations.localeOf(context).languageCode,
+    );
+    if (found == null || !mounted) return; // superseded by a newer query
+    setState(() {
+      _suggestions = found
+          .map((s) => _PlaceSuggestion(name: s.name, lat: s.lat, lng: s.lng))
+          .toList();
+      _loadingSuggestions = false;
+    });
   }
 
   void _selectSuggestion(_PlaceSuggestion s) {

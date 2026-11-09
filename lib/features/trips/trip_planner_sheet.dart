@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/place_search.dart';
 import '../../core/token_storage.dart';
 import '../../core/validators/validators.dart';
 
@@ -36,6 +37,8 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
   bool _loadingDest = false;
   Timer? _debounceOrigin;
   Timer? _debounceDest;
+  final _originSearch = PlaceSearch();
+  final _destSearch = PlaceSearch();
 
   double _corridor = 2.0;
   int _seats = 2;
@@ -79,37 +82,26 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
       setState(() => _loadingDest = true);
     }
 
-    try {
-      final origin = widget.currentPos;
-      final bbox = origin != null
-          ? '&viewbox=${origin.longitude - 0.5},${origin.latitude - 0.5}'
-            ',${origin.longitude + 0.5},${origin.latitude + 0.5}&bounded=0'
-          : '';
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&addressdetails=0$bbox',
-      );
-      final resp = await http.get(
-          uri, headers: {'Accept-Language': 'en', 'User-Agent': 'sameway-app'});
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        final sug = list
-            .map((e) => _Suggestion(
-                  name: e['display_name'] as String,
-                  lat: double.parse(e['lat'] as String),
-                  lng: double.parse(e['lon'] as String),
-                ))
-            .toList();
-        setState(() => isOrigin
-            ? _originSuggestions = sug
-            : _destSuggestions = sug);
+    // Separate searchers per field, so typing in one doesn't cancel the other.
+    final found = await (isOrigin ? _originSearch : _destSearch).search(
+      query,
+      near: widget.currentPos,
+      languageCode: Localizations.localeOf(context).languageCode,
+      bounded: false,
+    );
+    if (found == null || !mounted) return; // superseded by a newer query
+    final sug = found
+        .map((s) => _Suggestion(name: s.name, lat: s.lat, lng: s.lng))
+        .toList();
+    setState(() {
+      if (isOrigin) {
+        _originSuggestions = sug;
+        _loadingOrigin = false;
+      } else {
+        _destSuggestions = sug;
+        _loadingDest = false;
       }
-    } catch (_) {}
-    if (mounted) {
-      setState(() => isOrigin
-          ? _loadingOrigin = false
-          : _loadingDest = false);
-    }
+    });
   }
 
   Future<void> _submit() async {

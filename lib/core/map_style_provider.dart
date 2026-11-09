@@ -9,6 +9,12 @@ enum MapStyle { osm, satellite, dark }
 /// When empty, the dark style falls back to filtered OSM tiles.
 const kStadiaApiKey = String.fromEnvironment('STADIA_API_KEY');
 
+/// Identifies the app to tile servers. The OSM tile policy blocks requests
+/// without a distinct app User-Agent; must be the real application id.
+const kMapUserAgentPackage = 'com.sameway.app';
+
+const kOsmAttribution = '© OpenStreetMap contributors';
+
 class MapStyleProvider extends ChangeNotifier {
   MapStyle _style = MapStyle.osm;
   MapStyle get style => _style;
@@ -44,6 +50,22 @@ class MapStyleProvider extends ChangeNotifier {
         return kStadiaApiKey.isEmpty
             ? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
             : 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png?api_key=$kStadiaApiKey';
+    }
+  }
+
+  /// Licence attribution for the tiles currently shown. The providers'
+  /// terms require it to be visible on the map (OSM: not behind a toggle) —
+  /// see [MapAttribution].
+  String get attribution {
+    switch (_style) {
+      case MapStyle.osm:
+        return kOsmAttribution;
+      case MapStyle.satellite:
+        return 'Tiles © Esri — Esri, Maxar, Earthstar Geographics';
+      case MapStyle.dark:
+        return kStadiaApiKey.isEmpty
+            ? kOsmAttribution
+            : '© Stadia Maps © OpenMapTiles $kOsmAttribution';
     }
   }
 

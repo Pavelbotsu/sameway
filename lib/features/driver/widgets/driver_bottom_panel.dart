@@ -11,7 +11,9 @@ import '../../../core/error_handling.dart';
 import '../../../core/feature_flags.dart';
 import '../../../core/geo.dart';
 import '../../../core/widgets/animated_map_marker.dart';
+import '../../../core/map_style_provider.dart';
 import '../../../core/widgets/m3_expressive/m3_expressive.dart';
+import '../../../core/widgets/map_attribution.dart';
 import '../../../core/widgets/sheet_grab_handle.dart';
 import '../../../core/widgets/sos_button.dart';
 import '../../../core/widgets/user_avatar.dart';
@@ -1073,7 +1075,7 @@ class _PreAcceptRouteMap extends StatelessWidget {
           children: [
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.sameway.app',
+              userAgentPackageName: kMapUserAgentPackage,
             ),
             if (routePts.length >= 2)
               PolylineLayer(polylines: [
@@ -1104,6 +1106,7 @@ class _PreAcceptRouteMap extends StatelessWidget {
                   ),
                 ),
             ]),
+            const MapAttribution(),
           ],
         ),
       ),
@@ -1275,7 +1278,7 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
                 TileLayer(
                   urlTemplate:
                       'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.sameway.app',
+                  userAgentPackageName: kMapUserAgentPackage,
                 ),
                 PolylineLayer(polylines: _buildPolylines(a, b)),
                 AnimatedMarkerPosition(
@@ -1326,6 +1329,7 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
                       ),
                   ]),
                 ),
+                const MapAttribution(),
               ],
             ),
           ),

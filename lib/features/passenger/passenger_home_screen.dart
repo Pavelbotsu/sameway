@@ -18,6 +18,8 @@ import '../../core/haptics.dart';
 import '../../core/app_localizations.dart';
 import '../../core/map_centering.dart';
 import '../../core/map_style_provider.dart';
+import '../../core/place_search.dart';
+import '../../core/widgets/map_attribution.dart';
 import '../../core/matching_preference_provider.dart';
 import '../../core/token_storage.dart';
 import 'package:geocoding/geocoding.dart';
@@ -774,7 +776,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                 Consumer<MapStyleProvider>(
                   builder: (_, mapStyle, __) => TileLayer(
                     urlTemplate: mapStyle.urlTemplate,
-                    userAgentPackageName: 'com.example.sameway',
+                    userAgentPackageName: kMapUserAgentPackage,
                     tileBuilder: mapStyle.tileBuilder,
                   ),
                 ),
@@ -935,6 +937,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
                       ),
                     ],
                   ),
+                // Licence credit for the current tile style (always visible).
+                Consumer<MapStyleProvider>(
+                  builder: (_, mapStyle, __) =>
+                      MapAttribution(text: mapStyle.attribution),
+                ),
               ],
             ),
 
@@ -1614,6 +1621,7 @@ class _LookingCardState extends State<_LookingCard> {
   List<_PlaceSuggestion> _suggestions = [];
   bool _loading = false;
   Timer? _debounce;
+  final _placeSearch = PlaceSearch();
 
   @override
   void initState() {
@@ -1676,32 +1684,18 @@ class _LookingCardState extends State<_LookingCard> {
 
   Future<void> _fetch(String query) async {
     setState(() => _loading = true);
-    try {
-      final origin = widget.currentPos;
-      final bbox = origin != null
-          ? '&viewbox=${origin.longitude - 0.5},${origin.latitude - 0.5}'
-            ',${origin.longitude + 0.5},${origin.latitude + 0.5}&bounded=1'
-          : '';
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&addressdetails=0$bbox',
-      );
-      final resp = await http.get(
-        uri,
-        headers: {'Accept-Language': 'en', 'User-Agent': 'sameway-app'},
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        setState(() => _suggestions = list
-            .map((e) => _PlaceSuggestion(
-                  name: e['display_name'] as String,
-                  lat: double.parse(e['lat'] as String),
-                  lng: double.parse(e['lon'] as String),
-                ))
-            .toList());
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _loading = false);
+    final found = await _placeSearch.search(
+      query,
+      near: widget.currentPos,
+      languageCode: Localizations.localeOf(context).languageCode,
+    );
+    if (found == null || !mounted) return; // superseded by a newer query
+    setState(() {
+      _suggestions = found
+          .map((s) => _PlaceSuggestion(name: s.name, lat: s.lat, lng: s.lng))
+          .toList();
+      _loading = false;
+    });
   }
 
   void _select(_PlaceSuggestion s) {
@@ -2996,7 +2990,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
                   TileLayer(
                     urlTemplate:
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'com.sameway.app',
+                    userAgentPackageName: kMapUserAgentPackage,
                   ),
                   PolylineLayer(
                     polylines: _buildAcceptedPolylines(
@@ -3065,6 +3059,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
                       ],
                     ),
                   ),
+                  const MapAttribution(),
                 ],
               ),
             ),
