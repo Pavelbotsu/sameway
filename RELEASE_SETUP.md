@@ -76,9 +76,23 @@ Rotation is the fix. Purging the keys from git history is cleanup — see the
 ## Build commands
 
 ```
-# Dev, against a local tunnel
-flutter run --dart-define=API_HOST=<your-tunnel>.ngrok-free.dev
+# Emulator against the local backend (sameway_backend/scripts/dev.sh, :4040).
+# Debug and profile builds use http://10.0.2.2:4040 by default.
+flutter run
 
-# Release — API_HOST now defaults to production, so the define is optional
+# Physical phone / testers: the ngrok tunnel. Release builds default to it
+# until there is a domain, so the define is optional.
+flutter run --dart-define=API_HOST=<your-tunnel>.ngrok-free.dev
 flutter build apk --release
+
+# STORE SUBMISSION — STORE_BUILD makes the app refuse to start (red
+# "Misconfigured build" screen) if API_HOST is ngrok, local or plain http.
+flutter build appbundle --release   --dart-define=STORE_BUILD=true   --dart-define=API_HOST=<production host>
+```
+
+On-emulator integration tests (local backend must be running):
+
+```
+flutter build apk --profile --target-platform android-x64 -t integration_test/backend_smoke_test.dart
+flutter drive --profile --driver test_driver/integration_test.dart   --target integration_test/backend_smoke_test.dart   --use-application-binary build/app/outputs/flutter-apk/app-profile.apk
 ```

@@ -20,6 +20,7 @@ import 'core/remote_config_service.dart';
 import 'core/session.dart';
 import 'core/token_storage.dart';
 import 'core/websocket_client.dart';
+import 'core/widgets/misconfigured_build_app.dart';
 import 'core/widgets/branded_snack_bar.dart';
 import 'features/auth/auth_provider.dart';
 import 'features/auth/auth_repository.dart';
@@ -34,6 +35,13 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // A store build aimed at a test backend must not run at all — before
+  // Firebase or anything else touches the network.
+  final buildProblem = storeBuildProblem();
+  if (buildProblem != null) {
+    runApp(MisconfiguredBuildApp(problem: buildProblem));
+    return;
+  }
   await Firebase.initializeApp();
   // Analytics / Crashlytics / Performance only with the user's consent. The
   // manifest keeps them off until this runs; undecided counts as "no", and

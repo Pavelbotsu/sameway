@@ -27,6 +27,31 @@ const kApiHost = _definedHost != ''
 const kApiInsecure =
     bool.fromEnvironment('API_INSECURE') || kApiHost == kLocalDevHost;
 const kApiBase = '${kApiInsecure ? 'http' : 'https'}://$kApiHost';
+
+/// Set with `--dart-define=STORE_BUILD=true` for builds that go to Google
+/// Play / the App Store. Such a build refuses to start while it points at a
+/// test backend — see [storeBuildProblem].
+const kStoreBuild = bool.fromEnvironment('STORE_BUILD');
+
+/// Why this build must not ship, or null. A store build pointing at an ngrok
+/// tunnel (the release default until there is a domain), the local dev
+/// backend, or plain http would send every user's traffic to a developer
+/// machine — and nothing about the build itself would look wrong.
+String? storeBuildProblem({
+  bool storeBuild = kStoreBuild,
+  String host = kApiHost,
+  bool insecure = kApiInsecure,
+}) {
+  if (!storeBuild) return null;
+  final h = host.toLowerCase();
+  if (h.isEmpty) return 'API_HOST is empty';
+  if (h.contains('ngrok')) return 'API_HOST is an ngrok test tunnel ($host)';
+  if (h.startsWith('10.0.2.2') || h.startsWith('localhost') || h.startsWith('127.')) {
+    return 'API_HOST is a local development address ($host)';
+  }
+  if (insecure) return 'API_INSECURE is set (plain http)';
+  return null;
+}
 const kWsBase = '${kApiInsecure ? 'ws' : 'wss'}://$kApiHost';
 const _base = kApiBase;
 
