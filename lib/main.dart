@@ -189,13 +189,8 @@ class _SamewayAppState extends State<SamewayApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('uk'),
-        Locale('es'),
-        Locale('de'),
-        Locale('fr'),
-        Locale('it'),
+      supportedLocales: [
+        for (final code in AppLocalizations.supportedLanguageCodes) Locale(code),
       ],
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,

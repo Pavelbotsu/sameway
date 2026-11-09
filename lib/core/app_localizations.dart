@@ -9,6 +9,10 @@ class AppLocalizations {
 
   static const delegate = _AppLocalizationsDelegate();
 
+  /// Languages the app has translations for. Single source for the
+  /// delegate, MaterialApp.supportedLocales and the device-locale default.
+  static const supportedLanguageCodes = ['en', 'uk', 'es', 'de', 'fr', 'it'];
+
   // Helper: pick by language code, falling back to English. English fallback
   // means new locales can be added one string at a time without breaking the
   // app — `fr:` / `it:` are optional named args on every getter.
@@ -3265,7 +3269,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      ['en', 'uk', 'es', 'de', 'fr', 'it'].contains(locale.languageCode);
+      AppLocalizations.supportedLanguageCodes.contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) async =>
