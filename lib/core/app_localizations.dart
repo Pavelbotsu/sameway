@@ -180,22 +180,6 @@ class AppLocalizations {
         fr: 'S\'inscrire',
         it: 'Registrati',
       );
-  String get continueWithGoogle => _t(
-        en: 'Continue with Google',
-        uk: 'Продовжити з Google',
-        es: 'Continuar con Google',
-        de: 'Mit Google fortfahren',
-        fr: 'Continuer avec Google',
-        it: 'Continua con Google',
-      );
-  String get or => _t(
-        en: 'or',
-        uk: 'або',
-        es: 'o',
-        de: 'oder',
-        fr: 'ou',
-        it: 'o',
-      );
 
   // ─── Home top bar & account sheet ────────────────────────────────────────
   String get account => _t(
@@ -1213,14 +1197,6 @@ class AppLocalizations {
         fr: 'Les passagers proches de ton trajet apparaîtront ici.',
         it: 'I passeggeri vicini al tuo tragitto appariranno qui.',
       );
-  String get rideRequests => _t(
-        en: 'Ride requests',
-        uk: 'Запити на поїздку',
-        es: 'Solicitudes de viaje',
-        de: 'Fahrtanfragen',
-        fr: 'Demandes de trajet',
-        it: 'Richieste di passaggio',
-      );
 
   // ─── Account & Security ──────────────────────────────────────────────────
   String get displayName => _t(
@@ -1832,14 +1808,6 @@ class AppLocalizations {
         fr: 'Itinéraire piéton',
         it: 'Apri indicazioni a piedi',
       );
-  String get driverGoingYourWay => _t(
-        en: 'Driver is going your way',
-        uk: 'Водій їде у вашому напрямку',
-        es: 'El conductor va en tu dirección',
-        de: 'Fahrer ist auf deinem Weg',
-        fr: 'Le conducteur va dans ta direction',
-        it: 'Il conducente va nella tua direzione',
-      );
   String get tellCodeToPassenger => _t(
         en: 'Tell this code to your passenger when you arrive',
         uk: 'Скажіть цей код пасажиру при зустрічі',
@@ -1921,14 +1889,6 @@ class AppLocalizations {
         de: 'Dauert zu lange — bitte erneut versuchen',
         fr: 'Trop long — réessaie',
         it: 'Sta impiegando troppo — riprova',
-      );
-  String get retry => _t(
-        en: 'Retry',
-        uk: 'Повторити',
-        es: 'Reintentar',
-        de: 'Erneut',
-        fr: 'Réessayer',
-        it: 'Riprova',
       );
   String get noInternet => _t(
         en: 'No internet',
@@ -2143,14 +2103,6 @@ class AppLocalizations {
         de: 'Profilfoto',
         fr: 'Photo de profil',
         it: 'Foto profilo',
-      );
-  String get choosePhoto => _t(
-        en: 'Choose a photo',
-        uk: 'Виберіть фото',
-        es: 'Elegir una foto',
-        de: 'Foto auswählen',
-        fr: 'Choisir une photo',
-        it: 'Scegli una foto',
       );
   String get takePhoto => _t(
         en: 'Take photo',
@@ -2884,14 +2836,6 @@ class AppLocalizations {
         de: 'Auto',
         fr: 'Voiture',
         it: 'Auto',
-      );
-  String get plateLabel => _t(
-        en: 'Plate',
-        uk: 'Номерний знак',
-        es: 'Matrícula',
-        de: 'Kennzeichen',
-        fr: 'Plaque',
-        it: 'Targa',
       );
   String get requestThisRide => _t(
         en: 'Request this ride',
