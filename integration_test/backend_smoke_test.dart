@@ -70,6 +70,10 @@ void main() {
     await connected.timeout(const Duration(seconds: 10));
     ws.dispose();
 
+    // Data export returns the account's own data.
+    final export = await api.get('/auth/export', auth: true) as Map;
+    expect((export['profile'] as Map)['email'], email);
+
     // Account deletion: wrong password is a plain 403, then it works.
     await expectLater(
       repo.deleteAccount('wrong-password'),

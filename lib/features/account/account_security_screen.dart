@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
@@ -600,6 +601,27 @@ class _LegalAndPrivacySection extends StatefulWidget {
 
 class _LegalAndPrivacySectionState extends State<_LegalAndPrivacySection> {
   bool? _analyticsOn;
+  bool _exporting = false;
+
+  /// GDPR access/portability: everything the server holds about the account
+  /// as one JSON file, handed to the share sheet (save to Files, email…).
+  Future<void> _exportData() async {
+    setState(() => _exporting = true);
+    try {
+      final data = await ApiClient(TokenStorage()).get('/auth/export', auth: true);
+      final bytes = utf8.encode(const JsonEncoder.withIndent('  ').convert(data));
+      final date = DateTime.now().toIso8601String().substring(0, 10);
+      // ignore: deprecated_member_use
+      await Share.shareXFiles([
+        XFile.fromData(bytes,
+            name: 'sameway-data-$date.json', mimeType: 'application/json'),
+      ], fileNameOverrides: ['sameway-data-$date.json']);
+    } catch (e) {
+      if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
+    } finally {
+      if (mounted) setState(() => _exporting = false);
+    }
+  }
 
   @override
   void initState() {
@@ -668,6 +690,21 @@ class _LegalAndPrivacySectionState extends State<_LegalAndPrivacySection> {
         ),
         linkTile(Icons.privacy_tip_outlined, l.privacyPolicy, kPrivacyPolicyUrl),
         linkTile(Icons.description_outlined, l.termsOfService, kTermsUrl),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.download_outlined,
+              color: AppColors.textSecondary),
+          title: Text(l.downloadMyData,
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
+          trailing: _exporting
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2))
+              : const Icon(Icons.ios_share_rounded,
+                  color: AppColors.textSecondary, size: 18),
+          onTap: _exporting ? null : _exportData,
+        ),
         const SizedBox(height: 16),
         OutlinedButton.icon(
           onPressed: _deleteAccount,

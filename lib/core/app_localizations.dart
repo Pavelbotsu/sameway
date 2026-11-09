@@ -3186,6 +3186,14 @@ class AppLocalizations {
         fr: "Facultatif. Nous aide à trouver des bugs et à améliorer l'app.",
         it: "Facoltativo. Ci aiuta a trovare bug e migliorare l'app.",
       );
+  String get downloadMyData => _t(
+        en: 'Download my data',
+        uk: 'Завантажити мої дані',
+        es: 'Descargar mis datos',
+        de: 'Meine Daten herunterladen',
+        fr: 'Télécharger mes données',
+        it: 'Scarica i miei dati',
+      );
   String get legalAndPrivacy => _t(
         en: 'Legal & privacy',
         uk: 'Правова інформація та конфіденційність',
