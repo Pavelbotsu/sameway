@@ -16,6 +16,7 @@ import 'package:sameway/core/token_storage.dart';
 import 'package:sameway/core/websocket_client.dart';
 import 'package:sameway/features/auth/auth_provider.dart';
 import 'package:sameway/features/auth/auth_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,17 @@ void main() {
 
   test('debug build targets the local backend', () {
     expect(kApiBase, 'http://10.0.2.2:4040');
+  });
+
+  test('JWT lives in the Keystore and old prefs tokens migrate', () async {
+    final p = await SharedPreferences.getInstance();
+    await p.setString('jwt', 'legacy-token');
+    final s = TokenStorage();
+    expect(await s.getToken(), 'legacy-token');
+    expect(p.getString('jwt'), isNull);
+    expect(await const PlatformSecretStore().read('jwt'), 'legacy-token');
+    await s.clear();
+    expect(await const PlatformSecretStore().read('jwt'), isNull);
   });
 
   test('register needs consent, then the full account lifecycle works',

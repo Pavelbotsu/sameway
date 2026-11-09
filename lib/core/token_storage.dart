@@ -1,6 +1,46 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Where the JWT lives. The platform implementation is the Android Keystore
+/// (EncryptedSharedPreferences); tests pass a fake.
+abstract class SecretStore {
+  Future<String?> read(String key);
+  Future<void> write(String key, String value);
+  Future<void> delete(String key);
+}
+
+class PlatformSecretStore implements SecretStore {
+  const PlatformSecretStore();
+
+  static const _s = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+
+  @override
+  Future<String?> read(String key) => _s.read(key: key);
+  @override
+  Future<void> write(String key, String value) =>
+      _s.write(key: key, value: value);
+  @override
+  Future<void> delete(String key) => _s.delete(key: key);
+}
+
+/// Session data on the device. The JWT is kept in [SecretStore]; role, id,
+/// name and email are not secrets and stay in SharedPreferences.
+///
+/// Older installs kept the JWT in SharedPreferences (plain XML in the app
+/// sandbox). The first [getToken] moves it into the secret store. If the
+/// secret store fails (broken Keystore on some devices, a plugin missing in
+/// an isolate, unit tests) the token stays in / falls back to
+/// SharedPreferences rather than logging the user out. The background
+/// location isolate uses this same class, so it reads whichever copy exists.
 class TokenStorage {
+  TokenStorage({SecretStore secure = const PlatformSecretStore()})
+      : _secure = secure;
+
+  final SecretStore _secure;
+
   static const _token = 'jwt';
   static const _role = 'role';
   static const _userId = 'user_id';
@@ -15,7 +55,13 @@ class TokenStorage {
     String? email,
   }) async {
     final p = await SharedPreferences.getInstance();
-    await p.setString(_token, token);
+    try {
+      await _secure.write(_token, token);
+      await p.remove(_token);
+    } catch (e) {
+      debugPrint('TokenStorage: secure write failed, using prefs ($e)');
+      await p.setString(_token, token);
+    }
     await p.setString(_role, role);
     await p.setString(_userId, userId);
     if (name != null) await p.setString(_name, name);
@@ -23,7 +69,21 @@ class TokenStorage {
   }
 
   Future<String?> getToken() async {
-    return (await SharedPreferences.getInstance()).getString(_token);
+    final p = await SharedPreferences.getInstance();
+    // A prefs copy is either a pre-migration token or the fallback written
+    // by save(); either way it is the newest one.
+    final legacy = p.getString(_token);
+    try {
+      if (legacy != null) {
+        await _secure.write(_token, legacy);
+        await p.remove(_token);
+        return legacy;
+      }
+      return await _secure.read(_token);
+    } catch (e) {
+      debugPrint('TokenStorage: secure store unavailable ($e)');
+      return legacy;
+    }
   }
 
   Future<String?> getRole() async {
@@ -44,6 +104,9 @@ class TokenStorage {
 
   Future<void> clear() async {
     final p = await SharedPreferences.getInstance();
+    try {
+      await _secure.delete(_token);
+    } catch (_) {/* nothing stored there */}
     await p.remove(_token);
     await p.remove(_role);
     await p.remove(_userId);
