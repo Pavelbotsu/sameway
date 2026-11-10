@@ -5,7 +5,7 @@ import 'api_client.dart';
 /// Terms of Service / Privacy Policy version this build asks users to accept.
 /// MUST match `handlers.CurrentTermsVersion` on the backend. Bumping both
 /// re-prompts every user (signup screen + TermsGateScreen on next start).
-const kTermsVersion = 1;
+const kTermsVersion = 2;
 
 /// Served by the backend so a corrected document reaches every user without
 /// an app release. The same URLs go in the Play Console / App Store Connect.

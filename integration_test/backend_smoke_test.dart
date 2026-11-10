@@ -53,6 +53,7 @@ void main() {
         role: 'passenger',
         acceptTerms: false,
         ageConfirmed: false,
+        birthDate: DateTime(1990, 1, 1),
       ),
       throwsA(isA<ApiException>()
           .having((e) => e.code, 'code', 'consent_required')),
@@ -65,6 +66,7 @@ void main() {
       role: 'passenger',
       acceptTerms: true,
       ageConfirmed: true,
+      birthDate: DateTime(1990, 1, 1),
     );
     expect(res.needsConsent, isFalse);
     await storage.save(token: res.token, role: res.role, userId: res.userId);
@@ -110,6 +112,7 @@ void main() {
       role: 'driver',
       acceptTerms: true,
       ageConfirmed: true,
+      birthDate: DateTime(1990, 1, 1),
     );
     await storage.save(token: res.token, role: res.role, userId: res.userId);
     final auth = AuthProvider(repo, storage);

@@ -9,6 +9,7 @@ import '../auth/auth_provider.dart';
 import '../driver/driver_home_screen.dart';
 import '../onboarding/role_selection_screen.dart';
 import '../passenger/passenger_home_screen.dart';
+import 'birth_date_field.dart';
 import 'legal_consent_checks.dart';
 
 /// Blocks a signed-in account that hasn't accepted the current Terms of
@@ -36,17 +37,22 @@ class TermsGateScreen extends StatefulWidget {
 class _TermsGateScreenState extends State<TermsGateScreen> {
   bool _age = false;
   bool _terms = false;
+  DateTime? _birthDate;
   bool _showError = false;
   bool _saving = false;
 
   Future<void> _continue() async {
-    if (!(_age && _terms)) {
+    final askBirthDate =
+        context.read<AuthProvider>().needsBirthDate != false;
+    if (!(_age && _terms) || (askBirthDate && _birthDate == null)) {
       setState(() => _showError = true);
       return;
     }
     setState(() => _saving = true);
     try {
-      await context.read<AuthProvider>().acceptTerms();
+      await context
+          .read<AuthProvider>()
+          .acceptTerms(birthDate: askBirthDate ? _birthDate : null);
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => TermsGateScreen.homeFor(widget.role)),
@@ -93,6 +99,14 @@ class _TermsGateScreenState extends State<TermsGateScreen> {
                       color: AppColors.textSecondary, fontSize: 15, height: 1.4),
                 ),
                 const SizedBox(height: 28),
+                if (context.watch<AuthProvider>().needsBirthDate != false) ...[
+                  BirthDateField(
+                    value: _birthDate,
+                    onChanged: (d) => setState(() => _birthDate = d),
+                    showError: _showError,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 LegalConsentChecks(
                   ageConfirmed: _age,
                   termsAccepted: _terms,

@@ -1384,6 +1384,7 @@ class _StatusPanel extends StatelessWidget {
                               requestId: provider.acceptedRequestId,
                               driverId: provider.acceptedDriverId,
                               driverName: provider.acceptedDriverName,
+                              driverAge: provider.acceptedDriverAge,
                               driverPhotoUrl: provider.acceptedDriverPhotoUrl,
                               carSummary: provider.acceptedCarSummary,
                               carPlate: provider.acceptedCarPlate,
@@ -1406,6 +1407,7 @@ class _StatusPanel extends StatelessWidget {
                               requestId: provider.acceptedRequestId,
                               driverId: provider.acceptedDriverId,
                               driverName: provider.acceptedDriverName,
+                              driverAge: provider.acceptedDriverAge,
                               driverPhotoUrl: provider.acceptedDriverPhotoUrl,
                               carSummary: provider.acceptedCarSummary,
                               carPlate: provider.acceptedCarPlate,
@@ -2654,6 +2656,7 @@ class _AcceptedCard extends StatefulWidget {
   // animates in/out of the AnimatedSwitcher.
   final String? driverId;
   final String? driverName;
+  final int? driverAge;
   final String? driverPhotoUrl;
   final String? carSummary;
   final String? carPlate;
@@ -2671,6 +2674,7 @@ class _AcceptedCard extends StatefulWidget {
     this.requestId,
     this.driverId,
     this.driverName,
+    this.driverAge,
     this.driverPhotoUrl,
     this.carSummary,
     this.carPlate,
@@ -2902,7 +2906,8 @@ class _AcceptedCardState extends State<_AcceptedCard>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${l.driverLabel}: ${widget.driverName}',
+                '${l.driverLabel}: ${widget.driverName}'
+                '${widget.driverAge != null ? ' · ${l.ageYears(widget.driverAge!)}' : ''}',
                 style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 13,

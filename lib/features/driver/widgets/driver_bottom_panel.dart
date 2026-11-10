@@ -940,8 +940,11 @@ class _RequestTile extends StatelessWidget {
                       : (info?.name?.trim().isNotEmpty == true)
                           ? info!.name!
                           : AppLocalizations.of(context).passenger;
+                  final age = request.passengerAge;
                   return Text(
-                    name,
+                    age == null
+                        ? name
+                        : '$name · ${AppLocalizations.of(context).ageYears(age)}',
                     style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 13,

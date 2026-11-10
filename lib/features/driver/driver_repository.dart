@@ -13,6 +13,8 @@ class RideRequest {
   final String? passengerPhotoUrl;
   final double? passengerAvgRating;
   final int? passengerRatingCount;
+  /// Only sent once the ride is accepted.
+  final int? passengerAge;
   // Pickup-handshake fields. `pickupCode` is the shared 4-digit code (empty
   // until the row reaches 'accepted'); `pickedUpAt` is non-null once either
   // side confirms via POST /pickup/confirm.
@@ -55,6 +57,7 @@ class RideRequest {
     this.passengerPhotoUrl,
     this.passengerAvgRating,
     this.passengerRatingCount,
+    this.passengerAge,
     this.pickupCode,
     this.pickedUpAt,
     this.matchMethod,
@@ -79,6 +82,7 @@ class RideRequest {
             (j['passenger_avg_rating'] as num?)?.toDouble(),
         passengerRatingCount:
             (j['passenger_rating_count'] as num?)?.toInt(),
+        passengerAge: (j['passenger_age'] as num?)?.toInt(),
         pickupCode: (j['pickup_code'] as String?)?.trim().isEmpty == true
             ? null
             : j['pickup_code'] as String?,
@@ -111,6 +115,7 @@ class RideRequest {
         passengerPhotoUrl: passengerPhotoUrl,
         passengerAvgRating: passengerAvgRating,
         passengerRatingCount: passengerRatingCount,
+        passengerAge: passengerAge,
         pickupCode: pickupCode ?? this.pickupCode,
         pickedUpAt: pickedUpAt ?? this.pickedUpAt,
         matchMethod: matchMethod ?? this.matchMethod,

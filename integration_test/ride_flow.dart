@@ -82,6 +82,7 @@ void rideTest({SecretStore secure = const PlatformSecretStore()}) {
       me = await repo.register(
         name: driverName, email: driverEmail, password: password,
         role: 'driver', acceptTerms: true, ageConfirmed: true,
+        birthDate: DateTime(1990, 1, 1),
       );
     } on ApiException catch (e) {
       expect(e.statusCode, 409, reason: 'unexpected register failure: $e');
@@ -89,6 +90,7 @@ void rideTest({SecretStore secure = const PlatformSecretStore()}) {
       me = await repo.register(
         name: 'Pax$run', email: passengerEmail, password: password,
         role: 'passenger', acceptTerms: true, ageConfirmed: true,
+        birthDate: DateTime(1990, 1, 1),
       );
     }
     await storage.save(token: me.token, role: me.role, userId: me.userId);
@@ -220,6 +222,8 @@ Future<void> _passenger(ApiClient api, Inbox inbox) async {
   expect(response['status'], 'accepted');
   // Once accepted the passenger needs the plate to find the car.
   expect(response['car_plate'], carPlate);
+  // Age is shared once the ride is agreed (never before).
+  expect(response['driver_age'], isA<int>());
 
   final msg = await inbox.next('chat_message');
   final code = RegExp(r'\b\d{4}\b').firstMatch(msg['content'] as String)![0]!;

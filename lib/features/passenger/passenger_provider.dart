@@ -96,6 +96,8 @@ class OutstandingRequest {
   final String? carModel;
   final String? carColor;
   final String? carPlate;
+  /// Only sent once the ride is accepted.
+  final int? driverAge;
   final String status; // 'pending' | 'accepted'
   final DateTime createdAt;
 
@@ -105,6 +107,7 @@ class OutstandingRequest {
     required this.status,
     required this.createdAt,
     this.driverName,
+    this.driverAge,
     this.driverAvgRating,
     this.driverRatingCount,
     this.carMake,
@@ -121,6 +124,7 @@ class OutstandingRequest {
       createdAt: DateTime.tryParse(j['created_at'] as String? ?? '') ??
           DateTime.now(),
       driverName: j['driver_name'] as String?,
+      driverAge: (j['driver_age'] as num?)?.toInt(),
       driverAvgRating: (j['driver_avg_rating'] as num?)?.toDouble(),
       driverRatingCount: (j['driver_rating_count'] as num?)?.toInt(),
       carMake: j['car_make'] as String?,
@@ -198,6 +202,8 @@ class PassengerProvider extends ChangeNotifier {
   String? acceptedRequestId;
   String? acceptedDriverId;
   String? acceptedDriverName;
+  /// Driver's age, shared by the server only once the ride is accepted.
+  int? acceptedDriverAge;
   double? acceptedDriverAvgRating;
   int? acceptedDriverRatingCount;
   String? acceptedCarSummary;
@@ -513,6 +519,7 @@ class PassengerProvider extends ChangeNotifier {
         acceptedRequestId = reqId;
         acceptedDriverId = p['driver_id'] as String?;
         acceptedDriverName = p['driver_name'] as String?;
+        acceptedDriverAge = (p['driver_age'] as num?)?.toInt();
         acceptedDriverAvgRating = (p['driver_avg_rating'] as num?)?.toDouble();
         acceptedDriverRatingCount =
             (p['driver_rating_count'] as num?)?.toInt();
@@ -659,6 +666,7 @@ class PassengerProvider extends ChangeNotifier {
         acceptedRequestId = a.requestId;
         acceptedDriverId = a.driverId;
         acceptedDriverName = a.driverName;
+        acceptedDriverAge = a.driverAge;
         acceptedDriverAvgRating = a.driverAvgRating;
         acceptedDriverRatingCount = a.driverRatingCount;
         acceptedCarSummary = a.carSummary;

@@ -24,6 +24,10 @@ String friendlyError(BuildContext context, Object e) {
         return l.accountSuspended;
       case 'consent_required':
         return l.consentRequiredError;
+      case 'underage':
+        return l.errUnderage;
+      case 'birth_date_invalid':
+        return l.birthDateRequired;
       case 'active_ride':
         return l.deleteAccountActiveRide;
     }

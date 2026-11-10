@@ -28,6 +28,11 @@ class AuthProvider extends ChangeNotifier {
   /// current Terms/Privacy and confirm 18+ before using the app.
   bool needsConsent = false;
 
+  /// Whether the consent screen must ask for the date of birth. null = not
+  /// known this session (cold start): the gate then asks to be safe; the
+  /// server ignores it when one is already on file.
+  bool? needsBirthDate;
+
   /// The shared socket, closed on sign-out. Optional so tests can omit it.
   final WebSocketClient? _ws;
 
@@ -47,6 +52,7 @@ class AuthProvider extends ChangeNotifier {
     required String role,
     required bool acceptTerms,
     required bool ageConfirmed,
+    required DateTime birthDate,
   }) async {
     return _run(
       () => _repo.register(
@@ -56,6 +62,7 @@ class AuthProvider extends ChangeNotifier {
         role: role,
         acceptTerms: acceptTerms,
         ageConfirmed: ageConfirmed,
+        birthDate: birthDate,
       ),
     );
   }
@@ -75,6 +82,7 @@ class AuthProvider extends ChangeNotifier {
         email: result.email,
       );
       needsConsent = result.needsConsent;
+      needsBirthDate = result.needsBirthDate;
       if (!needsConsent) {
         // Lets the splash screen skip the terms gate on later cold starts.
         await _storage.setAcceptedTermsVersion(result.userId, kTermsVersion);
@@ -100,12 +108,13 @@ class AuthProvider extends ChangeNotifier {
 
   /// Records Terms/Privacy acceptance + 18+ for the signed-in account.
   /// Throws on failure so the gate screen can show it.
-  Future<void> acceptTerms() async {
-    await _repo.acceptTerms();
+  Future<void> acceptTerms({DateTime? birthDate}) async {
+    await _repo.acceptTerms(birthDate: birthDate);
     final userId = await _storage.getUserId();
     if (userId != null) {
       await _storage.setAcceptedTermsVersion(userId, kTermsVersion);
     }
+    needsBirthDate = false;
     needsConsent = false;
     notifyListeners();
   }

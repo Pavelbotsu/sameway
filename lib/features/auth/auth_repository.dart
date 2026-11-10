@@ -1,4 +1,5 @@
 import '../../core/api_client.dart';
+import '../legal/birth_date_field.dart' show formatBirthDate;
 
 class AuthResult {
   final String token;
@@ -12,13 +13,18 @@ class AuthResult {
   /// bump). Absent → false (older backends).
   final bool needsConsent;
 
+  /// The consent screen must also collect the date of birth (account
+  /// predates it). Absent → false.
+  final bool needsBirthDate;
+
   AuthResult.fromJson(Map<String, dynamic> j)
       : token = j['token'] as String,
         userId = j['user_id'] as String,
         role = j['role'] as String,
         name = j['name'] as String?,
         email = j['email'] as String?,
-        needsConsent = j['needs_consent'] as bool? ?? false;
+        needsConsent = j['needs_consent'] as bool? ?? false,
+        needsBirthDate = j['needs_birth_date'] as bool? ?? false;
 }
 
 class AuthRepository {
@@ -32,8 +38,10 @@ class AuthRepository {
     required String role,
     required bool acceptTerms,
     required bool ageConfirmed,
+    required DateTime birthDate,
   }) async {
     final data = await _api.post('/auth/register', {
+      'birth_date': formatBirthDate(birthDate),
       'name': name,
       'email': email,
       'password': password,
@@ -46,10 +54,14 @@ class AuthRepository {
 
   /// Records acceptance of the current Terms/Privacy + the 18+ attestation
   /// for an account that predates them.
-  Future<void> acceptTerms() async {
+  Future<void> acceptTerms({DateTime? birthDate}) async {
     await _api.post(
       '/auth/consent',
-      {'accept_terms': true, 'age_confirmed': true},
+      {
+        'accept_terms': true,
+        'age_confirmed': true,
+        if (birthDate != null) 'birth_date': formatBirthDate(birthDate),
+      },
       auth: true,
     );
   }

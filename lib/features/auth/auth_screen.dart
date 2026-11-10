@@ -7,6 +7,7 @@ import '../../core/fcm_service.dart';
 import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
 import 'forgot_password_screen.dart';
+import '../legal/birth_date_field.dart';
 import '../legal/legal_consent_checks.dart';
 import '../legal/terms_gate_screen.dart';
 
@@ -26,6 +27,7 @@ class _AuthScreenState extends State<AuthScreen>
   // pre-checked — consent has to be an explicit action.
   bool _ageConfirmed = false;
   bool _termsAccepted = false;
+  DateTime? _birthDate;
   bool _showConsentError = false;
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
@@ -58,7 +60,8 @@ class _AuthScreenState extends State<AuthScreen>
 
   Future<void> _submit() async {
     final formOk = _formKey.currentState?.validate() ?? false;
-    final consentOk = _isLogin || (_ageConfirmed && _termsAccepted);
+    final consentOk =
+        _isLogin || (_ageConfirmed && _termsAccepted && _birthDate != null);
     if (!consentOk) setState(() => _showConsentError = true);
     if (!formOk || !consentOk) return;
     final auth = context.read<AuthProvider>();
@@ -76,6 +79,7 @@ class _AuthScreenState extends State<AuthScreen>
             role: widget.role,
             acceptTerms: _termsAccepted,
             ageConfirmed: _ageConfirmed,
+            birthDate: _birthDate!,
           );
     if (ok && mounted) {
       // Re-issue JWT with the role chosen on this screen (login may return DB role).
@@ -194,6 +198,13 @@ class _AuthScreenState extends State<AuthScreen>
                   ),
                 ),
                 if (!_isLogin) ...[
+                  const SizedBox(height: 12),
+                  BirthDateField(
+                    value: _birthDate,
+                    onChanged: (d) => setState(() => _birthDate = d),
+                    showError: _showConsentError,
+                    accent: _roleColor,
+                  ),
                   const SizedBox(height: 12),
                   LegalConsentChecks(
                     ageConfirmed: _ageConfirmed,

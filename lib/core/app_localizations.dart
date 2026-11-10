@@ -3429,6 +3429,42 @@ class AppLocalizations {
         it: 'Conferma di avere almeno 18 anni e accetta i termini per continuare',
         pl: 'Aby kontynuować, potwierdź, że masz 18 lat, i zaakceptuj regulamin',
       );
+  String get birthDateLabel => _t(
+        en: 'Date of birth',
+        uk: 'Дата народження',
+        es: 'Fecha de nacimiento',
+        de: 'Geburtsdatum',
+        fr: 'Date de naissance',
+        it: 'Data di nascita',
+        pl: 'Data urodzenia',
+      );
+  String get birthDateRequired => _t(
+        en: 'Enter your date of birth — Sameway is for people aged 18 or older',
+        uk: 'Вкажіть дату народження — Sameway лише для осіб від 18 років',
+        es: 'Indica tu fecha de nacimiento: Sameway es para mayores de 18 años',
+        de: 'Gib dein Geburtsdatum an – Sameway ist ab 18 Jahren',
+        fr: 'Indique ta date de naissance : Sameway est réservé aux 18 ans et plus',
+        it: 'Inserisci la data di nascita: Sameway è per maggiori di 18 anni',
+        pl: 'Podaj datę urodzenia — Sameway jest dla osób od 18 lat',
+      );
+  String get errUnderage => _t(
+        en: 'You must be 18 or older to use Sameway',
+        uk: 'Щоб користуватися Sameway, вам має бути 18 або більше',
+        es: 'Debes tener 18 años o más para usar Sameway',
+        de: 'Du musst mindestens 18 sein, um Sameway zu nutzen',
+        fr: 'Tu dois avoir 18 ans ou plus pour utiliser Sameway',
+        it: 'Devi avere almeno 18 anni per usare Sameway',
+        pl: 'Aby korzystać z Sameway, musisz mieć ukończone 18 lat',
+      );
+  String ageYears(int n) => _t(
+        en: '$n y.o.',
+        uk: '$n р.',
+        es: '$n años',
+        de: '$n J.',
+        fr: '$n ans',
+        it: '$n anni',
+        pl: '$n l.',
+      );
   String get termsGateTitle => _t(
         en: 'Before you continue',
         uk: 'Перш ніж продовжити',
