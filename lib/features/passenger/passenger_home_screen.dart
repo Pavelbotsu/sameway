@@ -69,7 +69,8 @@ class PassengerHomeScreen extends StatefulWidget {
   State<PassengerHomeScreen> createState() => _PassengerHomeScreenState();
 }
 
-class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
+class _PassengerHomeScreenState extends State<PassengerHomeScreen>
+    with WidgetsBindingObserver {
   final _mapController = MapController();
   final DraggableScrollableController _sheetCtrl =
       DraggableScrollableController();
@@ -158,6 +159,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       final provider = context.read<PassengerProvider>();
@@ -207,10 +209,25 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
     ));
   }
 
+  /// False while the app is in the background. The nearby-drivers poll only
+  /// feeds the map, and it is the heaviest query the server runs, so it is
+  /// skipped while nobody can see the result. Location updates keep going:
+  /// they keep the passenger matchable.
+  bool _inForeground = true;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final was = _inForeground;
+    _inForeground = state == AppLifecycleState.resumed;
+    // Back on screen: refresh at once instead of waiting for the next tick.
+    if (_inForeground && !was) _fetchNearbyDrivers();
+  }
+
   @override
   void dispose() {
     _locationTimer?.cancel();
     _driversTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _noticeSub?.cancel();
     // The rating listener was never removed. PassengerProvider is root-scoped
     // and outlives this screen, so every navigation away and back stacked
@@ -233,7 +250,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
   bool _fetchingNearby = false;
 
   Future<void> _fetchNearbyDrivers() async {
-    if (_myPos == null || _fetchingNearby) return;
+    if (_myPos == null || _fetchingNearby || !_inForeground) return;
     _fetchingNearby = true;
     try {
       // Via the repository/ApiClient rather than a raw http.post: that path had
