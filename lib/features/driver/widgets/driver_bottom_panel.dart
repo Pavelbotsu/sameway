@@ -570,14 +570,10 @@ class _RequestsList extends StatelessWidget {
               onCancel: r.status == 'accepted'
                   ? () => onCancelRide(r.id)
                   : null,
-              // Drop-off must cover in_progress — that IS the normal case, once
-              // the passenger has entered the pickup code. This used to be
-              // 'accepted'-only while _buildAcceptedActions renders the button
-              // only for in_progress, so the two conditions never overlapped and
-              // the button was permanently disabled: a ride that completed its
-              // handshake could not be ended at all except by killing the whole
-              // route. DropoffPassenger accepts both statuses.
-              onComplete: (r.status == 'accepted' || r.status == 'in_progress')
+              // Drop-off only after the pickup code was confirmed
+              // (in_progress): the backend refuses it for accepted rides
+              // (code not_picked_up), since nothing shows the two met.
+              onComplete: r.status == 'in_progress'
                   ? () => onCompleteRide(r.id, r.passengerID)
                   : null,
               onRespond: r.status == 'pending'

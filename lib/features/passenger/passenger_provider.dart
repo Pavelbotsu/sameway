@@ -156,6 +156,8 @@ enum PassengerNotice {
   cancelledNoShow,
   /// The accepted ride expired without a pickup.
   cancelledTimeout,
+  /// The driver ended their route before the pickup.
+  cancelledDriverEnded,
 }
 
 /// Outcome of submitting a pickup code.
@@ -404,6 +406,10 @@ class PassengerProvider extends ChangeNotifier {
     loadOutstandingRequests();
   }
 
+  /// Feeds one WebSocket frame through the normal handler. Tests only.
+  @visibleForTesting
+  void handleMessageForTest(Map<String, dynamic> msg) => _onMessage(msg);
+
   void _onMessage(Map<String, dynamic> msg) {
     final type = msg['type'] as String?;
     final p = (msg['payload'] as Map?)?.cast<String, dynamic>() ?? const {};
@@ -438,6 +444,8 @@ class PassengerProvider extends ChangeNotifier {
         // Offers also time out silently; only an accepted ride is worth
         // telling the passenger about.
         _notices.add(PassengerNotice.cancelledTimeout);
+      } else if (!_disposed && p['cancelled_by'] == 'driver_ended') {
+        _notices.add(PassengerNotice.cancelledDriverEnded);
       }
       acceptedRequestId = null;
       acceptedDriverId = null;

@@ -3595,6 +3595,15 @@ class AppLocalizations {
     it: 'Il tuo viaggio è scaduto prima della salita ed è stato annullato.',
     pl: 'Twój przejazd wygasł przed odbiorem i został anulowany.',
   );
+  String get rideCancelledDriverEnded => _t(
+    en: 'The driver ended their route before picking you up. The ride was cancelled.',
+    uk: 'Водій завершив маршрут, не забравши вас. Поїздку скасовано.',
+    es: 'El conductor terminó su ruta antes de recogerte. El viaje se canceló.',
+    de: 'Der Fahrer hat seine Route beendet, bevor er dich abgeholt hat. Die Fahrt wurde storniert.',
+    fr: 'Le conducteur a terminé son trajet avant de te prendre. Le trajet a été annulé.',
+    it: 'Il conducente ha terminato il percorso prima di prenderti. Il viaggio è stato annullato.',
+    pl: 'Kierowca zakończył trasę, zanim cię odebrał. Przejazd został anulowany.',
+  );
   String get newPickupCode => _t(
     en: 'New code',
     uk: 'Новий код',

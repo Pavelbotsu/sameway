@@ -196,6 +196,8 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen> {
       PassengerNotice.pickupCodeReset => (l.pickupCodeResetNotice, AppColors.teal),
       PassengerNotice.cancelledNoShow => (l.rideCancelledNoShow, AppColors.error),
       PassengerNotice.cancelledTimeout => (l.rideCancelledTimeout, AppColors.error),
+      PassengerNotice.cancelledDriverEnded =>
+        (l.rideCancelledDriverEnded, AppColors.error),
     };
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),
