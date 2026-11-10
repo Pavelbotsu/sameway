@@ -28,6 +28,10 @@ String friendlyError(BuildContext context, Object e) {
         return l.errUnderage;
       case 'birth_date_invalid':
         return l.birthDateRequired;
+      case 'driver_declaration_required':
+        return l.driverDeclAllRequired;
+      case 'car_details_required':
+        return l.carDetailsRequired;
       case 'active_ride':
         return l.deleteAccountActiveRide;
     }

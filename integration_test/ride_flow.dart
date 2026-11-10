@@ -121,6 +121,9 @@ Future<void> _driver(ApiClient api, Inbox inbox) async {
     'car_make': 'Skoda', 'car_model': 'Octavia', 'car_color': 'Grey',
     'car_plate': carPlate,
   }, auth: true);
+  await api.post('/auth/driver-declaration', {
+    'licence': true, 'insurance': true, 'roadworthy': true, 'cost_sharing': true,
+  }, auth: true);
   await api.post('/driver/route', {
     'origin_lat': origin.lat, 'origin_lng': origin.lng,
     'destination_lat': destination.lat, 'destination_lng': destination.lng,

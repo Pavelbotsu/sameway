@@ -3465,6 +3465,78 @@ class AppLocalizations {
         it: '$n anni',
         pl: '$n l.',
       );
+  String get driverDeclTitle => _t(
+        en: 'Before your first ride',
+        uk: 'Перед першою поїздкою',
+        es: 'Antes de tu primer viaje',
+        de: 'Vor deiner ersten Fahrt',
+        fr: 'Avant ton premier trajet',
+        it: 'Prima del tuo primo viaggio',
+        pl: 'Przed pierwszym przejazdem',
+      );
+  String get driverDeclBody => _t(
+        en: 'Sameway doesn\'t check documents. You confirm these yourself and must show them to a passenger if asked.',
+        uk: 'Sameway не перевіряє документи. Ви підтверджуєте це самі й маєте показати документи пасажиру на його прохання.',
+        es: 'Sameway no revisa documentos. Lo confirmas tú y debes mostrarlos a un pasajero si te lo pide.',
+        de: 'Sameway prüft keine Dokumente. Du bestätigst das selbst und musst sie Mitfahrenden auf Nachfrage zeigen.',
+        fr: 'Sameway ne vérifie pas les documents. Tu le confirmes toi-même et dois les montrer à un passager s\'il le demande.',
+        it: 'Sameway non controlla i documenti. Lo confermi tu e devi mostrarli a un passeggero se te lo chiede.',
+        pl: 'Sameway nie sprawdza dokumentów. Potwierdzasz to sam i musisz je pokazać pasażerowi na jego prośbę.',
+      );
+  String get driverDeclLicence => _t(
+        en: 'I have a valid driving licence',
+        uk: 'Маю чинне посвідчення водія',
+        es: 'Tengo un permiso de conducir válido',
+        de: 'Ich habe einen gültigen Führerschein',
+        fr: 'J\'ai un permis de conduire valide',
+        it: 'Ho una patente di guida valida',
+        pl: 'Mam ważne prawo jazdy',
+      );
+  String get driverDeclInsurance => _t(
+        en: 'My car has valid third-party liability insurance (OC / ОСЦПВ)',
+        uk: 'Моє авто має чинну страховку цивільної відповідальності (ОСЦПВ / OC)',
+        es: 'Mi coche tiene un seguro de responsabilidad civil válido',
+        de: 'Mein Auto hat eine gültige Kfz-Haftpflichtversicherung',
+        fr: 'Ma voiture a une assurance responsabilité civile valide',
+        it: 'La mia auto ha un\'assicurazione RC valida',
+        pl: 'Mój samochód ma ważne ubezpieczenie OC',
+      );
+  String get driverDeclRoadworthy => _t(
+        en: 'My car is roadworthy and has a seat belt for every seat I offer',
+        uk: 'Моє авто справне, і кожне запропоноване місце має пасок безпеки',
+        es: 'Mi coche está en buen estado y cada plaza que ofrezco tiene cinturón',
+        de: 'Mein Auto ist verkehrssicher und jeder angebotene Platz hat einen Gurt',
+        fr: 'Ma voiture est en bon état et chaque place proposée a une ceinture',
+        it: 'La mia auto è in regola e ogni posto offerto ha la cintura',
+        pl: 'Mój samochód jest sprawny, a każde oferowane miejsce ma pas bezpieczeństwa',
+      );
+  String get driverDeclCostSharing => _t(
+        en: 'I only share costs and never make a profit from passengers',
+        uk: 'Я лише ділю витрати й ніколи не заробляю на пасажирах',
+        es: 'Solo comparto gastos y nunca obtengo beneficio de los pasajeros',
+        de: 'Ich teile nur Kosten und verdiene nichts an Mitfahrenden',
+        fr: 'Je partage seulement les frais et ne fais aucun profit sur les passagers',
+        it: 'Divido solo le spese e non guadagno mai sui passeggeri',
+        pl: 'Dzielę się tylko kosztami i nigdy nie zarabiam na pasażerach',
+      );
+  String get driverDeclAllRequired => _t(
+        en: 'Confirm all four to drive with Sameway',
+        uk: 'Підтвердьте всі чотири пункти, щоб їздити з Sameway',
+        es: 'Confirma los cuatro para conducir con Sameway',
+        de: 'Bestätige alle vier, um mit Sameway zu fahren',
+        fr: 'Confirme les quatre pour conduire avec Sameway',
+        it: 'Conferma tutti e quattro per guidare con Sameway',
+        pl: 'Potwierdź wszystkie cztery, aby jeździć z Sameway',
+      );
+  String get carDetailsRequired => _t(
+        en: 'Add your car\'s make, model, colour and plate so passengers can recognise it',
+        uk: 'Додайте марку, модель, колір і номер авто, щоб пасажири могли його впізнати',
+        es: 'Añade la marca, modelo, color y matrícula para que los pasajeros reconozcan tu coche',
+        de: 'Gib Marke, Modell, Farbe und Kennzeichen an, damit Mitfahrende dein Auto erkennen',
+        fr: 'Ajoute la marque, le modèle, la couleur et la plaque pour que les passagers reconnaissent ta voiture',
+        it: 'Aggiungi marca, modello, colore e targa così i passeggeri riconoscono l\'auto',
+        pl: 'Dodaj markę, model, kolor i numer rejestracyjny, by pasażerowie rozpoznali auto',
+      );
   String get termsGateTitle => _t(
         en: 'Before you continue',
         uk: 'Перш ніж продовжити',

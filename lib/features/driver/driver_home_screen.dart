@@ -13,6 +13,8 @@ import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/error_handling.dart';
+import '../../core/widgets/branded_snack_bar.dart';
+import 'driver_setup.dart';
 import '../../core/feature_flags.dart';
 import '../../core/fcm_service.dart';
 import '../../core/haptics.dart';
@@ -363,10 +365,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         initialDestName: initialDestName,
         initialDestLatLng: initialDestLatLng,
         onPickOnMap: _enterDestPickMode,
-        onSubmit: (destLat, destLng, corridorKm, seats) {
+        onSubmit: (destLat, destLng, corridorKm, seats) async {
           if (_myPos == null) return;
           final preferAI = context.read<MatchingPreferenceProvider>().useAI;
-          context.read<DriverProvider>().setRoute(
+          final driver = context.read<DriverProvider>();
+          final err = await withDriverSetup(context, () => driver.setRoute(
                 originLat: _myPos!.latitude,
                 originLng: _myPos!.longitude,
                 destLat: destLat,
@@ -374,7 +377,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 corridorKm: corridorKm,
                 seats: seats,
                 preferAI: preferAI,
-              );
+              ));
+          if (err != null && mounted) {
+            BrandedSnack.showError(context, friendlyError(context, err));
+          }
         },
       ),
     );

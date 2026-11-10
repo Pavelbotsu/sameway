@@ -9,6 +9,7 @@ import '../../core/app_localizations.dart';
 import '../../core/place_search.dart';
 import '../../core/token_storage.dart';
 import '../../core/validators/validators.dart';
+import '../driver/driver_setup.dart';
 
 class _Suggestion {
   final String name;
@@ -151,7 +152,18 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
           behavior: SnackBarBehavior.floating,
         ));
       } else {
-        final msg = (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
+        final body = jsonDecode(resp.body) as Map;
+        final need = driverSetupNeedFor(ApiException(
+            body['error'] as String? ?? 'Failed',
+            statusCode: resp.statusCode,
+            code: body['code'] as String?));
+        if (need != null) {
+          // Declaration / car details first, then submit again.
+          setState(() => _submitting = false);
+          if (await resolveDriverSetup(context, need) && mounted) _submit();
+          return;
+        }
+        final msg = body['error'] as String? ?? 'Failed';
         setState(() => _error = msg);
       }
     } catch (_) {
