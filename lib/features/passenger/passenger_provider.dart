@@ -162,6 +162,8 @@ enum PassengerNotice {
   cancelledTimeout,
   /// The driver ended their route before the pickup.
   cancelledDriverEnded,
+  /// The passenger's location is outside every service area.
+  outsideServiceArea,
 }
 
 /// Outcome of submitting a pickup code.
@@ -602,6 +604,10 @@ class PassengerProvider extends ChangeNotifier {
   /// match while their UI still says "searching".
   bool locationSyncFailing = false;
   int _locationFailures = 0;
+
+  /// The server refuses the location because it is outside the service
+  /// areas. Not a sync failure: the passenger is told once, not warned.
+  bool outsideServiceArea = false;
   static const _locationFailureThreshold = 3;
 
   Future<void> updateLocation(double lat, double lng) async {
@@ -612,12 +618,21 @@ class PassengerProvider extends ChangeNotifier {
     _evaluateCheckIn();
     try {
       await _repo.updateLocation(lat, lng);
+      outsideServiceArea = false;
       if (locationSyncFailing) {
         _locationFailures = 0;
         locationSyncFailing = false;
         notifyListeners();
       }
-    } catch (_) {
+    } catch (e) {
+      if (e is ApiException && e.code == 'outside_service_area') {
+        if (!outsideServiceArea && !_disposed) {
+          outsideServiceArea = true;
+          _notices.add(PassengerNotice.outsideServiceArea);
+          notifyListeners();
+        }
+        return;
+      }
       _locationFailures++;
       if (_locationFailures >= _locationFailureThreshold && !locationSyncFailing) {
         locationSyncFailing = true;

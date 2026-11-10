@@ -200,6 +200,8 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
       PassengerNotice.cancelledTimeout => (l.rideCancelledTimeout, AppColors.error),
       PassengerNotice.cancelledDriverEnded =>
         (l.rideCancelledDriverEnded, AppColors.error),
+      PassengerNotice.outsideServiceArea =>
+        (l.outsideServiceArea, AppColors.teal),
     };
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),

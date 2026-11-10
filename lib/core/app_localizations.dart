@@ -3537,6 +3537,15 @@ class AppLocalizations {
         it: 'Aggiungi marca, modello, colore e targa così i passeggeri riconoscono l\'auto',
         pl: 'Dodaj markę, model, kolor i numer rejestracyjny, by pasażerowie rozpoznali auto',
       );
+  String get outsideServiceArea => _t(
+        en: 'Sameway isn\'t available here yet — we\'re live in Kraków and the Poltava region.',
+        uk: 'Sameway тут ще не працює — ми доступні в Кракові та на Полтавщині.',
+        es: 'Sameway aún no está disponible aquí: funcionamos en Cracovia y la región de Poltava.',
+        de: 'Sameway ist hier noch nicht verfügbar – wir sind in Krakau und in der Region Poltawa aktiv.',
+        fr: 'Sameway n\'est pas encore disponible ici : nous sommes actifs à Cracovie et dans la région de Poltava.',
+        it: 'Sameway non è ancora disponibile qui: siamo attivi a Cracovia e nella regione di Poltava.',
+        pl: 'Sameway nie działa jeszcze w tym miejscu — jesteśmy w Krakowie i w obwodzie połtawskim.',
+      );
   String get termsGateTitle => _t(
         en: 'Before you continue',
         uk: 'Перш ніж продовжити',

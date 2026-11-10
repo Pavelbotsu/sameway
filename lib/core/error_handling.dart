@@ -32,6 +32,8 @@ String friendlyError(BuildContext context, Object e) {
         return l.driverDeclAllRequired;
       case 'car_details_required':
         return l.carDetailsRequired;
+      case 'outside_service_area':
+        return l.outsideServiceArea;
       case 'active_ride':
         return l.deleteAccountActiveRide;
     }
