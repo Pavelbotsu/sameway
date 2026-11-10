@@ -109,3 +109,13 @@ On-emulator integration tests (local backend must be running):
 flutter build apk --profile --target-platform android-x64 -t integration_test/backend_smoke_test.dart
 flutter drive --profile --driver test_driver/integration_test.dart   --target integration_test/backend_smoke_test.dart   --use-application-binary build/app/outputs/flutter-apk/app-profile.apk
 ```
+
+Full ride with one emulator: the emulator plays one side, the host the other
+(same RUN id, started together; the backend needs OSRM access for the route).
+
+```
+flutter build apk --profile --target-platform android-x64 -t integration_test/two_device_ride_test.dart --dart-define=RUN=<id>
+flutter drive --profile --driver test_driver/integration_test.dart   --target integration_test/two_device_ride_test.dart   --use-application-binary build/app/outputs/flutter-apk/app-profile.apk
+# at the same time, on the host (ROLE=passenger makes the emulator the driver):
+flutter test tool/ride_counterpart_test.dart --dart-define=RUN=<id> --dart-define=ROLE=passenger --dart-define=API_HOST=localhost:4040 --dart-define=API_INSECURE=true
+```
