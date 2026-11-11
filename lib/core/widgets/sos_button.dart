@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../api_client.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../haptics.dart';
+import '../token_storage.dart';
 
 /// The European emergency number. It works in every EU/EEA country (Sameway
 /// launches in Poland) and on any phone, with or without a SIM. It depends on
@@ -24,6 +26,9 @@ class SosButton extends StatelessWidget {
   // applicable (e.g. driver firing SOS doesn't have their own plate).
   final String? driverName;
   final String? plate;
+  /// The ongoing ride, if any: "Share trip" then sends a live link
+  /// (POST /rides/:id/share) instead of a fixed map pin.
+  final String? requestId;
 
   const SosButton({
     super.key,
@@ -31,6 +36,7 @@ class SosButton extends StatelessWidget {
     this.lng,
     this.driverName,
     this.plate,
+    this.requestId,
   });
 
   @override
@@ -47,6 +53,7 @@ class SosButton extends StatelessWidget {
           lng: lng,
           driverName: driverName,
           plate: plate,
+          requestId: requestId,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -76,13 +83,14 @@ class SosButton extends StatelessWidget {
 ///   - **Call emergency services** — `tel:` URI to [kEmergencyNumber] (112).
 ///     Just opens the dialer — we do NOT auto-dial, the user still has to
 ///     press the green button.
-///   - **Share trip with contact** — opens the system share sheet prefilled
-///     with a Google Maps location URL, driver name, plate.
+///   - **Share trip with contact** — opens the system share sheet with a live
+///     trip link (ongoing ride), or a Google Maps pin, driver name and plate.
 class SosSheet extends StatelessWidget {
   final double? lat;
   final double? lng;
   final String? driverName;
   final String? plate;
+  final String? requestId;
 
   const SosSheet({
     super.key,
@@ -90,6 +98,7 @@ class SosSheet extends StatelessWidget {
     this.lng,
     this.driverName,
     this.plate,
+    this.requestId,
   });
 
   static Future<void> show(
@@ -98,6 +107,7 @@ class SosSheet extends StatelessWidget {
     double? lng,
     String? driverName,
     String? plate,
+    String? requestId,
   }) {
     Haptics.heavy();
     return showModalBottomSheet(
@@ -109,6 +119,7 @@ class SosSheet extends StatelessWidget {
         lng: lng,
         driverName: driverName,
         plate: plate,
+        requestId: requestId,
       ),
     );
   }
@@ -122,6 +133,21 @@ class SosSheet extends StatelessWidget {
   }
 
   Future<void> _share(BuildContext context) async {
+    final l = AppLocalizations.of(context);
+    // Live link for an ongoing ride: the contact can follow the car until
+    // the ride ends. Falls back to a fixed pin if it can't be created.
+    if (requestId != null) {
+      try {
+        final res = await ApiClient(TokenStorage())
+            .post('/rides/$requestId/share', const {}, auth: true);
+        final url = '$kApiBase${res['url']}';
+        // ignore: deprecated_member_use
+        await Share.share(l.shareTripLiveBody(url));
+        if (context.mounted) Navigator.pop(context);
+        return;
+      } catch (_) {/* fall through to the pin */}
+      if (!context.mounted) return;
+    }
     final mapsUrl = (lat != null && lng != null)
         ? 'https://maps.google.com/?q=$lat,$lng'
         : 'unknown location';

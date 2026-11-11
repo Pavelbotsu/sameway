@@ -2344,6 +2344,15 @@ class AppLocalizations {
       pl: 'Jadę przejazdem Sameway. Moja lokalizacja: $mapsUrl  Kierowca: $who · Rejestracja: $p',
     );
   }
+  String shareTripLiveBody(String url) => _t(
+        en: 'I\'m in a Sameway ride. Follow it live: $url',
+        uk: 'Я в поїздці Sameway. Стежте за нею наживо: $url',
+        es: 'Estoy en un viaje de Sameway. Síguelo en directo: $url',
+        de: 'Ich bin auf einer Sameway-Fahrt. Live verfolgen: $url',
+        fr: 'Je suis dans un trajet Sameway. Suis-le en direct : $url',
+        it: 'Sono in una corsa Sameway. Seguila in diretta: $url',
+        pl: 'Jadę przejazdem Sameway. Śledź go na żywo: $url',
+      );
   // ─── Profile photo (Phase 1.3) ───────────────────────────────────────────
   String get profilePhoto => _t(
         en: 'Profile photo',

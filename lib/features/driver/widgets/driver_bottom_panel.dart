@@ -324,6 +324,10 @@ class _ActivePanel extends StatelessWidget {
             child: SosButton(
               lat: myPos?.latitude,
               lng: myPos?.longitude,
+              requestId: driver.requests
+                  .where((r) => r.status == 'accepted' || r.status == 'in_progress')
+                  .map((r) => r.id)
+                  .firstOrNull,
             ),
           ),
           const SizedBox(height: 8),
