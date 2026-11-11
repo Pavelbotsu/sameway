@@ -177,10 +177,13 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
         const Duration(seconds: 10),
         (_) => _sendLocation(),
       );
+      // The server pushes `nearby_changed` when drivers around change; the
+      // timer is only a fallback (lost socket, missed event).
       _driversTimer = Timer.periodic(
-        const Duration(seconds: 10),
+        const Duration(seconds: 60),
         (_) => _fetchNearbyDrivers(),
       );
+      _nearbySub = provider.nearbyChanged.listen((_) => _onNearbyChanged());
       _fetchNearbyDrivers();
 
       provider.addListener(_onRatingPending);
@@ -231,6 +234,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
     _driversTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _noticeSub?.cancel();
+    _nearbySub?.cancel();
     // The rating listener was never removed. PassengerProvider is root-scoped
     // and outlives this screen, so every navigation away and back stacked
     // another listener holding a dead BuildContext — the rating sheet fired
@@ -251,9 +255,23 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
   /// response let requests pile up on top of each other.
   bool _fetchingNearby = false;
 
+  StreamSubscription<void>? _nearbySub;
+  DateTime? _lastNearbyFetch;
+
+  /// Refresh on a server hint, but at most every 5 s: several drivers moving
+  /// at once shouldn't turn into a burst of requests.
+  void _onNearbyChanged() {
+    final last = _lastNearbyFetch;
+    if (last != null && DateTime.now().difference(last) < const Duration(seconds: 5)) {
+      return;
+    }
+    _fetchNearbyDrivers();
+  }
+
   Future<void> _fetchNearbyDrivers() async {
     if (_myPos == null || _fetchingNearby || !_inForeground) return;
     _fetchingNearby = true;
+    _lastNearbyFetch = DateTime.now();
     try {
       // Via the repository/ApiClient rather than a raw http.post: that path had
       // no timeout at all and skipped the 401 → session-expiry handling, so an

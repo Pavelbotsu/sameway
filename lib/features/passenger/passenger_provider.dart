@@ -437,6 +437,8 @@ class PassengerProvider extends ChangeNotifier {
       _resetCheckIn();
       state = PassengerStatus.looking;
       notifyListeners();
+    } else if (type == 'nearby_changed') {
+      if (!_disposed) _nearbyChanged.add(null);
     } else if (type == 'pickup_code_reset') {
       if (!_disposed) _notices.add(PassengerNotice.pickupCodeReset);
     } else if (type == 'ride_cancelled') {
@@ -598,6 +600,11 @@ class PassengerProvider extends ChangeNotifier {
 
   final _notices = StreamController<PassengerNotice>.broadcast();
   Stream<PassengerNotice> get notices => _notices.stream;
+
+  /// The server says drivers near you changed (route set or ended, or a
+  /// driver moved): time to refresh the nearby list. Replaces fast polling.
+  final _nearbyChanged = StreamController<void>.broadcast();
+  Stream<void> get nearbyChanged => _nearbyChanged.stream;
 
   /// True when several consecutive location pings have failed. A passenger
   /// whose location never reaches the server is invisible to the corridor
@@ -842,6 +849,7 @@ class PassengerProvider extends ChangeNotifier {
     detachWS();
     _ratingWaitTimeout?.cancel();
     _notices.close();
+    _nearbyChanged.close();
     super.dispose();
   }
 }
