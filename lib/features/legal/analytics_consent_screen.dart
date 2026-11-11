@@ -53,7 +53,7 @@ class _AnalyticsConsentScreenState extends State<AnalyticsConsentScreen> {
                 ),
                 const SizedBox(height: 8),
                 TextButton(
-                  onPressed: () => openLegalUrl(kPrivacyPolicyUrl),
+                  onPressed: () => openLegalUrl(context, kPrivacyPolicyUrl),
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
                     l.privacyPolicy,

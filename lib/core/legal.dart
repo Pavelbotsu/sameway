@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'api_client.dart';
@@ -13,7 +14,16 @@ const kPrivacyPolicyUrl = '$kApiBase/legal/privacy';
 const kTermsUrl = '$kApiBase/legal/terms';
 const kAccountDeletionUrl = '$kApiBase/account/delete';
 
-/// Opens a legal page in the external browser. Returns false if nothing could
-/// handle it.
-Future<bool> openLegalUrl(String url) =>
-    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+/// Languages the documents exist in on the backend (handlers/static).
+const kLegalLanguages = {'en', 'pl', 'uk'};
+
+/// [url] in [lang] when the document exists in it, otherwise English.
+String legalUrlFor(String url, String lang) =>
+    '$url?lang=${kLegalLanguages.contains(lang) ? lang : 'en'}';
+
+/// Opens a legal page in the external browser, in the app's current
+/// language. Returns false if nothing could handle it.
+Future<bool> openLegalUrl(BuildContext context, String url) => launchUrl(
+      Uri.parse(legalUrlFor(url, Localizations.localeOf(context).languageCode)),
+      mode: LaunchMode.externalApplication,
+    );

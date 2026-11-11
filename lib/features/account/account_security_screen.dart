@@ -659,7 +659,7 @@ class _LegalAndPrivacySectionState extends State<_LegalAndPrivacySection> {
               style: const TextStyle(color: AppColors.textPrimary, fontSize: 14)),
           trailing: const Icon(Icons.open_in_new_rounded,
               color: AppColors.textSecondary, size: 18),
-          onTap: () => openLegalUrl(url),
+          onTap: () => openLegalUrl(context, url),
         );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -129,7 +129,7 @@ class _LinkButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => openLegalUrl(url),
+      onPressed: () => openLegalUrl(context, url),
       style: TextButton.styleFrom(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         minimumSize: const Size(0, 36),
