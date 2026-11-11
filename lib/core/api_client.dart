@@ -138,6 +138,27 @@ class ApiClient {
     }
   }
 
+  /// Multipart upload of one file (e.g. the profile photo). Same error and
+  /// 401 handling as [post].
+  Future<Map<String, dynamic>> uploadFile(
+    String path, {
+    required String field,
+    required String filePath,
+    bool auth = true,
+  }) async {
+    try {
+      final h = await _headers(auth, mutating: true)..remove('Content-Type');
+      final req = http.MultipartRequest('POST', Uri.parse('$_base$path'))
+        ..headers.addAll(h)
+        ..files.add(await http.MultipartFile.fromPath(field, filePath));
+      final streamed = await req.send().timeout(const Duration(seconds: 30));
+      final res = await http.Response.fromStream(streamed);
+      return _parse(res, authed: h.containsKey('Authorization'));
+    } on TimeoutException {
+      throw const ApiException('timeout');
+    }
+  }
+
   Future<Map<String, dynamic>> put(
     String path,
     Map<String, dynamic> body, {
@@ -280,3 +301,7 @@ class ApiClient {
         statusCode: res.statusCode, code: code, details: details);
   }
 }
+
+/// Photos uploaded through the API come back as server-relative paths
+/// (`/photos/<id>.jpg`); older profiles may still hold full URLs.
+String resolvePhotoUrl(String url) => url.startsWith('/') ? '$kApiBase$url' : url;

@@ -1,5 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../core/api_client.dart' show kApiBase;
@@ -165,10 +164,8 @@ class AuthProvider extends ChangeNotifier {
   /// this device holds for it. Throws ApiException (403 wrong password,
   /// 409 ride in progress) — nothing local is touched in that case.
   Future<void> deleteAccount(String password) async {
-    final userId = await _storage.getUserId();
     await _repo.deleteAccount(password);
     // Server side is done; everything below is best-effort local cleanup.
-    if (userId != null) await _deleteProfilePhotos(userId);
     try {
       // Stops pushes to this device for the deleted account (the server
       // already dropped the token; this invalidates it at FCM too).
@@ -178,18 +175,4 @@ class AuthProvider extends ChangeNotifier {
     await _clearLocalSession();
   }
 
-  /// Profile photos live in Firebase Storage under `user_photos/{userId}/` and the
-  /// backend has no handle on them. Whether this succeeds depends on the
-  /// Storage security rules (audit P0-12).
-  Future<void> _deleteProfilePhotos(String userId) async {
-    try {
-      final dir = FirebaseStorage.instance.ref('user_photos/$userId');
-      final list = await dir.listAll().timeout(const Duration(seconds: 10));
-      for (final item in list.items) {
-        await item.delete().timeout(const Duration(seconds: 10));
-      }
-    } catch (e) {
-      debugPrint('deleteAccount: photo cleanup failed: $e');
-    }
-  }
 }

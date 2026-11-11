@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../api_client.dart' show resolvePhotoUrl;
 import '../app_colors.dart';
 
 /// Avatar with photo when available, deterministic initials-in-colored-circle
@@ -60,7 +61,7 @@ class UserAvatar extends StatelessWidget {
       child: ClipOval(
         child: has
             ? Image.network(
-                photoUrl!,
+                resolvePhotoUrl(photoUrl!),
                 fit: BoxFit.cover,
                 // On network failure fall back to initials. Image.network
                 // errorBuilder is the cheapest hook for this.

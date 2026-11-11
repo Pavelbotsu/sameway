@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -198,13 +196,10 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       );
       if (file == null) return;
       setState(() => _uploadingPhoto = true);
-      final userId = await TokenStorage().getUserId();
-      if (userId == null) return;
-      final ref = FirebaseStorage.instance
-          .ref('user_photos/$userId/${DateTime.now().millisecondsSinceEpoch}.jpg');
-      await ref.putFile(File(file.path));
-      final url = await ref.getDownloadURL();
-      await _saveProfilePhoto(url);
+      // Stored on our server, which strips the photo's metadata (GPS).
+      final res = await ApiClient(TokenStorage())
+          .uploadFile('/auth/profile/photo', field: 'photo', filePath: file.path);
+      final url = res['photo_url'] as String;
       if (!mounted) return;
       setState(() => _photoUrl = url);
       BrandedSnack.showSuccess(
