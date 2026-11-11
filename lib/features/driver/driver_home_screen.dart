@@ -12,17 +12,25 @@ import 'package:provider/provider.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/error_handling.dart';
+import '../../core/widgets/branded_snack_bar.dart';
+import 'driver_setup.dart';
+import '../../core/feature_flags.dart';
 import '../../core/fcm_service.dart';
 import '../../core/haptics.dart';
 import '../../core/map_centering.dart';
 import '../../core/wkt.dart';
 import '../../core/map_style_provider.dart';
+import '../../core/place_search.dart';
+import '../../core/widgets/map_attribution.dart';
 import '../../core/matching_preference_provider.dart';
 import '../../core/widgets/ai_matching_toggle_tile.dart';
 import '../../core/widgets/bug_report_sheet.dart';
 import '../../core/widgets/connectivity_pill.dart';
 import '../../core/widgets/map_destination_picker.dart';
 import '../../core/widgets/map_recenter_button.dart';
+import '../../core/widgets/map_pick_button.dart';
+import '../../core/widgets/micro_detour_toggle_tile.dart';
 import '../../core/widgets/pre_permission_sheet.dart';
 import '../../core/widgets/test_ai_tile.dart';
 import '../onboarding/onboarding_screen.dart';
@@ -31,12 +39,14 @@ import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
 import '../../core/widgets/language_sheet.dart';
 import '../../core/widgets/rating_sheet.dart';
+import '../../core/widgets/ride_check_in_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
 import '../../core/widgets/role_switch_sheet.dart';
 import '../passenger/passenger_home_screen.dart';
 import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
 import '../account/account_security_screen.dart';
+import '../chat/conversations_screen.dart';
 import '../onboarding/role_selection_screen.dart';
 import 'driver_provider.dart';
 import 'widgets/driver_bottom_panel.dart';
@@ -62,16 +72,43 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   String? _lastNotifiedRequestId;
   late VoidCallback _providerListener;
   late VoidCallback _ratingListener;
+  late VoidCallback _checkInListener;
+  bool _checkInSheetOpen = false;
   StreamSubscription<PassengerMatchInfo>? _incomingSub;
+  StreamSubscription<void>? _bgLocationSub;
+  StreamSubscription<String>? _pickupLockedSub;
   bool _hasFitPickupCamera = false;
   // True while the driver is picking their destination by panning the map.
   bool _pickingDest = false;
+
+  /// Captured here rather than read in [dispose].
+  ///
+  /// By the time `State.dispose()` runs, `StatefulElement.unmount()` has already
+  /// marked the element defunct and nulled its inherited-element map, so
+  /// `context.read<T>()` throws — an assert ("Looking up a deactivated widget's
+  /// ancestor is unsafe") in debug, `ProviderNotFoundException` in release.
+  /// Either way `dispose()` aborts before `super.dispose()`, the exception
+  /// escapes `_InactiveElements._unmountAll`, and every element still queued for
+  /// unmount is left half torn down — which is what surfaced as the
+  /// `InheritedElement` assertion storm on role switch.
+  ///
+  /// The listeners below use it too: a `notifyListeners` landing between
+  /// `deactivate()` and `dispose()` would hit the same defunct context.
+  ///
+  /// Non-`final`: `didChangeDependencies` may run more than once.
+  late DriverProvider _provider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _provider = context.read<DriverProvider>();
+  }
 
   @override
   void initState() {
     super.initState();
     _providerListener = () {
-      final provider = context.read<DriverProvider>();
+      final provider = _provider;
       final newId = provider.acceptedRequestId;
       if (newId != null && newId != _lastNotifiedRequestId) {
         _lastNotifiedRequestId = newId;
@@ -86,7 +123,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       }
     };
     _ratingListener = () {
-      final provider = context.read<DriverProvider>();
+      final provider = _provider;
       if (provider.pendingRatingRequestId != null &&
           provider.pendingRatingPassengerId != null &&
           mounted) {
@@ -110,6 +147,26 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         });
       }
     };
+    // Mid-ride safety check-in. Clears the provider flag BEFORE showing, so a
+    // rebuild while the sheet is up can't re-open it.
+    _checkInListener = () async {
+      final provider = _provider;
+      if (!provider.checkInPrompt || !mounted || _checkInSheetOpen) return;
+      final requestId = provider.takeCheckInPrompt();
+      if (requestId == null) return;
+      _checkInSheetOpen = true;
+      await RideCheckInSheet.show(
+        context,
+        otherPartyLabel: AppLocalizations.of(context).passenger,
+        lat: _myPos?.latitude,
+        lng: _myPos?.longitude,
+        // No driverName/plate: the driver IS the driver, so echoing their own
+        // details back into an SOS share helps nobody.
+        onNeedHelp: (reason) => provider.flagSafety(requestId, reason),
+      );
+      _checkInSheetOpen = false;
+      if (mounted) _checkInListener();
+    };
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _initLocation();
       if (!widget.isGuest) {
@@ -122,6 +179,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         final provider = context.read<DriverProvider>();
         provider.addListener(_providerListener);
         provider.addListener(_ratingListener);
+        provider.addListener(_checkInListener);
         _incomingSub = provider.incomingRequests.listen((info) {
           if (!mounted) return;
           Haptics.heavy();
@@ -137,9 +195,31 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             duration: const Duration(seconds: 6),
           ));
         });
+        _pickupLockedSub = provider.pickupLocked.listen((_) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).pickupLockedDriver),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 8),
+          ));
+        });
+        _bgLocationSub = provider.backgroundLocationFailed.listen((_) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context).backgroundLocationUnavailable),
+            backgroundColor: AppColors.surface,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 10),
+            showCloseIcon: true,
+          ));
+        });
       }
+      // 10s, not 15s: the backend drops a driver from matching once their last
+      // fix is older than MATCH_LOC_FRESH_S. A tighter interval leaves room for
+      // a few dropped pings before the driver goes invisible.
       _locationTimer =
-          Timer.periodic(const Duration(seconds: 15), (_) => _sendLocation());
+          Timer.periodic(const Duration(seconds: 10), (_) => _sendLocation());
     });
   }
 
@@ -285,10 +365,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         initialDestName: initialDestName,
         initialDestLatLng: initialDestLatLng,
         onPickOnMap: _enterDestPickMode,
-        onSubmit: (destLat, destLng, corridorKm, seats) {
+        onSubmit: (destLat, destLng, corridorKm, seats) async {
           if (_myPos == null) return;
           final preferAI = context.read<MatchingPreferenceProvider>().useAI;
-          context.read<DriverProvider>().setRoute(
+          final driver = context.read<DriverProvider>();
+          final err = await withDriverSetup(context, () => driver.setRoute(
                 originLat: _myPos!.latitude,
                 originLng: _myPos!.longitude,
                 destLat: destLat,
@@ -296,7 +377,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 corridorKm: corridorKm,
                 seats: seats,
                 preferAI: preferAI,
-              );
+              ));
+          if (err != null && mounted) {
+            BrandedSnack.showError(context, friendlyError(context, err));
+          }
         },
       ),
     );
@@ -518,10 +602,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   @override
   void dispose() {
-    final provider = context.read<DriverProvider>();
-    provider.removeListener(_providerListener);
-    provider.removeListener(_ratingListener);
+    // Uses the captured _provider, never context.read: see the field's doc.
+    _provider.removeListener(_providerListener);
+    _provider.removeListener(_ratingListener);
+    _provider.removeListener(_checkInListener);
+    // Detach from the shared socket without closing it — PassengerProvider
+    // uses the same WebSocketClient (see main.dart).
+    _provider.detachWS();
     _incomingSub?.cancel();
+    _bgLocationSub?.cancel();
+    _pickupLockedSub?.cancel();
     _locationTimer?.cancel();
     _sheetCtrl.dispose();
     super.dispose();
@@ -538,11 +628,22 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         onSetRoute: _showSetRouteSheet,
         onPlanTrip: _showPlanTripSheet,
         onFindTrips: _showFindTripsSheet,
+        onReportBug: _showBugReportSheet,
         onShowAccount: _showAccountSheet,
       ),
       body: Stack(
+        // Keys are load-bearing here — see the long note on the passenger
+        // screen's Stack. This list is currently safe only by accident: every
+        // child above the sheet is an unconditional Consumer that shrinks to
+        // nothing when inactive, so the sheet's index never moves. The moment
+        // someone adds an `if (...)` child above it, the tail swap below
+        // (recenter button <-> map picker) stops the bottom-up scan from
+        // rescuing the sheet, it gets destroyed mid-frame, and _sheetCtrl is
+        // left permanently detached. Keys make that impossible instead of
+        // merely unlikely.
         children: [
           Consumer<DriverProvider>(
+            key: const ValueKey('map'),
             builder: (_, driver, __) {
               final routePoints = driver.activeRoute != null
                   ? _parseWKT(driver.activeRoute!.routeWkt)
@@ -596,7 +697,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   Consumer<MapStyleProvider>(
                     builder: (_, mapStyle, __) => TileLayer(
                       urlTemplate: mapStyle.urlTemplate,
-                      userAgentPackageName: 'com.example.sameway',
+                      userAgentPackageName: kMapUserAgentPackage,
                       tileBuilder: mapStyle.tileBuilder,
                     ),
                   ),
@@ -663,6 +764,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           ),
                       ],
                     ),
+                  // Licence credit for the current tile style (always visible).
+                  Consumer<MapStyleProvider>(
+                    builder: (_, mapStyle, __) =>
+                        MapAttribution(text: mapStyle.attribution),
+                  ),
                 ],
               );
             },
@@ -670,6 +776,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
           // Top bar
           Positioned(
+            key: const ValueKey('topBar'),
             top: 0,
             left: 0,
             right: 0,
@@ -695,7 +802,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                             Text(
                               l.driver,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.mapLabelText,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                               ),
@@ -767,6 +874,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
           // Pickup-route distance + ETA pill (only while a pickup route is active).
           Consumer<DriverProvider>(
+            key: const ValueKey('pickupEtaPill'),
             builder: (_, driver, __) {
               final pickup = driver.pickupRoute;
               if (pickup == null) return const SizedBox.shrink();
@@ -789,18 +897,24 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           // driver isn't left wondering why their location pings aren't
           // landing.
           Consumer<DriverProvider>(
+            key: const ValueKey('connectivityPill'),
             builder: (_, driver, __) =>
-                ConnectivityPill(wsState: driver.wsState),
+                ConnectivityPill(
+                  wsState: driver.wsState,
+                  locationFailing: driver.locationSyncFailing,
+                ),
           ),
 
           // Bottom panel
           DraggableScrollableSheet(
+            // The key that matters most — see the note on `children:` above.
+            key: const ValueKey('driverPanelSheet'),
             controller: _sheetCtrl,
             initialChildSize: 0.55,
-            minChildSize: 0.07,
+            minChildSize: 0.26,
             maxChildSize: 0.85,
             snap: true,
-            snapSizes: const [0.28, 0.55],
+            snapSizes: const [0.55],
             builder: (_, scrollController) => Consumer<DriverProvider>(
               builder: (_, driver, __) => DriverBottomPanel(
                 driver: driver,
@@ -822,6 +936,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
           // Rating-wait banner overlay
           Consumer<DriverProvider>(
+            key: const ValueKey('ratingWaitBanner'),
             builder: (_, driver, __) {
               if (driver.awaitingRatingRequestId == null) {
                 return const SizedBox.shrink();
@@ -842,6 +957,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           // slides with it as it's dragged. Hidden during map-pick mode.
           if (!_pickingDest)
             MapRecenterButton(
+              key: const ValueKey('recenterButton'),
               sheetController: _sheetCtrl,
               accentColor: AppColors.primary,
               onPressed: _recenterOnUser,
@@ -850,6 +966,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           // Map-pick overlay: fixed centre pin + confirm/cancel bar.
           if (_pickingDest)
             MapDestinationPicker(
+              key: const ValueKey('mapDestinationPicker'),
               sheetController: _sheetCtrl,
               accent: AppColors.primary,
               title: AppLocalizations.of(context).moveMapToDestination,
@@ -922,6 +1039,7 @@ class _DriverNavBar extends StatelessWidget {
   final VoidCallback onSetRoute;
   final VoidCallback onPlanTrip;
   final VoidCallback onFindTrips;
+  final VoidCallback onReportBug;
   final VoidCallback onShowAccount;
 
   const _DriverNavBar({
@@ -929,11 +1047,13 @@ class _DriverNavBar extends StatelessWidget {
     required this.onSetRoute,
     required this.onPlanTrip,
     required this.onFindTrips,
+    required this.onReportBug,
     required this.onShowAccount,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.surface,
@@ -946,25 +1066,33 @@ class _DriverNavBar extends StatelessWidget {
         children: [
           _NavIconBtn(
             icon: Icons.add_road_rounded,
-            label: 'Route',
+            label: l.navRoute,
             color: AppColors.primary,
             onTap: onSetRoute,
           ),
+          if (FeatureFlags.plannedTrips)
+            _NavIconBtn(
+              icon: Icons.event_available_rounded,
+              label: l.navPlan,
+              color: AppColors.primary,
+              onTap: isGuest ? null : onPlanTrip,
+            ),
+          if (FeatureFlags.plannedTrips)
+            _NavIconBtn(
+              icon: Icons.search_rounded,
+              label: l.navFind,
+              color: AppColors.primary,
+              onTap: onFindTrips,
+            ),
           _NavIconBtn(
-            icon: Icons.event_available_rounded,
-            label: 'Plan',
+            icon: Icons.bug_report_rounded,
+            label: l.navReportBug,
             color: AppColors.primary,
-            onTap: isGuest ? null : onPlanTrip,
-          ),
-          _NavIconBtn(
-            icon: Icons.search_rounded,
-            label: 'Find',
-            color: AppColors.primary,
-            onTap: onFindTrips,
+            onTap: isGuest ? null : onReportBug,
           ),
           _NavIconBtn(
             icon: Icons.manage_accounts_rounded,
-            label: 'Account',
+            label: l.navAccount,
             color: AppColors.primary,
             onTap: onShowAccount,
           ),
@@ -1011,17 +1139,25 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
   List<_PlaceSuggestion> _suggestions = [];
   bool _loadingSuggestions = false;
   Timer? _debounce;
+  final _placeSearch = PlaceSearch();
   LatLng? _selectedLatLng;
 
   @override
   void initState() {
     super.initState();
     // Returning from map-pick: pre-fill the field + skip re-geocoding by
-    // seeding the resolved coordinates.
+    // seeding the resolved coordinates. Seed BEFORE attaching the listener so
+    // the seed doesn't call setState() during initState.
     if (widget.initialDestLatLng != null) {
       _dest.text = widget.initialDestName ?? '';
       _selectedLatLng = widget.initialDestLatLng;
     }
+    // Rebuild so the clear (X) button toggles live as the user types.
+    _dest.addListener(_onDestTextChanged);
+  }
+
+  void _onDestTextChanged() {
+    if (mounted) setState(() {});
   }
 
   void _onDestChanged(String v) {
@@ -1038,32 +1174,18 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
 
   Future<void> _fetchSuggestions(String query) async {
     setState(() => _loadingSuggestions = true);
-    try {
-      final origin = widget.originPos;
-      final bbox = origin != null
-          ? '&viewbox=${origin.longitude - 0.5},${origin.latitude - 0.5}'
-            ',${origin.longitude + 0.5},${origin.latitude + 0.5}&bounded=1'
-          : '';
-      final uri = Uri.parse(
-        'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}&format=json&limit=5&addressdetails=0$bbox',
-      );
-      final resp = await http.get(
-        uri,
-        headers: {'Accept-Language': 'en', 'User-Agent': 'sameway-app'},
-      );
-      if (resp.statusCode == 200 && mounted) {
-        final list = jsonDecode(resp.body) as List;
-        setState(() => _suggestions = list
-            .map((e) => _PlaceSuggestion(
-                  name: e['display_name'] as String,
-                  lat: double.parse(e['lat'] as String),
-                  lng: double.parse(e['lon'] as String),
-                ))
-            .toList());
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _loadingSuggestions = false);
+    final found = await _placeSearch.search(
+      query,
+      near: widget.originPos,
+      languageCode: Localizations.localeOf(context).languageCode,
+    );
+    if (found == null || !mounted) return; // superseded by a newer query
+    setState(() {
+      _suggestions = found
+          .map((s) => _PlaceSuggestion(name: s.name, lat: s.lat, lng: s.lng))
+          .toList();
+      _loadingSuggestions = false;
+    });
   }
 
   void _selectSuggestion(_PlaceSuggestion s) {
@@ -1075,7 +1197,7 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
 
   Future<void> _submit() async {
     if (_dest.text.trim().isEmpty) {
-      setState(() => _error = 'Enter a destination');
+      setState(() => _error = AppLocalizations.of(context).errEnterDestination);
       return;
     }
     setState(() {
@@ -1095,7 +1217,7 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
       final locations = await locationFromAddress(_dest.text.trim());
       if (locations.isEmpty) {
         setState(() {
-          _error = 'Address not found';
+          _error = AppLocalizations.of(context).errAddressNotFound;
           _geocoding = false;
         });
         return;
@@ -1105,8 +1227,9 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
       Navigator.pop(context);
       widget.onSubmit(loc.latitude, loc.longitude, _corridor, _seats);
     } catch (e) {
+      if (!mounted) return;
       setState(() {
-        _error = 'Could not find address';
+        _error = AppLocalizations.of(context).errAddressNotFound;
         _geocoding = false;
       });
     }
@@ -1114,6 +1237,7 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
 
   @override
   void dispose() {
+    _dest.removeListener(_onDestTextChanged);
     _dest.dispose();
     _debounce?.cancel();
     super.dispose();
@@ -1164,17 +1288,19 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
               onChanged: _onDestChanged,
               decoration: InputDecoration(
                 hintText: l.destination,
-                // Location icon doubles as the "pick on map" button: close this
-                // sheet and drop into map-pick mode.
-                prefixIcon: IconButton(
+                // Location icon doubles as the "pick on map" button — the
+                // tinted circle makes it read as tappable. Close this sheet and
+                // drop into map-pick mode.
+                prefixIcon: MapPickButton(
+                  accent: AppColors.primary,
                   tooltip: l.pickOnMap,
-                  icon: const Icon(Icons.location_on_rounded,
-                      color: AppColors.primary, size: 20),
                   onPressed: () {
                     Navigator.pop(context);
                     widget.onPickOnMap();
                   },
                 ),
+                prefixIconConstraints:
+                    const BoxConstraints(minWidth: 48, minHeight: 48),
                 suffixIcon: _loadingSuggestions
                     ? const Padding(
                         padding: EdgeInsets.all(12),
@@ -1187,7 +1313,18 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
                           ),
                         ),
                       )
-                    : null,
+                    : _dest.text.isNotEmpty
+                        ? IconButton(
+                            tooltip: l.clear,
+                            icon: const Icon(Icons.close_rounded,
+                                color: AppColors.textSecondary, size: 18),
+                            onPressed: () {
+                              _dest.clear();
+                              _selectedLatLng = null;
+                              setState(() => _suggestions = []);
+                            },
+                          )
+                        : null,
               ),
             ),
             if (_suggestions.isNotEmpty)
@@ -1570,15 +1707,20 @@ class _AccountSheetState extends State<_AccountSheet> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
             ? l.testNotificationSent
-            : (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed'),
+            : friendlyError(
+                context,
+                ApiException(
+                  (jsonDecode(resp.body) as Map)['error'] as String? ?? '',
+                  statusCode: resp.statusCode,
+                ))),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
       if (ok && mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Network error'),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context).networkError),
           backgroundColor: AppColors.error,
           behavior: SnackBarBehavior.floating,
         ));
@@ -1755,6 +1897,19 @@ class _AccountSheetState extends State<_AccountSheet> {
             ),
           if (!widget.isGuest)
             _SheetTile(
+              icon: Icons.forum_rounded,
+              label: l.messagesTitle,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const ConversationsScreen()),
+                );
+              },
+            ),
+          if (!widget.isGuest)
+            _SheetTile(
               icon: Icons.history_rounded,
               label: l.tripHistory,
               onTap: () {
@@ -1789,21 +1944,27 @@ class _AccountSheetState extends State<_AccountSheet> {
             label: l.showTutorialAgain,
             onTap: widget.onShowTutorial,
           ),
-          AIMatchingToggleTile(
-            label: l.aiMatchingLabel,
-            subtitle: l.aiMatchingSubtitle,
-          ),
-          const TestAITile(),
-          _SheetTile(
-            icon: Icons.local_offer_rounded,
-            label: l.promotionsAndRewards,
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const PromotionsScreen()));
-            },
-          ),
-          if (!widget.isGuest) ...[
+          // Micro-detour opt-in (Round 2 §2) — server-side setting, drives
+          // whether the backend evaluates near-miss detours for this driver.
+          if (!widget.isGuest) const MicroDetourToggleTile(),
+          if (FeatureFlags.aiControls) ...[
+            AIMatchingToggleTile(
+              label: l.aiMatchingLabel,
+              subtitle: l.aiMatchingSubtitle,
+            ),
+            const TestAITile(),
+          ],
+          if (FeatureFlags.promotions)
+            _SheetTile(
+              icon: Icons.local_offer_rounded,
+              label: l.promotionsAndRewards,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const PromotionsScreen()));
+              },
+            ),
+          if (FeatureFlags.plannedTrips && !widget.isGuest) ...[
             _SheetTile(
               icon: Icons.event_available_rounded,
               label: l.planATrip,

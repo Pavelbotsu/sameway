@@ -102,15 +102,21 @@ class FcmService {
       if (jwt == null) return;
       final fcmToken = await FirebaseMessaging.instance.getToken();
       if (fcmToken == null) return;
-      await http.put(
-        Uri.parse('$kApiBase/auth/fcm-token'),
-        headers: {
-          'Authorization': 'Bearer $jwt',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'fcm_token': fcmToken}),
-      );
-    } catch (_) {}
+      // Bounded: this had no timeout, so a hung connection left the future
+      // pending for the process lifetime.
+      await http
+          .put(
+            Uri.parse('$kApiBase/auth/fcm-token'),
+            headers: {
+              'Authorization': 'Bearer $jwt',
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({'fcm_token': fcmToken}),
+          )
+          .timeout(const Duration(seconds: 15));
+    } catch (_) {
+      // Best-effort: onTokenRefresh and the next app start retry it.
+    }
   }
 
   /// Phase 1.7: show the rationale sheet (once per install) and then request

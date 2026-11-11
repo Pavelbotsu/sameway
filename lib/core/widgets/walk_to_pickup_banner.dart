@@ -32,7 +32,21 @@ class WalkToPickupBanner extends StatelessWidget {
   /// flag marker + walking polyline alone.
   static const double minMetersForBanner = 300;
 
-  String _formatDistance(double m) {
+  /// Below this the pickup is effectively where the passenger already is, and
+  /// "stay where you are" is the honest instruction.
+  ///
+  /// These two constants define three mutually exclusive tiers, and the caller
+  /// ([_AcceptedCard]) must render exactly one:
+  ///
+  ///   walk < 100 m   -> "driver notified, stay where you are"
+  ///   100 m - 300 m  -> [WalkToPickupCompact] — one line, no external link
+  ///   walk > 300 m   -> this banner, with walking directions
+  ///
+  /// They used to overlap: the "stay where you are" line was unconditional, so
+  /// a 400 m walk rendered the banner AND an instruction not to move.
+  static const double kStayPutMetres = 100;
+
+  static String formatDistance(double m) {
     if (m < 1000) return '${m.toStringAsFixed(0)} m';
     return '${(m / 1000).toStringAsFixed(1)} km';
   }
@@ -51,6 +65,8 @@ class WalkToPickupBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Defensive: the caller decides the tier, but never render the heavy banner
+    // for a walk the compact line is meant to cover.
     if (walkDistanceM < minMetersForBanner) return const SizedBox.shrink();
     final l = AppLocalizations.of(context);
     // Average walking speed 1.4 m/s ≈ 5 km/h.
@@ -74,7 +90,7 @@ class WalkToPickupBanner extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  l.walkToPickup(_formatDistance(walkDistanceM)),
+                  l.walkToPickup(formatDistance(walkDistanceM)),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -111,6 +127,47 @@ class WalkToPickupBanner extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Middle tier: a short walk the user still has to be told about, but not one
+/// that warrants a full banner and an external maps hand-off. The pickup flag
+/// and walking polyline on the map carry the rest of the message.
+///
+/// Exists because the two previous states were "silent" and "full banner", and
+/// everything between 100 m and 300 m fell into the silent one — while the
+/// card underneath said "stay at your location".
+class WalkToPickupCompact extends StatelessWidget {
+  final double walkDistanceM;
+
+  const WalkToPickupCompact({super.key, required this.walkDistanceM});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.directions_walk_rounded,
+              color: AppColors.teal, size: 18),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              l.walkToPickupShort(
+                  WalkToPickupBanner.formatDistance(walkDistanceM)),
+              style: const TextStyle(
+                color: AppColors.teal,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],

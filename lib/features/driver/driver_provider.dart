@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
+import '../../core/analytics.dart';
+import '../../core/api_client.dart' show ApiException;
 import '../../core/geo.dart';
 import '../../core/haptics.dart';
+import '../../core/location_service.dart';
+import '../../core/ride_check_in.dart';
 import '../../core/websocket_client.dart';
 import 'driver_repository.dart';
 
@@ -18,7 +23,13 @@ class PassengerMatchInfo {
 class PeerLatLng {
   final double lat;
   final double lng;
-  const PeerLatLng(this.lat, this.lng);
+
+  /// When this fix was received. The mid-ride check-in refuses to compare
+  /// positions unless both are recent — a passenger whose phone is locked stops
+  /// reporting, and a frozen position is not evidence that they left the car.
+  final DateTime at;
+
+  PeerLatLng(this.lat, this.lng, {DateTime? at}) : at = at ?? DateTime.now();
 }
 
 class DriverProvider extends ChangeNotifier {
@@ -29,6 +40,13 @@ class DriverProvider extends ChangeNotifier {
   List<RideRequest> requests = [];
   bool isLoading = false;
   String? error;
+  // Live corridor counters, updated by the `corridor_stats` WS event after
+  // every backend corridor run (route set, movement re-run, passenger-appear
+  // trigger). totalNotified is server-cumulative for the current route, so
+  // it can be assigned directly — never summed client-side.
+  int totalNotified = 0;
+  int candidatesFound = 0;
+  int activePendingCount = 0;
   String? acceptedRequestId;
   String? acceptedPassengerName;
   double? acceptedPassengerAvgRating;
@@ -47,6 +65,94 @@ class DriverProvider extends ChangeNotifier {
   LatLng? _lastPickupComputedAt;
   DateTime _lastPickupComputeTime =
       DateTime.fromMillisecondsSinceEpoch(0);
+
+  // ── Mid-ride safety check-in ─────────────────────────────────────────────
+  // Set when a passenger currently in this driver's car has been provably far
+  // away for ~30s. The home screen watches it and opens RideCheckInSheet.
+  // See core/ride_check_in.dart for why freshness gating is the whole design.
+  //
+  // Per-request trackers, not one: a driver can carry several passengers, and
+  // one of them getting out must not consume the other's streak or its
+  // already-asked latch.
+  //
+  // Prompts queue rather than overwrite: two trackers can latch in the same
+  // tick, and each has already spent its once-per-ride prompt.
+  bool checkInPrompt = false;
+  final List<String> _checkInQueue = [];
+  final Map<String, RideCheckInTracker> _checkIns = {};
+
+  /// Pops the next queued request that is still in_progress, or null. Rides
+  /// that ended while waiting in the queue are dropped.
+  String? takeCheckInPrompt() {
+    String? next;
+    while (_checkInQueue.isNotEmpty && next == null) {
+      final id = _checkInQueue.removeAt(0);
+      if (requests.any((r) => r.id == id && r.status == 'in_progress')) {
+        next = id;
+      }
+    }
+    checkInPrompt = _checkInQueue.isNotEmpty;
+    return next;
+  }
+
+  /// Evaluates every ride currently in_progress. Rides still in `accepted` are
+  /// skipped: before pickup the two being apart is the expected state — that
+  /// separation is exactly the walk-to-pickup leg.
+  void _evaluateCheckIn() {
+    for (final r in requests) {
+      if (r.status != 'in_progress') {
+        _checkIns[r.id]?.reset();
+        continue;
+      }
+      final loc = passengerLocations[r.id];
+      final verdict = evaluateCheckIn(
+        // Reuses the fix updateLocation already records for the speed EMA.
+        // _lastMyPosTime is epoch-initialised, so it is only meaningful once
+        // _lastMyPos is non-null — pass null together with it.
+        self: _lastMyPos,
+        selfAt: _lastMyPos == null ? null : _lastMyPosTime,
+        peer: loc == null ? null : LatLng(loc.lat, loc.lng),
+        peerAt: loc?.at,
+        now: DateTime.now(),
+      );
+      final tracker =
+          _checkIns.putIfAbsent(r.id, () => RideCheckInTracker());
+      if (tracker.observe(r.id, verdict)) {
+        _checkInQueue.add(r.id);
+        checkInPrompt = true;
+        Analytics.logEvent('ride_check_in_prompted', {'role': 'driver'});
+        notifyListeners();
+      }
+    }
+  }
+
+  void _resetCheckIn(String requestId) {
+    _checkIns.remove(requestId);
+    _checkInQueue.remove(requestId);
+    checkInPrompt = _checkInQueue.isNotEmpty;
+  }
+
+  /// Full teardown (route deleted, driving day ended, role switched).
+  void _resetAllCheckIns() {
+    _checkIns.clear();
+    _checkInQueue.clear();
+    checkInPrompt = false;
+  }
+
+  /// Records a "something is wrong" answer. Never throws — the caller's next
+  /// step is the SOS sheet, and a failed bookkeeping write must not block it.
+  Future<void> flagSafety(String requestId, String reason) async {
+    try {
+      await _repo.flagSafety(requestId: requestId, reason: reason);
+    } catch (_) {/* best effort — SOS is the real escalation */}
+  }
+
+  /// True when several consecutive location pings have failed. The backend
+  /// stops matching a driver whose last fix has aged out, so this drives a
+  /// visible warning rather than letting the driver sit there invisible.
+  bool locationSyncFailing = false;
+  int _locationFailures = 0;
+  static const _locationFailureThreshold = 3;
 
   // Rolling EMA of observed speed (km/h), computed from successive
   // updateLocation() samples. Used for the ETA badge.
@@ -110,10 +216,35 @@ class DriverProvider extends ChangeNotifier {
   // subscribes to surface a SnackBar + haptic.
   Stream<PassengerMatchInfo> get incomingRequests => _incomingRequests.stream;
 
+  // Emits when the background location service could not start for a new
+  // route. The driver then drops out of matching as soon as the screen locks,
+  // so the home screen tells them to keep the app open instead of failing
+  // silently (the old behaviour).
+  final _backgroundLocationFailed = StreamController<void>.broadcast();
+  Stream<void> get backgroundLocationFailed => _backgroundLocationFailed.stream;
+
+  // Emits a request id when its passenger has locked the pickup code, so the
+  // home screen can tell the driver to issue a new one.
+  final _pickupLocked = StreamController<String>.broadcast();
+  Stream<String> get pickupLocked => _pickupLocked.stream;
+
   StreamSubscription? _wsSub;
   StreamSubscription? _wsStateSub;
 
   DriverProvider(this._repo, this._ws);
+
+  // Guards notifyListeners() against firing after disposal. Several paths
+  // notify after an await (network calls in setRoute/_maybeRefreshPickupRoute);
+  // if the user switches role in that window, notifying a disposed
+  // ChangeNotifier throws and main.dart's PlatformDispatcher.onError reports it
+  // to Crashlytics as a fatal crash.
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
 
   PassengerMatchInfo? infoFor(String requestId) => passengerInfo[requestId];
 
@@ -134,6 +265,11 @@ class DriverProvider extends ChangeNotifier {
     final p = (msg['payload'] as Map?)?.cast<String, dynamic>() ?? const {};
 
     if (type == 'ride_cancelled' || type == 'passenger_request_cancelled') {
+      // 'driver_passed': the ETA-window logic expired this match because the
+      // driver drove past the pickup before it went active.
+      if (type == 'ride_cancelled' && p['cancelled_by'] == 'driver_passed') {
+        Analytics.logEvent('ride_expired_passed', {'role': 'driver'});
+      }
       final reqId = p['request_id'] as String?;
       if (reqId != null && reqId == acceptedRequestId) {
         acceptedRequestId = null;
@@ -144,6 +280,7 @@ class DriverProvider extends ChangeNotifier {
       }
       if (reqId != null) {
         passengerLocations.remove(reqId);
+        _resetCheckIn(reqId);
       }
       loadRequests();
     } else if (type == 'ride_response') {
@@ -186,7 +323,10 @@ class DriverProvider extends ChangeNotifier {
       final lat = (p['lat'] as num?)?.toDouble();
       final lng = (p['lng'] as num?)?.toDouble();
       if (reqId != null && lat != null && lng != null) {
+        // PeerLatLng stamps arrival time itself — the relay carries no
+        // timestamp, and arrival is what "how current is this" means here.
         passengerLocations[reqId] = PeerLatLng(lat, lng);
+        _evaluateCheckIn();
         notifyListeners();
         if (reqId == acceptedRequestId) {
           _maybeRefreshPickupRoute(reqId, LatLng(lat, lng));
@@ -217,6 +357,19 @@ class DriverProvider extends ChangeNotifier {
       if (reqId != null && reqId == awaitingRatingRequestId) {
         clearAwaitingRating();
       }
+    } else if (type == 'corridor_stats') {
+      candidatesFound = (p['candidates_found'] as num?)?.toInt() ?? 0;
+      activePendingCount = (p['active_pending_count'] as num?)?.toInt() ?? 0;
+      totalNotified =
+          (p['total_notified'] as num?)?.toInt() ?? totalNotified;
+      notifyListeners();
+    } else if (type == 'pickup_locked') {
+      final reqId = p['request_id'] as String?;
+      if (reqId != null) {
+        lockedPickupRequestIds.add(reqId);
+        if (!_disposed) _pickupLocked.add(reqId);
+        notifyListeners();
+      }
     } else if (type == 'chat_message') {
       unreadMessages++;
       notifyListeners();
@@ -235,6 +388,13 @@ class DriverProvider extends ChangeNotifier {
     isLoading = true;
     error = null;
     notifyListeners();
+    // Custom trace around the heaviest matching call the client can observe:
+    // the backend runs the full corridor match inside POST /driver/route.
+    // Trace failures are swallowed — perf tooling must never break the flow.
+    final trace = FirebasePerformance.instance.newTrace('ride_matching');
+    try {
+      await trace.start();
+    } catch (_) {}
     try {
       activeRoute = await _repo.setRoute(
         originLat: originLat,
@@ -245,11 +405,38 @@ class DriverProvider extends ChangeNotifier {
         seats: seats,
         preferAI: preferAI,
       );
+      try {
+        trace.setMetric('notified', activeRoute?.notifiedCount ?? 0);
+        trace.putAttribute(
+            'distance_km', (activeRoute?.distanceKm ?? 0).toStringAsFixed(1));
+      } catch (_) {}
+      // Seed the live counters from the route-set response; the
+      // corridor_stats WS event that follows carries the authoritative
+      // cumulative value and overwrites this.
+      totalNotified = activeRoute?.notifiedCount ?? 0;
+      candidatesFound = totalNotified;
+      activePendingCount = 0;
       destinationPos = LatLng(destLat, destLng);
+      // Keep the position flowing once the screen goes off. The in-app timer
+      // still covers the foreground; if the service can't start, warn the
+      // driver rather than let them vanish from matching unnoticed.
+      if (!await LocationService.start() && !_disposed) {
+        _backgroundLocationFailed.add(null);
+      }
       await loadRequests();
     } catch (e) {
+      // Missing driver declaration / car details: the screen walks the
+      // driver through it and retries (driver_setup.dart).
+      if (e is ApiException &&
+          (e.code == 'driver_declaration_required' ||
+              e.code == 'car_details_required')) {
+        rethrow;
+      }
       error = e.toString();
     } finally {
+      try {
+        await trace.stop();
+      } catch (_) {}
       isLoading = false;
       notifyListeners();
     }
@@ -277,6 +464,8 @@ class DriverProvider extends ChangeNotifier {
         status: accepted ? 'accepted' : 'declined',
       );
       if (accepted) {
+        // Seat is actually reserved backend-side on this accept.
+        Analytics.logEvent('seat_claimed', {'role': 'driver'});
         final info = passengerInfo[requestId];
         acceptedRequestId = requestId;
         acceptedPassengerName = info?.name;
@@ -302,6 +491,35 @@ class DriverProvider extends ChangeNotifier {
   void clearUnread() {
     unreadMessages = 0;
     notifyListeners();
+  }
+
+  /// Requests whose pickup code the passenger has locked (5 wrong tries).
+  /// The code block highlights "New code" for these.
+  final Set<String> lockedPickupRequestIds = {};
+
+  /// Issues a new pickup code after a lockout and refreshes the request list
+  /// so the new code shows. Throws on failure — the caller reports it.
+  Future<void> regeneratePickupCode(String requestId) async {
+    await _repo.regeneratePickupCode(requestId);
+    lockedPickupRequestIds.remove(requestId);
+    await loadRequests();
+  }
+
+  /// Cancels an accepted ride because the passenger never came. Throws
+  /// ApiException `no_show_too_early` (with waitSeconds) when it's too soon.
+  Future<void> reportNoShow(String requestId) async {
+    await _repo.reportNoShow(requestId);
+    if (acceptedRequestId == requestId) {
+      acceptedRequestId = null;
+      acceptedPassengerName = null;
+      acceptedPassengerAvgRating = null;
+      acceptedPassengerRatingCount = null;
+      _clearPickupRoute();
+    }
+    passengerInfo.remove(requestId);
+    passengerLocations.remove(requestId);
+    lockedPickupRequestIds.remove(requestId);
+    await loadRequests();
   }
 
   Future<void> cancelRide(String requestId) async {
@@ -333,17 +551,25 @@ class DriverProvider extends ChangeNotifier {
   }
 
   void _localCleanupOnDone() {
+    // Driving day over — stop the background location service. Leaving it
+    // running would keep an ongoing notification up and drain battery for a
+    // driver who is no longer offering rides.
+    LocationService.stop();
     acceptedRequestId = null;
     acceptedPassengerName = null;
     acceptedPassengerAvgRating = null;
     acceptedPassengerRatingCount = null;
     passengerInfo.clear();
     passengerLocations.clear();
+    _resetAllCheckIns();
     requests = [];
     activeRoute = null;
     destinationPos = null;
     _clearPickupRoute();
     unreadMessages = 0;
+    totalNotified = 0;
+    candidatesFound = 0;
+    activePendingCount = 0;
     notifyListeners();
   }
 
@@ -353,6 +579,7 @@ class DriverProvider extends ChangeNotifier {
     requests = requests.where((r) => r.id != requestId).toList();
     passengerInfo.remove(requestId);
     passengerLocations.remove(requestId);
+    _resetCheckIn(requestId);
     if (acceptedRequestId == requestId) {
       // Promote whoever's left to the singleton "current accepted" slot so
       // the SnackBar/_lastNotifiedRequestId logic in driver_home_screen
@@ -420,6 +647,8 @@ class DriverProvider extends ChangeNotifier {
   Future<void> deleteRoute() async {
     try {
       await _repo.deleteRoute();
+      // No active route → nothing to stay visible for.
+      await LocationService.stop();
       activeRoute = null;
       requests = [];
       acceptedRequestId = null;
@@ -431,6 +660,9 @@ class DriverProvider extends ChangeNotifier {
       destinationPos = null;
       _clearPickupRoute();
       unreadMessages = 0;
+      totalNotified = 0;
+      candidatesFound = 0;
+      activePendingCount = 0;
       error = null;
       notifyListeners();
     } catch (e) {
@@ -456,9 +688,27 @@ class DriverProvider extends ChangeNotifier {
     }
     _lastMyPos = newPos;
     _lastMyPosTime = now;
+    // Before the round trip: this is our own GPS fix, and how current it is has
+    // nothing to do with whether the POST succeeded.
+    _evaluateCheckIn();
     try {
       await _repo.updateLocation(lat, lng);
-    } catch (_) {}
+      if (locationSyncFailing) {
+        _locationFailures = 0;
+        locationSyncFailing = false;
+        notifyListeners();
+      }
+    } catch (_) {
+      // Never silent past a few in a row. The backend drops a driver from
+      // matching once their last fix ages out, so persistently failing pings
+      // mean the driver is invisible to passengers while their UI still looks
+      // perfectly normal — the single most confusing failure mode in the app.
+      _locationFailures++;
+      if (_locationFailures >= _locationFailureThreshold && !locationSyncFailing) {
+        locationSyncFailing = true;
+        notifyListeners();
+      }
+    }
   }
 
   void clearError() {
@@ -466,13 +716,23 @@ class DriverProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Stops listening to the shared WebSocket without closing it. See
+  /// [PassengerProvider.detachWS] — the socket belongs to both providers.
+  void detachWS() {
+    _wsSub?.cancel();
+    _wsSub = null;
+    _wsStateSub?.cancel();
+    _wsStateSub = null;
+  }
+
   @override
   void dispose() {
-    _wsSub?.cancel();
-    _wsStateSub?.cancel();
+    _disposed = true;
+    detachWS();
     _ratingWaitTimeout?.cancel();
     _incomingRequests.close();
-    _ws.disconnect();
+    _backgroundLocationFailed.close();
+    _pickupLocked.close();
     super.dispose();
   }
 }

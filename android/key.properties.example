@@ -1,0 +1,18 @@
+# Copy to android/key.properties and fill in. That file is gitignored and must
+# never be committed — it points at the keystore that signs your Play Store
+# releases. Losing it (or leaking it) means you can no longer publish updates
+# to an existing listing.
+#
+# Create the keystore with:
+#
+#   keytool -genkey -v -keystore %USERPROFILE%\sameway-release.jks \
+#     -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias sameway
+#
+# Then read the SHA-1 to register in the Firebase console:
+#
+#   keytool -list -v -keystore %USERPROFILE%\sameway-release.jks -alias sameway
+
+storeFile=C:/Users/<you>/sameway-release.jks
+storePassword=
+keyAlias=sameway
+keyPassword=

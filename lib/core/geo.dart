@@ -16,6 +16,23 @@ int minutesAt(double distanceM, double speedKmh) {
   return mins < 1 ? 1 : mins.round();
 }
 
+/// Rough minutes until a driver reaches the passenger's pick-up point, for the
+/// pre-match candidate list.
+///
+/// Deliberately an ESTIMATE and labelled as one in the UI. The server does not
+/// return a per-candidate ETA — `/passenger/nearby-drivers` is the most
+/// frequently polled query in the app and interpolating a real drive time
+/// against each driver's stored `route_m` would add measurable cost to every
+/// tick. A straight-line distance at [assumedDriverKmh] is honest enough to
+/// rank candidates against each other, which is all this number is for.
+///
+/// Returns at least 1: a driver who is already at the pick-up is "1 min", never
+/// "0 min", because 0 reads as "they are here" and they are not.
+int estimateDriverEtaMinutes(LatLng driver, LatLng pickup) {
+  final km = geoDistanceKm(driver, pickup);
+  return minutesAt(km * 1000, assumedDriverKmh);
+}
+
 /// Great-circle distance in kilometres between two LatLng points.
 /// Uses the Haversine formula with the WGS-84 mean Earth radius.
 double geoDistanceKm(LatLng a, LatLng b) {

@@ -25,7 +25,7 @@ class OnboardingArt extends StatelessWidget {
   }
 }
 
-enum OnboardingScene { route, matching, co2, pickupCode }
+enum OnboardingScene { route, matching, co2, pickupCode, safety }
 
 class _OnboardingPainter extends CustomPainter {
   final OnboardingScene scene;
@@ -65,6 +65,9 @@ class _OnboardingPainter extends CustomPainter {
         break;
       case OnboardingScene.pickupCode:
         _paintPickupCode(canvas, size);
+        break;
+      case OnboardingScene.safety:
+        _paintSafety(canvas, size);
         break;
     }
   }
@@ -229,6 +232,51 @@ class _OnboardingPainter extends CustomPainter {
         );
       }
     }
+  }
+
+  void _paintSafety(Canvas canvas, Size size) {
+    // A shield with a check mark — the universal "stay safe" motif.
+    final cx = size.width / 2;
+    final top = size.height * 0.26;
+    final bottom = size.height * 0.76;
+    final halfW = size.width * 0.21;
+    final shoulder = size.height * 0.50;
+    final shield = Path()
+      ..moveTo(cx, top)
+      ..lineTo(cx + halfW, top + 14)
+      ..lineTo(cx + halfW, shoulder)
+      ..quadraticBezierTo(cx + halfW, bottom - 20, cx, bottom)
+      ..quadraticBezierTo(cx - halfW, bottom - 20, cx - halfW, shoulder)
+      ..lineTo(cx - halfW, top + 14)
+      ..close();
+    canvas.drawPath(
+      shield,
+      Paint()
+        ..color = accent.withValues(alpha: 0.18)
+        ..style = PaintingStyle.fill,
+    );
+    canvas.drawPath(
+      shield,
+      Paint()
+        ..color = accent
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..strokeJoin = StrokeJoin.round,
+    );
+    // Centered check mark.
+    final check = Path()
+      ..moveTo(cx - 15, size.height * 0.50)
+      ..lineTo(cx - 3, size.height * 0.50 + 13)
+      ..lineTo(cx + 17, size.height * 0.44);
+    canvas.drawPath(
+      check,
+      Paint()
+        ..color = accent
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round,
+    );
   }
 
   void _drawPin(Canvas canvas, Offset pos, Color color) {

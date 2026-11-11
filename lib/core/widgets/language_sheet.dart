@@ -12,6 +12,7 @@ const _languages = <_LanguageOption>[
   _LanguageOption(code: 'es', label: 'Español', flag: '🇪🇸'),
   _LanguageOption(code: 'fr', label: 'Français', flag: '🇫🇷'),
   _LanguageOption(code: 'it', label: 'Italiano', flag: '🇮🇹'),
+  _LanguageOption(code: 'pl', label: 'Polski', flag: '🇵🇱'),
   _LanguageOption(code: 'uk', label: 'Українська', flag: '🇺🇦'),
 ];
 

@@ -47,5 +47,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Optional data collection stays off until the user consents
+	     (lib/core/consent_service.dart). Mirrors AndroidManifest.xml. -->
+	<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+	<false/>
+	<key>FirebaseCrashlyticsCollectionEnabled</key>
+	<false/>
+	<key>firebase_performance_collection_enabled</key>
+	<false/>
 </dict>
 </plist>

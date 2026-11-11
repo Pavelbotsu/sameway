@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/legal.dart';
 import '../../core/token_storage.dart';
-import '../driver/driver_home_screen.dart';
-import '../passenger/passenger_home_screen.dart';
+import '../legal/terms_gate_screen.dart';
 import 'auth_repository.dart';
 
 /// Two-step password reset:
@@ -93,13 +93,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         code: code,
         newPassword: pw,
       );
-      await TokenStorage().save(
+      final storage = TokenStorage();
+      await storage.save(
         token: result.token,
         role: result.role,
         userId: result.userId,
         name: result.name,
         email: result.email,
       );
+      if (!result.needsConsent) {
+        await storage.setAcceptedTermsVersion(result.userId, kTermsVersion);
+      }
       if (!mounted) return;
       messenger.showSnackBar(SnackBar(
         content: Text(l.resetSuccess),
@@ -108,9 +112,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ));
       nav.pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (_) => result.role == 'driver'
-              ? const DriverHomeScreen()
-              : const PassengerHomeScreen(),
+          builder: (_) => TermsGateScreen.destination(
+            role: result.role,
+            needsConsent: result.needsConsent,
+          ),
         ),
         (_) => false,
       );
