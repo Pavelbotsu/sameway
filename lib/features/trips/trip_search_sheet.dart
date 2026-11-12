@@ -258,7 +258,7 @@ class _TripSearchSheetState extends State<TripSearchSheet> {
                   : const Icon(Icons.search_rounded, size: 18),
               label: Text(_loading ? 'Searching…' : 'Search Trips'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
+                backgroundColor: AppColors.primaryFill,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 13),
                 shape: RoundedRectangleBorder(

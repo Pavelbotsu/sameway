@@ -165,7 +165,7 @@ class RideCheckInSheet extends StatelessWidget {
                 onPressed: () => _allGood(context),
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.teal,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.onAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),

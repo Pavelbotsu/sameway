@@ -187,7 +187,7 @@ class _IdlePanel extends StatelessWidget {
                   label: l.setRoute,
                   icon: Icons.add_road_rounded,
                   height: 54,
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primaryFill,
                   foregroundColor: Colors.white,
                   onPressed: driver.isLoading ? null : onSetRoute,
                   menuItems: [
@@ -211,7 +211,7 @@ class _IdlePanel extends StatelessWidget {
                     icon: const Icon(Icons.add_road_rounded, size: 20),
                     label: Text(l.setRoute),
                     style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.primaryFill,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)),
@@ -727,7 +727,7 @@ class _RequestTile extends StatelessWidget {
             ),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.success,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.onAccent,
               padding: const EdgeInsets.symmetric(vertical: 12),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14)),
@@ -905,7 +905,7 @@ class _RequestTile extends StatelessWidget {
             label: Text(l.accept),
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.success,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.onAccent,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1365,7 +1365,11 @@ class _DriverPickupCodeBlock extends StatelessWidget {
   void _snack(BuildContext context, String text, Color color) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),
-      backgroundColor: color,
+      // Dark branded surface (white text 16:1); the colour marks the border.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: color.withValues(alpha: 0.6)),
+      ),
       behavior: SnackBarBehavior.floating,
     ));
   }
@@ -1428,7 +1432,6 @@ class _DriverPickupCodeBlock extends StatelessWidget {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(l.codeCopied),
-      backgroundColor: AppColors.success,
       behavior: SnackBarBehavior.floating,
     ));
   }

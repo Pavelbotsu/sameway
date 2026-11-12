@@ -55,7 +55,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (!mounted) return;
       messenger.showSnackBar(SnackBar(
         content: Text(l.resetCodeSent),
-        backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
       ));
       setState(() => _step = 1);
@@ -107,7 +106,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (!mounted) return;
       messenger.showSnackBar(SnackBar(
         content: Text(l.resetSuccess),
-        backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
       ));
       nav.pushAndRemoveUntil(

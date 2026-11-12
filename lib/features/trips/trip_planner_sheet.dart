@@ -148,7 +148,6 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
         Navigator.pop(context);
         messenger.showSnackBar(SnackBar(
           content: Text(l.tripPlannedSuccess),
-          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ));
       } else {
@@ -532,7 +531,7 @@ class _TripPlannerSheetState extends State<TripPlannerSheet> {
                     : const Icon(Icons.event_available_rounded, size: 18),
                 label: Text(_submitting ? 'Planning…' : 'Plan Trip'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: AppColors.primaryFill,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(

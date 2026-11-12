@@ -43,7 +43,7 @@ class SosButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return Material(
-      color: AppColors.error,
+      color: AppColors.danger,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
@@ -240,7 +240,7 @@ class SosSheet extends StatelessWidget {
               ),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.onAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),

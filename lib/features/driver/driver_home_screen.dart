@@ -115,7 +115,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(context).passengerAcceptedRide),
-            backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 4),
           ));
@@ -190,7 +189,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               : l.passenger;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(l.passengerSentRequest(name)),
-            backgroundColor: AppColors.teal,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 6),
           ));
@@ -199,7 +197,6 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(AppLocalizations.of(context).pickupLockedDriver),
-            backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 8),
           ));
@@ -1721,7 +1718,6 @@ class _AccountSheetState extends State<_AccountSheet> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(AppLocalizations.of(context).networkError),
-          backgroundColor: AppColors.error,
           behavior: SnackBarBehavior.floating,
         ));
       }
@@ -2286,6 +2282,8 @@ class _GuestSignInSheet extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: color,
+                foregroundColor:
+                    color == AppColors.teal ? AppColors.onAccent : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),

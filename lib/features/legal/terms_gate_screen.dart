@@ -121,7 +121,7 @@ class _TermsGateScreenState extends State<TermsGateScreen> {
                   child: FilledButton(
                     onPressed: _saving ? null : _continue,
                     style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.primaryFill,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)),
