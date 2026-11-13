@@ -24,9 +24,17 @@ const passengerEmail = 'pax-$run@example.com';
 const driverName = 'Drv$run';
 const carPlate = 'KR 2DEV';
 
-// Kraków: Old Town → east. Real roads, routed by the backend's OSRM.
-const origin = (lat: 50.0614, lng: 19.9383);
-const destination = (lat: 50.0700, lng: 19.9950);
+// Which service area to ride in: krakow (default) or poltava
+// (--dart-define=AREA=poltava). Real roads, routed by the backend's OSRM.
+const area = String.fromEnvironment('AREA', defaultValue: 'krakow');
+const _poltava = area == 'poltava';
+// Kraków: Old Town → east. Poltava: centre (Corpus Garden) → north-west.
+const origin = _poltava
+    ? (lat: 49.5883, lng: 34.5514)
+    : (lat: 50.0614, lng: 19.9383);
+const destination = _poltava
+    ? (lat: 49.6100, lng: 34.5050)
+    : (lat: 50.0700, lng: 19.9950);
 
 const waitLong = Duration(minutes: 3);
 
