@@ -72,6 +72,11 @@ int _matching(String s, int open) {
   throw FormatException('unbalanced braces', s, open);
 }
 
+/// Ukrainian uses one apostrophe, ’ (U+2019): "ім’я", "п’ятниця". The deck
+/// and the old strings mix in ' and ʼ (U+02BC).
+String normalizeUkApostrophes(String s) =>
+    s.replaceAll("'", '’').replaceAll('ʼ', '’');
+
 /// The message with every argument replaced by `{name}` and branches dropped:
 /// the text a reader sees around the placeholders.
 String icuSkeleton(String message) {

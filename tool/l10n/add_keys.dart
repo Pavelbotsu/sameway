@@ -47,7 +47,7 @@ void main(List<String> args) {
         stderr.writeln('$key: missing $code');
         exit(1);
       }
-      head[key] = text;
+      head[key] = code == 'uk' ? normalizeUkApostrophes(text) : text;
       if (code == 'en') {
         final plurals = {
           for (final l in ['en', 'uk', 'pl'])

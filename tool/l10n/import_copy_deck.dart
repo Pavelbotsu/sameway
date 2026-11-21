@@ -281,24 +281,29 @@ Map<String, MapLine> _readMap() {
 
 void _writeArb(Map<String, Map<String, String>> out,
     Map<String, Map<String, dynamic>> meta, Map<String, Set<String>> review) {
+  // Keys this importer wrote before carry x-deck in the English metadata.
+  // Read English once, before it is rewritten, so uk/pl drop the same keys.
+  final enBefore = jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync())
+      as Map<String, dynamic>;
+  final owned = enBefore.keys
+      .where((k) =>
+          k.startsWith('@') &&
+          !k.startsWith('@@') &&
+          enBefore[k] is Map &&
+          (enBefore[k] as Map).containsKey('x-deck'))
+      .map((k) => k.substring(1))
+      .toSet();
+  Set<String>? enKeysAfter;
   for (final code in ['en', 'uk', 'pl']) {
     final file = File('lib/l10n/app_$code.arb');
     final arb = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
-    // Drop keys this importer wrote before (they carry x-deck in English).
-    final en = code == 'en'
-        ? arb
-        : jsonDecode(File('lib/l10n/app_en.arb').readAsStringSync())
-            as Map<String, dynamic>;
-    final owned = en.keys
-        .where((k) =>
-            k.startsWith('@') &&
-            !k.startsWith('@@') &&
-            en[k] is Map &&
-            (en[k] as Map).containsKey('x-deck'))
-        .map((k) => k.substring(1))
-        .toSet();
-    arb.removeWhere(
-        (k, _) => owned.contains(k) || (k.startsWith('@') && owned.contains(k.substring(1))));
+    String bare(String k) =>
+        k.startsWith('@') && !k.startsWith('@@') ? k.substring(1) : k;
+    arb.removeWhere((k, _) =>
+        owned.contains(bare(k)) ||
+        // Leftovers in uk/pl from an earlier run (e.g. a renamed key).
+        (enKeysAfter != null && !k.startsWith('@@') &&
+            !enKeysAfter.contains(bare(k))));
 
     final head = <String, dynamic>{};
     final tail = <String, dynamic>{};
@@ -308,7 +313,7 @@ void _writeArb(Map<String, Map<String, String>> out,
     });
     final result = <String, dynamic>{...head};
     out.forEach((key, v) {
-      result[key] = v[code];
+      result[key] = code == 'uk' ? normalizeUkApostrophes(v[code]!) : v[code];
       if (code == 'en') {
         final m = Map<String, dynamic>.of(meta[key]!);
         // A placeholder that is a plural in any language is an int.
@@ -332,6 +337,11 @@ void _writeArb(Map<String, Map<String, String>> out,
       }
     });
     result.addAll(tail);
+    if (code == 'en') {
+      enKeysAfter = result.keys
+          .where((k) => !k.startsWith('@'))
+          .toSet();
+    }
     file.writeAsStringSync('${const JsonEncoder.withIndent('  ').convert(result)}\n');
   }
 }

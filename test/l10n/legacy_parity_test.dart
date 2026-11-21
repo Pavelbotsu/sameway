@@ -1,13 +1,14 @@
 // Proves the legacy_* ARB keys reproduce the old AppLocalizations._t()
-// strings exactly (en, uk, pl). Deleted when AppLocalizations becomes a
-// wrapper over L10n.
+// strings. It covered en, uk and pl for the import; UK was then rewritten to
+// «ти» (and a few PL name patterns fixed) on purpose, so it now checks English
+// only. Deleted when AppLocalizations becomes a wrapper over L10n.
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sameway/core/app_localizations.dart';
 import 'package:sameway/l10n/l10n.dart';
 
 void main() {
-  for (final code in ['en', 'uk', 'pl']) {
+  for (final code in ['en']) {
     test('legacy strings match ARB ($code)', () {
       final o = AppLocalizations(Locale(code));
       final n = lookupL10n(Locale(code));

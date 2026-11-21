@@ -683,7 +683,7 @@ n_drivers_are_usually_in_a | skip | board-note
 n_400_m | skip | sample
 n_ul_mogilska | skip | sample
 n_1833_3_min_11_km | merge | psNotifDriver_timeDurationDistance
-n_olenas_pickup_in_400_m | icu | nD2_pickupInSide | {passengerName}’s pickup in {distance}, on the {side} | {passengerName} через {distance}, {side} | Odbiór: {passengerName}, za {distance} {side}
+n_olenas_pickup_in_400_m | icu | nD2_pickupInSide | {passengerName}’s pickup in {distance}, on the {side} | Зустріч: {passengerName}, через {distance}, {side} | Odbiór: {passengerName}, za {distance} {side} | uk
 n_ul_mogilska_12_shes_waiting | icu | nD2_placeWaiting | {place} · waiting at {spot} | {place} · чекає: {spot} | {place} · czeka: {spot} | uk pl
 n_200_m | skip | sample
 n_turn_back_via_ul_lubicz | icu | nD3_turnBackVia | Turn back via {street} | Розворот через {street} | Zawróć przez {street}
@@ -700,7 +700,7 @@ n_youve_been_parked_at_politechnika | icu | nD4_parkedEndTrip | You’ve been pa
 n_dropoff_reminders_mirror_pickup_ones | skip | board-note
 n_sunday_15_november | skip | os-string
 n_tomorrow_0750_2_passengers | icu | nD5_dayTimePassengers | {day} {time} · {count, plural, =1{1 passenger} other{{count} passengers}} | {day} о {time} · пасажирів: {count} | {day} {time} · pasażerowie: {count} | uk pl
-n_olena_ul_mogilska_12_and | icu | nD5_passengersLeaveOnTime | {passengers}. Leave on time, they’re counting on you. | {passengers}. Не запізнюйся, на тебе розраховують. | {passengers}. Wyjedź na czas, liczą na ciebie.
+n_olena_ul_mogilska_12_and | icu | nD5_passengersLeaveOnTime | {passengers}. Leave on time, they’re counting on you. | Пасажири: {passengers}. Не запізнюйся, на тебе розраховують. | Pasażerowie: {passengers}. Wyjedź na czas, liczą na ciebie. | uk pl
 n_new_booking_anna | icu | nD5_newBooking | New booking: {name} | Нова бронь: {name} | Nowa rezerwacja: {name}
 n_dbica_rzeszw_on_sat_21 | icu | nD5_requestAnswerBy | {from} → {to} on {date} · {seats, plural, =1{1 seat} other{{seats} seats}} · {price}. Answer by {deadline}. | {from} → {to}, {date} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price}. Відповісти до {deadline}. | {from} → {to}, {date} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price}. Odpowiedz do {deadline}. | uk pl
 n_5_h_ago | skip | os-string
@@ -920,3 +920,11 @@ di_states | skip | board-note
 di_driver_coming | skip | board-note
 di_arrived | skip | board-note
 di_driving_to_pickup | skip | board-note
+
+# ── City names are data (cities.name_uk / name_pl), not copy ─────────────────
+i_warszawa | skip | sample
+i_katowice | skip | sample
+i_przemyl | skip | sample
+rw_wrocaw | skip | sample
+rw_gdask | skip | sample
+rw_lublin | skip | sample
