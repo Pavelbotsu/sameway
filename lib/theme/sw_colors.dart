@@ -16,8 +16,10 @@ abstract final class SwColors {
   /// Decorative divider. Never the only boundary of an input (1.3:1).
   static const line = Color(0xFF2B2B34);
 
-  /// Field and control borders: 3:1 against every surface (WCAG 1.4.11).
-  static const fieldBorder = Color(0xFF64647C);
+  /// Field and control borders: 3:1 against every surface (WCAG 1.4.11):
+  /// 4.2 on background, 3.93 on s1, 3.66 on s2, 3.21 on s3. The canvas still
+  /// shows #64647C (docs/15, approved deviation).
+  static const fieldBorder = Color(0xFF72728A);
 
   // Text
   static const text = Color(0xFFF2F2F7); // 17:1 on background
@@ -48,7 +50,7 @@ abstract final class SwColors {
   static const eco = Color(0xFF7BD88F); // CO2, "Saved on this phone"
   static const ecoTint = Color(0xFF0F2A1A);
 
-  // On the Main board but not in tokens.json (DESIGN_DEBT.md, v3 deviations).
+  // From the Main board; added to tokens.json in Phase 1.
   static const dangerLine = Color(0xFF4A2227); // border of the tinted danger button
   static const warningLine = Color(0xFF5A4614); // border of the warning banner
   static const snackbar = Color(0xFFF2F2F7); // snackbar is light on dark screens

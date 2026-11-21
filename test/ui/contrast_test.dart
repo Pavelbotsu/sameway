@@ -18,21 +18,13 @@ void main() {
     'surface3': SwColors.surface3,
   };
 
-  group('field border (WCAG 1.4.11, ≥ 3:1)', () {
-    test('against the field fill (background) and sheets (surface 1)', () {
-      expect(contrast(SwColors.fieldBorder, SwColors.background), greaterThanOrEqualTo(3));
-      expect(contrast(SwColors.fieldBorder, SwColors.surface1), greaterThanOrEqualTo(3));
-    });
-
-    // Doc 12 says "3:1 on every surface"; measured it is 2.98 on surface 2
-    // and 2.6 on surface 3. Fields and seat squares are filled with
-    // `background`, so their inner boundary still passes. Logged in
-    // DESIGN_DEBT.md for the designer; this test pins today's values so a
-    // token change is noticed.
-    test('known gap on surface 2 and 3', () {
-      expect(contrast(SwColors.fieldBorder, SwColors.surface2), closeTo(2.98, 0.02));
-      expect(contrast(SwColors.fieldBorder, SwColors.surface3), closeTo(2.6, 0.05));
-    });
+  group('field border (WCAG 1.4.11, ≥ 3:1 on every surface)', () {
+    for (final s in surfaces.entries) {
+      test('on ${s.key}', () {
+        final ratio = contrast(SwColors.fieldBorder, s.value);
+        expect(ratio, greaterThanOrEqualTo(3), reason: 'fieldBorder on ${s.key}: ${ratio.toStringAsFixed(2)}');
+      });
+    }
   });
 
   group('text ≥ 4.5:1', () {
