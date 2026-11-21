@@ -24,7 +24,8 @@ class _Pill extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, size: 14, color: fg),
+              // Scales with the label so the icon still reads at 200 %.
+              Icon(icon, size: MediaQuery.textScalerOf(context).scale(14), color: fg),
               const SizedBox(width: SwSpace.s4),
             ],
             Flexible(child: Text(label, style: _badgeText.copyWith(color: fg))),

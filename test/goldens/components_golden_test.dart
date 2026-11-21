@@ -99,34 +99,32 @@ void main() {
         ],
       ));
 
-  swGoldenMatrix('ride_card', (c, s, role) => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SwRideCard(
-            departTime: '09:00',
-            arrival: s.arrival,
-            price: '16 zł',
-            seatsLeft: s.seatsLeft,
-            stops: s.stops,
-            driverName: 'Marek',
-            tag: SwTagBadge(s.yourPeople, icon: Icons.star_border_rounded),
-            bookingMode: s.instant,
-            selected: true,
-            onTap: () {},
-          ),
-          gap(),
-          SwRideCard(
-            departTime: '09:00',
-            arrival: s.arrival,
-            price: '9 zł',
-            seatsLeft: s.seatsLeft,
-            stops: s.stops,
-            chosenFrom: 1,
-            driverName: 'Anna',
-            bookingMode: s.askMe,
-            onTap: () {},
-          ),
-        ],
+  // One card per golden: two cards at 200 % don't fit in 844 px, and the
+  // harness treats any overflow as a failure.
+  swGoldenMatrix('ride_card', (c, s, role) => SwRideCard(
+        departTime: '09:00',
+        arrival: s.arrival,
+        price: '16 zł',
+        seatsLeft: s.seatsLeft,
+        stops: s.stops,
+        driverName: 'Marek',
+        tag: SwTagBadge(s.yourPeople, icon: Icons.star_border_rounded),
+        bookingMode: s.instantBooking, // docs/15 #10: "Instant booking" on ride cards
+        selected: true,
+        onTap: () {},
+      ));
+
+  // Part of the route chosen (Tarnów → Rzeszów), "Ask me", not selected.
+  swGoldenMatrix('ride_card_part', (c, s, role) => SwRideCard(
+        departTime: '09:00',
+        arrival: s.arrival,
+        price: '9 zł',
+        seatsLeft: s.seatsLeft,
+        stops: s.stops,
+        chosenFrom: 1,
+        driverName: 'Anna',
+        bookingMode: s.askMe,
+        onTap: () {},
       ));
 
   swGoldenMatrix('driver_offer', (c, s, role) => SwDriverOfferCard(

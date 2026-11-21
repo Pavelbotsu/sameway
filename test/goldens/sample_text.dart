@@ -42,7 +42,6 @@ class SampleText {
   List<String> get stops =>
       uk ? const ['Краків', 'Тарнів', 'Ряшів'] : const ['Kraków', 'Tarnów', 'Rzeszów'];
   String get yourPeople => _t('Your people', 'Свої попутники'); // d_your_people
-  String get instant => _t('Instant', 'Миттєво'); // i_instant
 
   // Driver offer
   String get offerTitle => _t('Kasia · 9 min', 'Kasia · 9 хв');

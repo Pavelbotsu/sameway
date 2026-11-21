@@ -96,6 +96,10 @@ class SwRideCard extends StatelessWidget {
       ],
     );
 
+    final modeText = Text(bookingMode ?? '',
+        textAlign: large ? TextAlign.start : TextAlign.end,
+        style: SwType.caption.copyWith(fontWeight: FontWeight.w500));
+
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -109,15 +113,27 @@ class SwRideCard extends StatelessWidget {
         const SizedBox(height: SwSpace.s12),
         _RouteLine(stops: stops, from: chosenFrom, to: chosenTo ?? stops.length - 1, large: large),
         const SizedBox(height: SwSpace.s12),
-        Row(
-          children: [
-            Expanded(child: driverRow),
-            if (bookingMode != null) ...[
-              const SizedBox(width: SwSpace.s8),
-              Text(bookingMode!, style: SwType.caption.copyWith(fontWeight: FontWeight.w500)),
-            ],
-          ],
-        ),
+        if (large) ...[
+          // At 200 % the booking mode gets its own line under the driver.
+          driverRow,
+          if (bookingMode != null) ...[const SizedBox(height: 6), modeText],
+        ] else
+          // The booking mode keeps its own width (up to 40 %, then wraps);
+          // the driver row gets the rest.
+          LayoutBuilder(
+            builder: (context, box) => Row(
+              children: [
+                Expanded(child: driverRow),
+                if (bookingMode != null) ...[
+                  const SizedBox(width: SwSpace.s8),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: box.maxWidth * 0.4),
+                    child: modeText,
+                  ),
+                ],
+              ],
+            ),
+          ),
       ],
     );
 
