@@ -2008,6 +2008,10 @@
   "@fmt_daysAgoShort": {
     "x-needs-review": true
   },
+  "prLanguage_english": "англійська",
+  "@prLanguage_english": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Я є…",
   "legacy_chooseRole": "Обери свою роль, щоб почати",
   "@legacy_chooseRole": {

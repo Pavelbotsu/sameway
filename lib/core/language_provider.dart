@@ -6,18 +6,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../l10n/l10n.dart';
 import 'app_localizations.dart';
 
-class LanguageProvider extends ChangeNotifier {
-  /// Starts in the phone's language when the app has it, otherwise English —
-  /// until the user picks a language, which then sticks. It used to always
-  /// start in English, so a Ukrainian or German phone opened in English.
+/// The app language: "Use device language" (the default) or a language the
+/// user picked in PR_Language, saved on this phone. Server sync comes with
+/// `user_settings` (Phase 5).
+class LanguageProvider extends ChangeNotifier with WidgetsBindingObserver {
+  /// [deviceLocale] is for tests; the app follows the system locale and
+  /// updates when it changes.
   LanguageProvider({Locale? deviceLocale})
-      : _locale = resolveDeviceLocale(
-            deviceLocale ?? PlatformDispatcher.instance.locale) {
+      : _device = deviceLocale ?? PlatformDispatcher.instance.locale,
+        _followSystem = deviceLocale == null {
+    if (_followSystem) WidgetsBinding.instance.addObserver(this);
     _load();
   }
 
-  Locale _locale;
-  Locale get locale => _locale;
+  final bool _followSystem;
+  Locale _device;
+
+  /// The language the user picked, or null for "Use device language".
+  Locale? _override;
+  Locale? get chosen => _override;
+  bool get usesDeviceLanguage => _override == null;
+
+  /// The language the app shows.
+  Locale get locale => _override ?? resolveDeviceLocale(_device);
+
+  /// The device language when the app has it, else English.
+  Locale get deviceLanguage => resolveDeviceLocale(_device);
 
   static const _prefsKey = 'app_lang';
 
@@ -40,16 +54,48 @@ class LanguageProvider extends ChangeNotifier {
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
     final code = prefs.getString(_prefsKey);
-    if (code == null || code == _locale.languageCode) return;
-    _locale = Locale(code);
+    if (code == null) return;
+    if (!AppLocalizations.supportedLanguageCodes.contains(code)) {
+      // A language the app no longer ships: back to the device language.
+      await prefs.remove(_prefsKey);
+      return;
+    }
+    if (_override?.languageCode == code) return;
+    _override = Locale(code);
     notifyListeners();
   }
 
+  /// Use [locale] from now on, whatever the device language.
   Future<void> setLocale(Locale locale) async {
-    if (_locale == locale) return;
-    _locale = locale;
+    if (_override == locale) return;
+    _override = locale;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefsKey, locale.languageCode);
+  }
+
+  /// Follow the device language again.
+  Future<void> useDeviceLanguage() async {
+    if (_override == null) return;
+    _override = null;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_prefsKey);
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    final next = locales?.isNotEmpty == true
+        ? locales!.first
+        : PlatformDispatcher.instance.locale;
+    if (next == _device) return;
+    _device = next;
+    if (_override == null) notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    if (_followSystem) WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

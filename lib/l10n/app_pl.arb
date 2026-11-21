@@ -2470,6 +2470,10 @@
   "@fmt_daysAgoShort": {
     "x-needs-review": true
   },
+  "prLanguage_english": "angielski",
+  "@prLanguage_english": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Jestem…",
   "legacy_chooseRole": "Wybierz swoją rolę, aby zacząć",
   "legacy_driver": "Kierowca",

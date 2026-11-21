@@ -4,7 +4,7 @@ import '../../core/consent_service.dart';
 import '../../core/fcm_service.dart';
 import '../../core/legal.dart';
 import '../../core/token_storage.dart';
-import '../../core/widgets/language_sheet.dart';
+import '../account/language_screen.dart';
 import '../legal/analytics_consent_screen.dart';
 import '../legal/terms_gate_screen.dart';
 import 'onboarding_screen.dart';
@@ -120,7 +120,7 @@ class _SplashScreenState extends State<SplashScreen>
                   color: AppColors.textSecondary,
                   size: 26,
                 ),
-                onPressed: () => LanguageSheet.show(context),
+                onPressed: () => LanguageScreen.push(context),
               ),
             ),
           ),

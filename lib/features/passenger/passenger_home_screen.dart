@@ -43,7 +43,8 @@ import '../../core/widgets/walk_to_pickup_banner.dart';
 import '../../core/wkt.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../../core/widgets/glass_card.dart';
-import '../../core/widgets/language_sheet.dart';
+import '../account/language_screen.dart';
+import '../../theme/theme.dart' show SwRole;
 import '../../core/widgets/rating_wait_banner.dart';
 import '../../core/widgets/ride_check_in_sheet.dart';
 import '../../core/widgets/m3_expressive/wave_progress_indicator.dart';
@@ -612,7 +613,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
   List<LatLng> _parseWKT(String wkt) => parseLineStringWKT(wkt);
 
   void _showLanguageSheet() {
-    LanguageSheet.show(context);
+    LanguageScreen.push(context, role: SwRole.passenger);
   }
 
   void _showBugReportSheet() {

@@ -37,7 +37,8 @@ import '../onboarding/onboarding_screen.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/car_edit_sheet.dart';
 import '../../core/widgets/glass_card.dart';
-import '../../core/widgets/language_sheet.dart';
+import '../account/language_screen.dart';
+import '../../theme/theme.dart' show SwRole;
 import '../../core/widgets/rating_sheet.dart';
 import '../../core/widgets/ride_check_in_sheet.dart';
 import '../../core/widgets/rating_wait_banner.dart';
@@ -452,7 +453,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   void _showLanguageSheet() {
-    LanguageSheet.show(context);
+    LanguageScreen.push(context, role: SwRole.driver);
   }
 
   void _showBugReportSheet() {

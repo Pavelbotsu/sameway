@@ -91,7 +91,18 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) {
+          final language = LanguageProvider();
+          // Android notification channels carry their names in the app
+          // language; re-create them (same ids) when it changes.
+          var current = language.locale;
+          language.addListener(() {
+            if (language.locale == current) return;
+            current = language.locale;
+            FcmService.createChannels(current);
+          });
+          return language;
+        }),
         ChangeNotifierProvider(create: (_) => MapStyleProvider()),
         ChangeNotifierProvider(create: (_) => MatchingPreferenceProvider()),
         ChangeNotifierProvider(create: (_) => ConnectivityProvider()),

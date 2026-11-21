@@ -9988,6 +9988,10 @@
       }
     }
   },
+  "prLanguage_english": "English",
+  "@prLanguage_english": {
+    "description": "Exonym of English in the UI language, for 'Currently {language}' (the deck has no row for it)"
+  },
   "legacy_iAm": "I am a…",
   "@legacy_iAm": {
     "description": "Legacy AppLocalizations.iAm"
