@@ -135,7 +135,6 @@ class _RoleSwitchSheetState extends State<RoleSwitchSheet> {
       setState(() => _loading = false);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(friendlyError(context, e)),
-        backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
     }

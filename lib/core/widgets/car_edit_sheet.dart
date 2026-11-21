@@ -84,7 +84,6 @@ class _CarEditSheetState extends State<CarEditSheet> {
         Navigator.pop(context);
         messenger.showSnackBar(SnackBar(
           content: Text(l.carInfoSaved),
-          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ));
       }

@@ -325,7 +325,6 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         final l = AppLocalizations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(l.nameUpdated),
-          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ));
       }
@@ -1191,7 +1190,6 @@ class _ChangePasswordSectionState extends State<_ChangePasswordSection> {
         form.reset();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(l.passwordUpdated),
-          backgroundColor: AppColors.success,
           behavior: SnackBarBehavior.floating,
         ));
       } else {

@@ -57,7 +57,11 @@ class _TestAITileState extends State<TestAITile> {
 
       messenger.showSnackBar(SnackBar(
         content: Text(msg),
-        backgroundColor: color,
+        // Dark branded surface (white text 16:1); the colour marks the border.
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: color.withValues(alpha: 0.6)),
+        ),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 5),
       ));
@@ -65,7 +69,6 @@ class _TestAITileState extends State<TestAITile> {
       if (!mounted) return;
       messenger.showSnackBar(SnackBar(
         content: Text('${l.testAIFailed}: ${friendlyError(context, e)}'),
-        backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
     } finally {

@@ -1,0 +1,4 @@
+tags:
+  # Component goldens (test/goldens). Generated on Windows; CI skips them.
+  # Run: flutter test --tags golden [--update-goldens]
+  golden:

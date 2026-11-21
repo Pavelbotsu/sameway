@@ -96,7 +96,6 @@ class _BugReportSheetState extends State<BugReportSheet> {
       nav.pop();
       messenger.showSnackBar(SnackBar(
         content: Text(l.bugReportThanks),
-        backgroundColor: AppColors.success,
         behavior: SnackBarBehavior.floating,
       ));
     } catch (e) {
@@ -104,7 +103,6 @@ class _BugReportSheetState extends State<BugReportSheet> {
       setState(() => _sending = false);
       messenger.showSnackBar(SnackBar(
         content: Text(friendlyError(context, e)),
-        backgroundColor: AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
     }

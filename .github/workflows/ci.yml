@@ -22,7 +22,9 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter analyze
-      - run: flutter test
+      # Goldens are rendered on Windows and differ by a few pixels on Linux;
+      # they run locally: flutter test --tags golden
+      - run: flutter test --exclude-tags golden
 
   secrets:
     runs-on: ubuntu-latest

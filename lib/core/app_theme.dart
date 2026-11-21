@@ -16,6 +16,8 @@ ColorScheme _brandScheme() {
   );
   return base.copyWith(
     primary: AppColors.teal,
+    // Text on teal fills must be dark: white on teal is 1.9:1.
+    onPrimary: AppColors.onAccent,
     secondary: AppColors.primary,
     surface: AppColors.surface,
     error: AppColors.error,
@@ -79,7 +81,8 @@ ThemeData buildAppTheme() => ThemeData(
           // backgroundColor intentionally omitted — naked ElevatedButtons
           // now adopt colorScheme.primary (teal) instead of hardcoding
           // purple. Per-call styleFrom overrides keep their explicit colors.
-          foregroundColor: Colors.white,
+          // Dark ink: naked ElevatedButtons are teal (white would be 1.9:1).
+          foregroundColor: AppColors.onAccent,
           // M3 spec minimum (64×48); per-call SizedBox or styleFrom override
           // sets full-width where intended. Avoids the infinite-width crash
           // when an ElevatedButton is placed inside a Row without Expanded.

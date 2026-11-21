@@ -16,4 +16,15 @@ abstract class AppColors {
   static const border = Color(0xFF1E2038);
   static const error = Color(0xFFFF5E5E);
   static const success = Color(0xFF4DC987);
+
+  // Text and icons ON the bright accent fills (teal, success, error):
+  // white on them is only 1.9–3:1, this dark ink is 6.7–10.6:1 (WCAG AA).
+  static const onAccent = Color(0xFF08080F);
+
+  // Fills behind WHITE text. No single purple reaches 4.5:1 both under
+  // white text and as text on the dark background, so buttons get their
+  // own: white on primaryFill is 5.3:1 (primary is 3.8:1).
+  static const primaryFill = Color(0xFF6355E8);
+  // SOS and other red buttons with white text: 5.0:1 (error is 3.0:1).
+  static const danger = Color(0xFFD32F2F);
 }

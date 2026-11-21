@@ -208,7 +208,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
     };
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),
-      backgroundColor: color,
+      // Dark branded surface (white text 16:1); the colour marks the border.
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: color.withValues(alpha: 0.6)),
+      ),
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 6),
     ));
@@ -2609,6 +2613,7 @@ class _OfferCardState extends State<_OfferCard>
                     onPressed: widget.onAccept,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.teal,
+                      foregroundColor: AppColors.onAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -3462,6 +3467,7 @@ class _GuestPassengerCard extends StatelessWidget {
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.teal,
+              foregroundColor: AppColors.onAccent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
@@ -3602,7 +3608,6 @@ class _AccountSheetState extends State<_AccountSheet> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(AppLocalizations.of(context).networkError),
-          backgroundColor: AppColors.error,
           behavior: SnackBarBehavior.floating,
         ));
       }
@@ -4146,6 +4151,8 @@ class _GuestSignInSheet extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: color,
+                foregroundColor:
+                    color == AppColors.teal ? AppColors.onAccent : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -4861,7 +4868,6 @@ class _PickupCodeBlock extends StatelessWidget {
                 : l2.invalidCode;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
-      backgroundColor: AppColors.error,
       behavior: SnackBarBehavior.floating,
       duration: Duration(seconds: result.locked ? 8 : 4),
     ));
@@ -4906,7 +4912,7 @@ class _PickupCodeBlock extends StatelessWidget {
               label: Text(l.submit),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.teal,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.onAccent,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
