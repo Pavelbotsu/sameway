@@ -2212,6 +2212,80 @@
   "@err_roleLockedActiveRide": {
     "x-needs-review": true
   },
+  "pHome_distanceAway": "{distance} від тебе",
+  "@pHome_distanceAway": {
+    "x-needs-review": true
+  },
+  "pHome_offerDeclined": "Пропозицію відхилено",
+  "@pHome_offerDeclined": {
+    "x-needs-review": true
+  },
+  "pHome_lookingForNextRide": "Шукаємо наступну попутку…",
+  "@pHome_lookingForNextRide": {
+    "x-needs-review": true
+  },
+  "dHome_legPickup": "Зустріч",
+  "@dHome_legPickup": {
+    "x-needs-review": true
+  },
+  "dHome_legContinue": "Далі",
+  "@dHome_legContinue": {
+    "x-needs-review": true
+  },
+  "dHome_legDistanceEta": "{label} {distance} · {duration}",
+  "common_waitingForRating": "{role, select, driver{Чекаємо, поки водій тебе оцінить…} other{Чекаємо, поки пасажир тебе оцінить…}}",
+  "@common_waitingForRating": {
+    "x-needs-review": true
+  },
+  "common_aiBadge": "ШІ",
+  "@common_aiBadge": {
+    "x-needs-review": true
+  },
+  "common_unknownLocation": "місцезнаходження невідоме",
+  "@common_unknownLocation": {
+    "x-needs-review": true
+  },
+  "oSplash_tagline": "Нам по дорозі.",
+  "notif_channelRide": "Сповіщення про попутки",
+  "@notif_channelRide": {
+    "x-needs-review": true
+  },
+  "notif_channelRideDesc": "Пропозиції, підтвердження, зустріч і завершення попуток.",
+  "@notif_channelRideDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelChat": "Повідомлення в чаті",
+  "@notif_channelChat": {
+    "x-needs-review": true
+  },
+  "notif_channelChatDesc": "Нові повідомлення від водія чи пасажира.",
+  "@notif_channelChatDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketing": "Акції та поради",
+  "@notif_channelMarketing": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketingDesc": "Необовʼязкові рекламні та інформаційні сповіщення.",
+  "@notif_channelMarketingDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeChannel": "Показ маршруту",
+  "@notif_routeChannel": {
+    "x-needs-review": true
+  },
+  "notif_routeChannelDesc": "Пасажири по дорозі бачать тебе, поки ти їдеш.",
+  "@notif_routeChannelDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeTitle": "sameway показує твій маршрут",
+  "@notif_routeTitle": {
+    "x-needs-review": true
+  },
+  "notif_routeText": "Пасажири, яким по дорозі, можуть тебе знайти.",
+  "@notif_routeText": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Я є…",
   "legacy_chooseRole": "Виберіть свою роль для початку",
   "legacy_driver": "Водій",

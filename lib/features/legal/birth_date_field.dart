@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../l10n/format.dart';
 
 /// Minimum age to use Sameway; the backend enforces the same (handlers.minAge).
 const kMinAge = 18;
@@ -75,7 +76,9 @@ class BirthDateField extends StatelessWidget {
                       color: hasValue ? accent : AppColors.textSecondary, size: 20),
                   const SizedBox(width: 12),
                   Text(
-                    hasValue ? formatBirthDate(value!) : l.birthDateLabel,
+                    hasValue
+                        ? SwFormat.of(context).numericDate(value!)
+                        : l.birthDateLabel,
                     style: TextStyle(
                       color: hasValue ? Colors.white : AppColors.textSecondary,
                       fontSize: 15,

@@ -1,3 +1,4 @@
+// l10n-ignore-file: replaced by LanguageScreen in this phase
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

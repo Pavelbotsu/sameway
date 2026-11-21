@@ -1,3 +1,4 @@
+// l10n-ignore-file: dev-only: shown only for a store build aimed at a test backend
 import 'package:flutter/material.dart';
 
 /// Shown instead of the app when a STORE_BUILD points at a test backend

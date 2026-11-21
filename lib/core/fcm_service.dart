@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import '../l10n/l10n.dart';
 import 'api_client.dart';
+import 'language_provider.dart';
 import 'token_storage.dart';
 import 'widgets/pre_permission_sheet.dart';
 
@@ -14,25 +16,28 @@ import 'widgets/pre_permission_sheet.dart';
 /// silence chat without losing critical ride alerts. Channel IDs must match
 /// the `ChannelID` strings the backend stamps into AndroidConfig.
 class FcmChannels {
-  static const ride = AndroidNotificationChannel(
+  // Names and descriptions are in the app language (ARB); re-creating a
+  // channel with the same id renames it in Android Settings.
+  static AndroidNotificationChannel ride(L10n l) => AndroidNotificationChannel(
     'ride_critical',
-    'Ride alerts',
-    description: 'Ride offers, accepted, pickup, and ride-completion events.',
+    l.notif_channelRide,
+    description: l.notif_channelRideDesc,
     importance: Importance.high,
     playSound: true,
     enableVibration: true,
   );
-  static const chat = AndroidNotificationChannel(
+  static AndroidNotificationChannel chat(L10n l) => AndroidNotificationChannel(
     'chat',
-    'Chat messages',
-    description: 'New messages from your driver or passenger.',
+    l.notif_channelChat,
+    description: l.notif_channelChatDesc,
     importance: Importance.defaultImportance,
     playSound: true,
   );
-  static const marketing = AndroidNotificationChannel(
+  static AndroidNotificationChannel marketing(L10n l) =>
+      AndroidNotificationChannel(
     'marketing',
-    'Promotions & tips',
-    description: 'Optional promotional and informational notifications.',
+    l.notif_channelMarketing,
+    description: l.notif_channelMarketingDesc,
     importance: Importance.low,
     playSound: false,
   );
@@ -49,23 +54,26 @@ class FcmService {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
+  /// Phase 3.6: create the three named channels on Android so the OS lists
+  /// them in Settings → Notifications with independent toggles. No-op on
+  /// iOS (channel concept doesn't exist there) and on the web. Called again
+  /// when the app language changes: same ids, new names.
+  static Future<void> createChannels(Locale locale) async {
+    if (kIsWeb || !Platform.isAndroid) return;
+    final plugin = FlutterLocalNotificationsPlugin();
+    final android = plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    if (android == null) return;
+    final l = l10nFor(locale);
+    await android.createNotificationChannel(FcmChannels.ride(l));
+    await android.createNotificationChannel(FcmChannels.chat(l));
+    await android.createNotificationChannel(FcmChannels.marketing(l));
+  }
+
   static Future<void> init() async {
     FirebaseMessaging.onBackgroundMessage(_bgHandler);
 
-    // Phase 3.6: create the three named channels on Android so the OS lists
-    // them in Settings → Notifications with independent toggles. No-op on
-    // iOS (channel concept doesn't exist there) and on the web.
-    if (!kIsWeb && Platform.isAndroid) {
-      final plugin = FlutterLocalNotificationsPlugin();
-      final android =
-          plugin.resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
-      if (android != null) {
-        await android.createNotificationChannel(FcmChannels.ride);
-        await android.createNotificationChannel(FcmChannels.chat);
-        await android.createNotificationChannel(FcmChannels.marketing);
-      }
-    }
+    await createChannels(await LanguageProvider.storedOrDevice());
 
     // Phase 1.7: permission is no longer requested here (no BuildContext at
     // app startup). Home screens call `maybeRequestPermissionWithRationale`

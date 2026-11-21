@@ -1193,8 +1193,11 @@ class _ChangePasswordSectionState extends State<_ChangePasswordSection> {
           behavior: SnackBarBehavior.floating,
         ));
       } else {
-        final msg =
-            (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
+        final body = jsonDecode(resp.body) as Map;
+        final msg = friendlyError(
+            context,
+            ApiException(body['error'] as String? ?? '',
+                statusCode: resp.statusCode, code: body['code'] as String?));
         setState(() => _serverError = msg);
       }
     } catch (_) {

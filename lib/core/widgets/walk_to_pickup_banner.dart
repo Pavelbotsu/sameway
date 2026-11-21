@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../app_colors.dart';
 import '../app_localizations.dart';
+import '../../l10n/format.dart';
 
 /// Compact banner shown on the passenger's accepted card when the pickup
 /// point is far enough away that the user needs explicit walking guidance
@@ -46,10 +47,9 @@ class WalkToPickupBanner extends StatelessWidget {
   /// a 400 m walk rendered the banner AND an instruction not to move.
   static const double kStayPutMetres = 100;
 
-  static String formatDistance(double m) {
-    if (m < 1000) return '${m.toStringAsFixed(0)} m';
-    return '${(m / 1000).toStringAsFixed(1)} km';
-  }
+  /// "850 m" / "1.2 km" in the app language (lib/l10n/format.dart).
+  static String formatDistance(BuildContext context, double m) =>
+      SwFormat.of(context).distance(m);
 
   Future<void> _openMaps(BuildContext context) async {
     final uri = Uri.parse(
@@ -90,7 +90,7 @@ class WalkToPickupBanner extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  l.walkToPickup(formatDistance(walkDistanceM)),
+                  l.walkToPickup(formatDistance(context, walkDistanceM)),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -161,7 +161,7 @@ class WalkToPickupCompact extends StatelessWidget {
           Flexible(
             child: Text(
               l.walkToPickupShort(
-                  WalkToPickupBanner.formatDistance(walkDistanceM)),
+                  WalkToPickupBanner.formatDistance(context, walkDistanceM)),
               style: const TextStyle(
                 color: AppColors.teal,
                 fontSize: 13,

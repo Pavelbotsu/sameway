@@ -3,6 +3,7 @@ import 'dart:ui' show PlatformDispatcher;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/l10n.dart';
 import 'app_localizations.dart';
 
 class LanguageProvider extends ChangeNotifier {
@@ -25,6 +26,16 @@ class LanguageProvider extends ChangeNotifier {
       AppLocalizations.supportedLanguageCodes.contains(device.languageCode)
           ? Locale(device.languageCode)
           : const Locale('en');
+
+  /// The app language for code without a BuildContext (notification
+  /// channels, the foreground-service notification): the saved choice when
+  /// it has an ARB file, else the device language, else English.
+  static Future<Locale> storedOrDevice() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString(_prefsKey);
+    if (code != null && l10nLanguageCodes.contains(code)) return Locale(code);
+    return l10nResolve(PlatformDispatcher.instance.locale);
+  }
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();

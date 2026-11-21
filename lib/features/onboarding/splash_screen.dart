@@ -9,6 +9,7 @@ import '../legal/analytics_consent_screen.dart';
 import '../legal/terms_gate_screen.dart';
 import 'onboarding_screen.dart';
 import 'role_selection_screen.dart';
+import '../../l10n/l10n.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -113,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: Material(
               color: Colors.transparent,
               child: IconButton(
-                tooltip: 'Language',
+                tooltip: context.l10n.common_language,
                 icon: const Icon(
                   Icons.language_rounded,
                   color: AppColors.textSecondary,
@@ -167,6 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 const SizedBox(height: 28),
                 const Text(
+                  // l10n-ignore: brand name, same in every language
                   'sameway',
                   style: TextStyle(
                     color: Colors.white,
@@ -176,9 +178,9 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Your way. Every day.',
-                  style: TextStyle(
+                Text(
+                  context.l10n.oSplash_tagline,
+                  style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 16,
                     letterSpacing: 0.2,

@@ -181,7 +181,7 @@ class _SamewayAppState extends State<SamewayApp> {
     return MaterialApp(
       navigatorKey: _navKey,
       scaffoldMessengerKey: FcmService.scaffoldMessengerKey,
-      title: 'sameway',
+      title: 'sameway', // l10n-ignore: brand name (OS task switcher)
       theme: buildAppTheme(),
       locale: locale,
       localizationsDelegates: const [

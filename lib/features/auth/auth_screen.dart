@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/error_handling.dart';
+import '../../l10n/l10n.dart';
 import '../../core/fcm_service.dart';
 import '../../core/validators/validators.dart';
 import 'auth_provider.dart';
@@ -242,7 +243,7 @@ class _AuthScreenState extends State<AuthScreen>
                         _ErrorBanner(
                             message: auth.lastError != null
                                 ? friendlyError(context, auth.lastError!)
-                                : auth.error!),
+                                : context.l10n.legacy_errGeneric),
                       const SizedBox(height: 4),
                       SizedBox(
                         width: double.infinity,
@@ -370,7 +371,9 @@ class _RoleBadge extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Text(
-            isDriver ? 'Driver' : 'Passenger',
+            isDriver
+                ? context.l10n.legacy_driver
+                : context.l10n.legacy_passenger,
             style: TextStyle(
               color: color,
               fontSize: 12,

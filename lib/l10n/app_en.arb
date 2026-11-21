@@ -9919,6 +9919,105 @@
   "@err_roleLockedActiveRide": {
     "description": "Server code role_locked_active_ride (decision 3, from Phase 3)"
   },
+  "pHome_distanceAway": "{distance} away",
+  "@pHome_distanceAway": {
+    "description": "Driver info sheet: straight-line distance to the driver",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "pHome_offerDeclined": "Offer declined",
+  "@pHome_offerDeclined": {
+    "description": "Passenger declined an offer; search continues"
+  },
+  "pHome_lookingForNextRide": "Looking for the next available ride…",
+  "@pHome_lookingForNextRide": {},
+  "dHome_legPickup": "Pickup",
+  "@dHome_legPickup": {
+    "description": "Route leg chip: driving to the pickup"
+  },
+  "dHome_legContinue": "Continue",
+  "@dHome_legContinue": {
+    "description": "Route leg chip: rest of the route after the pickup"
+  },
+  "dHome_legDistanceEta": "{label} {distance} · {duration}",
+  "@dHome_legDistanceEta": {
+    "description": "Route leg chip, e.g. 'Pickup 1.2 km · 4 min'",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "distance": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "common_waitingForRating": "{role, select, driver{Waiting for the driver to rate you…} other{Waiting for the passenger to rate you…}}",
+  "@common_waitingForRating": {
+    "description": "Banner after a ride while the other party rates (removed with stars in Phase 4)",
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "common_aiBadge": "AI",
+  "@common_aiBadge": {
+    "description": "Badge on AI-suggested matches"
+  },
+  "common_unknownLocation": "unknown location",
+  "@common_unknownLocation": {
+    "description": "SOS share text when there is no GPS fix"
+  },
+  "oSplash_tagline": "Your way. Every day.",
+  "@oSplash_tagline": {
+    "description": "App slogan (glossary: UK is its own slogan)"
+  },
+  "notif_channelRide": "Ride alerts",
+  "@notif_channelRide": {
+    "description": "Android notification channel name (Settings › Notifications)"
+  },
+  "notif_channelRideDesc": "Ride offers, accepted rides, pickup and ride completion.",
+  "@notif_channelRideDesc": {
+    "description": "Android notification channel description"
+  },
+  "notif_channelChat": "Chat messages",
+  "@notif_channelChat": {
+    "description": "Android notification channel name"
+  },
+  "notif_channelChatDesc": "New messages from your driver or passenger.",
+  "@notif_channelChatDesc": {
+    "description": "Android notification channel description"
+  },
+  "notif_channelMarketing": "Promotions & tips",
+  "@notif_channelMarketing": {
+    "description": "Android notification channel name"
+  },
+  "notif_channelMarketingDesc": "Optional promotional and informational notifications.",
+  "@notif_channelMarketingDesc": {
+    "description": "Android notification channel description"
+  },
+  "notif_routeChannel": "Sharing your route",
+  "@notif_routeChannel": {
+    "description": "Android channel of the driver's location foreground service"
+  },
+  "notif_routeChannelDesc": "Keeps you visible to matching passengers while you drive.",
+  "@notif_routeChannelDesc": {
+    "description": "Android channel description of the location foreground service"
+  },
+  "notif_routeTitle": "sameway is sharing your route",
+  "@notif_routeTitle": {
+    "description": "Ongoing notification while the driver shares a route"
+  },
+  "notif_routeText": "Passengers heading your way can find you.",
+  "@notif_routeText": {
+    "description": "Ongoing notification body while the driver shares a route"
+  },
   "legacy_iAm": "I am a…",
   "@legacy_iAm": {
     "description": "Legacy AppLocalizations.iAm"

@@ -21,6 +21,7 @@ import '../../../core/wkt.dart';
 import '../../chat/chat_screen.dart';
 import '../driver_provider.dart';
 import '../driver_repository.dart';
+import '../../../l10n/format.dart';
 
 const _kSwitchDuration = Duration(milliseconds: 280);
 const _kSwitchCurve = Curves.easeOutCubic;
@@ -835,7 +836,7 @@ class _RequestTile extends StatelessWidget {
         // take this passenger, and it is what the matcher optimised for.
         if (request.carryM != null)
           Text(
-            l.ridesWithYou(_formatKm(request.carryM!)),
+            l.ridesWithYou(_formatKm(context, request.carryM!)),
             style: const TextStyle(
               color: AppColors.textPrimary,
               fontSize: 13,
@@ -873,9 +874,8 @@ class _RequestTile extends StatelessWidget {
     );
   }
 
-  static String _formatKm(double m) => m < 1000
-      ? '${m.toStringAsFixed(0)} m'
-      : '${(m / 1000).toStringAsFixed(1)} km';
+  static String _formatKm(BuildContext context, double m) =>
+      SwFormat.of(context).distance(m);
 
   Widget _buildAcceptDeclineRow(BuildContext context) {
     final l = AppLocalizations.of(context);

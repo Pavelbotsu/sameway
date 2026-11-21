@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
+import '../../core/error_handling.dart';
 import '../../core/legal.dart';
 import '../../core/token_storage.dart';
 import '../legal/terms_gate_screen.dart';
@@ -60,7 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() => _step = 1);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = '$e');
+      setState(() => _error = friendlyError(context, e));
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

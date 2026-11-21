@@ -54,6 +54,8 @@ import '../promotions/promotions_screen.dart';
 import '../trips/trip_history_screen.dart';
 import '../trips/trip_planner_sheet.dart';
 import '../trips/trip_search_sheet.dart';
+import '../../l10n/format.dart';
+import '../../l10n/l10n.dart';
 
 class DriverHomeScreen extends StatefulWidget {
   final bool isGuest;
@@ -943,7 +945,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 left: 0,
                 right: 0,
                 child: RatingWaitBanner(
-                  otherPartyLabel: 'passenger',
+                  otherIsDriver: false,
                   onDismiss: () => driver.clearAwaitingRating(),
                 ),
               );
@@ -1391,7 +1393,7 @@ class _SetRouteSheetState extends State<_SetRouteSheet> {
                 ),
                 const Spacer(),
                 Text(
-                  '${_corridor.toStringAsFixed(1)} km',
+                  SwFormat.of(context).distance(_corridor * 1000),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
@@ -1862,7 +1864,8 @@ class _AccountSheetState extends State<_AccountSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${(_co2Saved ?? 24.6).toStringAsFixed(1)} kg CO₂ saved',
+                          context.l10n.legacy_savedCO2(SwFormat.of(context)
+                              .decimal(_co2Saved ?? 24.6)),
                           style: const TextStyle(
                             color: AppColors.success,
                             fontSize: 13,
@@ -1870,7 +1873,7 @@ class _AccountSheetState extends State<_AccountSheet> {
                           ),
                         ),
                         Text(
-                          '${_tripsCount ?? 8} shared trip${(_tripsCount ?? 8) == 1 ? '' : 's'}',
+                          context.l10n.common_ridesTogether(_tripsCount ?? 8),
                           style: const TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 11),
@@ -2126,21 +2129,21 @@ class _MapStyleSheet extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           _MapOption(
-            label: 'Standard',
+            label: context.l10n.legacy_mapStyleStandard,
             icon: Icons.map_rounded,
             style: MapStyle.osm,
             selected: provider.style == MapStyle.osm,
           ),
           const SizedBox(height: 10),
           _MapOption(
-            label: 'Satellite',
+            label: context.l10n.legacy_mapStyleSatellite,
             icon: Icons.satellite_alt_rounded,
             style: MapStyle.satellite,
             selected: provider.style == MapStyle.satellite,
           ),
           const SizedBox(height: 10),
           _MapOption(
-            label: 'Dark',
+            label: context.l10n.legacy_mapStyleDark,
             icon: Icons.dark_mode_rounded,
             style: MapStyle.dark,
             selected: provider.style == MapStyle.dark,
@@ -2331,7 +2334,7 @@ class _PickupEtaPill extends StatelessWidget {
             if (pickupKm > 0) ...[
               _LegChip(
                 color: const Color(0xFFFF9800),
-                label: 'Pickup',
+                label: context.l10n.dHome_legPickup,
                 km: pickupKm,
                 etaMin: _etaMin(pickupKm),
               ),
@@ -2340,7 +2343,7 @@ class _PickupEtaPill extends StatelessWidget {
             if (continuationKm > 0)
               _LegChip(
                 color: const Color(0xFF43A047),
-                label: 'Continue',
+                label: context.l10n.dHome_legContinue,
                 km: continuationKm,
                 etaMin: _etaMin(continuationKm),
               ),
@@ -2375,7 +2378,10 @@ class _LegChip extends StatelessWidget {
         ),
         const SizedBox(width: 6),
         Text(
-          '$label ${km.toStringAsFixed(1)} km · $etaMin min',
+          context.l10n.dHome_legDistanceEta(
+              label,
+              SwFormat.of(context).distance(km * 1000),
+              SwFormat.of(context).duration(Duration(minutes: etaMin))),
           style: const TextStyle(
             color: Colors.white,
             fontSize: 12,

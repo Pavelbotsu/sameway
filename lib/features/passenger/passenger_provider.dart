@@ -291,6 +291,9 @@ class PassengerProvider extends ChangeNotifier {
   WsState wsState = WsState.disconnected;
   int unreadMessages = 0;
   String? error;
+  /// The exception behind [error], for `friendlyError` (the UI never shows
+  /// [error] itself: it is English and technical).
+  Object? lastError;
   String? pendingRatingRequestId;
   String? pendingRatingDriverId;
   String? awaitingRatingRequestId;
@@ -707,6 +710,7 @@ class PassengerProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       error = e.toString();
+      lastError = e;
       notifyListeners();
       return false;
     }

@@ -1,3 +1,4 @@
+// l10n-ignore-file: FeatureFlags.plannedTrips is off everywhere; deleted in Phase 8 (decision 11)
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';

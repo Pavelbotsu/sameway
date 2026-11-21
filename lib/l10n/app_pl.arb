@@ -2788,6 +2788,80 @@
   "@err_roleLockedActiveRide": {
     "x-needs-review": true
   },
+  "pHome_distanceAway": "{distance} od ciebie",
+  "@pHome_distanceAway": {
+    "x-needs-review": true
+  },
+  "pHome_offerDeclined": "Oferta odrzucona",
+  "@pHome_offerDeclined": {
+    "x-needs-review": true
+  },
+  "pHome_lookingForNextRide": "Szukamy kolejnego przejazdu…",
+  "@pHome_lookingForNextRide": {
+    "x-needs-review": true
+  },
+  "dHome_legPickup": "Odbiór",
+  "@dHome_legPickup": {
+    "x-needs-review": true
+  },
+  "dHome_legContinue": "Dalej",
+  "@dHome_legContinue": {
+    "x-needs-review": true
+  },
+  "dHome_legDistanceEta": "{label} {distance} · {duration}",
+  "common_waitingForRating": "{role, select, driver{Czekamy, aż kierowca cię oceni…} other{Czekamy, aż pasażer cię oceni…}}",
+  "@common_waitingForRating": {
+    "x-needs-review": true
+  },
+  "common_aiBadge": "AI",
+  "@common_aiBadge": {
+    "x-needs-review": true
+  },
+  "common_unknownLocation": "nieznana lokalizacja",
+  "@common_unknownLocation": {
+    "x-needs-review": true
+  },
+  "oSplash_tagline": "Twoja droga. Każdego dnia.",
+  "notif_channelRide": "Powiadomienia o przejazdach",
+  "@notif_channelRide": {
+    "x-needs-review": true
+  },
+  "notif_channelRideDesc": "Oferty, akceptacje, odbiór i zakończenie przejazdów.",
+  "@notif_channelRideDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelChat": "Wiadomości na czacie",
+  "@notif_channelChat": {
+    "x-needs-review": true
+  },
+  "notif_channelChatDesc": "Nowe wiadomości od kierowcy lub pasażera.",
+  "@notif_channelChatDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketing": "Promocje i porady",
+  "@notif_channelMarketing": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketingDesc": "Opcjonalne powiadomienia promocyjne i informacyjne.",
+  "@notif_channelMarketingDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeChannel": "Udostępnianie trasy",
+  "@notif_routeChannel": {
+    "x-needs-review": true
+  },
+  "notif_routeChannelDesc": "Pasażerowie po drodze widzą cię, gdy jedziesz.",
+  "@notif_routeChannelDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeTitle": "sameway udostępnia twoją trasę",
+  "@notif_routeTitle": {
+    "x-needs-review": true
+  },
+  "notif_routeText": "Pasażerowie jadący w twoją stronę mogą cię znaleźć.",
+  "@notif_routeText": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Jestem…",
   "legacy_chooseRole": "Wybierz swoją rolę, aby zacząć",
   "legacy_driver": "Kierowca",

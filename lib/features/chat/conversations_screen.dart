@@ -9,6 +9,7 @@ import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
 import '../../core/widgets/user_avatar.dart';
 import 'chat_screen.dart';
+import '../../l10n/format.dart';
 
 /// Recent-conversations list (Round 2 §3): every persistent pair thread the
 /// user has, newest activity first, with unread badges. Entry point lives in
@@ -87,15 +88,8 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     if (mounted) setState(() => _loaded = true);
   }
 
-  String _relativeTime(BuildContext context, DateTime? t) {
-    if (t == null) return '';
-    final diff = DateTime.now().difference(t);
-    if (diff.inMinutes < 1) return 'now';
-    if (diff.inHours < 1) return '${diff.inMinutes}m';
-    if (diff.inDays < 1) return '${diff.inHours}h';
-    if (diff.inDays < 7) return '${diff.inDays}d';
-    return '${t.day}.${t.month}.${t.year}';
-  }
+  String _relativeTime(BuildContext context, DateTime? t) =>
+      t == null ? '' : SwFormat.of(context).relative(t);
 
   @override
   Widget build(BuildContext context) {

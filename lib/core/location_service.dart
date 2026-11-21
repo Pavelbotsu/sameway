@@ -7,7 +7,9 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
+import '../l10n/l10n.dart';
 import 'api_client.dart';
+import 'language_provider.dart';
 import 'token_storage.dart';
 
 /// Keeps the driver's position reaching the server while the app is not in the
@@ -42,15 +44,14 @@ class LocationService {
     return FlutterForegroundTask.isRunningService;
   }
 
-  static void _init() {
+  static void _init(L10n l) {
     if (_initialized) return;
     _initialized = true;
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'sameway_location',
-        channelName: 'Sharing your route',
-        channelDescription:
-            'Keeps you visible to matching passengers while you drive.',
+        channelName: l.notif_routeChannel,
+        channelDescription: l.notif_routeChannelDesc,
         // LOW: this notification is a legal/OS requirement, not something the
         // driver needs to look at. Don't buzz them at the wheel.
         channelImportance: NotificationChannelImportance.LOW,
@@ -88,14 +89,15 @@ class LocationService {
           perm != LocationPermission.always) {
         return _fail('location permission not granted ($perm)');
       }
-      _init();
+      final l = l10nFor(await LanguageProvider.storedOrDevice());
+      _init(l);
       if (await FlutterForegroundTask.isRunningService) {
         lastError = null;
         return true;
       }
       final result = await FlutterForegroundTask.startService(
-        notificationTitle: 'Sameway is sharing your route',
-        notificationText: 'Passengers heading your way can find you.',
+        notificationTitle: l.notif_routeTitle,
+        notificationText: l.notif_routeText,
         callback: _locationTaskEntry,
       );
       if (result is ServiceRequestFailure) {

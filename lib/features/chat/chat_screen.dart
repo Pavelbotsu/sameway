@@ -56,6 +56,7 @@ class ChatMessage {
   factory ChatMessage.skeleton({String? sender}) => ChatMessage(
         id: '',
         senderID: sender ?? 'them',
+        // l10n-ignore: skeleton placeholder, only drawn blurred by Skeletonizer
         content: 'Loading message content placeholder.',
         createdAt: DateTime.now(),
       );

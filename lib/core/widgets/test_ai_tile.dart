@@ -1,3 +1,4 @@
+// l10n-ignore-file: FeatureFlags.aiControls is off everywhere (dev tool)
 import 'package:flutter/material.dart';
 
 import '../api_client.dart';
