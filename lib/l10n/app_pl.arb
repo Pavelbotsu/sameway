@@ -1,6 +1,2724 @@
 {
   "@@locale": "pl",
   "common_retry": "Ponów",
+  "bHowtoreport_howToReportABug": "Jak zgłosić błąd",
+  "@bHowtoreport_howToReportABug": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_threeWaysAllOpenThe": "Trzy sposoby, każdy otwiera ten sam formularz. Wybierz najwygodniejszy.",
+  "@bHowtoreport_threeWaysAllOpenThe": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_shakeYourPhone": "Potrząśnij telefonem",
+  "@bHowtoreport_shakeYourPhone": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_worksOnAnyScreenWe": "Działa na każdym ekranie. Zapiszemy zrzut ekranu dokładnie z tej chwili.",
+  "@bHowtoreport_worksOnAnyScreenWe": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_tapTheBetaPill": "Dotknij „Beta”",
+  "@bHowtoreport_tapTheBetaPill": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_smallButtonInTheCorner": "Mały przycisk w rogu każdego ekranu w czasie testów.",
+  "@bHowtoreport_smallButtonInTheCorner": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_profileHelpFeedback": "Profil › Pomoc i opinie",
+  "@bHowtoreport_profileHelpFeedback": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_ifShakingIsntYourThing": "Jeśli nie chcesz potrząsać telefonem.",
+  "@bHowtoreport_ifShakingIsntYourThing": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_aGoodReportHasThree": "Dobre zgłoszenie ma trzy części",
+  "@bHowtoreport_aGoodReportHasThree": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_whatYouDid": "Co robisz",
+  "@bHowtoreport_whatYouDid": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_tappedFindARideWith": "„Dotykam »Znajdź przejazd«, cel: Politechnika”",
+  "@bHowtoreport_tappedFindARideWith": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_whatYouExpected": "Co ma się stać",
+  "@bHowtoreport_whatYouExpected": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_searchingScreen": "„Ma się otworzyć wyszukiwanie”",
+  "@bHowtoreport_searchingScreen": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_whatHappened": "Co dzieje się naprawdę",
+  "@bHowtoreport_whatHappened": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_appFrozeFor5S": "„Aplikacja zawiesza się na 5 s i wraca do mapy”",
+  "@bHowtoreport_appFrozeFor5S": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_weAttachAutomaticallyScreenshotApp": "Automatycznie dołączamy: zrzut ekranu, wersję aplikacji, model telefonu, twoją rolę, bieżący ekran i logi z ostatnich 2 minut. Nigdy twoich wiadomości ani dokładnego adresu domowego.",
+  "@bHowtoreport_weAttachAutomaticallyScreenshotApp": {
+    "x-needs-review": true
+  },
+  "bHowtoreport_gotItStartTesting": "Jasne, zaczynam testy",
+  "@bHowtoreport_gotItStartTesting": {
+    "x-needs-review": true
+  },
+  "bMyreports_myReports": "Moje zgłoszenia",
+  "@bMyreports_myReports": {
+    "x-needs-review": true
+  },
+  "bMyreports_closed": "Zamknięte",
+  "@bMyreports_closed": {
+    "x-needs-review": true
+  },
+  "bMyreports_needInfo": "Potrzebne szczegóły",
+  "@bMyreports_needInfo": {
+    "x-needs-review": true
+  },
+  "bMyreports_seen": "Przeczytane",
+  "@bMyreports_seen": {
+    "x-needs-review": true
+  },
+  "bReportdetail_replyToTheTeam": "Odpowiedz zespołowi",
+  "@bReportdetail_replyToTheTeam": {
+    "x-needs-review": true
+  },
+  "bReportdetail_attachScreenRecording": "Dołącz nagranie ekranu",
+  "@bReportdetail_attachScreenRecording": {
+    "x-needs-review": true
+  },
+  "bReportdetail_cantReproduceAnymore": "Już się nie powtarza",
+  "@bReportdetail_cantReproduceAnymore": {
+    "x-needs-review": true
+  },
+  "bWhatsnew_whatsInThisBuild": "Co nowego w tej wersji",
+  "@bWhatsnew_whatsInThisBuild": {
+    "x-needs-review": true
+  },
+  "bWhatsnew_new": "Nowe",
+  "@bWhatsnew_new": {
+    "x-needs-review": true
+  },
+  "bWhatsnew_fixed": "Naprawione",
+  "@bWhatsnew_fixed": {
+    "x-needs-review": true
+  },
+  "bWhatsnew_knownIssuesNoNeedTo": "Znane problemy · nie trzeba ich zgłaszać",
+  "@bWhatsnew_knownIssuesNoNeedTo": {
+    "x-needs-review": true
+  },
+  "bWhatsnew_nextWhatToTest": "Dalej: co przetestować",
+  "@bWhatsnew_nextWhatToTest": {
+    "x-needs-review": true
+  },
+  "diDDropoff_passengerIsOut": "Pasażer wysiadł",
+  "@diDDropoff_passengerIsOut": {
+    "x-needs-review": true
+  },
+  "diSpec_states": "Stany",
+  "diSpec_driverComing": "Kierowca jedzie",
+  "diSpec_arrived": "Na miejscu",
+  "diSpec_drivingToPickup": "Jazda po pasażera",
+  "dCantpickup_trafficOrAClosedRoad": "Korek lub zamknięta droga",
+  "dCantpickup_cantStopSafelyThere": "Nie da się tam bezpiecznie stanąć",
+  "dEndroute_endYourRoute": "Zakończyć trasę?",
+  "dEndroute_keepDriving": "Jadę dalej",
+  "dEndundo_routeEndedPassengersCantSee": "Trasa zakończona. Pasażerowie już cię nie widzą.",
+  "dIntrip_acceptMorePassengers": "Przyjmuj kolejnych pasażerów",
+  "dLivenobg_locationAccessIsOffPassengers": "Dostęp do lokalizacji jest wyłączony. Pasażerowie nie widzą twojej trasy.",
+  "dNoshow_leaveWithoutHer": "Jedź bez niej",
+  "dPassengercancelled_sheNoLongerNeedsThe": "Przejazd nie jest już potrzebny. Trasa zostaje aktywna, a miejsce znów jest wolne.",
+  "dRequestrules_cityRides": "Przejazdy po mieście",
+  "dRequestrules_answeringARequestShouldNever": "Odpowiedź na prośbę nigdy nie powinna oznaczać sięgania po telefon w czasie jazdy.",
+  "dRequestrules_autoacceptYourPeople_a11y": "Automatycznie akceptuj swoją ekipę",
+  "dRequestrules_shortDetours": "Krótkie objazdy",
+  "dRequestrules_autoacceptShortDetours_a11y": "Automatycznie akceptuj krótkie objazdy",
+  "dRequestrules_whileMoving": "W ruchu",
+  "dRequestrules_whileMovingRequestsAreRead": "W trakcie jazdy prośby są czytane na głos. Odpowiadasz na postoju.",
+  "dRequestrules_noAnswerMeansTheRequest": "Brak odpowiedzi oznacza odmowę. Za odmowę nigdy nie ma kary.",
+  "dRouteempty_destination_a11y": "Cel",
+  "dRouteempty_whereAreYouDriving_hint": "Dokąd jedziesz autem?",
+  "dRouteempty_addADestinationToContinue": "Dodaj cel, aby kontynuować",
+  "dRouteoptions_seatsAndDetours": "Miejsca i objazdy",
+  "dTimesheet_whenAreYouLeaving": "Kiedy wyjeżdżasz?",
+  "dTopickup_restartNavigationWithThePickup": "Uruchom nawigację ponownie z odbiorem",
+  "dTopickup_greenJacketStopOnlyWhere": "Zielona kurtka. Zatrzymaj się tylko tam, gdzie to bezpieczne i dozwolone.",
+  "dTopickup_cantPickUp": "Nie mogę odebrać",
+  "dTopickup_prototypeArriveAtPickup_a11y": "Prototyp: dojazd na miejsce odbioru",
+  "xMapfailed_retry": "Ponów",
+  "xServererror_somethingWentWrongOnOur": "Coś poszło nie tak po naszej stronie",
+  "iAllprices_allPrices": "Wszystkie ceny",
+  "iAllprices_perSeatByDistanceSame": "Za miejsce, według odległości. Ta sama zasada co dla całej trasy.",
+  "iCancelbooking_cancelYourSeat": "Anulować twoje miejsce?",
+  "iCancelbooking_cancelSeat": "Anuluj miejsce",
+  "iCancelbooking_keepMySeat": "Zostaw moje miejsce",
+  "iCitypicker_goingTo": "Dokąd jedziesz",
+  "iCitypicker_searchCity_a11y": "Szukaj miasta",
+  "iCitypicker_rze": "Rze",
+  "iCitypicker_cityOrTown_hint": "Miasto lub miejscowość",
+  "iDrivercancel_cancelThisRoute": "Anulować tę trasę?",
+  "iDrivercancel_carProblem": "Problem z autem",
+  "iDrivercancel_cancelRoute": "Anuluj trasę",
+  "iDrivercancel_keepRoute": "Zostaw trasę",
+  "iDrivercancelled_rideCancelled": "Przejazd odwołany",
+  "iDrivercancelled_hisPlansChangedYouDont": "Zmieniły mu się plany. Nic nie musisz płacić.",
+  "iDriverdetails_whenAndWho": "Kiedy i kto",
+  "iDriverdetails_requests": "Prośby",
+  "iDriverdetails_instantBooking": "Natychmiastowa rezerwacja",
+  "iDriverdetails_askMe": "Pytaj mnie",
+  "iDriverdetails_verifiedPassengersBookRightAway": "Zweryfikowani pasażerowie rezerwują od razu. „Pytaj mnie”: 3 h na odpowiedź, noce się nie liczą.",
+  "iDriverdetails_tellMyPeople": "Powiadom moją ekipę",
+  "iDriverdetails_luggage": "Bagaż",
+  "iDriverdetails_small": "Mały",
+  "iDriverdetails_medium": "Średni",
+  "iDriverdetails_large": "Duży",
+  "iDrivermanage_editOrCancelRoute_a11y": "Edytuj lub anuluj trasę",
+  "iDrivermanage_seatsByPartOfThe": "Miejsca na odcinkach trasy",
+  "iDrivermanage_booked": "Zarezerwowane",
+  "iDrivermanage_fuelCovered": "Pokryte paliwo",
+  "iDrivermanage_messageAll": "Napisz do wszystkich",
+  "iDrivermanage_shareRoute": "Udostępnij trasę",
+  "iDriverprice_pricePerSeat": "Cena za miejsce",
+  "iDriverprice_suggestedPrice": "Sugerowana cena",
+  "iDriverprice_howItsCalculated": "Jak to liczymy",
+  "iDriverprice_partOfTheWayCalculated": "Część trasy · policzone za ciebie",
+  "iDriverprice_howPassengersPayYou": "Jak pasażerowie ci płacą",
+  "iDriverprice_inCashWhenYouMeet2": "Gotówką przy spotkaniu. Bez prowizji.",
+  "iDriverprice_takeBlikToo": "Przyjmuj też BLIK",
+  "iDriverprice_passengersSeeYourPhoneNumber": "Pasażerowie zobaczą twój numer telefonu po akceptacji, żeby wysłać BLIK.",
+  "iDriverroute_stopsOnTheWay": "Przystanki po drodze",
+  "iDriverroute_passengersCanBookAnyPart": "Pasażerowie mogą zarezerwować dowolną część twojej trasy, np. tylko Tarnów → Rzeszów. Przystanki to publiczne, łatwo dostępne miejsca spotkań.",
+  "iDriverroute_next": "Dalej",
+  "iMybooking_yourBooking": "Twoja rezerwacja",
+  "iMybooking_savedOnThisPhoneWorks": "Zapisane w telefonie, działa bez zasięgu",
+  "iMybooking_openInMaps": "Otwórz w Mapach",
+  "iMybooking_yourPickupCode": "Twój kod odbioru",
+  "iMybooking_imRunningLate": "Spóźnię się",
+  "iMybooking_cancelBooking": "Anuluj rezerwację",
+  "iNoshowdriver_shesHereEnterCode": "Jest na miejscu: wpisz kod",
+  "iNoshowpassenger_heDidntCome": "Nie przyjechał",
+  "iPricehow_howThePriceIsCalculated": "Jak liczymy cenę",
+  "iPricehow_route": "Trasa",
+  "iPricehow_yourCar": "Twoje auto",
+  "iPricehow_fuelPrice": "Cena paliwa",
+  "iPricehow_fuelForTheRoute": "Paliwo na trasę",
+  "iPricehow_sharedBy": "Dzielone na",
+  "iPricestops_noStops": "Bez przystanków",
+  "iRequestexpired_requestExpired": "Prośba wygasła",
+  "iRequestexpired_nothingWasBookedHereAre": "Nic nie zostało zarezerwowane. Oto inne przejazdy na tę samą trasę.",
+  "iResultsempty_driversPublishRidesDaysAhead": "Kierowcy publikują przejazdy z wyprzedzeniem. Damy znać, gdy pojawi się nowy.",
+  "iResultsempty_tellMeAboutNewRides": "Daj znać o nowych przejazdach",
+  "iResultsempty_otherDays": "Inne dni",
+  "iRidedetail_shareRide_a11y": "Udostępnij przejazd",
+  "iRidedetail_yourPickup": "Twój odbiór",
+  "iRidedetail_rynek": "Rynek",
+  "iRidedetail_dworzecPkp": "Dworzec PKP",
+  "iRidedetail_yourDropoff": "Twoja wysiadka",
+  "iRidedetail_mediumBagOk": "Średni bagaż OK",
+  "iRidedetail_noSmoking": "Bez palenia",
+  "iRidedetail_max2InBack": "Maks. 2 osoby z tyłu",
+  "iRidedetail_instantBookingTheSeatIs2": "Natychmiastowa rezerwacja: miejsce jest twoje od razu po rezerwacji.",
+  "iRidedetail_perSeatCash": "za miejsce · gotówka",
+  "iRidedetail_bookSeat": "Rezerwuj",
+  "mSendfailed_notSentTapToRetry": "Nie wysłano · Stuknij, aby ponowić",
+  "mThreaddriver_passenger": "Pasażer ·",
+  "mThreaddriver_youAcceptedTheRideRequest": "Prośba zaakceptowana",
+  "mThreaddriver_onMyWay": "Już jadę",
+  "mThreaddriver_cantFindYou": "Nie widzę cię",
+  "oEmailexists_youSignedUpWithGoogle": "Konto założone przez Google",
+  "oEmailexists_useADifferentEmail": "Użyj innego e-maila",
+  "oSignin_welcomeToSameway": "Witaj w sameway",
+  "oSignin_signInToRequestRides": "Zaloguj się, aby prosić o przejazdy, pisać do kierowców i mieć historię tras.",
+  "oSignin_continueWithApple": "Kontynuuj z Apple",
+  "oSignin_lookAroundFirst": "Najpierw się rozejrzę",
+  "oSignin_noAccountNeededToBrowse": "Do przeglądania mapy nie potrzeba konta. Zalogujesz się, gdy poprosisz o przejazd.",
+  "oSignin_byContinuingYouAgreeTo": "Kontynuując, akceptujesz dokumenty:",
+  "oSignin_terms": "Regulamin",
+  "oSignin_and": "i",
+  "prCarev_consumptionKwh100Km": "Zużycie, kWh/100 km",
+  "prCarev_usedToSuggestYourPrice2": "Służy do wyliczenia sugerowanej ceny między miastami, ze średnią ceną ładowania.",
+  "prMapstyle_standard": "Standardowa",
+  "prMapstyle_satellite": "Satelitarna",
+  "prMapstyle_matchPhonesDarkMode": "Jak tryb ciemny telefonu",
+  "prMapstyle_switchesBetweenStandardAndDark": "Przełącza między Standardową a Ciemną",
+  "prMapstyle_matchDarkMode_a11y": "Tryb ciemny jak w telefonie",
+  "prMapstyle_largerMapLabels": "Większe napisy na mapie",
+  "prMapstyle_easierToReadStreetNames": "Łatwiej czytać nazwy ulic",
+  "prProfiledriver_licenceCheckInProgress": "Trwa sprawdzanie prawa jazdy",
+  "prProfiledriver_cityRidesReadAloud": "Po mieście · czytanie na głos",
+  "prProfiledriver_switchToPassenger": "Przełącz na pasażera",
+  "prSwitchrole_switchRole": "Zmień rolę",
+  "prSwitchrole_yourCurrentRideOrSearch": "Twój obecny przejazd lub wyszukiwanie zostaną bez zmian. Nie zmienisz roli w trakcie aktywnego przejazdu.",
+  "prSwitchrole_offerSeatsOnATrip": "Oferuj miejsca w trasie, którą jedziesz. Pierwszy raz? Pokażemy ci, co i jak.",
+  "prSwitchrole_currentlySelected": "Obecnie wybrana",
+  "prVerifylicence_passengersCanBookYouOnly": "Pasażerowie mogą cię zarezerwować dopiero po jednorazowym sprawdzeniu prawa jazdy. Widzą „Zweryfikowane prawo jazdy”, nigdy dokument.",
+  "prVerifylicence_front": "Przód",
+  "prVerifylicence_allFourCornersInThe": "Wszystkie cztery rogi na zdjęciu",
+  "prVerifylicence_noGlareOnTheText": "Bez odblasków na tekście",
+  "prVerifylicence_categoryBValidToday": "Kategoria B, ważne dziś",
+  "prVerifylicence_sendForChecking": "Wyślij do sprawdzenia",
+  "prVerifylicence_privacyNotice": "Informacja o prywatności",
+  "prVerifyrejected_notVerified": "Niezweryfikowane",
+  "prVerifyrejected_weCouldntVerifyYourLicence": "Nie udało się zweryfikować prawa jazdy",
+  "prVerifyrejected_theTextOnTheBack": "Tekst na odwrocie był zbyt rozmazany. Poza tym wszystko w porządku: zrób nowe zdjęcie w dobrym świetle.",
+  "prVerifyrejected_takeANewPhoto": "Zrób nowe zdjęcie",
+  "prVerifystatus_phone": "Telefon",
+  "prVerifystatus_drivingLicence": "Prawo jazdy",
+  "prVerifystatus_checking": "Sprawdzamy",
+  "prVerifystatus_usuallyWithin24Hours": "Zwykle w ciągu 24 godzin",
+  "prVerifystatus_youCanPlanRoutesNow": "Trasy możesz planować już teraz. Pasażerowie zarezerwują cię po sprawdzeniu. Damy znać.",
+  "psDriverchoice_pickUpThere": "Odbiorę stamtąd",
+  "@psDriverchoice_pickUpThere": {
+    "x-needs-review": true
+  },
+  "psDriverchoice_notThisTime": "Nie tym razem",
+  "@psDriverchoice_notThisTime": {
+    "x-needs-review": true
+  },
+  "psDriverchoice_carpoolingNotATaxiThe": "Wspólne przejazdy, nie taksówka: kierowca zawsze sam decyduje o objeździe. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.",
+  "@psDriverchoice_carpoolingNotATaxiThe": {
+    "x-needs-review": true
+  },
+  "psNotifpassenger_walkToAPickupSpot": "Dojdziesz do punktu odbioru?",
+  "@psNotifpassenger_walkToAPickupSpot": {
+    "x-needs-review": true
+  },
+  "psNotifpassenger_illWalk": "Dojdę",
+  "@psNotifpassenger_illWalk": {
+    "x-needs-review": true
+  },
+  "psNotifpassenger_cantWalkThere": "Nie dam rady dojść",
+  "@psNotifpassenger_cantWalkThere": {
+    "x-needs-review": true
+  },
+  "psWalktodriver_you": "Ty",
+  "@psWalktodriver_you": {
+    "x-needs-review": true
+  },
+  "pCantfind_cantFindEachOther": "Nie możecie się znaleźć?",
+  "pCantfind_quickMessage": "Szybka wiadomość",
+  "pCantfind_imByTheEntrance": "Jestem przy wejściu",
+  "pCantfind_shareMyExactLocation": "Udostępnij moją dokładną lokalizację",
+  "pCantfind_yourPhoneNumbersStayHidden": "Wasze numery pozostają ukryte",
+  "pCantfind_sendSomeoneALiveLink": "Wyślij komuś link na żywo",
+  "pDrivercancelled_hesNoLongerDrivingThis": "Nie jedzie już w tę stronę. Przepraszamy. Już szukamy od nowa z tego samego miejsca odbioru.",
+  "pInride_pickupConfirmedOnYourWay": "Odbiór potwierdzony · w drodze",
+  "pInride_tripProgress_a11y": "Postęp przejazdu",
+  "pInride_prototypeArrive_a11y": "Prototyp: dojazd",
+  "pPickmap_moveTheMapToSet": "Przesuń mapę, aby ustawić cel",
+  "pPickmap_setDestinationHere": "Ustaw cel tutaj",
+  "pReportsent_reportSent": "Zgłoszenie wysłane",
+  "pReportsent_thanksWereOnIt": "Dzięki. Zajmujemy się tym.",
+  "pReportsent_ourTeamReadsEveryReport": "Czytamy każde zgłoszenie i odpowiadamy w ciągu 24 h w Wiadomości › Aktualizacje przejazdów.",
+  "pReportsent_inReview": "W trakcie sprawdzania",
+  "pReportsent_replyFromOurTeam": "Odpowiedź zespołu",
+  "pSearchcity_places": "Miejsca",
+  "pSearchcity_cityCentrePodkarpackie": "Centrum · Podkarpackie",
+  "pSearchloading_searchingPlaces": "Szukamy miejsc",
+  "pSearchnoresults_noPlacesMatch": "Brak pasujących miejsc",
+  "pSearchnoresults_checkTheSpellingOrDrop": "Sprawdź pisownię albo wskaż miejsce na mapie.",
+  "pTimesheet_whenDoYouWantTo": "Kiedy chcesz jechać?",
+  "pCancelconfirm_keepMyRide": "Zostaw przejazd",
+  "pCancelconfirm_cancelThisRide": "Anulować przejazd?",
+  "dRequestrules_readRequestsAloud": "Czytaj prośby na głos",
+  "dRequestrules_holdRequestsUntilYouStop": "Wstrzymuj prośby do postoju",
+  "dTopickup_restart": "Uruchom ponownie",
+  "rEditdriver_editRoutine": "Edytuj plan",
+  "rEditdriver_delete": "Usuń",
+  "rEditdriver_name": "Nazwa",
+  "rEditdriver_days": "Dni",
+  "rEditdriver_askMeAt": "Pytaj mnie o",
+  "rEditdriver_yourDailyCheckinNotification": "Twoje codzienne powiadomienie",
+  "rEditdriver_doItAutomatically": "Automatycznie",
+  "rEditdriver_peopleFirst_a11y": "Ekipa najpierw",
+  "rEditdriver_autoacceptMyPeople": "Auto-akceptuj ekipę",
+  "rEditdriver_othersStillNeedYourOk": "Inni nadal potrzebują twojej zgody",
+  "rEditdriver_saveRoutine": "Zapisz plan",
+  "rEditpassenger_askMyPeopleFirst": "Najpierw pytaj moją ekipę",
+  "rNotifdriver_samewayDailyRoutine": "sameway · Codzienny plan",
+  "rNotifdriver_drivingToWorkToday": "Jedziesz dziś do pracy?",
+  "rNotifdriver_yesPublish": "Tak, publikuj",
+  "rNotifdriver_notToday": "Nie dziś",
+  "rNotifdriver_notificationPreviewActionsWorkRight": "Podgląd powiadomienia. Akcje działają prosto z ekranu blokady, bez otwierania aplikacji.",
+  "rNotifpassenger_needYourRideHomeToday": "Potrzebujesz dziś podwózki do domu?",
+  "rNotifpassenger_findAnother": "Szukaj innego",
+  "rRoutinesempty_noRoutinesYet": "Nie masz jeszcze stałych tras",
+  "rRoutinesempty_sameTripMostDaysPlan": "Prawie codziennie ta sama trasa? Zaplanuj ją raz, a co rano zapytamy.",
+  "rRoutinesempty_planARoutine": "Zaplanuj stałą trasę",
+  "dRequestrules_timeToAnswer": "Czas na odpowiedź",
+  "iPricehow_suggestedPerSeat": "Sugerowana cena za miejsce",
+  "soPeopleempty_noPeopleYet": "Nie masz jeszcze ekipy",
+  "soPeopleempty_afterARideTapAdd": "Po przejeździe stuknij „Dodaj”, aby zatrzymać kogoś, z kim dobrze się jechało. Następnym razem zapytamy ich pierwszych.",
+  "sDriverrides_noRequestsYet": "Brak próśb",
+  "sDriverschedule_leaveHomeAt": "Wyjazd z domu o",
+  "sDriverschedule_passengersSeeThisAsYour": "Pasażerowie widzą to jako godzinę wyjazdu.",
+  "sDriverschedule_publishAutomatically": "Automatycznie",
+  "sPastempty_noPastRidesYet": "Nie masz jeszcze przejazdów",
+  "sPastempty_yourRidesAndTheCo": "Tu pojawią się twoje przejazdy i wspólnie zaoszczędzone CO₂.",
+  "sRidesloading_loadingYourRides": "Wczytujemy twoje przejazdy",
+  "sRidesrequested_waitingForAnAnswer": "Czeka na odpowiedź",
+  "sTripdetail_tripDetails": "Szczegóły podróży",
+  "sTripdetail_distance": "Dystans",
+  "sTripdetail_duration": "Czas",
+  "sTripdetail_chatStaysOpen24H": "Czat jest otwarty 24 godz. po przejeździe",
+  "sTripdetail_bookThisTripAgain": "Zarezerwuj tę podróż ponownie",
+  "xGuestgate_createAnAccountToRide": "Załóż konto, by jechać",
+  "xGuestgate_soDriversKnowWhoTheyre": "Żeby kierowcy wiedzieli, kogo zabierają. To 30 sekund, a wyszukiwanie zostanie zachowane.",
+  "xLocationdenied_locationIsOffForSameway": "Lokalizacja dla sameway jest wyłączona",
+  "xLocationdenied_turnItOnInSettings": "Włącz ją w Ustawienia › sameway › Lokalizacja, aby widzieć kierowców w pobliżu. Adres odbioru możesz też wpisać.",
+  "xLocationoff_locationIsOff": "Lokalizacja wyłączona",
+  "xLocationoff_turnItOnSoWe": "Włącz ją, abyśmy mogli dopasować kierowców przejeżdżających w pobliżu. Albo wpisz adres odbioru.",
+  "xLocationoff_turnOnLocation": "Włącz lokalizację",
+  "xLocationoff_enterPickupAddress": "Wpisz adres odbioru",
+  "xMapfailed_mapDidntLoadYourDriver": "Mapa się nie wczytała. Kierowca, miejsce odbioru i kod działają dalej.",
+  "xNodrivers_itsQuietRightNowPick": "Teraz jest spokojnie. Wybierz, co ci pasuje:",
+  "xNodrivers_keepSearchingInBackground": "Szukaj dalej w tle",
+  "xNodrivers_wellNotifyYouForThe": "Powiadomimy cię przez następne 30 min",
+  "xNodrivers_walkUpTo1Km": "Dojdź do 1 km do odbioru",
+  "xNodrivers_findsMoreDriversOnMain": "Więcej kierowców na głównych drogach",
+  "xNodrivers_scheduleForLater": "Zaplanuj na później",
+  "xNodrivers_matchingStarts2HBefore": "Dopasowanie startuje 2 godz. wcześniej",
+  "xNotifdenied_notificationsAreOffRoutinesCant": "Powiadomienia są wyłączone. Stałe trasy nie zapytają cię rano, a ty nie dowiesz się, kiedy kierowca dojedzie.",
+  "xNotifdenied_turnOnInSettings": "Włącz w Ustawieniach",
+  "xServererror_yourRidesAndMessagesAre": "Twoje przejazdy i wiadomości są bezpieczne. Spróbuj za chwilę.",
+  "xSessionexpired_pleaseSignInAgain": "Zaloguj się ponownie",
+  "xSessionexpired_youWereSignedOutFor": "Wylogowaliśmy cię dla bezpieczeństwa, np. po zmianie hasła na innym urządzeniu. Przejazdy zostają.",
+  "xSignout_signOut": "Wylogować się?",
+  "bAnnotate_markTheProblem": "Zaznacz problem",
+  "@bAnnotate_markTheProblem": {
+    "x-needs-review": true
+  },
+  "bAnnotate_highlight": "Podświetl",
+  "@bAnnotate_highlight": {
+    "x-needs-review": true
+  },
+  "bAnnotate_arrow": "Strzałka",
+  "@bAnnotate_arrow": {
+    "x-needs-review": true
+  },
+  "bAnnotate_hide": "Ukryj",
+  "@bAnnotate_hide": {
+    "x-needs-review": true
+  },
+  "bAnnotate_circleWhatsWrongUseHide": "Zakreśl, co jest nie tak. „Ukryj” użyj na wszystkim, co osobiste: imionach, numerach rejestracyjnych, adresach.",
+  "@bAnnotate_circleWhatsWrongUseHide": {
+    "x-needs-review": true
+  },
+  "bAnnotate_last2MinNoMessages": "Ostatnie 2 min · bez wiadomości i dokładnych lokalizacji",
+  "@bAnnotate_last2MinNoMessages": {
+    "x-needs-review": true
+  },
+  "bHowToReport_howToReportABug": "Jak zgłosić błąd",
+  "@bHowToReport_howToReportABug": {
+    "x-needs-review": true
+  },
+  "bHowToReport_threeWaysAllOpenThe": "Trzy sposoby, każdy otwiera ten sam formularz. Wybierz najwygodniejszy.",
+  "@bHowToReport_threeWaysAllOpenThe": {
+    "x-needs-review": true
+  },
+  "bHowToReport_shakeYourPhone": "Potrząśnij telefonem",
+  "@bHowToReport_shakeYourPhone": {
+    "x-needs-review": true
+  },
+  "bHowToReport_worksOnAnyScreenWe": "Działa na każdym ekranie. Zapiszemy zrzut ekranu dokładnie z tej chwili.",
+  "@bHowToReport_worksOnAnyScreenWe": {
+    "x-needs-review": true
+  },
+  "bHowToReport_tapTheBetaPill": "Dotknij „Beta”",
+  "@bHowToReport_tapTheBetaPill": {
+    "x-needs-review": true
+  },
+  "bHowToReport_smallButtonInTheCorner": "Mały przycisk w rogu każdego ekranu w czasie testów.",
+  "@bHowToReport_smallButtonInTheCorner": {
+    "x-needs-review": true
+  },
+  "bHowToReport_profileHelpFeedback": "Profil › Pomoc i opinie",
+  "@bHowToReport_profileHelpFeedback": {
+    "x-needs-review": true
+  },
+  "bHowToReport_ifShakingIsntYourThing": "Jeśli nie chcesz potrząsać telefonem.",
+  "@bHowToReport_ifShakingIsntYourThing": {
+    "x-needs-review": true
+  },
+  "bHowToReport_aGoodReportHasThree": "Dobre zgłoszenie ma trzy części",
+  "@bHowToReport_aGoodReportHasThree": {
+    "x-needs-review": true
+  },
+  "bHowToReport_whatYouDid": "Co robisz",
+  "@bHowToReport_whatYouDid": {
+    "x-needs-review": true
+  },
+  "bHowToReport_tappedFindARideWith": "„Dotykam »Znajdź przejazd«, cel: Politechnika”",
+  "@bHowToReport_tappedFindARideWith": {
+    "x-needs-review": true
+  },
+  "bHowToReport_whatYouExpected": "Co ma się stać",
+  "@bHowToReport_whatYouExpected": {
+    "x-needs-review": true
+  },
+  "bHowToReport_searchingScreen": "„Ma się otworzyć wyszukiwanie”",
+  "@bHowToReport_searchingScreen": {
+    "x-needs-review": true
+  },
+  "bHowToReport_whatHappened": "Co dzieje się naprawdę",
+  "@bHowToReport_whatHappened": {
+    "x-needs-review": true
+  },
+  "bHowToReport_appFrozeFor5S": "„Aplikacja zawiesza się na 5 s i wraca do mapy”",
+  "@bHowToReport_appFrozeFor5S": {
+    "x-needs-review": true
+  },
+  "bHowToReport_weAttachAutomaticallyScreenshotApp": "Automatycznie dołączamy: zrzut ekranu, wersję aplikacji, model telefonu, twoją rolę, bieżący ekran i logi z ostatnich 2 minut. Nigdy twoich wiadomości ani dokładnego adresu domowego.",
+  "@bHowToReport_weAttachAutomaticallyScreenshotApp": {
+    "x-needs-review": true
+  },
+  "bHowToReport_gotItStartTesting": "Jasne, zaczynam testy",
+  "@bHowToReport_gotItStartTesting": {
+    "x-needs-review": true
+  },
+  "bMissions_testMissions": "Misje testowe",
+  "@bMissions_testMissions": {
+    "x-needs-review": true
+  },
+  "bMissions_tryTheseAtLeastOnce": "Wypróbuj każdą przynajmniej raz. Odhaczymy ją automatycznie.",
+  "@bMissions_tryTheseAtLeastOnce": {
+    "x-needs-review": true
+  },
+  "bMissions_doneOfTotal": "Zrobione: {done} z {total}",
+  "@bMissions_doneOfTotal": {
+    "x-needs-review": true
+  },
+  "bMissions_findARideAsA": "Znajdź przejazd jako pasażer",
+  "@bMissions_findARideAsA": {
+    "x-needs-review": true
+  },
+  "bMissions_searchRequestASeatUse": "Wyszukaj, poproś o miejsce, użyj kodu odbioru",
+  "@bMissions_searchRequestASeatUse": {
+    "x-needs-review": true
+  },
+  "bMissions_done_a11y": "zrobione",
+  "@bMissions_done_a11y": {
+    "x-needs-review": true
+  },
+  "bMissions_shareARouteAsA": "Udostępnij trasę jako kierowca",
+  "@bMissions_shareARouteAsA": {
+    "x-needs-review": true
+  },
+  "bMissions_setARouteAcceptA": "Ustaw trasę, zaakceptuj prośbę, wpisz kod",
+  "@bMissions_setARouteAcceptA": {
+    "x-needs-review": true
+  },
+  "bMissions_scheduleARideForTomorrow": "Zaplanuj przejazd na jutro",
+  "@bMissions_scheduleARideForTomorrow": {
+    "x-needs-review": true
+  },
+  "bMissions_inKrakwWithArriveBy": "Po Krakowie, z „Przyjazd do”",
+  "@bMissions_inKrakwWithArriveBy": {
+    "x-needs-review": true
+  },
+  "bMissions_notDone_a11y": "niezrobione",
+  "@bMissions_notDone_a11y": {
+    "x-needs-review": true
+  },
+  "bMissions_bookPartOfAnIntercity": "Zarezerwuj część trasy między miastami",
+  "@bMissions_bookPartOfAnIntercity": {
+    "x-needs-review": true
+  },
+  "bMissions_egKrakwTarnwOnA": "Np. Kraków → Tarnów na dłuższej trasie",
+  "@bMissions_egKrakwTarnwOnA": {
+    "x-needs-review": true
+  },
+  "bMissions_chatDuringARide": "Napisz w trakcie przejazdu",
+  "@bMissions_chatDuringARide": {
+    "x-needs-review": true
+  },
+  "bMissions_quickRepliesAndLiveLocation": "Szybkie odpowiedzi i lokalizacja na żywo",
+  "@bMissions_quickRepliesAndLiveLocation": {
+    "x-needs-review": true
+  },
+  "bMissions_switchRolesAndBack": "Zmień rolę i wróć",
+  "@bMissions_switchRolesAndBack": {
+    "x-needs-review": true
+  },
+  "bMissions_fromTheRolePillOn": "Przełącznikiem roli na mapie",
+  "@bMissions_fromTheRolePillOn": {
+    "x-needs-review": true
+  },
+  "bMissions_testingAlone": "Testujesz sam?",
+  "@bMissions_testingAlone": {
+    "x-needs-review": true
+  },
+  "bMissions_turnOnADemoDriver": "Włącz kierowcę demo: wirtualne auto jeździ po Krakowie i akceptuje twoje prośby.",
+  "@bMissions_turnOnADemoDriver": {
+    "x-needs-review": true
+  },
+  "bMissions_demoDriver_a11y": "Kierowca demo",
+  "@bMissions_demoDriver_a11y": {
+    "x-needs-review": true
+  },
+  "bMissions_nextReportingBugs": "Dalej: zgłaszanie błędów",
+  "@bMissions_nextReportingBugs": {
+    "x-needs-review": true
+  },
+  "bMyReports_myReports": "Moje zgłoszenia",
+  "@bMyReports_myReports": {
+    "x-needs-review": true
+  },
+  "bMyReports_closed": "Zamknięte",
+  "@bMyReports_closed": {
+    "x-needs-review": true
+  },
+  "bMyReports_idWhen": "#{reportId} · {when}",
+  "@bMyReports_idWhen": {
+    "x-needs-review": true
+  },
+  "bMyReports_needInfo": "Potrzebne szczegóły",
+  "@bMyReports_needInfo": {
+    "x-needs-review": true
+  },
+  "bMyReports_fixedIn": "Naprawione w {version}",
+  "@bMyReports_fixedIn": {
+    "x-needs-review": true
+  },
+  "bMyReports_seen": "Przeczytane",
+  "@bMyReports_seen": {
+    "x-needs-review": true
+  },
+  "bMyReports_summary": "{reports, plural, one{{reports} zgłoszenie} few{{reports} zgłoszenia} many{{reports} zgłoszeń} other{{reports} zgłoszenia}} · naprawione: {fixed} · w tym tygodniu jesteś w top 10 testerów",
+  "@bMyReports_summary": {
+    "x-needs-review": true
+  },
+  "bReport_stepOf": "Krok {step} z {total}",
+  "bReport_whatKind": "Jaki typ?",
+  "@bReport_whatKind": {
+    "x-needs-review": true
+  },
+  "bReport_bug": "Błąd",
+  "@bReport_bug": {
+    "x-needs-review": true
+  },
+  "bReport_crash": "Awaria",
+  "@bReport_crash": {
+    "x-needs-review": true
+  },
+  "bReport_looksWrong": "Wygląd",
+  "@bReport_looksWrong": {
+    "x-needs-review": true
+  },
+  "bReport_idea": "Pomysł",
+  "@bReport_idea": {
+    "x-needs-review": true
+  },
+  "bReport_howBadIsIt": "Jak bardzo to przeszkadza?",
+  "@bReport_howBadIsIt": {
+    "x-needs-review": true
+  },
+  "bReport_blocksMe": "Blokuje mnie",
+  "@bReport_blocksMe": {
+    "x-needs-review": true
+  },
+  "bReport_annoying": "Irytuje",
+  "@bReport_annoying": {
+    "x-needs-review": true
+  },
+  "bReport_minor": "Drobiazg",
+  "@bReport_minor": {
+    "x-needs-review": true
+  },
+  "bReport_whatDidYouDo": "Co robisz?",
+  "@bReport_whatDidYouDo": {
+    "x-needs-review": true
+  },
+  "bReport_whatDidYouExpect": "Co miało się stać?",
+  "@bReport_whatDidYouExpect": {
+    "x-needs-review": true
+  },
+  "bReport_egThePinJumpedBack_hint": "Np. pinezka wraca tam, gdzie stoję",
+  "@bReport_egThePinJumpedBack_hint": {
+    "x-needs-review": true
+  },
+  "bReport_screen": "Ekran: {screen}",
+  "@bReport_screen": {
+    "x-needs-review": true
+  },
+  "bReport_filledInForYou": "Uzupełnione automatycznie",
+  "@bReport_filledInForYou": {
+    "x-needs-review": true
+  },
+  "bReport_nextScreenshot": "Dalej: zrzut ekranu",
+  "@bReport_nextScreenshot": {
+    "x-needs-review": true
+  },
+  "bReportDetail_version": "Wersja {version}",
+  "@bReportDetail_version": {
+    "x-needs-review": true
+  },
+  "bReportDetail_yesterdayAt": "Wczoraj, {time}",
+  "@bReportDetail_yesterdayAt": {
+    "x-needs-review": true
+  },
+  "bReportDetail_todayTeamReply": "Dziś, {time} · {name}, zespół sameway",
+  "@bReportDetail_todayTeamReply": {
+    "x-needs-review": true
+  },
+  "bReportDetail_replyToTheTeam": "Odpowiedz zespołowi",
+  "@bReportDetail_replyToTheTeam": {
+    "x-needs-review": true
+  },
+  "bReportDetail_attachScreenRecording": "Dołącz nagranie ekranu",
+  "@bReportDetail_attachScreenRecording": {
+    "x-needs-review": true
+  },
+  "bReportDetail_cantReproduceAnymore": "Już się nie powtarza",
+  "@bReportDetail_cantReproduceAnymore": {
+    "x-needs-review": true
+  },
+  "bSent_thanksItsWithTheTeam": "Dzięki! Zgłoszenie trafiło do zespołu",
+  "@bSent_thanksItsWithTheTeam": {
+    "x-needs-review": true
+  },
+  "bSent_reportId": "Zgłoszenie #{reportId}",
+  "@bSent_reportId": {
+    "x-needs-review": true
+  },
+  "bSent_weReadEveryReportYoull": "Czytamy każde zgłoszenie. Odpowiemy tutaj, zwykle w ciągu doby, a gdy naprawimy błąd, dostaniesz powiadomienie.",
+  "@bSent_weReadEveryReportYoull": {
+    "x-needs-review": true
+  },
+  "bSent_missionProgress": "Misja zaliczona? Masz już {done} z {total}.",
+  "@bSent_missionProgress": {
+    "x-needs-review": true
+  },
+  "bSent_backToTheApp": "Wróć do aplikacji",
+  "@bSent_backToTheApp": {
+    "x-needs-review": true
+  },
+  "bSent_seeMyReports": "Moje zgłoszenia",
+  "@bSent_seeMyReports": {
+    "x-needs-review": true
+  },
+  "bShake_betaReportBug_a11y": "Beta: zgłoś błąd",
+  "@bShake_betaReportBug_a11y": {
+    "x-needs-review": true
+  },
+  "bShake_somethingWrong": "Coś nie tak?",
+  "@bShake_somethingWrong": {
+    "x-needs-review": true
+  },
+  "bShake_weSavedAScreenshotOf": "Zapisaliśmy zrzut ekranu tego, co widzisz.",
+  "@bShake_weSavedAScreenshotOf": {
+    "x-needs-review": true
+  },
+  "bShake_somethingBrokeOrLooksWrong": "Coś się zepsuło albo źle wygląda",
+  "@bShake_somethingBrokeOrLooksWrong": {
+    "x-needs-review": true
+  },
+  "bShake_shareAnIdea": "Podziel się pomysłem",
+  "@bShake_shareAnIdea": {
+    "x-needs-review": true
+  },
+  "bShake_somethingCouldBeBetter": "Coś mogłoby działać lepiej",
+  "@bShake_somethingCouldBeBetter": {
+    "x-needs-review": true
+  },
+  "bShake_shookByAccident": "Potrząśnięte przypadkiem",
+  "@bShake_shookByAccident": {
+    "x-needs-review": true
+  },
+  "bShake_turnOffShakeToReport": "Wyłącz zgłaszanie potrząśnięciem",
+  "@bShake_turnOffShakeToReport": {
+    "x-needs-review": true
+  },
+  "bWelcome_betaTesters": "Beta testy",
+  "@bWelcome_betaTesters": {
+    "x-needs-review": true
+  },
+  "bWelcome_youreTestingSamewayBeforeEveryone": "Testujesz sameway przed wszystkimi",
+  "@bWelcome_youreTestingSamewayBeforeEveryone": {
+    "x-needs-review": true
+  },
+  "bWelcome_thanksForHelpingThisIs": "Dzięki za pomoc! To wczesna wersja: niektóre rzeczy się zepsują i właśnie takie miejsca chcemy znaleźć.",
+  "@bWelcome_thanksForHelpingThisIs": {
+    "x-needs-review": true
+  },
+  "bWelcome_versionBuild": "Wersja {version} · kompilacja {build} · {platform}",
+  "@bWelcome_versionBuild": {
+    "x-needs-review": true
+  },
+  "bWelcome_thingsCanBreak": "Coś może się zepsuć",
+  "@bWelcome_thingsCanBreak": {
+    "x-needs-review": true
+  },
+  "bWelcome_crashesAndOddBehaviourAre": "Awarie i dziwne zachowanie są normalne. Zgłaszaj je, nie obchodź.",
+  "@bWelcome_crashesAndOddBehaviourAre": {
+    "x-needs-review": true
+  },
+  "bWelcome_dataMayReset": "Dane mogą zniknąć",
+  "@bWelcome_dataMayReset": {
+    "x-needs-review": true
+  },
+  "bWelcome_ridesChatsAndRewardsCan": "Przejazdy, czaty i nagrody mogą zostać wyczyszczone między wersjami.",
+  "@bWelcome_ridesChatsAndRewardsCan": {
+    "x-needs-review": true
+  },
+  "bWelcome_realPeopleRealCars": "Prawdziwi ludzie, prawdziwe auta",
+  "@bWelcome_realPeopleRealCars": {
+    "x-needs-review": true
+  },
+  "bWelcome_ridesWithOtherTestersAre": "Przejazdy z innymi testerami są prawdziwe. Te same zasady bezpieczeństwa: kod odbioru, bezpieczne postoje.",
+  "@bWelcome_ridesWithOtherTestersAre": {
+    "x-needs-review": true
+  },
+  "bWelcome_keepItPrivate": "Na razie to tajemnica",
+  "@bWelcome_keepItPrivate": {
+    "x-needs-review": true
+  },
+  "bWelcome_pleaseDontPostScreenshotsPublicly": "Prosimy, nie publikuj zrzutów ekranu przed premierą.",
+  "@bWelcome_pleaseDontPostScreenshotsPublicly": {
+    "x-needs-review": true
+  },
+  "bWelcome_showMeHowItWorks": "Pokaż, jak to działa",
+  "@bWelcome_showMeHowItWorks": {
+    "x-needs-review": true
+  },
+  "bWelcome_skipIveDoneThisBefore": "Pomiń, już to znam",
+  "@bWelcome_skipIveDoneThisBefore": {
+    "x-needs-review": true
+  },
+  "bWhatsNew_whatsInThisBuild": "Co nowego w tej wersji",
+  "@bWhatsNew_whatsInThisBuild": {
+    "x-needs-review": true
+  },
+  "bWhatsNew_new": "Nowe",
+  "@bWhatsNew_new": {
+    "x-needs-review": true
+  },
+  "bWhatsNew_fixed": "Naprawione",
+  "@bWhatsNew_fixed": {
+    "x-needs-review": true
+  },
+  "bWhatsNew_knownIssuesNoNeedTo": "Znane problemy · nie trzeba ich zgłaszać",
+  "@bWhatsNew_knownIssuesNoNeedTo": {
+    "x-needs-review": true
+  },
+  "bWhatsNew_nextWhatToTest": "Dalej: co przetestować",
+  "@bWhatsNew_nextWhatToTest": {
+    "x-needs-review": true
+  },
+  "diDDropOff_timeDurationDistance": "{time} · {duration} · {distance}",
+  "@diDDropOff_timeDurationDistance": {
+    "x-needs-review": true
+  },
+  "diDDropOff_dropOffIn_a11y": "Wysiadka · za {duration}",
+  "@diDDropOff_dropOffIn_a11y": {
+    "x-needs-review": true
+  },
+  "diDDropOff_passengerOnRoute": "{passengerName} · {place}, na twojej trasie",
+  "@diDDropOff_passengerOnRoute": {
+    "x-needs-review": true
+  },
+  "diDDropOff_passengerIsOut": "Pasażer wysiadł",
+  "@diDDropOff_passengerIsOut": {
+    "x-needs-review": true
+  },
+  "diDMinimal_navigation_a11y": "Nawigacja",
+  "@diDMinimal_navigation_a11y": {
+    "x-needs-review": true
+  },
+  "diDRequest_onRouteDetourPlace": "Na trasie · +{detour} · {place}",
+  "@diDRequest_onRouteDetourPlace": {
+    "x-needs-review": true
+  },
+  "diDRequest_toPlaceTogether": "Do: {place} · razem {distance}",
+  "@diDRequest_toPlaceTogether": {
+    "x-needs-review": true
+  },
+  "diDToPickup_pickUpSide_a11y": "Odbierz: {passengerName} · {side}",
+  "@diDToPickup_pickUpSide_a11y": {
+    "x-needs-review": true
+  },
+  "diDToPickup_placeNote": "{place} · {note}",
+  "@diDToPickup_placeNote": {
+    "x-needs-review": true
+  },
+  "diPArrived_howWasIt": "Jak minęła podróż? Kierowca: {driverName}",
+  "@diPArrived_howWasIt": {
+    "x-needs-review": true
+  },
+  "diPComing_driverAwayPickup_a11y": "{driverName} · za {eta}. Odbiór: {pickup}",
+  "@diPComing_driverAwayPickup_a11y": {
+    "x-needs-review": true
+  },
+  "diPFound_pickingYouUp_a11y": "Odbierze cię: {driverName}",
+  "@diPFound_pickingYouUp_a11y": {
+    "x-needs-review": true
+  },
+  "diPFound_pickupAtWalk": "Odbiór o {time} · {place} · {distance} pieszo",
+  "@diPFound_pickupAtWalk": {
+    "x-needs-review": true
+  },
+  "diPInRide_driverDistanceLeft": "Kierowca: {driverName} · zostało {distance}",
+  "@diPInRide_driverDistanceLeft": {
+    "x-needs-review": true
+  },
+  "diPSearch_lookingElapsed_a11y": "Szukamy kierowców, {elapsed}",
+  "@diPSearch_lookingElapsed_a11y": {
+    "x-needs-review": true
+  },
+  "diPSearchExp_toPlaceDriversNearby": "Do: {place} · {count, plural, one{{count} kierowca} few{{count} kierowców} many{{count} kierowców} other{{count} kierowcy}} w pobliżu",
+  "@diPSearchExp_toPlaceDriversNearby": {
+    "x-needs-review": true
+  },
+  "diPWaiting_driverIsHere_a11y": "Już na miejscu: {driverName}",
+  "@diPWaiting_driverIsHere_a11y": {
+    "x-needs-review": true
+  },
+  "diPWaiting_carWaitsUpTo": "{car} · czeka do {duration}",
+  "@diPWaiting_carWaitsUpTo": {
+    "x-needs-review": true
+  },
+  "diPWalk_meetAround": "Spotkacie się w punkcie odbioru około {time}",
+  "@diPWalk_meetAround": {
+    "x-needs-review": true
+  },
+  "diPWalk_youEta": "Ty · {duration}",
+  "@diPWalk_youEta": {
+    "x-needs-review": true
+  },
+  "common_nameDuration": "{name} · {duration}",
+  "@common_nameDuration": {
+    "x-needs-review": true
+  },
+  "diSUpcoming_departsVia": "Wyjazd o {time} · przez {via}",
+  "@diSUpcoming_departsVia": {
+    "x-needs-review": true
+  },
+  "common_pickupPlace": "Odbiór: {place}",
+  "@common_pickupPlace": {
+    "x-needs-review": true
+  },
+  "diSUpcoming_driverPlate": "Kierowca: {driverName} · {plate}",
+  "@diSUpcoming_driverPlate": {
+    "x-needs-review": true
+  },
+  "diSUpcoming_runningLate": "Spóźnię się",
+  "@diSUpcoming_runningLate": {
+    "x-needs-review": true
+  },
+  "diDLive_seatsFree": "{seats, plural, one{{seats} wolne} few{{seats} wolne} many{{seats} wolnych} other{{seats} wolnego}}",
+  "@diDLive_seatsFree": {
+    "x-needs-review": true
+  },
+  "dCantPickup_title": "Nie możesz zabrać: {passengerName}?",
+  "dCantPickup_trafficOrAClosedRoad": "Korek lub zamknięta droga",
+  "dCantPickup_cantStopSafelyThere": "Nie da się tam bezpiecznie stanąć",
+  "dCantPickup_keepsPlace": "Pasażer: {passengerName}. Miejsce w kolejce zostaje, od razu szukamy innego kierowcy.",
+  "@dCantPickup_keepsPlace": {
+    "x-needs-review": true
+  },
+  "dCantPickup_tell": "Powiadom: {passengerName}",
+  "common_confirmPickup": "Potwierdź odbiór",
+  "dCode_waitingAt": "Czeka w miejscu: {place}",
+  "@dCode_waitingAt": {
+    "x-needs-review": true
+  },
+  "dCode_askForCode": "Poproś pasażera o 4‑cyfrowy kod",
+  "common_itsOnHerScreenThis": "Ma go na ekranie. To potwierdza, że zabierasz właściwą osobę.",
+  "common_wrongCodeMeansWrongPerson": "Zły kod to zła osoba. Nie ruszaj.",
+  "common_codeNotWorking": "Kod nie działa?",
+  "dDone_routeFinished": "Trasa zakończona",
+  "dDone_thanks": "{name}, dzięki, że dzielisz się miejscem.",
+  "@dDone_thanks": {
+    "x-needs-review": true
+  },
+  "common_shared": "Wspólnie",
+  "dDone_driveAgain": "Jeszcze raz razem? · {name}",
+  "dDone_addHerToYourPeople": "Dodaj tę osobę do ekipy. Dostanie powiadomienie, gdy zaplanujesz tę trasę.",
+  "dEndRoute_endYourRoute": "Zakończyć trasę?",
+  "dEndRoute_passengerBooked": "{passengerName}: czeka na odbiór za {duration}. Od razu powiadomimy pasażera i poszukamy innego kierowcy.",
+  "@dEndRoute_passengerBooked": {
+    "x-needs-review": true
+  },
+  "dEndRoute_keepDriving": "Jadę dalej",
+  "dEndUndo_routeEndedPassengersCantSee": "Trasa zakończona. Pasażerowie już cię nie widzą.",
+  "common_switchToPassenger_a11y": "Przełącz na pasażera",
+  "dHome_plateSeats": "{plate} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}",
+  "@dHome_plateSeats": {
+    "x-needs-review": true
+  },
+  "dInTrip_dropOffIn": "Wysiadka: {passengerName} za {duration}",
+  "dInTrip_thenToDestination": "Potem {duration} do twojego celu",
+  "dInTrip_dropOffAt": "Wysiadka: {passengerName} · {place}",
+  "dInTrip_yourDestinationAt": "{time} · twój cel",
+  "dInTrip_acceptMorePassengers": "Przyjmuj kolejnych pasażerów",
+  "dInTrip_seatsStillFree": "Wciąż {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}}",
+  "@dInTrip_seatsStillFree": {
+    "x-needs-review": true
+  },
+  "dInTrip_droppedOff": "Wysiadka zakończona",
+  "dLive_youreSharingYourRoute": "Udostępniasz swoją trasę",
+  "dLive_seatsFreeTo": "{seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} · cel: {place} · {duration}",
+  "@dLive_seatsFreeTo": {
+    "x-needs-review": true
+  },
+  "dLive_passengersNearRoute": "{count, plural, one{{count} pasażer} few{{count} pasażerów} many{{count} pasażerów} other{{count} pasażera}} blisko twojej trasy",
+  "@dLive_passengersNearRoute": {
+    "x-needs-review": true
+  },
+  "dLive_weAskYouBeforeAnyone": "Zapytamy cię, zanim ktoś dołączy",
+  "dLive_openNavigation": "Otwórz nawigację",
+  "dLive_whenYouAcceptSomeoneNavigation": "Gdy kogoś zaakceptujesz, nawigacja uruchomi się ponownie z odbiorem.",
+  "common_endRoute": "Zakończ trasę",
+  "dLive_prototypeARequestArrives_a11y": "Prototyp: przychodzi prośba",
+  "dLiveNoBg_locationAccessIsOffPassengers": "Dostęp do lokalizacji jest wyłączony. Pasażerowie nie widzą twojej trasy.",
+  "dNoShow_waitedMinutes": "Czekasz {minutes, plural, one{{minutes} minutę} few{{minutes} minuty} many{{minutes} minut} other{{minutes} minuty}}",
+  "@dNoShow_waitedMinutes": {
+    "x-needs-review": true
+  },
+  "dNoShow_notHereYet": "Jeszcze nie ma: {passengerName}",
+  "dNoShow_waitedAt": "Czekasz już {minutes} min w miejscu: {place}.",
+  "@dNoShow_waitedAt": {
+    "x-needs-review": true
+  },
+  "dNoShow_canLeave": "Możesz jechać. Bez kary dla ciebie, a my damy znać pasażerowi.",
+  "@dNoShow_canLeave": {
+    "x-needs-review": true
+  },
+  "dNoShow_leaveWithoutHer": "Jedź bez niej",
+  "dNoShow_waitMore": "Poczekaj jeszcze {minutes} min",
+  "dPassengerCancelled_title": "Anulowano: {passengerName}",
+  "dPassengerCancelled_sheNoLongerNeedsThe": "Przejazd nie jest już potrzebny. Trasa zostaje aktywna, a miejsce znów jest wolne.",
+  "common_o_a11y": "O",
+  "common_wantsToJoin": "{passengerName}: chce dołączyć",
+  "@common_wantsToJoin": {
+    "x-needs-review": true
+  },
+  "dRequest_detourRidesVerified": "+{detour} objazdu · {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · e-mail zweryfikowany",
+  "@dRequest_detourRidesVerified": {
+    "x-needs-review": true
+  },
+  "dRequest_secondsLeft": "{seconds, plural, one{Została {seconds} sekunda} few{Zostały {seconds} sekundy} many{Zostało {seconds} sekund} other{Zostało {seconds} sekundy}} na odpowiedź",
+  "@dRequest_secondsLeft": {
+    "x-needs-review": true
+  },
+  "dRequest_secondsShort": "{seconds} s",
+  "common_plusDuration": "+{duration}",
+  "dRequest_dropOffBefore": "Wysiadka na twojej trasie, {distance} przed celem",
+  "common_decline": "Odrzuć",
+  "common_accept": "Akceptuj",
+  "dRequest_youreStoppedSoYouCan": "Stoisz, więc możesz stuknąć. W trakcie jazdy prośby są czytane na głos i czekają, aż się zatrzymasz.",
+  "common_rules": "Zasady",
+  "common_requestsWhileDriving": "Prośby w czasie jazdy",
+  "dRequestRules_cityRides": "Przejazdy po mieście",
+  "dRequestRules_answeringARequestShouldNever": "Odpowiedź na prośbę nigdy nie powinna oznaczać sięgania po telefon w czasie jazdy.",
+  "common_autoaccept": "Auto-akceptacja",
+  "common_yourPeople": "Twoja ekipa",
+  "common_namesAndMore": "{first}, {second} i {count, plural, one{{count} inna osoba} few{{count} inne osoby} many{{count} innych osób} other{{count} innej osoby}}",
+  "@common_namesAndMore": {
+    "x-needs-review": true
+  },
+  "dRequestRules_autoacceptYourPeople_a11y": "Automatycznie akceptuj swoją ekipę",
+  "dRequestRules_shortDetours": "Krótkie objazdy",
+  "dRequestRules_detourUpTo": "Gdy objazd trwa do {minutes} min",
+  "dRequestRules_autoacceptShortDetours_a11y": "Automatycznie akceptuj krótkie objazdy",
+  "common_spokenAlerts": "Komunikaty głosowe",
+  "dRequestRules_whileMoving": "W ruchu",
+  "dRequestRules_whileMovingRequestsAreRead": "W trakcie jazdy prośby są czytane na głos. Odpowiadasz na postoju.",
+  "dRequestRules_noAnswerMeansTheRequest": "Brak odpowiedzi oznacza odmowę. Za odmowę nigdy nie ma kary.",
+  "common_durationDistance": "{duration} · {distance}",
+  "common_howLongADetourIs": "Jak długi objazd jest OK?",
+  "common_freeSeats": "{seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}}",
+  "@common_freeSeats": {
+    "x-needs-review": true
+  },
+  "common_change": "Zmień",
+  "common_startSharingRoute": "Udostępnij trasę",
+  "dRouteEmpty_destination_a11y": "Cel",
+  "dRouteEmpty_whereAreYouDriving_hint": "Dokąd jedziesz autem?",
+  "dRouteEmpty_addADestinationToContinue": "Dodaj cel, aby kontynuować",
+  "dRouteOptions_seatsAndDetours": "Miejsca i objazdy",
+  "common_freeSeats2": "Wolne miejsca",
+  "dRouteOptions_carSeats": "Twoje auto ma {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}",
+  "@dRouteOptions_carSeats": {
+    "x-needs-review": true
+  },
+  "common_fewerSeats_a11y": "Mniej miejsc",
+  "common_moreSeats_a11y": "Więcej miejsc",
+  "dTimeSheet_whenAreYouLeaving": "Kiedy wyjeżdżasz?",
+  "dToPickup_restartNavigationWithThePickup": "Uruchom nawigację ponownie z odbiorem",
+  "dToPickup_pickUp": "Odbiór: {passengerName}",
+  "common_placeDuration": "{place} · {duration}",
+  "common_messageName": "Napisz: {name}",
+  "dToPickup_greenJacketStopOnlyWhere": "Zielona kurtka. Zatrzymaj się tylko tam, gdzie to bezpieczne i dozwolone.",
+  "common_imHere": "Jestem",
+  "dToPickup_cantPickUp": "Nie mogę odebrać",
+  "dToPickup_prototypeArriveAtPickup_a11y": "Prototyp: dojazd na miejsce odbioru",
+  "common_email": "E-mail",
+  "xMapFailed_retry": "Ponów",
+  "errors_messageNotSent": "Wiadomość niewysłana",
+  "xServerError_somethingWentWrongOnOur": "Coś poszło nie tak po naszej stronie",
+  "iAllPrices_allPrices": "Wszystkie ceny",
+  "iAllPrices_perSeatByDistanceSame": "Za miejsce, według odległości. Ta sama zasada co dla całej trasy.",
+  "common_route": "{from} → {to}",
+  "iBooking_bookASeat": "Zarezerwuj miejsce",
+  "common_dateRoute": "{date} · {from} → {to}",
+  "common_cityTime": "{city} · {time}",
+  "iBooking_price": "Cena",
+  "iBooking_seatsTimesPrice": "{seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} × {price}",
+  "@iBooking_seatsTimesPrice": {
+    "x-needs-review": true
+  },
+  "iBooking_youPay": "Płacisz kierowcy",
+  "iBooking_inCashWhenYouMeet": "Gotówką przy spotkaniu. Cena jest taka sama bez względu na liczbę pasażerów.",
+  "iBooking_messageOptional": "Wiadomość do kierowcy (opcjonalnie)",
+  "iBooking_hiIHaveAMedium_hint": "Cześć! Mam średnią torbę.",
+  "iBooking_instantBookingTheSeatIs": "Natychmiastowa rezerwacja: miejsce jest twoje od razu.",
+  "iBooking_bookSeatPrice": "Rezerwuj · {price}",
+  "iCancelBooking_cancelYourSeat": "Anulować twoje miejsce?",
+  "iCancelBooking_driverTold": "Kierowca ({driverName}) dowie się od razu, a miejsce wróci do sprzedaży. Nic nie musisz płacić.",
+  "iCancelBooking_cancelSeat": "Anuluj miejsce",
+  "iCancelBooking_keepMySeat": "Zostaw moje miejsce",
+  "iCityPicker_goingTo": "Dokąd jedziesz",
+  "iCityPicker_searchCity_a11y": "Szukaj miasta",
+  "iCityPicker_rze": "Rze",
+  "iCityPicker_cityOrTown_hint": "Miasto lub miejscowość",
+  "iCityPicker_popularFrom": "Popularne trasy · {city}",
+  "@iCityPicker_popularFrom": {
+    "x-needs-review": true
+  },
+  "common_warszawa": "Warszawa",
+  "iCityPicker_ridesThisWeek": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} w tym tygodniu",
+  "@iCityPicker_ridesThisWeek": {
+    "x-needs-review": true
+  },
+  "common_katowice": "Katowice",
+  "iDone_arrivedIn": "Jesteś na miejscu: {city}",
+  "@iDone_arrivedIn": {
+    "x-needs-review": true
+  },
+  "iDone_didYouPay": "Płatność dla kierowcy ({driverName}): {price}. Wszystko opłacone?",
+  "iDone_yesInCash": "Tak, gotówką",
+  "iDone_thereWasAProblem": "Był problem",
+  "iDoneRated_paid": "Dzięki! Płatność dla kierowcy ({driverName}): {price}, opłacone.",
+  "iDriverCancel_cancelThisRoute": "Anulować tę trasę?",
+  "iDriverCancel_passengersTold": "Pasażerowie ({names}) dowiedzą się od razu i zobaczą inne przejazdy. Kierunek: {city}.",
+  "@iDriverCancel_passengersTold": {
+    "x-needs-review": true
+  },
+  "common_myPlansChanged": "Zmieniły mi się plany",
+  "iDriverCancel_carProblem": "Problem z autem",
+  "common_somethingElse": "Coś innego",
+  "iDriverCancel_cancelRoute": "Anuluj trasę",
+  "iDriverCancel_keepRoute": "Zostaw trasę",
+  "iDriverCancelled_rideCancelled": "Przejazd odwołany",
+  "iDriverCancelled_cancelled": "Przejazd {when} odwołany · {driverName}",
+  "@iDriverCancelled_cancelled": {
+    "x-needs-review": true
+  },
+  "iDriverCancelled_hisPlansChangedYouDont": "Zmieniły mu się plany. Nic nie musisz płacić.",
+  "iDriverCancelled_otherRidesOn": "Inne przejazdy: {date}",
+  "@iDriverCancelled_otherRidesOn": {
+    "x-needs-review": true
+  },
+  "iDriverCancelled_tellMe": "Daj znać, gdy ktoś opublikuje {from} → {to} ({day}).",
+  "@iDriverCancelled_tellMe": {
+    "x-needs-review": true
+  },
+  "iDriverDetails_whenAndWho": "Kiedy i kto",
+  "iDriverDetails_departureFrom": "Wyjazd: {city}",
+  "@iDriverDetails_departureFrom": {
+    "x-needs-review": true
+  },
+  "iDriverDetails_requests": "Prośby",
+  "iDriverDetails_instantBooking": "Natychmiastowa rezerwacja",
+  "iDriverDetails_askMe": "Pytaj mnie",
+  "iDriverDetails_verifiedPassengersBookRightAway": "Zweryfikowani pasażerowie rezerwują od razu. „Pytaj mnie”: 3 h na odpowiedź, noce się nie liczą.",
+  "iDriverDetails_tellMyPeople": "Powiadom moją ekipę",
+  "iDriverDetails_notifiedFirst": "Pierwsi dostaną powiadomienie: {names}",
+  "@iDriverDetails_notifiedFirst": {
+    "x-needs-review": true
+  },
+  "common_notifyMyPeople_a11y": "Powiadom moją ekipę",
+  "iDriverDetails_luggage": "Bagaż",
+  "iDriverDetails_small": "Mały",
+  "iDriverDetails_medium": "Średni",
+  "iDriverDetails_large": "Duży",
+  "iDriverManage_dateTimePerSeat": "{date} · {time} · {price} za miejsce",
+  "iDriverManage_editOrCancelRoute_a11y": "Edytuj lub anuluj trasę",
+  "iDriverManage_seatsByPartOfThe": "Miejsca na odcinkach trasy",
+  "common_a_a11y": "A",
+  "iDriverManage_requestLine": "{from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price} · e-mail niezweryfikowany",
+  "@iDriverManage_requestLine": {
+    "x-needs-review": true
+  },
+  "common_answerBy": "Odpowiedz do {deadline}",
+  "iDriverManage_needsOk": "Natychmiastowa rezerwacja jest włączona, ale e-mail pasażera ({name}) nie jest jeszcze zweryfikowany, więc potrzebna jest twoja zgoda.",
+  "@iDriverManage_needsOk": {
+    "x-needs-review": true
+  },
+  "iDriverManage_booked": "Zarezerwowane",
+  "iDriverManage_routePricePeople": "{from} → {to} · {price} · twoja ekipa",
+  "common_routePrice": "{from} → {to} · {price}",
+  "iDriverManage_fuelCovered": "Pokryte paliwo",
+  "iDriverManage_collectedOf": "{collected} z {total}",
+  "iDriverManage_messageAll": "Napisz do wszystkich",
+  "iDriverManage_shareRoute": "Udostępnij trasę",
+  "iDriverPrice_pricePerSeat": "Cena za miejsce",
+  "iDriverPrice_routeStops": "{from} → {to} · {distance} · przystanki: {stops}",
+  "@iDriverPrice_routeStops": {
+    "x-needs-review": true
+  },
+  "iDriverPrice_less": "{price} mniej",
+  "iDriverPrice_more": "{price} więcej",
+  "iDriverPrice_suggestedPrice": "Sugerowana cena",
+  "iDriverPrice_fuelSplit": "{fuel} za paliwo ÷ {people, plural, one{{people} osoba} few{{people} osoby} many{{people} osób} other{{people} osoby}} · {fuelType} {fuelPrice}/l, {date}",
+  "@iDriverPrice_fuelSplit": {
+    "x-needs-review": true
+  },
+  "iDriverPrice_howItsCalculated": "Jak to liczymy",
+  "iDriverPrice_partOfTheWayCalculated": "Część trasy · policzone za ciebie",
+  "iDriverPrice_otherParts": "Inne odcinki liczymy tak samo: {list}.",
+  "iDriverPrice_howPassengersPayYou": "Jak pasażerowie ci płacą",
+  "iDriverPrice_inCashWhenYouMeet2": "Gotówką przy spotkaniu. Bez prowizji.",
+  "iDriverPrice_takeBlikToo": "Przyjmuj też BLIK",
+  "iDriverPrice_passengersSeeYourPhoneNumber": "Pasażerowie zobaczą twój numer telefonu po akceptacji, żeby wysłać BLIK.",
+  "iDriverRoute_stopsOnTheWay": "Przystanki po drodze",
+  "iDriverRoute_via": "przez {road}",
+  "common_placePlusDuration": "{place} · +{duration}",
+  "iDriverRoute_stopIn": "Przystanek: {city}",
+  "@iDriverRoute_stopIn": {
+    "x-needs-review": true
+  },
+  "iDriverRoute_passengersCanBookAnyPart": "Pasażerowie mogą zarezerwować dowolną część twojej trasy, np. tylko Tarnów → Rzeszów. Przystanki to publiczne, łatwo dostępne miejsca spotkań.",
+  "iDriverRoute_next": "Dalej",
+  "iMyBooking_yourBooking": "Twoja rezerwacja",
+  "iMyBooking_instantDriverTold": "Natychmiastowa rezerwacja · kierowca ({driverName}) już wie",
+  "iMyBooking_savedOnThisPhoneWorks": "Zapisane w telefonie, działa bez zasięgu",
+  "iMyBooking_beThere": "Bądź o {time} · odjazd {departure}",
+  "iMyBooking_arrivesAbout": "Przyjazd około {time}",
+  "iMyBooking_openInMaps": "Otwórz w Mapach",
+  "iMyBooking_yourPickupCode": "Twój kod odbioru",
+  "iMyBooking_sayCode": "Powiedz go przy spotkaniu. Kierowca ({driverName}) go wpisze.",
+  "iMyBooking_priceInCash": "{price} gotówką",
+  "iMyBooking_imRunningLate": "Spóźnię się",
+  "iMyBooking_cancelBooking": "Anuluj rezerwację",
+  "iNoShowDriver_notHereYet": "Jeszcze nie ma: {passengerName}",
+  "@iNoShowDriver_notHereYet": {
+    "x-needs-review": true
+  },
+  "iNoShowDriver_waitUntil": "Poczekaj do {time}. Potem możesz odjechać: miejsce się zwolni, a pasażer dostanie powiadomienie.",
+  "@iNoShowDriver_waitUntil": {
+    "x-needs-review": true
+  },
+  "iNoShowDriver_leaveWithout": "Odjedź bez pasażera ({passengerName})",
+  "@iNoShowDriver_leaveWithout": {
+    "x-needs-review": true
+  },
+  "common_availableAtIn": "Dostępne o {time} · za {minutes} min",
+  "iNoShowDriver_shesHereEnterCode": "Jest na miejscu: wpisz kod",
+  "iNoShowPassenger_driverNotHere": "Jeszcze nie ma: {driverName}",
+  "@iNoShowPassenger_driverNotHere": {
+    "x-needs-review": true
+  },
+  "iNoShowPassenger_placeTimeSharing": "{place} · {time} · udostępnia lokalizację",
+  "common_call": "Zadzwoń",
+  "iNoShowPassenger_heDidntCome": "Nie przyjechał",
+  "iPriceHow_howThePriceIsCalculated": "Jak liczymy cenę",
+  "iPriceHow_route": "Trasa",
+  "iPriceHow_yourCar": "Twoje auto",
+  "iPriceHow_carConsumption": "{car} · {consumption} l/100 km",
+  "iPriceHow_fuelPrice": "Cena paliwa",
+  "iPriceHow_fuelPriceDate": "{fuelType} {fuelPrice}/l · {date}",
+  "iPriceHow_fuelForTheRoute": "Paliwo na trasę",
+  "iPriceHow_sharedBy": "Dzielone na",
+  "iPriceHow_youPlusSeats": "ty + {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}",
+  "@iPriceHow_youPlusSeats": {
+    "x-needs-review": true
+  },
+  "iPriceHow_eachPaysSame": "Każdy pasażer płaci tyle samo, nawet gdy zarezerwuje tylko jeden. Maksimum to {max}, więc pełne auto nigdy nie zbierze więcej, niż kosztuje paliwo. Odcinki trasy liczymy według odległości.",
+  "iPriceStops_noStops": "Bez przystanków",
+  "iPriceStops_routeNoStops": "{from} → {to} · {distance} · bez przystanków",
+  "iPriceStops_stopsCount": "{stops, plural, one{{stops} przystanek} few{{stops} przystanki} many{{stops} przystanków} other{{stops} przystanku}}",
+  "@iPriceStops_stopsCount": {
+    "x-needs-review": true
+  },
+  "iPriceStops_routeOneStop": "{from} → {to} · {distance} · przystanek: {stop}",
+  "iPriceStops_seeAllPrices": "Zobacz wszystkie ceny ({count})",
+  "iRequestExpired_requestExpired": "Prośba wygasła",
+  "iRequestExpired_noAnswer": "Brak odpowiedzi na czas: {driverName}",
+  "@iRequestExpired_noAnswer": {
+    "x-needs-review": true
+  },
+  "iRequestExpired_nothingWasBookedHereAre": "Nic nie zostało zarezerwowane. Oto inne przejazdy na tę samą trasę.",
+  "iRequestExpired_arrivalDuration": "→ {arrival} · {duration}",
+  "@iRequestExpired_arrivalDuration": {
+    "x-needs-review": true
+  },
+  "common_dateSeats": "{date} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}",
+  "@common_dateSeats": {
+    "x-needs-review": true
+  },
+  "iResults_filters_a11y": "Filtry",
+  "iResults_pricePerSeatTheSame": "Cena za miejsce, taka sama bez względu na liczbę pasażerów. Płacisz kierowcy gotówką przy spotkaniu.",
+  "iResults_yourPeopleFirst": "Najpierw twoja ekipa",
+  "iResults_morning": "Rano",
+  "iResults_directOnly": "Tylko bezpośrednie",
+  "iResults_seatsLeft": "{seats, plural, one{Zostało {seats} miejsce} few{Zostały {seats} miejsca} many{Zostało {seats} miejsc} other{Zostało {seats} miejsca}}",
+  "@iResults_seatsLeft": {
+    "x-needs-review": true
+  },
+  "iResults_instant": "Od razu",
+  "iResults_przemyl": "Przemyśl",
+  "iResults_partOfRoute": "Część trasy {routeFrom} → {routeTo}. Jedziesz {from} → {to}.",
+  "iResults_usuallyAnswersIn": "Zwykle odpowiada w {duration}",
+  "iResults_full": "Brak miejsc",
+  "iResults_noSeatsLeft": "Brak miejsc",
+  "iResults_nothingFits": "Nic nie pasuje?",
+  "iResults_getNotified": "Dostaniesz powiadomienie, gdy ktoś opublikuje {from} → {to} ({day}).",
+  "@iResults_getNotified": {
+    "x-needs-review": true
+  },
+  "iResults_rideAlert_a11y": "Alert o przejazdach",
+  "iResultsEmpty_noRidesOn": "Jeszcze nie ma przejazdów: {date}",
+  "@iResultsEmpty_noRidesOn": {
+    "x-needs-review": true
+  },
+  "iResultsEmpty_driversPublishRidesDaysAhead": "Kierowcy publikują przejazdy z wyprzedzeniem. Damy znać, gdy pojawi się nowy.",
+  "iResultsEmpty_tellMeAboutNewRides": "Daj znać o nowych przejazdach",
+  "common_routeDate": "{from} → {to} · {date}",
+  "iResultsEmpty_otherDays": "Inne dni",
+  "iResultsEmpty_dayRides": "{date} · {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}}",
+  "@iResultsEmpty_dayRides": {
+    "x-needs-review": true
+  },
+  "iRideDetail_routeDuration": "{from} → {to} · {duration}",
+  "iRideDetail_shareRide_a11y": "Udostępnij przejazd",
+  "iRideDetail_yourPickup": "Twój odbiór",
+  "iRideDetail_rynek": "Rynek",
+  "iRideDetail_dworzecPkp": "Dworzec PKP",
+  "iRideDetail_yourDropoff": "Twoja wysiadka",
+  "iRideDetail_driverHistory": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {together} z tobą · od {year}",
+  "@iRideDetail_driverHistory": {
+    "x-needs-review": true
+  },
+  "iRideDetail_mediumBagOk": "Średni bagaż OK",
+  "iRideDetail_noSmoking": "Bez palenia",
+  "iRideDetail_max2InBack": "Maks. 2 osoby z tyłu",
+  "iRideDetail_instantBookingTheSeatIs2": "Natychmiastowa rezerwacja: miejsce jest twoje od razu po rezerwacji.",
+  "iRideDetail_perSeatCash": "za miejsce · gotówka",
+  "iRideDetail_bookSeat": "Rezerwuj",
+  "iSearch_from": "Skąd: {city}",
+  "iSearch_to": "Dokąd: {city}",
+  "iSearch_swapCities_a11y": "Zamień miasta",
+  "iSearch_date": "Data",
+  "iSearch_seats": "Miejsca",
+  "iSearch_showRides": "Pokaż przejazdy",
+  "iSecondRequest_withdrawQ": "Wycofać prośbę? Kierowca: {driverName}",
+  "iSecondRequest_body": "Na tej samej trasie możesz czekać na jednego kierowcę naraz. Jeśli zarezerwujesz przejazd (kierowca: {newDriver}), prośba (kierowca: {oldDriver}) zostanie wycofana, a kierowca dostanie powiadomienie.",
+  "@iSecondRequest_body": {
+    "x-needs-review": true
+  },
+  "iSecondRequest_withdrawAndBook": "Wycofaj i zarezerwuj: {driverName}",
+  "iSecondRequest_keepWaiting": "Czekaj dalej: {driverName}",
+  "iWaiting_requestSent": "Prośba wysłana",
+  "iWaiting_waitingFor": "Czekamy na odpowiedź: {driverName}",
+  "iWaiting_hasUntil": "Kierowca: {driverName}. Ma czas na odpowiedź do {deadline} (noce się nie liczą). Powiadomimy cię, a prośbę znajdziesz w Przejazdach.",
+  "iWaiting_routeSeatsPrice": "{from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price}",
+  "@iWaiting_routeSeatsPrice": {
+    "x-needs-review": true
+  },
+  "iWaiting_keepBrowsing": "Przeglądaj dalej",
+  "lScreens_rideDetail": "Szczegóły przejazdu",
+  "mEmpty_noConversationsYet": "Nie masz jeszcze rozmów",
+  "mEmpty_whenYouBookARide": "Gdy zarezerwujesz przejazd, czat z kierowcą otworzy się tu automatycznie. Jest otwarty do 24 godz. po przejeździe.",
+  "mInbox_searchMessages_a11y": "Szukaj w wiadomościach",
+  "mInbox_rideUpdates": "Aktualizacje przejazdów",
+  "mInbox_confirmedFor": "Potwierdzone na {day} {time} · {name}",
+  "mInbox_new_a11y": "nowe",
+  "mInbox_activeRides": "Aktywne przejazdy",
+  "mInbox_online_a11y": "online",
+  "common_dayTimePlace": "{day} {time} · {place}",
+  "mInbox_typing": "pisze…",
+  "common_datePlace": "{date} · {place}",
+  "common_pastRides": "Minione przejazdy",
+  "mInbox_thanksForTheRide": "Dzięki za przejazd!",
+  "mInbox_youSeeYouNextWeek": "Ty: Do zobaczenia za tydzień",
+  "common_imAtTheBusStop": "Jestem na przystanku",
+  "mSendFailed_notSentTapToRetry": "Nie wysłano · Stuknij, aby ponowić",
+  "mThread_driver": "Kierowca ·",
+  "common_callName": "Zadzwoń: {name}",
+  "mThread_moreReportOrBlock_a11y": "Więcej: zgłoś lub zablokuj",
+  "mThread_pickupPlate": "Odbiór {place} · {plate}",
+  "mThread_view": "Zobacz",
+  "mThread_driverAccepted": "Prośba zaakceptowana · {driverName}",
+  "mThread_hiIllBeAtThe": "Cześć! Będę w miejscu odbioru kilka minut wcześniej.",
+  "mThread_greatThanksWhatDoYou": "Super, dzięki! Jak cię poznam?",
+  "mThread_seenAt": "{time} · Przeczytane",
+  "mThread_blackJacketRedBackpack": "Czarna kurtka, czerwony plecak",
+  "mThread_liveLocation": "Lokalizacja na żywo",
+  "mThread_sharingUntilPickup": "Udostępniana do odbioru · {duration} stąd",
+  "mThread_imAtThePickup": "Jestem w miejscu odbioru",
+  "mThread_runningLate": "Spóźnię się {minutes} min",
+  "mThread_whereExactly": "Gdzie dokładnie?",
+  "mThread_attachLocationOrPhoto_a11y": "Załącz lokalizację lub zdjęcie",
+  "mThread_send_a11y": "Wyślij",
+  "mThreadDriver_passenger": "Pasażer ·",
+  "mThreadDriver_youAcceptedTheRideRequest": "Prośba zaakceptowana",
+  "mThreadDriver_onMyWay": "Już jadę",
+  "mThreadDriver_cantFindYou": "Nie widzę cię",
+  "mUpdates_driverConfirmed": "Przejazd potwierdzony · {driverName}",
+  "mUpdates_dayTimeTo": "{day} {time} · do: {place}",
+  "mUpdates_stillSearching": "Wciąż szukamy: {days} {time}",
+  "mUpdates_wellStartMatching2H": "Dopasowanie zaczniemy 2 godz. przed każdym przejazdem",
+  "mUpdates_thisWeek": "W tym tygodniu",
+  "mUpdates_savedCo2": "Oszczędzono {co2} CO₂",
+  "mUpdates_rideWithOn": "Przejazd · {name} · {date}",
+  "mUpdates_rideCancelledByDriver": "Kierowca anulował przejazd",
+  "mUpdates_foundAnotherOption": "{date} · znaleźliśmy inną opcję",
+  "nD1_requestSecondsLeft": "sameway · Prośba · zostało {seconds} s",
+  "nD1_requestBody": "Odbiór {place} · +{detour} objazdu · wysiadka na twojej trasie.",
+  "nD1_sharingYourRoute": "Udostępniasz trasę",
+  "nD1_toPlaceSeatsFree": "Do: {place} · {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}}",
+  "@nD1_toPlaceSeatsFree": {
+    "x-needs-review": true
+  },
+  "nD1_wellAskBeforeAnyoneIs": "Zapytamy, zanim ktoś dołączy. Komunikaty głosowe są włączone.",
+  "common_anyNavigationAppGoogleMaps": "Dowolna nawigacja (Google Maps, Waze…)",
+  "common_samewayPickup": "sameway · Odbiór",
+  "nD2_pickupInSide": "Odbiór: {passengerName}, za {distance} {side}",
+  "nD2_placeWaiting": "{place} · czeka: {spot}",
+  "@nD2_placeWaiting": {
+    "x-needs-review": true
+  },
+  "nD2_iSeeHer": "Widzę pasażera",
+  "nD3_turnBackVia": "Zawróć przez {street}",
+  "nD3_timePlus": "{time} · +{duration}",
+  "nD3_didYouPass": "Odbiór pominięty? · {passengerName}",
+  "nD3_drovePast": "Auto jest {distance} za miejscem odbioru. Zawróć (+{duration}) albo zaproponuj nowe miejsce.",
+  "nD3_turnBack": "Zawróć",
+  "nD3_suggestSpot": "Nowe miejsce",
+  "nD3_pickedUp": "Odebrano",
+  "nD3_passengerAtPickup": "{passengerName}: jest w miejscu odbioru",
+  "@nD3_passengerAtPickup": {
+    "x-needs-review": true
+  },
+  "nD3_waitingNote": "Czeka {duration} · {note}",
+  "nD4_samewayDropoff": "sameway · Wysiadka",
+  "nD4_dropOffIn": "Wysiadka: {passengerName}, za {distance}",
+  "nD4_placeOnRouteSafe": "{place}, na twojej trasie. Zatrzymaj się tylko tam, gdzie bezpiecznie.",
+  "nD4_droppedOff": "Wysadzono",
+  "nD4_samewayTrip": "sameway · Podróż",
+  "nD4_stillDriving": "Przejazd wciąż trwa? · {passengerName}",
+  "nD4_parkedEndTrip": "Auto stoi przy celu od {minutes} min. Zakończ przejazd, żeby pasażer dostał podsumowanie.",
+  "nD4_endTrip": "Zakończ przejazd",
+  "nD4_stillDriving2": "Wciąż jadę",
+  "nD5_dayTimePassengers": "{day} {time} · pasażerowie: {count}",
+  "@nD5_dayTimePassengers": {
+    "x-needs-review": true
+  },
+  "nD5_passengersLeaveOnTime": "{passengers}. Wyjedź na czas, liczą na ciebie.",
+  "nD5_cantGo": "Nie mogę jechać",
+  "nD5_newBooking": "Nowa rezerwacja: {name}",
+  "nD5_requestAnswerBy": "{from} → {to}, {date} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price}. Odpowiedz do {deadline}.",
+  "@nD5_requestAnswerBy": {
+    "x-needs-review": true
+  },
+  "nD5_bookedBy": "{from} → {to}, {when} · rezerwacje: {names}.",
+  "nD5_seatCancelled": "Rezerwacja anulowana · {name}",
+  "nD5_routeStillOn": "{date} · trasa nadal aktualna, jedzie: {name}.",
+  "@nD5_routeStillOn": {
+    "x-needs-review": true
+  },
+  "nD5_eveningbeforeReminderForEveryPlanned": "Przypomnienie wieczorem przed każdą zaplanowaną trasą z pasażerami, żeby nikt nie czekał na próżno. Anulowanie z powiadomienia pyta o powód i od razu informuje pasażerów.",
+  "nD6_requestExpiresIn": "Prośba ({name}) wygaśnie za {minutes} min",
+  "nD6_wed": "Śr",
+  "nD6_bookedSeat": "Miejsce zarezerwowane: {name}",
+  "@nD6_bookedSeat": {
+    "x-needs-review": true
+  },
+  "nD6_instantBooking": "{from} → {to}, {when} · natychmiastowa rezerwacja · {price}.",
+  "common_lookingForDrivers": "Szukamy kierowców",
+  "nP1_toPlaceSearching": "Do: {place} · szukamy {elapsed}",
+  "nP1_usuallyUnder5MinYou": "Zwykle poniżej 5 min. Możesz zamknąć aplikację.",
+  "common_open": "Otwórz",
+  "nP1_samewayRide": "sameway · Przejazd",
+  "nP1_offers": "{driverName}: może cię odebrać za {eta}, {walk} pieszo. {otherName}: za {otherEta}.",
+  "@nP1_offers": {
+    "x-needs-review": true
+  },
+  "nP1_seeDrivers": "Zobacz kierowców",
+  "nP1_requestDriver": "Poproś: {driverName}",
+  "nP1_searchingRunsAsALive": "Wyszukiwanie działa jako Live Activity (iOS) / stałe powiadomienie (Android), więc pasażer może wyjść z aplikacji. Gdy znajdą się kierowcy, wysyłamy jedno powiadomienie z prośbą na jedno dotknięcie.",
+  "nP2_driverComing": "{driverName}: jedzie · {duration}",
+  "@nP2_driverComing": {
+    "x-needs-review": true
+  },
+  "nP2_pickupCodeInApp": "Odbiór: {place} · kod jest w aplikacji",
+  "nP2_showCode": "Pokaż kod",
+  "nP2_samewayMessage": "sameway · Wiadomość",
+  "common_imByTheBlueGate": "Stoję przy niebieskiej bramie, srebrna Corolla",
+  "nP2_reply": "Odpowiedz",
+  "common_imComing": "Już idę",
+  "nP2_pickupInAtWalk": "Odbiór za {eta}: {place}. {distance} pieszo.",
+  "nP2_liveActivityUpdatesEveryFew": "Live Activity odświeża się co kilka sekund, auto jedzie po pasku postępu. Kod odbioru NIE jest pokazywany na ekranie blokady: każdy może go tam przeczytać. Szybka odpowiedź działa bez otwierania aplikacji.",
+  "nP3_timeSensitive": "PILNE ·",
+  "nP3_driverHere": "{driverName}: jest na miejscu i czeka",
+  "@nP3_driverHere": {
+    "x-needs-review": true
+  },
+  "nP3_carAtPlaceWaits": "{car} {plate}, {place}. Poczeka do {minutes} min.",
+  "nP3_waitingOf": "Czeka {elapsed} z {limit}",
+  "nP3_inCountdown": "za {countdown}",
+  "nP3_stillOnYourWay": "Jesteś w drodze?",
+  "nP3_driverWaited": "Kierowca czeka już {minutes} min. Daj znać albo anuluj, żeby mógł ruszyć.",
+  "nP3_moreMinutes": "Jeszcze {minutes} min",
+  "nP4_onTheWayArrive": "W drodze · przyjazd {time}",
+  "nP4_withDriverLeft": "Kierowca: {driverName} · zostało {distance}",
+  "nP4_dropOffFrom": "Wysiadka {distance} od celu: {place}",
+  "nP4_youveArrivedNiceRide": "Jesteś na miejscu. Udany przejazd!",
+  "nP4_sharedSaved": "{distance} wspólnie, {co2} CO₂ mniej. Wszystko OK?",
+  "nP4_reportProblem": "Zgłoś problem",
+  "nP4_samewayRewards": "sameway · Nagrody",
+  "nP4_newReward": "Nowa nagroda: {badge}",
+  "nP4_ridesInCityBox": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {city}. Czeka paczka niespodzianka.",
+  "@nP4_ridesInCityBox": {
+    "x-needs-review": true
+  },
+  "common_openBox": "Otwórz paczkę",
+  "nP4_duringTheRideTheLive": "W trakcie przejazdu Live Activity pokazuje czas dotarcia, a Udostępnij i Bezpieczeństwo są o jedno dotknięcie. Po dotarciu: jedno podsumowanie i nagroda tylko, jeśli coś się odblokowało.",
+  "nP5_driverCantTakeYou": "{driverName}: nie może cię zabrać",
+  "@nP5_driverCantTakeYou": {
+    "x-needs-review": true
+  },
+  "nP5_routeChanged": "Trasa kierowcy się zmieniła. {count, plural, one{Nadal masz dopasowanie z {count} innym kierowcą} few{Nadal masz dopasowanie z {count} innymi kierowcami} many{Nadal masz dopasowanie z {count} innymi kierowcami} other{Nadal masz dopasowanie z {count} innego kierowcy}}.",
+  "@nP5_routeChanged": {
+    "x-needs-review": true
+  },
+  "nP5_seeOptions": "Zobacz opcje",
+  "nP5_cancelledSearchingAgain": "Przejazd anulowany, szukamy ponownie",
+  "nP5_sorryYouKeepYourPlace": "Przepraszamy! Zachowujesz swoje miejsce w kolejce. Zwykle to mniej niż 5 min.",
+  "common_ok": "OK",
+  "common_noDriversOnYourRoute": "Na twojej trasie nie ma jeszcze kierowców",
+  "nP5_searchingLong": "Szukamy od {minutes} min. Przejdziesz do {distance} czy planujemy na później?",
+  "nP5_walkDistance": "Pieszo {distance}",
+  "common_keepSearching": "Szukaj dalej",
+  "nP5_stop": "Stop",
+  "nP5_badNewsAlwaysComesWith": "Zła wiadomość zawsze przychodzi z następnym krokiem. Po anulowaniu przez kierowcę wyszukiwanie startuje samo, więc pasażer nigdy nie zaczyna od nowa.",
+  "nP6_samewayReminder": "sameway · Przypomnienie",
+  "nP6_dayTimeRoute": "{day} {time} · {from} → {to}",
+  "nP6_meetAt": "Spotkanie: {place}. Kierowca: {driverName}. Maks. średni bagaż.",
+  "nP6_viewRide": "Zobacz przejazd",
+  "nP6_directions": "Trasa dojścia",
+  "nP6_samewayYourPeople": "sameway · Twoja ekipa",
+  "nP6_plannedRoute": "Nowa trasa: {name}",
+  "nP6_peopleRoute": "{from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to pierwszy.",
+  "@nP6_peopleRoute": {
+    "x-needs-review": true
+  },
+  "nP6_mute": "Wycisz: {name}",
+  "common_tue": "Wt",
+  "nP6_seatConfirmed": "Miejsce potwierdzone",
+  "nP6_acceptedFor": "Prośba zaakceptowana · {driverName}: {when}, {place}.",
+  "nP6_rideIn": "Twój przejazd za {minutes} min",
+  "nP6_matchingWorked": "Jutrzejsze dopasowanie się udało · {driverName}, {time}, {place}.",
+  "@nP6_matchingWorked": {
+    "x-needs-review": true
+  },
+  "nP7_samewayBetweenCities": "sameway · Między miastami",
+  "nP7_beAt": "Bądź tutaj: {place}, o {time}. {car} {plate}. Kod jest w aplikacji.",
+  "@nP7_beAt": {
+    "x-needs-review": true
+  },
+  "nP7_viewBooking": "Zobacz rezerwację",
+  "common_thu": "czw.",
+  "nP7_driverAccepted": "Zaakceptowano · {driverName}",
+  "@nP7_driverAccepted": {
+    "x-needs-review": true
+  },
+  "nP7_whenRouteCash": "{when} · {from} → {to} · {price} gotówką.",
+  "nP8_plansChanged": "Kierowcy zmieniły się plany. {name}: {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} o {time}, {price}.",
+  "@nP8_plansChanged": {
+    "x-needs-review": true
+  },
+  "nP8_otherRides": "Inne przejazdy",
+  "nP8_nothingBooked": "Nic nie zostało zarezerwowane. {count, plural, one{{count} inny przejazd} few{{count} inne przejazdy} many{{count} innych przejazdów} other{{count} innego przejazdu}}: {date}.",
+  "@nP8_nothingBooked": {
+    "x-needs-review": true
+  },
+  "nP8_aDriverCancellingTheDay": "Odwołanie przez kierowcę dzień wcześniej jest pilne: pasażer musi jeszcze dziś znaleźć inny przejazd. Wygasła prośba to zwykłe powiadomienie z kolejnymi przejazdami pod ręką.",
+  "oCreate_createYourAccount": "Załóż konto",
+  "oCreate_noAccountYet": "Nie ma jeszcze konta dla {email}. Zajmie to minutę.",
+  "oCreate_firstName": "Imię",
+  "oCreate_yourFirstName_hint": "Twoje imię",
+  "oCreate_shownToDriversAndPassengers": "Widzą je kierowcy i pasażerowie, z którymi jedziesz.",
+  "oCreate_chooseAPassword_hint": "Wybierz hasło",
+  "oCreate_atLeast8Characters": "Co najmniej 8 znaków",
+  "oCreate_aNumberOrASymbol": "Cyfra lub symbol",
+  "oCreate_im18OrOlder": "Mam co najmniej 18 lat",
+  "oCreate_byCreatingAnAccountYou": "Zakładając konto, akceptujesz",
+  "oCreate_createAccount": "Załóż konto",
+  "common_back_a11y": "Wstecz",
+  "oEmail_enterYourEmailIfYou": "Wpisz e-mail. Jeśli masz już konto, w następnym kroku zapytamy o hasło.",
+  "oEmail_nameexamplecom_hint": "imie@przyklad.pl",
+  "oEmailExists_youSignedUpWithGoogle": "Konto założone przez Google",
+  "oEmailExists_body": "{email} ma już konto przez Google. Kontynuuj z Google, aby się zalogować.",
+  "oEmailExists_useADifferentEmail": "Użyj innego e-maila",
+  "oIntro1_skip": "Pomiń",
+  "oIntro1_ridesWithPeopleAlreadyGoing": "Jedź z ludźmi, którzy i tak jadą w twoją stronę",
+  "oIntro1_driversOfferSeatsOnTrips": "Kierowcy oferują miejsca w trasach, które i tak robią. W mieście za darmo, między miastami dzielimy koszty. To nie taksówka.",
+  "oIntro1_a4digitPickupCodeConfirms": "4‑cyfrowy kod odbioru potwierdza, że wsiadasz do właściwego auta.",
+  "oIntro1_oneCarInsteadOfTwo": "Jedno auto zamiast dwóch. Liczymy zaoszczędzone CO₂.",
+  "oIntro1_getStarted": "Zaczynamy",
+  "oNotifications_knowWhenYourDriverIs": "Wiedz, kiedy kierowca jest blisko",
+  "oNotifications_whenADriverAcceptsAnd": "Gdy kierowca zaakceptuje i gdy będzie 2 min od ciebie",
+  "oNotifications_whenYourDriverIsWaiting": "Gdy kierowca czeka w miejscu odbioru",
+  "oNotifications_safetyAlertsNoAdsEver": "Alerty bezpieczeństwa. Nigdy reklamy.",
+  "oNotifications_turnOnNotifications": "Włącz powiadomienia",
+  "oNotifications_askedOnceWhenYouRequest": "Pytamy raz, przy pierwszej prośbie o przejazd.",
+  "oPassword_welcomeBack": "Witaj ponownie",
+  "common_p_a11y": "P",
+  "oPassword_notYouUseAnotherEmail": "To nie ty? Użyj innego e-maila",
+  "oPassword_password": "Hasło",
+  "oPassword_yourPassword_hint": "Twoje hasło",
+  "common_showPassword_a11y": "Pokaż hasło",
+  "common_signIn": "Logowanie",
+  "oPassword_forgotPassword": "Nie pamiętasz hasła?",
+  "oPasswordError_triesLeft": "Złe hasło. {tries, plural, one{Została {tries} próba} few{Zostały {tries} próby} many{Zostało {tries} prób} other{Zostało {tries} próby}}, potem logowanie wstrzymamy na {minutes} min.",
+  "@oPasswordError_triesLeft": {
+    "x-needs-review": true
+  },
+  "oPermission_allowLocationToSeeRides": "Włącz lokalizację, aby widzieć przejazdy w pobliżu",
+  "oPermission_matchYouWithDriversAlready": "Dopasujemy cię do kierowców, którzy już jadą twoją trasą",
+  "oPermission_showTheExactWalkTo": "Pokażemy dokładną drogę pieszo do miejsca odbioru",
+  "oPermission_sharedOnlyWithYourMatched": "Udostępniana tylko dopasowanemu kierowcy w trakcie przejazdu",
+  "oPermission_allowLocation": "Włącz lokalizację",
+  "common_notNow": "Nie teraz",
+  "oReset_resetPassword": "Reset hasła",
+  "oReset_sentLink": "Wysłaliśmy link do resetu na {email}. Działa przez godzinę.",
+  "oReset_openEmailApp": "Otwórz pocztę",
+  "oReset_backToSignIn": "Wróć do logowania",
+  "common_resendIn": "Nie dotarło? Sprawdź spam. Ponowna wysyłka za {countdown}.",
+  "oRole_howAreYouTravellingToday": "Jak dziś podróżujesz?",
+  "oRole_pickOneToStartYou": "Wybierz jedno na start. Zmienisz to w każdej chwili na mapie.",
+  "oRole_imDriving": "Prowadzę",
+  "oRole_iHaveFreeSeatsOn": "Mam wolne miejsca w trasie, którą i tak jadę",
+  "oRole_iNeedARide": "Potrzebuję podwózki",
+  "oRole_findADriverAlreadyHeading": "Znajdź kierowcę, który jedzie w moją stronę",
+  "oSignIn_welcomeToSameway": "Witaj w sameway",
+  "oSignIn_signInToRequestRides": "Zaloguj się, aby prosić o przejazdy, pisać do kierowców i mieć historię tras.",
+  "oSignIn_continueWithApple": "Kontynuuj z Apple",
+  "common_continueWithGoogle": "Kontynuuj z Google",
+  "common_continueWithEmail": "Kontynuuj z e-mailem",
+  "oSignIn_lookAroundFirst": "Najpierw się rozejrzę",
+  "oSignIn_noAccountNeededToBrowse": "Do przeglądania mapy nie potrzeba konta. Zalogujesz się, gdy poprosisz o przejazd.",
+  "oSignIn_byContinuingYouAgreeTo": "Kontynuując, akceptujesz dokumenty:",
+  "oSignIn_terms": "Regulamin",
+  "oSignIn_and": "i",
+  "common_privacyPolicy": "Polityka prywatności",
+  "common_sameway": "sameway",
+  "oSplash_continue_a11y": "Dalej",
+  "common_verifyYourEmail": "Potwierdź e-mail",
+  "oVerify_checkYourInbox": "Sprawdź skrzynkę",
+  "oVerify_sentCode": "Wysłaliśmy 6‑cyfrowy kod na {email}",
+  "oVerify_verificationCode": "Kod weryfikacyjny",
+  "common_verify": "Zweryfikuj",
+  "oVerify_wrongEmailChangeIt": "Zły e-mail? Zmień go",
+  "pfCancel_keepRide": "Zostaw przejazd",
+  "pfIntercity_samewayBetweenCitiesNow": "sameway · Między miastami · teraz",
+  "pfLocation_showsRidesNearYouWhile": "Pokazuje przejazdy w pobliżu. Gdy udostępniasz trasę, działa dalej z niebieskim wskaźnikiem.",
+  "pfLocation_aNotificationShowsWheneverYour": "Gdy trasa jest aktywna, widać powiadomienie.",
+  "pfTime_pickATime": "Wybierz godzinę",
+  "pfTime_dateAndTime_a11y": "Data i godzina",
+  "common_todayDate": "Dziś, {date}",
+  "prBlocked_theyCantSeeYourRoutes": "Nie widzą twoich tras ani nie mogą prosić o przejazd, a my was nie połączymy. Nie dostają o tym informacji.",
+  "prBlocked_blockedOn": "Zablokowano {date} · po zgłoszeniu",
+  "prBlocked_unblock": "Odblokuj",
+  "prBug_whereDidItHappen": "Gdzie to się stało?",
+  "prBug_matching": "Dopasowanie",
+  "prBug_chat": "Czat",
+  "common_whatHappened": "Co się stało?",
+  "prBug_egTheDestinationPinJumped_hint": "Np. pinezka celu wróciła po przesunięciu mapy",
+  "prBug_screenshotAttached": "Zrzut ekranu dołączony",
+  "prBug_takenWhenYouOpenedThis": "Zrobiony przy otwarciu tego okna",
+  "prBug_remove": "Usuń",
+  "common_includeAppLogs": "Dołącz logi aplikacji",
+  "prBug_noMessagesOrExactLocations": "Bez wiadomości i dokładnych lokalizacji",
+  "common_sendReport": "Wyślij zgłoszenie",
+  "prCar_passengersUseThisToRecognise": "Pasażerowie rozpoznają po tym twoje auto przy odbiorze.",
+  "prCar_make": "Marka",
+  "prCar_model": "Model",
+  "prCar_colour": "Kolor",
+  "prCar_white": "Biały",
+  "prCar_silver": "Srebrny",
+  "prCar_black": "Czarny",
+  "prCar_blue": "Niebieski",
+  "prCar_red": "Czerwony",
+  "prCar_licencePlate": "Tablica rejestracyjna",
+  "prCar_passengerSeats": "Miejsca dla pasażerów",
+  "prCar_defaultForNewRoutes": "Domyślnie dla nowych tras",
+  "prCar_fuel": "Paliwo",
+  "prCar_petrol": "Benzyna",
+  "prCar_diesel": "Diesel",
+  "prCar_lpg": "LPG",
+  "prCar_electric": "Elektryczny",
+  "prCar_consumptionL100Km": "Spalanie, l/100 km",
+  "prCar_usedToSuggestYourPrice": "Służy do wyliczenia sugerowanej ceny między miastami.",
+  "prCar_saveCar": "Zapisz auto",
+  "prCarEV_consumptionKwh100Km": "Zużycie, kWh/100 km",
+  "prCarEV_usedToSuggestYourPrice2": "Służy do wyliczenia sugerowanej ceny między miastami, ze średnią ceną ładowania.",
+  "prDelete_deleteYourAccount": "Usunąć konto?",
+  "prDelete_thisPermanentlyRemovesYourProfile": "To trwale usunie twój profil, historię przejazdów i wiadomości. Nadchodzące przejazdy zostaną anulowane, a kierowcy powiadomieni.",
+  "prDelete_toContinueConfirmItsYou": "Aby kontynuować, potwierdź Face ID lub hasłem.",
+  "prDelete_deleteMyAccount": "Usuń moje konto",
+  "prDelete_keepAccount": "Zostaw konto",
+  "prEdit_changePhoto_a11y": "Zmień zdjęcie",
+  "prEdit_displayName": "Wyświetlana nazwa",
+  "prEdit_yourName_hint": "Twoje imię",
+  "prEdit_bio": "Bio",
+  "prEdit_phoneNumber": "Numer telefonu",
+  "prEdit_shownOnlyToYourDriver": "Widoczny tylko dla twojego kierowcy lub pasażera podczas aktywnego przejazdu.",
+  "prEdit_saveChanges": "Zapisz zmiany",
+  "common_reportABug": "Zgłoś błąd",
+  "common_beta": "Beta",
+  "prHelp_screenshotAndLogsAttachedFor": "Zrzut ekranu i logi dołączymy za ciebie",
+  "prHelp_shakePhoneToReport": "Potrząśnij telefonem, aby zgłosić",
+  "prHelp_worksOnAnyScreenDuring": "Działa na każdym ekranie w becie",
+  "prHelp_shakeToReport_a11y": "Potrząśnij, aby zgłosić",
+  "prHelp_help": "Pomoc",
+  "prHelp_faq": "FAQ",
+  "common_contactSupport": "Kontakt z pomocą",
+  "prHelp_usuallyRepliesWithinADay": "Zwykle odpowiadamy w ciągu dnia",
+  "prHelp_firsttimeTips": "Wskazówki na start",
+  "prHelp_n9ShortTipsOnThe": "9 krótkich wskazówek na prawdziwych ekranach",
+  "prHelp_replayTheIntro": "Obejrzyj intro ponownie",
+  "prLanguage_appLanguage_a11y": "Język aplikacji",
+  "prLanguage_useDevice": "Język urządzenia",
+  "prLanguage_currently": "Obecnie: {language}",
+  "prLanguage_polish": "polski",
+  "prLanguage_ukrainian": "ukraiński",
+  "prLanguage_footnote": "Nazwy są w swoim języku, żeby każdy znalazł swój.",
+  "prMapStyle_standard": "Standardowa",
+  "prMapStyle_satellite": "Satelitarna",
+  "prMapStyle_matchPhonesDarkMode": "Jak tryb ciemny telefonu",
+  "prMapStyle_switchesBetweenStandardAndDark": "Przełącza między Standardową a Ciemną",
+  "prMapStyle_matchDarkMode_a11y": "Tryb ciemny jak w telefonie",
+  "prMapStyle_largerMapLabels": "Większe napisy na mapie",
+  "prMapStyle_easierToReadStreetNames": "Łatwiej czytać nazwy ulic",
+  "prNotifications_duringARide": "Podczas przejazdu",
+  "prNotifications_liveRideOnLockScreen": "Przejazd na ekranie blokady",
+  "prNotifications_searchDriverComingEta": "Szukanie, dojazd kierowcy, czas dotarcia",
+  "prNotifications_liveActivity_a11y": "Aktywność na żywo",
+  "prNotifications_spokenAlertsWhileDriving": "Komunikaty głosowe w czasie jazdy",
+  "prNotifications_requestsPickupAndDropoffRead": "Prośby, odbiór i wysiadka czytane na głos",
+  "prNotifications_requestAnswerTime": "Czas na odpowiedź",
+  "prNotifications_plannedRides": "Zaplanowane przejazdy",
+  "prNotifications_eveningbeforeReminder": "Przypomnienie wieczorem",
+  "prNotifications_timeDayBefore": "{time} dzień wcześniej",
+  "prNotifications_eveningReminder_a11y": "Przypomnienie wieczorne",
+  "prNotifications_reminderBeforePickup": "Przypomnienie przed odbiorem",
+  "prNotifications_minutesBefore": "{minutes} min wcześniej",
+  "prNotifications_pickupReminder_a11y": "Przypomnienie o odbiorze",
+  "prNotifications_dailyRoutineCheckins": "Codzienne pytania planu",
+  "prNotifications_countOn": "{count, plural, one{{count} włączone} few{{count} włączone} many{{count} włączonych} other{{count} włączonego}}",
+  "@prNotifications_countOn": {
+    "x-needs-review": true
+  },
+  "prNotifications_other": "Inne",
+  "prNotifications_yourPeoplesRoutes": "Trasy twojej ekipy",
+  "prNotifications_max1PerPersonPer": "Maks. 1 na osobę dziennie",
+  "prNotifications_peopleRoutes_a11y": "Trasy ekipy",
+  "prNotifications_newsAndTips": "Nowości i porady",
+  "prNotifications_news_a11y": "Nowości",
+  "prNotifications_safetyAndPickupAlertsAre": "Alerty bezpieczeństwa i odbioru są zawsze włączone i mogą przebić się przez Nie przeszkadzać.",
+  "prPassword_currentPassword": "Obecne hasło",
+  "prPassword_newPassword": "Nowe hasło",
+  "prPassword_strongUse12CharactersFor": "Silne · dla pewności użyj 12+ znaków",
+  "prPassword_repeatNewPassword": "Powtórz nowe hasło",
+  "prPassword_forgotCurrentPassword": "Nie pamiętasz obecnego hasła?",
+  "prPassword_updatePassword": "Zmień hasło",
+  "prPhoto_profilePhoto": "Zdjęcie profilowe",
+  "prPhoto_zoom_a11y": "Powiększenie",
+  "prPhoto_yourFaceClearlyVisible": "Wyraźnie widoczna twarz",
+  "prPhoto_noSunglassesLogosOrGroup": "Bez okularów przeciwsłonecznych, logo i zdjęć grupowych",
+  "prPhoto_weCheckNewPhotosUsually": "Sprawdzamy nowe zdjęcia, zwykle w kilka minut. Do tego czasu inni widzą twoje inicjały.",
+  "prPhoto_chooseAnother": "Wybierz inne",
+  "prPhoto_useThisPhoto": "Użyj tego zdjęcia",
+  "common_addAPhoto": "Dodaj zdjęcie",
+  "common_peopleAcceptRequestsFasterWhen": "Ludzie szybciej akceptują prośby, gdy widzą, kim jesteś",
+  "common_account": "Konto",
+  "common_personalInfo": "Dane osobowe",
+  "common_namePhotoBioPhone": "Imię, zdjęcie, bio, telefon",
+  "common_loginSecurity": "Logowanie i bezpieczeństwo",
+  "common_emailPasswordDeleteAccount": "E-mail, hasło, usuwanie konta",
+  "common_addYourCarToDrive": "Dodaj auto, aby jeździć jako kierowca",
+  "common_ridesPeople": "Przejazdy i ekipa",
+  "common_workMonfri": "Praca · pn–pt",
+  "common_rewardsProgress": "{collected} z {total} · paczki do otwarcia: {boxes}",
+  "@common_rewardsProgress": {
+    "x-needs-review": true
+  },
+  "common_ridesDistanceShared": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {distance} razem",
+  "@common_ridesDistanceShared": {
+    "x-needs-review": true
+  },
+  "common_preferences": "Preferencje",
+  "common_language": "Język",
+  "common_mapStyle": "Styl mapy",
+  "common_dark": "Ciemna",
+  "common_notifications": "Powiadomienia",
+  "common_switchToDriver": "Przełącz na kierowcę",
+  "common_support": "Wsparcie",
+  "common_helpFeedback": "Pomoc i opinie",
+  "common_reportABugFaqContact": "Zgłoś błąd, FAQ, kontakt",
+  "common_privacyLegal": "Prywatność i dokumenty",
+  "common_signOut": "Wyloguj",
+  "common_appVersionBeta": "sameway {version} (beta)",
+  "prProfileDriver_licenceCheckInProgress": "Trwa sprawdzanie prawa jazdy",
+  "prProfileDriver_cityRidesReadAloud": "Po mieście · czytanie na głos",
+  "prProfileDriver_switchToPassenger": "Przełącz na pasażera",
+  "prSecurity_signin": "Logowanie",
+  "prSecurity_notVerifiedYet": "Jeszcze niezweryfikowany",
+  "prSecurity_changePassword": "Zmień hasło",
+  "prSecurity_privacy": "Prywatność",
+  "prSecurity_shareCrashReports": "Wysyłaj raporty awarii",
+  "prSecurity_optionalHelpsUsFixBugs": "Opcjonalne. Pomaga nam szybciej naprawiać błędy.",
+  "prSecurity_termsOfService": "Regulamin usługi",
+  "prSecurity_verification": "Weryfikacja",
+  "prSecurity_phoneEmailDrivingLicence": "Telefon, e-mail, prawo jazdy",
+  "prSecurity_blockedPeople": "Zablokowane osoby",
+  "prSecurity_people": "{count, plural, one{{count} osoba} few{{count} osoby} many{{count} osób} other{{count} osoby}}",
+  "@prSecurity_people": {
+    "x-needs-review": true
+  },
+  "prSecurity_downloadMyData": "Pobierz moje dane",
+  "prSecurity_weEmailYouACopy": "Wyślemy ci kopię e-mailem w ciągu 48 godz.",
+  "prSecurity_dangerZone": "Strefa ryzyka",
+  "prSecurity_deleteAccount": "Usuń konto",
+  "prSecurity_removesYourProfileRidesAnd": "Usuwa profil, przejazdy i wiadomości",
+  "prSwitchRole_switchRole": "Zmień rolę",
+  "prSwitchRole_yourCurrentRideOrSearch": "Twój obecny przejazd lub wyszukiwanie zostaną bez zmian. Nie zmienisz roli w trakcie aktywnego przejazdu.",
+  "prSwitchRole_offerSeatsOnATrip": "Oferuj miejsca w trasie, którą jedziesz. Pierwszy raz? Pokażemy ci, co i jak.",
+  "prSwitchRole_currentlySelected": "Obecnie wybrana",
+  "prTips_eachTipAppearsOnceThe": "Każda wskazówka pojawia się raz, gdy pierwszy raz trafisz na dany ekran. Tutaj możesz otworzyć je ponownie.",
+  "prVerifyLicence_passengersCanBookYouOnly": "Pasażerowie mogą cię zarezerwować dopiero po jednorazowym sprawdzeniu prawa jazdy. Widzą „Zweryfikowane prawo jazdy”, nigdy dokument.",
+  "prVerifyLicence_front": "Przód",
+  "prVerifyLicence_allFourCornersInThe": "Wszystkie cztery rogi na zdjęciu",
+  "prVerifyLicence_noGlareOnTheText": "Bez odblasków na tekście",
+  "prVerifyLicence_categoryBValidToday": "Kategoria B, ważne dziś",
+  "prVerifyLicence_sendForChecking": "Wyślij do sprawdzenia",
+  "prVerifyLicence_privacyNotice": "Informacja o prywatności",
+  "prVerifyRejected_notVerified": "Niezweryfikowane",
+  "prVerifyRejected_weCouldntVerifyYourLicence": "Nie udało się zweryfikować prawa jazdy",
+  "prVerifyRejected_theTextOnTheBack": "Tekst na odwrocie był zbyt rozmazany. Poza tym wszystko w porządku: zrób nowe zdjęcie w dobrym świetle.",
+  "prVerifyRejected_takeANewPhoto": "Zrób nowe zdjęcie",
+  "prVerifyStatus_phone": "Telefon",
+  "prVerifyStatus_drivingLicence": "Prawo jazdy",
+  "prVerifyStatus_checking": "Sprawdzamy",
+  "prVerifyStatus_usuallyWithin24Hours": "Zwykle w ciągu 24 godzin",
+  "prVerifyStatus_youCanPlanRoutesNow": "Trasy możesz planować już teraz. Pasażerowie zarezerwują cię po sprawdzeniu. Damy znać.",
+  "psArrived_youreAtThePickupSpot": "Jesteś w punkcie odbioru",
+  "@psArrived_youreAtThePickupSpot": {
+    "x-needs-review": true
+  },
+  "psArrived_standByTheBusStop": "Stań przy znaku przystanku, żeby kierowcy cię widzieli.",
+  "@psArrived_standByTheBusStop": {
+    "x-needs-review": true
+  },
+  "psArrived_driversPassed": "{count, plural, one{W ciągu ostatnich {minutes} min przejechał tędy {count} kierowca} few{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} many{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} other{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowcy}}",
+  "@psArrived_driversPassed": {
+    "x-needs-review": true
+  },
+  "psArrived_betterOdds": "Większe szanse",
+  "@psArrived_betterOdds": {
+    "x-needs-review": true
+  },
+  "psAsk_meetAtSpot": "Spotkacie się w punkcie odbioru?",
+  "@psAsk_meetAtSpot": {
+    "x-needs-review": true
+  },
+  "psAsk_driverAlongStreet": "{driverName}: jedzie ulicą {street}. Twoja ulica to dla kierowcy {detour} objazdu, więc punkt odbioru jest wygodniejszy dla was obojga. We wspólnych przejazdach miejsce odbioru ustalacie razem.",
+  "@psAsk_driverAlongStreet": {
+    "x-needs-review": true
+  },
+  "psAsk_yourCurrentPoint": "Twoje obecne miejsce",
+  "@psAsk_yourCurrentPoint": {
+    "x-needs-review": true
+  },
+  "psAsk_extraForDriver": "+{detour} dla kierowcy",
+  "@psAsk_extraForDriver": {
+    "x-needs-review": true
+  },
+  "psAsk_onRouteAt": "Na jego trasie · {time}",
+  "@psAsk_onRouteAt": {
+    "x-needs-review": true
+  },
+  "psAsk_iCantWalkThere": "Nie dam rady tam dojść",
+  "@psAsk_iCantWalkThere": {
+    "x-needs-review": true
+  },
+  "psAsk_okIllWalk": "OK, dojdę",
+  "@psAsk_okIllWalk": {
+    "x-needs-review": true
+  },
+  "psAsk_cantWalkWellAskThe": "Nie możesz dojść? Zapytamy kierowcę, czy może jeszcze podjechać na twoją ulicę. To jego decyzja, a twoje miejsce czeka, dopóki nie zdecyduje.",
+  "@psAsk_cantWalkWellAskThe": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_cantWalk": "{passengerName}: nie może dojść do punktu odbioru",
+  "@psDriverChoice_cantWalk": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_originalPointDetour": "Pierwotne miejsce pasażera to {detour} objazdu (+{distance}). Twoja decyzja: odbierz stamtąd albo poszukamy innego kierowcy.",
+  "@psDriverChoice_originalPointDetour": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_pickUpThere": "Odbiorę stamtąd",
+  "@psDriverChoice_pickUpThere": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_notThisTime": "Nie tym razem",
+  "@psDriverChoice_notThisTime": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_carpoolingNotATaxiThe": "Wspólne przejazdy, nie taksówka: kierowca zawsze sam decyduje o objeździe. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.",
+  "@psDriverChoice_carpoolingNotATaxiThe": {
+    "x-needs-review": true
+  },
+  "psIntro_pickupSpots": "Punkty odbioru",
+  "@psIntro_pickupSpots": {
+    "x-needs-review": true
+  },
+  "psIntro_markedPlacesWhereDriversPass": "Oznaczone miejsca, gdzie kierowcy przejeżdżają najczęściej i mogą bezpiecznie się zatrzymać: zatoki autobusowe, szerokie ulice, dobrze oświetlone skrzyżowania. Czekając tutaj, szybciej zostaniesz odebrany.",
+  "@psIntro_markedPlacesWhereDriversPass": {
+    "x-needs-review": true
+  },
+  "psIntro_driversPassMoreOften": "Kierowcy jeżdżą tu częściej",
+  "@psIntro_driversPassMoreOften": {
+    "x-needs-review": true
+  },
+  "psIntro_mainRoadsOnPopularRoutes": "Główne ulice na popularnych trasach",
+  "@psIntro_mainRoadsOnPopularRoutes": {
+    "x-needs-review": true
+  },
+  "psIntro_safeToStop": "Można bezpiecznie stanąć",
+  "@psIntro_safeToStop": {
+    "x-needs-review": true
+  },
+  "psIntro_legalStopsBusBaysGood": "Dozwolone postoje, zatoki, dobre światło",
+  "@psIntro_legalStopsBusBaysGood": {
+    "x-needs-review": true
+  },
+  "psIntro_neverFar": "Zawsze blisko",
+  "@psIntro_neverFar": {
+    "x-needs-review": true
+  },
+  "psIntro_withinWalk": "Proponujemy tylko punkty do {minutes} min pieszo",
+  "@psIntro_withinWalk": {
+    "x-needs-review": true
+  },
+  "psIntro_iCantWalkFar": "Trudno mi chodzić daleko",
+  "@psIntro_iCantWalkFar": {
+    "x-needs-review": true
+  },
+  "psNotifDriver_timeDurationDistance": "{time} · {duration} · {distance}",
+  "@psNotifDriver_timeDurationDistance": {
+    "x-needs-review": true
+  },
+  "psNotifDriver_agreedToMeet": "{passengerName}: dojdzie do punktu odbioru",
+  "@psNotifDriver_agreedToMeet": {
+    "x-needs-review": true
+  },
+  "psNotifDriver_pickupOnRoute": "Odbiór: {place}, dokładnie na twojej trasie. Bez objazdu, oszczędzasz {saved}.",
+  "@psNotifDriver_pickupOnRoute": {
+    "x-needs-review": true
+  },
+  "psNotifPassenger_walkToAPickupSpot": "Dojdziesz do punktu odbioru?",
+  "@psNotifPassenger_walkToAPickupSpot": {
+    "x-needs-review": true
+  },
+  "psNotifPassenger_walkSaves": "{driverName}: jedzie ulicą {street}. {walk} pieszo do punktu odbioru oszczędza kierowcy {detour} objazdu. Odbiór o {time}.",
+  "@psNotifPassenger_walkSaves": {
+    "x-needs-review": true
+  },
+  "psNotifPassenger_illWalk": "Dojdę",
+  "@psNotifPassenger_illWalk": {
+    "x-needs-review": true
+  },
+  "psNotifPassenger_cantWalkThere": "Nie dam rady dojść",
+  "@psNotifPassenger_cantWalkThere": {
+    "x-needs-review": true
+  },
+  "psSettings_suggestPickupSpots": "Proponuj punkty odbioru",
+  "@psSettings_suggestPickupSpots": {
+    "x-needs-review": true
+  },
+  "psSettings_whenAShortWalkGets": "Gdy krótki spacer pomoże szybciej pojechać",
+  "@psSettings_whenAShortWalkGets": {
+    "x-needs-review": true
+  },
+  "psSettings_howFarCanYouWalk": "Ile możesz przejść pieszo?",
+  "@psSettings_howFarCanYouWalk": {
+    "x-needs-review": true
+  },
+  "psSettings_walkMinutes": "{minutes} min",
+  "@psSettings_walkMinutes": {
+    "x-needs-review": true
+  },
+  "psSettings_pickMeUpOnlyWhere": "Odbieraj mnie tylko z mojego miejsca",
+  "@psSettings_pickMeUpOnlyWhere": {
+    "x-needs-review": true
+  },
+  "psSettings_forAWheelchairKidsOr": "Na wózek, z dziećmi albo z ciężkim bagażem. Kierowcy widzą to, zanim zaakceptują.",
+  "@psSettings_forAWheelchairKidsOr": {
+    "x-needs-review": true
+  },
+  "psSuggest_pickupSpot": "Punkt odbioru",
+  "@psSuggest_pickupSpot": {
+    "x-needs-review": true
+  },
+  "psSuggest_distanceDuration": "{distance} · {duration}",
+  "@psSuggest_distanceDuration": {
+    "x-needs-review": true
+  },
+  "psSuggest_walkGetPickedFaster": "Przejdź {walk}, a szybciej cię odbiorą",
+  "@psSuggest_walkGetPickedFaster": {
+    "x-needs-review": true
+  },
+  "psSuggest_driversPassMoreOften": "Teraz kierowcy przejeżdżają ulicą {street} około {times}× częściej niż twoją.",
+  "@psSuggest_driversPassMoreOften": {
+    "x-needs-review": true
+  },
+  "psSuggest_here": "Tutaj",
+  "@psSuggest_here": {
+    "x-needs-review": true
+  },
+  "psSuggest_waitAbout": "czekanie ok. {duration}",
+  "@psSuggest_waitAbout": {
+    "x-needs-review": true
+  },
+  "psSuggest_atTheSpot": "W punkcie",
+  "@psSuggest_atTheSpot": {
+    "x-needs-review": true
+  },
+  "psSuggest_stayHere": "Zostanę tutaj",
+  "@psSuggest_stayHere": {
+    "x-needs-review": true
+  },
+  "psSuggest_walkThere": "Pójdę tam",
+  "@psSuggest_walkThere": {
+    "x-needs-review": true
+  },
+  "psSuggest_yourSearchKeepsRunningEither": "Wyszukiwanie trwa tak czy inaczej.",
+  "@psSuggest_yourSearchKeepsRunningEither": {
+    "x-needs-review": true
+  },
+  "psWalk_walkingToThePickupSpot": "Idziesz do punktu odbioru",
+  "@psWalk_walkingToThePickupSpot": {
+    "x-needs-review": true
+  },
+  "psWalk_distanceDurationSearching": "{distance} · {duration} · wciąż szukamy",
+  "@psWalk_distanceDurationSearching": {
+    "x-needs-review": true
+  },
+  "psWalk_goBackToWhereI": "Wróć tam, gdzie byłem",
+  "@psWalk_goBackToWhereI": {
+    "x-needs-review": true
+  },
+  "psWalkToDriver_walkTo": "Idź do: {place}",
+  "@psWalkToDriver_walkTo": {
+    "x-needs-review": true
+  },
+  "psWalkToDriver_bothArriveAround": "Oboje będziecie tam około {time}",
+  "@psWalkToDriver_bothArriveAround": {
+    "x-needs-review": true
+  },
+  "psWalkToDriver_you": "Ty",
+  "@psWalkToDriver_you": {
+    "x-needs-review": true
+  },
+  "common_minutesShort": "{minutes} min",
+  "@common_minutesShort": {
+    "x-needs-review": true
+  },
+  "psWalkToDriver_codeStaysSame": "Kod odbioru się nie zmienia: {code}",
+  "@psWalkToDriver_codeStaysSame": {
+    "x-needs-review": true
+  },
+  "pCall112_keepHolding": "Trzymaj… łączymy za {seconds} s",
+  "pCancelConfirm_driverOnWay": "{driverName}: już jedzie i będzie za {eta}. Od razu go powiadomimy.",
+  "@pCancelConfirm_driverOnWay": {
+    "x-needs-review": true
+  },
+  "pCantFind_cantFindEachOther": "Nie możecie się znaleźć?",
+  "pCantFind_driverWaits": "{driverName}: czeka do {minutes} min od przyjazdu. {car}, {plate}.",
+  "@pCantFind_driverWaits": {
+    "x-needs-review": true
+  },
+  "pCantFind_quickMessage": "Szybka wiadomość",
+  "pCantFind_imByTheEntrance": "Jestem przy wejściu",
+  "pCantFind_shareMyExactLocation": "Udostępnij moją dokładną lokalizację",
+  "pCantFind_driverSeesYou": "{driverName}: widzi cię na mapie do momentu odbioru",
+  "@pCantFind_driverSeesYou": {
+    "x-needs-review": true
+  },
+  "pCantFind_yourPhoneNumbersStayHidden": "Wasze numery pozostają ukryte",
+  "pCantFind_sendSomeoneALiveLink": "Wyślij komuś link na żywo",
+  "common_aboutDrive": "~{duration} jazdy",
+  "pConfirm_free": "Za darmo",
+  "pConfirm_when": "Kiedy",
+  "pConfirm_later": "Później",
+  "common_people": "Ekipa",
+  "pConfirm_includingYou1JustYou": "Razem z tobą. 1 = tylko ty.",
+  "pConfirm_fewerPeople_a11y": "Mniej osób",
+  "pConfirm_morePeople_a11y": "Więcej osób",
+  "common_findARide": "Znajdź przejazd",
+  "pDeclined_driverCantTakeYou": "Tym razem nie da rady: {driverName}",
+  "pDeclined_thatHappensYourSearchIs": "Zdarza się. Szukanie trwa, a nikt nie dostaje kary.",
+  "pDeclined_dropsYouAtTheDoor": "Wysadzi cię pod drzwiami",
+  "common_youveArrived": "Jesteś na miejscu",
+  "common_placeTime": "{place} · {time}",
+  "common_sharedWith": "Wspólnie · {name}",
+  "common_coSaved": "CO₂ zaoszczędzone",
+  "common_howWasRide": "{name}: jak minął przejazd?",
+  "common_good": "Dobrze",
+  "common_reportAProblem": "Zgłoś problem",
+  "pDone_rideAgain": "Jeszcze raz razem? · {name}",
+  "pDone_addHimToYourPeople": "Dodaj tę osobę do ekipy. Dowiesz się, gdy zaplanuje trasę.",
+  "common_add": "Dodaj",
+  "pDriverCancelled_driverCancelled": "Kierowca anulował: {driverName}",
+  "pDriverCancelled_hesNoLongerDrivingThis": "Nie jedzie już w tę stronę. Przepraszamy. Już szukamy od nowa z tego samego miejsca odbioru.",
+  "pDriverCancelled_searchingFor": "Szukamy od {elapsed}",
+  "pDriverCantPickup_title": "Kierowca nie da rady cię zabrać: {driverName}",
+  "pDriverCantPickup_body": "Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś pierwszy w kolejce.",
+  "@pDriverCantPickup_body": {
+    "x-needs-review": true
+  },
+  "pHome_czyyny": "CZYŻYNY",
+  "pHome_grzegrzki": "GRZEGÓRZKI",
+  "pHome_rakowice": "RAKOWICE",
+  "pHome_dbie": "DĄBIE",
+  "pHome_olsza": "OLSZA",
+  "common_role_a11y": "Rola",
+  "common_passenger": "Pasażer",
+  "common_switchToDriver_a11y": "Przełącz na kierowcę",
+  "common_driver": "Kierowca",
+  "common_centerMapOnMyLocation_a11y": "Wyśrodkuj mapę na mojej lokalizacji",
+  "common_whereTo": "Dokąd jedziesz?",
+  "common_whenNowChangeTime_a11y": "Kiedy: teraz. Zmień godzinę",
+  "common_now": "Teraz",
+  "common_home": "Dom",
+  "common_work": "Praca",
+  "common_dayPlace": "{day} · {place}",
+  "pHome_pickupConfirmed": "Odbiór {time} · kierowca potwierdził",
+  "common_main_a11y": "Główne",
+  "common_map": "Mapa",
+  "common_rides": "Przejazdy",
+  "common_unreadCount": "{count, plural, one{{count} nieprzeczytana} few{{count} nieprzeczytane} many{{count} nieprzeczytanych} other{{count} nieprzeczytanej}}",
+  "@common_unreadCount": {
+    "x-needs-review": true
+  },
+  "common_messages": "Wiadomości",
+  "pInRide_pickupConfirmedOnYourWay": "Odbiór potwierdzony · w drodze",
+  "pInRide_arrivalLeft": "Przyjazd · {duration} · zostało {distance}",
+  "pInRide_tripProgress_a11y": "Postęp przejazdu",
+  "pInRide_pickedUpAt": "Odebrano · {place}",
+  "pInRide_dropOffFromDestination": "Wysiadka {distance} od celu",
+  "common_safety": "Bezpieczeństwo",
+  "pInRide_prototypeArrive_a11y": "Prototyp: dojazd",
+  "pOffers_driversOnYourWay": "{count, plural, one{{count} kierowca jedzie} few{{count} kierowców jedzie} many{{count} kierowców jedzie} other{{count} kierowcy jedzie}} w twoją stronę",
+  "@pOffers_driversOnYourWay": {
+    "x-needs-review": true
+  },
+  "pOffers_freeYouMeetAtA": "Za darmo. Spotykacie się w punkcie na trasie kierowcy.",
+  "common_verified_a11y": "Zweryfikowany",
+  "common_carPlate": "{car} · {plate}",
+  "pOffers_toPickup": "do odbioru",
+  "common_trustLine": "Prawo jazdy zadeklarowane · e-mail zweryfikowany · {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}}",
+  "@common_trustLine": {
+    "x-needs-review": true
+  },
+  "common_walkDistance": "Pieszo {distance}",
+  "pOffers_dropsYouAway": "Wysadzi cię {distance} od celu",
+  "common_requestSeat": "Poproś o miejsce",
+  "common_k_a11y": "K",
+  "pOffers_walkDropsAtDoor": "Pieszo {distance} · wysadza pod drzwiami",
+  "pOffers_request": "Prośba",
+  "pPickMap_moveTheMapToSet": "Przesuń mapę, aby ustawić cel",
+  "pPickMap_distanceDrive": "{distance} · ~{duration} jazdy",
+  "pPickMap_setDestinationHere": "Ustaw cel tutaj",
+  "pReport_aboutRide": "Dotyczy przejazdu, {date}, {time}. Kierowca: {driverName}.",
+  "@pReport_aboutRide": {
+    "x-needs-review": true
+  },
+  "pReport_unsafeDriving": "Niebezpieczna jazda",
+  "pReport_wrongCarOrWrongPerson": "Złe auto lub zła osoba",
+  "pReport_madeMeFeelUncomfortable": "Było mi niekomfortowo",
+  "pReport_paymentProblem": "Problem z płatnością",
+  "pReport_tellUsMoreOptional": "Opowiedz więcej (opcjonalnie)",
+  "common_alsoBlock": "Zablokuj też: {name}. Nie połączymy was ponownie.",
+  "pReport_ourTeamRepliesWithin24": "Odpowiadamy w ciągu 24 h. W nagłej sytuacji dzwoń pod 112.",
+  "pReportSent_reportSent": "Zgłoszenie wysłane",
+  "pReportSent_thanksWereOnIt": "Dzięki. Zajmujemy się tym.",
+  "pReportSent_ourTeamReadsEveryReport": "Czytamy każde zgłoszenie i odpowiadamy w ciągu 24 h w Wiadomości › Aktualizacje przejazdów.",
+  "pReportSent_sentAt": "Wysłane · {time}",
+  "pReportSent_inReview": "W trakcie sprawdzania",
+  "pReportSent_replyFromOurTeam": "Odpowiedź zespołu",
+  "pReportSent_blocked": "Zablokowano: {name}. Możesz to cofnąć w Profil › Logowanie i bezpieczeństwo › Zablokowane osoby.",
+  "@pReportSent_blocked": {
+    "x-needs-review": true
+  },
+  "common_driverOnTheWay": "{driverName}: jest w drodze",
+  "@common_driverOnTheWay": {
+    "x-needs-review": true
+  },
+  "common_checkItFirst": "Najpierw sprawdź",
+  "common_shareTrip_a11y": "Udostępnij przejazd",
+  "common_pickupCode": "Kod odbioru",
+  "common_sayItWhenYouMeet": "Podaj go przy spotkaniu",
+  "common_message": "Wiadomość",
+  "common_cantFind": "Nie widzisz?",
+  "pSafety_rideSummary": "{driverName} · {car} · {plate} · odbiór {time}, {place}",
+  "pSafety_call112HoldFor2_a11y": "Połączenie z 112. Przytrzymaj 2 sekundy. Z czytnikiem ekranu stuknij dwukrotnie i potwierdź.",
+  "pSafety_holdFor2SecondsThis": "Przytrzymaj 2 sekundy. To chroni przed przypadkowym połączeniem.",
+  "pSafety_shareLiveTrip": "Udostępnij trasę na żywo",
+  "pSafety_aLinkShowsTheCar": "Link pokazuje auto i twoją trasę, aż dojedziesz",
+  "pSafety_thisIsntTheCarFrom": "To nie jest auto z aplikacji",
+  "pSafety_getOutWhenItsSafe": "Wysiądź, gdy będzie bezpiecznie, i daj nam znać",
+  "pSafety_unsafeDrivingBehaviourAnythingElse": "Niebezpieczna jazda, zachowanie, cokolwiek innego",
+  "common_from_a11y": "Skąd",
+  "common_currentLocation": "Obecna lokalizacja",
+  "common_to_a11y": "Dokąd",
+  "pSearch_clear_a11y": "Wyczyść",
+  "pSearch_chooseOnMap": "Wybierz na mapie",
+  "pSearch_dragTheMapToDrop": "Przesuń mapę, aby postawić pinezkę",
+  "pSearch_addAPlace": "Dodaj miejsce",
+  "pSearch_results": "Wyniki",
+  "pSearch_placeRecent": "{place} (ostatnio)",
+  "pSearch_usedYesterday": "Użyte wczoraj",
+  "pSearchCity_anotherCity": "{city} to inne miasto",
+  "pSearchCity_plannedAhead": "Przejazdy między miastami kierowcy planują z wyprzedzeniem. Kierunek {city}: w tym tygodniu {count, plural, one{{count} przejazd} few{{count} przejazdy} many{{count} przejazdów} other{{count} przejazdu}}, od {price}.",
+  "@pSearchCity_plannedAhead": {
+    "x-needs-review": true
+  },
+  "pSearchCity_seeRides": "Przejazdy: {city}",
+  "@pSearchCity_seeRides": {
+    "x-needs-review": true
+  },
+  "pSearchCity_places": "Miejsca",
+  "pSearchCity_cityCentrePodkarpackie": "Centrum · Podkarpackie",
+  "common_podkarpackie": "podkarpackie",
+  "pSearchLoading_searchingPlaces": "Szukamy miejsc",
+  "pSearchNoResults_noPlacesMatch": "Brak pasujących miejsc",
+  "pSearchNoResults_checkTheSpellingOrDrop": "Sprawdź pisownię albo wskaż miejsce na mapie.",
+  "common_lookingForDrivers2": "Szukamy kierowców…",
+  "pSearching_usuallySearchingFor": "Zwykle poniżej 5 min · szukamy od {elapsed}",
+  "common_edit": "Edytuj",
+  "pSearching_youCanLeaveTheApp": "Możesz wyjść z aplikacji. Powiadomimy cię, gdy kierowca zaakceptuje.",
+  "common_scheduleInstead": "Zaplanuj zamiast tego",
+  "common_cancel": "Anuluj",
+  "pSearching_prototypeDriversFound_a11y": "Prototyp: znaleziono kierowców",
+  "pTimeSheet_whenDoYouWantTo": "Kiedy chcesz jechać?",
+  "common_inMinutes": "Za {minutes} min",
+  "common_leaveAround": "Wyjazd ok. {time}",
+  "common_pickADateAndTime": "Wybierz datę i godzinę",
+  "common_repeatOnWeekdays": "Powtarzaj w dni robocze",
+  "common_sameTripMostDays": "Ta sama trasa prawie codziennie",
+  "common_done": "Gotowe",
+  "pWaiting_waitingFor": "Czekamy na akceptację: {driverName}",
+  "pWaiting_usuallyUnder30SIf": "Zwykle w mniej niż 30 s. Jeśli nie może, szukamy dalej automatycznie.",
+  "pWaiting_waitingForAnswer_a11y": "Czekamy na odpowiedź",
+  "pWaiting_driverToPickup": "{driverName} · {duration} do odbioru",
+  "common_cancelRequest": "Anuluj prośbę",
+  "pHome_profile": "Profil",
+  "common_myCar": "Mój samochód",
+  "common_cancelRide": "Anuluj przejazd",
+  "pCancelConfirm_keepMyRide": "Zostaw przejazd",
+  "pCancelConfirm_cancelThisRide": "Anulować przejazd?",
+  "dRequestRules_readRequestsAloud": "Czytaj prośby na głos",
+  "dRequestRules_holdRequestsUntilYouStop": "Wstrzymuj prośby do postoju",
+  "common_arriveBy": "Przyjazd do",
+  "platform_location": "Lokalizacja",
+  "platform_locationPermission": "Dostęp do lokalizacji",
+  "common_newStop": "Nowy przystanek: {passengerName}",
+  "dToPickup_restart": "Uruchom ponownie",
+  "pSafety_holdToCall112": "Przytrzymaj, aby zadzwonić pod 112",
+  "pOffers_m_a11y": "M",
+  "common_samewayLogo_a11y": "logo sameway",
+  "common_nameEtaAway": "{name} · za {duration}",
+  "@common_nameEtaAway": {
+    "x-needs-review": true
+  },
+  "rwBox_mysteryBox": "Paczka niespodzianka",
+  "rwBox_youGot": "Dostajesz",
+  "rwBox_goldenRoute": "Złota trasa",
+  "rwBox_yourRouteLineOnThe": "Twoja trasa na mapie będzie złota przez 30 dni. Widzą ją też pasażerowie i kierowcy z twoich przejazdów.",
+  "rwBox_rare": "Rzadka",
+  "rwBox_cosmetic": "Kosmetyczna",
+  "rwBox_whatCanBeInside": "Co może być w środku",
+  "rwBox_routeColoursAndMapPins": "Kolory trasy i pinezki · ramki profilu · naklejki do czatu · żadnych pieniędzy ani zniżek. Nigdy nic, co zmienia kolejność do miejsc.",
+  "rwBox_useNow": "Użyj teraz",
+  "rwDetail_takeRidesInsideKrakwAs": "Jeździj po Krakowie jako pasażer lub kierowca. Każdy poziom daje paczkę niespodziankę.",
+  "common_ridesCount": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}}",
+  "@common_ridesCount": {
+    "x-needs-review": true
+  },
+  "rwDetail_iii": "III",
+  "rwDetail_levelIii": "Poziom III",
+  "rwDetail_ridesProgress": "{done} / {total} przejazdów",
+  "rwDetail_unlockedOn": "Odblokowano {date}",
+  "rwDetail_shareOfRiders": "Ma ją {percent} użytkowników",
+  "rwDetail_share": "Udostępnij",
+  "rwEmpty_ofTotal": "z {total}",
+  "@rwEmpty_ofTotal": {
+    "x-needs-review": true
+  },
+  "rwEmpty_yourFirstRewardComesWith": "Pierwsza nagroda przyjdzie z pierwszym przejazdem.",
+  "rwEmpty_rewardsAreJustForFun": "Nagrody są dla zabawy: kolory mapy, ramki profilu, naklejki. Nigdy nie wpływają na to, kto dostaje miejsce.",
+  "common_rewards": "Nagrody",
+  "rwHome_shareCollection_a11y": "Udostępnij kolekcję",
+  "rwHome_rewardsCollected": "nagród zebranych",
+  "rwHome_boxesToOpen": "{boxes, plural, one{{boxes} paczka czeka} few{{boxes} paczki czekają} many{{boxes} paczek czeka} other{{boxes} paczki czeka}}",
+  "@rwHome_boxesToOpen": {
+    "x-needs-review": true
+  },
+  "rwHome_rewardsCollected2_a11y": "Zebrane nagrody",
+  "rwHome_nextBadge": "Dalej: {badge}",
+  "rwHome_ridesInCity": "{done} z {total} przejazdów · {city}",
+  "@rwHome_ridesInCity": {
+    "x-needs-review": true
+  },
+  "rwHome_all": "Wszystkie",
+  "rwHome_firsts": "Pierwsze razy",
+  "rwHome_cities": "Miasta",
+  "rwHome_green": "Eko",
+  "common_doneOfTotal": "{done} z {total}",
+  "rwHome_firstRideUnlocked_a11y": "Pierwszy przejazd, odblokowane",
+  "rwHome_firstRide": "Pierwszy przejazd",
+  "rwHome_unlocked": "Odblokowane",
+  "rwHome_firstDriveUnlocked_a11y": "Pierwszy kurs, odblokowane",
+  "rwHome_firstDrive": "Pierwszy kurs",
+  "rwHome_plannerUnlocked_a11y": "Planista, odblokowane",
+  "rwHome_planner": "Planista",
+  "rwHome_creatureOfHabitUnlocked_a11y": "Stały rytm, odblokowane",
+  "rwHome_creatureOfHabit": "Stały rytm",
+  "rwHome_badgeProgress": "{badge}, {progress}",
+  "rwHome_firstIntercity": "Pierwszy międzymiastowy",
+  "rwHome_passengerLevelIi_a11y": "Pasażer, poziom II",
+  "rwHome_ii": "II",
+  "rwHome_levelIi": "Poziom II",
+  "rwHome_driverLevelI_a11y": "Kierowca, poziom I",
+  "rwHome_i": "I",
+  "rwHome_levelI": "Poziom I",
+  "rwHome_fullCarUnlocked_a11y": "Pełne auto, odblokowane",
+  "rwHome_fullCar": "Pełne auto",
+  "rwHome_earlyBird": "Ranny ptaszek",
+  "rwHome_progressBefore": "{done} / {total} przed {time}",
+  "rwHome_n100Drives": "100 kursów",
+  "rwHome_n10Thankyous": "10 podziękowań",
+  "rwHome_citiesTrips": "Miasta i podróże",
+  "rwHome_badgeLevel": "{badge}, poziom {level}",
+  "@rwHome_badgeLevel": {
+    "x-needs-review": true
+  },
+  "rwHome_krakowRegular": "Krakowski bywalec",
+  "@rwHome_krakowRegular": {
+    "x-needs-review": true
+  },
+  "rwHome_explorer": "Odkrywca",
+  "rwHome_citiesCount": "{count, plural, one{{count} miasto} few{{count} miasta} many{{count} miast} other{{count} miasta}}",
+  "@rwHome_citiesCount": {
+    "x-needs-review": true
+  },
+  "rwHome_roadTripperUnlocked_a11y": "W trasie, odblokowane",
+  "rwHome_roadTripper": "W trasie",
+  "rwHome_stopoverPartOfARoute_a11y": "Po drodze, część trasy",
+  "rwHome_stopover": "Po drodze",
+  "rwHome_partOfARoute": "Część trasy",
+  "rwHome_n500KmClub": "Klub 500 km",
+  "rwHome_kmProgress": "{value} / {goal} km",
+  "rwHome_cityPassport": "Paszport miast",
+  "rwHome_stampsProgress": "{done} / {total} pieczątek",
+  "rwHome_firstKilo": "Pierwszy kilogram",
+  "rwHome_kgCo2": "{value} kg CO₂",
+  "rwHome_tenKilos": "Dziesięć kilo",
+  "rwHome_kgProgress": "{value} / {goal} kg",
+  "rwHome_aTreesWorth": "Jak jedno drzewo",
+  "rwHome_oneCarLess": "O jedno auto mniej",
+  "rwHome_weeksShared": "{weeks, plural, one{{weeks} tydzień} few{{weeks} tygodnie} many{{weeks} tygodni} other{{weeks} tygodnia}} wspólnych dojazdów",
+  "@rwHome_weeksShared": {
+    "x-needs-review": true
+  },
+  "rwHome_yourFirstPersonUnlocked_a11y": "Pierwsza osoba w ekipie, odblokowane",
+  "rwHome_yourFirstPerson": "Pierwsza osoba w ekipie",
+  "rwHome_crewOf5": "Ekipa 5 osób",
+  "rwHome_goodCompany": "Dobre towarzystwo",
+  "rwHome_ridesWithPeople": "{rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} z ekipą",
+  "@rwHome_ridesWithPeople": {
+    "x-needs-review": true
+  },
+  "rwHome_secretKeepRiding_a11y": "Sekret, jeździj dalej",
+  "rwHome_secret": "Sekret",
+  "rwHome_keepRiding": "Jeździj dalej",
+  "rwPassport_stampsHint": "{done} z {total} pieczątek · przejedź się po mieście, by ją zdobyć",
+  "rwPassport_since": "od {monthYear}",
+  "rwPassport_notYet": "Jeszcze nie",
+  "rwPassport_wrocaw": "Wrocław",
+  "rwPassport_gdask": "Gdańsk",
+  "rwPassport_lublin": "Lublin",
+  "rwPassport_collect10Stamps": "Zbierz 10 pieczątek",
+  "rwPassport_unlocksCityPassportAndA": "Odblokowuje „Paszport miast” i rzadką paczkę niespodziankę.",
+  "rwPassport_findARideToA": "Znajdź przejazd do nowego miasta",
+  "rwUnlocked_newReward": "Nowa nagroda",
+  "rwUnlocked_firstIntercity": "Twój pierwszy przejazd między miastami: {from} → {to}, kierowca: {driverName}.",
+  "@rwUnlocked_firstIntercity": {
+    "x-needs-review": true
+  },
+  "rwUnlocked_youEarnedAMysteryBox": "Masz paczkę niespodziankę",
+  "rwUnlocked_openItNowOrLater": "Otwórz teraz albo później w Nagrodach",
+  "rwUnlocked_seeAll": "Zobacz wszystkie",
+  "rEditDriver_editRoutine": "Edytuj plan",
+  "rEditDriver_delete": "Usuń",
+  "rEditDriver_name": "Nazwa",
+  "rEditDriver_days": "Dni",
+  "rEditDriver_askMeAt": "Pytaj mnie o",
+  "rEditDriver_yourDailyCheckinNotification": "Twoje codzienne powiadomienie",
+  "rEditDriver_doItAutomatically": "Automatycznie",
+  "rEditDriver_hearFirst": "Pierwsi dowiedzą się: {names}",
+  "@rEditDriver_hearFirst": {
+    "x-needs-review": true
+  },
+  "rEditDriver_peopleFirst_a11y": "Ekipa najpierw",
+  "rEditDriver_autoacceptMyPeople": "Auto-akceptuj ekipę",
+  "rEditDriver_othersStillNeedYourOk": "Inni nadal potrzebują twojej zgody",
+  "rEditDriver_saveRoutine": "Zapisz plan",
+  "rEditPassenger_askMyPeopleFirst": "Najpierw pytaj moją ekipę",
+  "rEditPassenger_getEarly": "{minutes} min przed innymi: {names}",
+  "@rEditPassenger_getEarly": {
+    "x-needs-review": true
+  },
+  "rNotifDriver_samewayDailyRoutine": "sameway · Codzienny plan",
+  "common_now2": "teraz",
+  "rNotifDriver_drivingToWorkToday": "Jedziesz dziś do pracy?",
+  "rNotifDriver_body": "Wyjazd {time} · {from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Osoby z ekipy, które szukają tego przejazdu: {count}.",
+  "@rNotifDriver_body": {
+    "x-needs-review": true
+  },
+  "rNotifDriver_yesPublish": "Tak, publikuj",
+  "rNotifDriver_notToday": "Nie dziś",
+  "rNotifDriver_notificationPreviewActionsWorkRight": "Podgląd powiadomienia. Akcje działają prosto z ekranu blokady, bez otwierania aplikacji.",
+  "rNotifPassenger_needYourRideHomeToday": "Potrzebujesz dziś podwózki do domu?",
+  "rNotifPassenger_body": "Przyjazd do {time} · {from} → {to}. Twoja ekipa: {driverName}, jedzie o {departure}, {seats, plural, one{ma {seats} wolne miejsce} few{ma {seats} wolne miejsca} many{ma {seats} wolnych miejsc} other{ma {seats} wolnego miejsca}}.",
+  "@rNotifPassenger_body": {
+    "x-needs-review": true
+  },
+  "rNotifPassenger_rideWith": "Tak · {driverName}",
+  "@rNotifPassenger_rideWith": {
+    "x-needs-review": true
+  },
+  "rNotifPassenger_findAnother": "Szukaj innego",
+  "common_dailyRoutines": "Codzienne plany",
+  "common_newRoutine_a11y": "Nowy plan",
+  "rRoutines_leaveAt": "{days} · {from} → {to} · wyjazd {time}",
+  "rRoutines_asksNotifiesPeople": "Pyta o {time} · powiadamia ekipę",
+  "common_workRoutine_a11y": "Plan: Praca",
+  "common_backHome": "Powrót do domu",
+  "rRoutines_arriveBy": "{days} · {from} → {to} · przyjazd do {time}",
+  "rRoutines_asksNameFirst": "Pyta o {time} · najpierw: {name}",
+  "@rRoutines_asksNameFirst": {
+    "x-needs-review": true
+  },
+  "common_backHomeRoutine_a11y": "Plan: Powrót do domu",
+  "common_gym": "Siłownia",
+  "rRoutines_daysRouteTime": "{days} · {from} → {to} · {time}",
+  "common_paused": "Wstrzymany",
+  "common_gymRoutine_a11y": "Plan: Siłownia",
+  "common_howItWorks": "Jak to działa",
+  "common_atYourChosenTimeYou": "O wybranej godzinie dostajesz jedno powiadomienie.",
+  "common_tapYesTodayPassengersWe": "Stuknij „Tak, dziś”. Pasażer: szukamy za ciebie. Kierowca: aplikacja otwiera się, żeby uruchomić trasę.",
+  "common_tapNotTodayAndNothing": "Dotknij „Nie dziś” i nic się nie dzieje. Ekipa dowie się dopiero po twoim „tak”.",
+  "rRoutinesEmpty_noRoutinesYet": "Nie masz jeszcze stałych tras",
+  "rRoutinesEmpty_sameTripMostDaysPlan": "Prawie codziennie ta sama trasa? Zaplanuj ją raz, a co rano zapytamy.",
+  "rRoutinesEmpty_planARoutine": "Zaplanuj stałą trasę",
+  "rToday_todaysRouteIsPublished": "Dzisiejsza trasa opublikowana",
+  "rToday_leavePlaceSeats": "Wyjazd {time} · {place} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}",
+  "@rToday_leavePlaceSeats": {
+    "x-needs-review": true
+  },
+  "rToday_notified": "Powiadomiono: {names}",
+  "rToday_alreadyTookSeat": "{name}: ma już miejsce (auto-akceptacja)",
+  "@rToday_alreadyTookSeat": {
+    "x-needs-review": true
+  },
+  "common_viewRoute": "Zobacz trasę",
+  "dRequestRules_timeToAnswer": "Czas na odpowiedź",
+  "common_betweenCities": "Między miastami",
+  "iPriceHow_suggestedPerSeat": "Sugerowana cena za miejsce",
+  "rules_whatHappens": "Co się dzieje",
+  "@rules_whatHappens": {
+    "x-needs-review": true
+  },
+  "seScreens_driversFound": "Znaleziono kierowców",
+  "common_driverOnTheWay2": "Kierowca w drodze",
+  "seScreens_requestASeat": "Poproś o miejsce",
+  "seScreens_incomingRequest": "Przychodząca prośba",
+  "seScreens_setRoute": "Ustaw trasę",
+  "soPeople_searchPeople_a11y": "Szukaj osób",
+  "soPeople_peopleYouLikedRidingWith": "Osoby, z którymi dobrze ci się jechało. Pytamy je jako pierwsze, gdy planujesz przejazd, a ty wiesz, gdy one coś planują. Dzwonek wyłącza to dla każdej osoby.",
+  "soPeople_yourPeopleCount": "Twoja ekipa · {count}",
+  "soPeople_ridesTogetherDrivesTo": "{rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · w dni robocze jeździ do: {place}",
+  "@soPeople_ridesTogetherDrivesTo": {
+    "x-needs-review": true
+  },
+  "soPeople_notificationsOn": "Powiadomienia: {name}, włączone",
+  "soPeople_ridesTogetherPlace": "{rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · {place}",
+  "@soPeople_ridesTogetherPlace": {
+    "x-needs-review": true
+  },
+  "soPeople_ridesTogetherYouDrove": "{rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · ty za kierownicą",
+  "@soPeople_ridesTogetherYouDrove": {
+    "x-needs-review": true
+  },
+  "common_ridesTogether": "{rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}}",
+  "@common_ridesTogether": {
+    "x-needs-review": true
+  },
+  "soPeople_notificationsOff": "Powiadomienia: {name}, wyłączone",
+  "soPeople_fromYourRecentRides": "Z ostatnich przejazdów",
+  "soPeople_onlyPeopleYouveActuallyShared": "Dodać można tylko osoby, z którymi masz za sobą wspólny przejazd.",
+  "soPeopleEmpty_noPeopleYet": "Nie masz jeszcze ekipy",
+  "soPeopleEmpty_afterARideTapAdd": "Po przejeździe stuknij „Dodaj”, aby zatrzymać kogoś, z kim dobrze się jechało. Następnym razem zapytamy ich pierwszych.",
+  "soPerson_reportOrBlock_a11y": "Zgłoś lub zablokuj",
+  "soPerson_idPhoneVerified": "Dowód i telefon zweryfikowane",
+  "soPerson_ridesWithYou": "Przejazdy z tobą",
+  "soPerson_totalRides": "Wszystkie przejazdy",
+  "soPerson_memberSince": "W aplikacji od",
+  "soPerson_inYourPeople": "W twojej ekipie",
+  "soPerson_addedAfterYour3rdRide": "Dodano po 3. wspólnym przejeździe",
+  "soPerson_tellWhenPlans": "Powiadamiaj o trasach: {name}",
+  "soPerson_routeNotifications_a11y": "Powiadomienia o trasach",
+  "soPerson_askFirstForRoutine": "Najpierw pytaj tę osobę o mój plan",
+  "soPerson_beforeWeSearchOtherDrivers": "Zanim poszukamy innych kierowców",
+  "soPerson_askFirst_a11y": "Pytaj najpierw",
+  "sDetail_moreOptions_a11y": "Więcej opcji",
+  "sDetail_arriveBy": "Na miejscu do {time}",
+  "sDetail_dayPickupAt": "{day} · odbiór o {time}, {place}",
+  "sDetail_pickupDot": "Odbiór · {place}",
+  "sDetail_walkFromHome": "{distance} pieszo od domu",
+  "sDetail_dropOffAway": "Wysiadka {distance} od celu",
+  "sDetail_whatHappensNext": "Co dalej",
+  "common_requestAccepted": "Prośba zaakceptowana · {driverName}",
+  "sDetail_reminder30MinBeforePickup": "Przypomnienie 30 min przed odbiorem",
+  "sDetail_codeAppears": "Kod odbioru pojawi się, gdy kierowca będzie {minutes} min od ciebie",
+  "@sDetail_codeAppears": {
+    "x-needs-review": true
+  },
+  "sDetail_changeTime": "Zmień godzinę",
+  "sDetail_cancelThisRide": "Anuluj ten przejazd",
+  "sDriverRides_routineLeave": "Codzienny plan · {label} · {days} · wyjazd {time}",
+  "common_weAskAt": "Pytamy cię codziennie o {time}",
+  "common_seatsTaken": "Zajęte {taken} z {total} miejsc",
+  "sDriverRides_wantsSeat": "{passengerName}: chce miejsce",
+  "@sDriverRides_wantsSeat": {
+    "x-needs-review": true
+  },
+  "sDriverRides_pickupDetour": "Odbiór {place} · +{detour}",
+  "common_j_a11y": "J",
+  "common_t_a11y": "T",
+  "sDriverRides_confirmed": "Potwierdzili: {names}",
+  "@sDriverRides_confirmed": {
+    "x-needs-review": true
+  },
+  "sDriverRides_noRequestsYet": "Brak próśb",
+  "sDriverRides_visibleSeats": "Widoczna dla pasażerów · {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}}",
+  "@sDriverRides_visibleSeats": {
+    "x-needs-review": true
+  },
+  "common_requestsCount": "{count, plural, one{{count} prośba} few{{count} prośby} many{{count} próśb} other{{count} prośby}}",
+  "@common_requestsCount": {
+    "x-needs-review": true
+  },
+  "sDriverRides_intercitySummary": "Międzymiastowy · {bookings, plural, one{{bookings} rezerwacja} few{{bookings} rezerwacje} many{{bookings} rezerwacji} other{{bookings} rezerwacji}} na {stops, plural, one{{stops} odcinku} few{{stops} odcinkach} many{{stops} odcinkach} other{{stops} odcinka}} · {price}",
+  "@sDriverRides_intercitySummary": {
+    "x-needs-review": true
+  },
+  "common_planARoute": "Zaplanuj trasę",
+  "sDriverSchedule_leaveHomeAt": "Wyjazd z domu o",
+  "sDriverSchedule_passengersSeeThisAsYour": "Pasażerowie widzą to jako godzinę wyjazdu.",
+  "sDriverSchedule_publishAutomatically": "Automatycznie",
+  "common_publishRoute": "Opublikuj trasę",
+  "sPast_november": "Listopad",
+  "sPast_dateTimeWith": "{date} · {time} · {name}",
+  "sPast_nowaHuta": "Nowa Huta",
+  "sPast_youDrove": "{date} · {time} · przewiezione osoby: {count}",
+  "@sPast_youDrove": {
+    "x-needs-review": true
+  },
+  "sPast_cancelledByDriver": "{date} · anulowany przez kierowcę",
+  "sPast_october": "Październik",
+  "sPastEmpty_noPastRidesYet": "Nie masz jeszcze przejazdów",
+  "sPastEmpty_yourRidesAndTheCo": "Tu pojawią się twoje przejazdy i wspólnie zaoszczędzone CO₂.",
+  "sRidesLoading_loadingYourRides": "Wczytujemy twoje przejazdy",
+  "sRidesRequested_waitingForAnAnswer": "Czeka na odpowiedź",
+  "sRidesRequested_answerBy": "{date} · {name} · odpowiedź do {deadline}",
+  "sSaved_upcoming": "Nadchodzące",
+  "sSaved_past": "Minione",
+  "common_routineArrive": "Codzienny plan · {label} · {days} · na {time}",
+  "common_dayDate": "{day} · {date}",
+  "common_confirmed": "Potwierdzony",
+  "common_pickupArriveDriver": "Odbiór {time} · na miejscu do {arrival} · {driverName}, {car}",
+  "sSaved_nextWeek": "W przyszłym tygodniu",
+  "sSaved_repeats_a11y": "Powtarza się",
+  "common_searching": "Szukanie",
+  "common_daysArriveMatching": "{days} · na miejscu do {time} · szukamy od 2 h przed",
+  "sSaved_requested": "Wysłano prośbę",
+  "sSaved_dworzecGwny": "Dworzec Główny",
+  "common_notAnsweredYet": "{date} · Brak odpowiedzi: {name}. Szukamy dalej.",
+  "@common_notAnsweredYet": {
+    "x-needs-review": true
+  },
+  "common_dateWithDriverPlacePrice": "{date} · kierowca: {driverName} · {place} · {price}",
+  "sSaved_everyWeekday": "Zapisane. W każdy dzień roboczy znajdziemy ci przejazd na {time}.",
+  "common_undo": "Cofnij",
+  "sSchedule_scheduleARide": "Zaplanuj przejazd",
+  "common_close_a11y": "Zamknij",
+  "common_inCity": "W mieście: {city}",
+  "@common_inCity": {
+    "x-needs-review": true
+  },
+  "common_labelAddress": "{label} · {address}",
+  "common_leaveAt": "Wyjazd o",
+  "common_today": "Dziś",
+  "common_sat": "Sob",
+  "common_sun": "Ndz",
+  "common_mon": "Pon",
+  "common_pickAnotherDate_a11y": "Wybierz inną datę",
+  "common_more": "Więcej",
+  "sSchedule_arriveAtBy": "{place}: na miejscu najpóźniej o",
+  "@sSchedule_arriveAtBy": {
+    "x-needs-review": true
+  },
+  "common_hour_a11y": "Godzina",
+  "common_minute_a11y": "Minuta",
+  "sSchedule_wellPickAPickupTime": "Godzinę odbioru dobierzemy za ciebie, zwykle 20 min wcześniej.",
+  "sSchedule_flexibleBy": "Elastycznie",
+  "sSchedule_exact": "Dokładnie",
+  "common_plusMinusMinutes": "±{minutes} min",
+  "sSchedule_repeat": "Powtarzaj",
+  "sSchedule_monfri": "pn–pt",
+  "common_repeatOn_a11y": "Powtarzaj w",
+  "common_monday_a11y": "poniedziałek",
+  "common_mo": "Pn",
+  "common_tuesday_a11y": "wtorek",
+  "common_tu": "Wt",
+  "common_wednesday_a11y": "środa",
+  "common_we": "Śr",
+  "common_thursday_a11y": "czwartek",
+  "common_th": "Cz",
+  "common_friday_a11y": "piątek",
+  "common_fr": "Pt",
+  "common_saturday_a11y": "sobota",
+  "common_sa": "So",
+  "common_sunday_a11y": "niedziela",
+  "common_su": "Nd",
+  "common_eachDay": "Każdego dnia",
+  "sSchedule_bookAutomatically": "Automatycznie",
+  "common_askMeFirst": "Najpierw pytaj",
+  "sSchedule_scheduleRide": "Zaplanuj przejazd",
+  "sTripDetail_tripDetails": "Szczegóły podróży",
+  "sTripDetail_dateTimeRange": "{date} · {start}–{end}",
+  "sTripDetail_passengerWith": "Pasażer · kierowca: {driverName}",
+  "sTripDetail_distance": "Dystans",
+  "sTripDetail_duration": "Czas",
+  "sTripDetail_chatStaysOpen24H": "Czat jest otwarty 24 godz. po przejeździe",
+  "sTripDetail_bookThisTripAgain": "Zarezerwuj tę podróż ponownie",
+  "tD1_firstTimeHereDriveWhere_a11y": "Pierwszy raz tutaj: Jedź tam, dokąd i tak jedziesz",
+  "common_driveWhereYouWereGoing": "Jedź tam, dokąd i tak jedziesz",
+  "tD1_enterYourOwnDestinationWe": "Wpisz swój własny cel. Pokazujemy tylko pasażerów, którzy już są na twojej drodze, nigdy nie jedziesz gdzieś tylko dla nich.",
+  "tD2_firstTimeHereHowLong_a11y": "Pierwszy raz: Jak długi objazd jest OK?",
+  "tD2_theMostExtraTimeYoull": "Najdłuższy dodatkowy czas, jaki akceptujesz na odbiór. 2 min to mniej pasażerów, 6 min więcej. Każdy odbiór potwierdzasz.",
+  "tD3_n2MinDetourDropoffOn": "+2 min objazdu · wysiadka na twojej trasie",
+  "tD3_exampleRequestTrust": "12 wspólnych przejazdów · e-mail zweryfikowany · 1 miejsce",
+  "@tD3_exampleRequestTrust": {
+    "x-needs-review": true
+  },
+  "tD3_dropoffOnYourRoute11": "Wysiadka: na twojej trasie, 1,1 km przed celem",
+  "tD3_sayAcceptOrDeclineNo": "Powiedz „akceptuj” lub „odrzuć”. Brak odpowiedzi to odmowa, bez kary.",
+  "tD3_autoacceptRules": "Zasady automatycznej akceptacji",
+  "tD3_firstTimeHereYouDecide_a11y": "Pierwszy raz tutaj: Ty decydujesz, kto jedzie",
+  "common_youDecideWhoRides": "Ty decydujesz, kto jedzie",
+  "tD3_eachRequestShowsTheExtra": "Każda prośba pokazuje dodatkowy czas, np. +2 min. Masz 30 s na odpowiedź. Brak odpowiedzi to odmowa, zawsze bez kary.",
+  "tD4_firstTimeHereStartOnly_a11y": "Pierwszy raz tutaj: Ruszaj tylko z właściwym kodem",
+  "common_startOnlyWithTheRight": "Ruszaj tylko z właściwym kodem",
+  "tD4_askThePassengerForTheir": "Poproś pasażera o 4‑cyfrowy kod i wpisz go. Zła osoba, zły kod. Zatrzymuj się tylko tam, gdzie to bezpieczne i legalne.",
+  "tD5_firstTimeHereSameRoad_a11y": "Pierwszy raz tutaj: Ta sama droga codziennie?",
+  "common_sameRoadEveryDay": "Ta sama droga codziennie?",
+  "tD5_planARouteAndRepeat": "Zaplanuj trasę i powtarzaj w dni robocze. Wybierz „Najpierw zapytaj” – co rano jedno powiadomienie pyta „Jedziesz dziś?”. Jedno stuknięcie i trasa opublikowana.",
+  "tP1_firstTimeHereStartWith_a11y": "Pierwszy raz tutaj: Zacznij od celu",
+  "tP1_firstTimeHere": "Pierwszy raz tutaj",
+  "common_startWithWhereYoureGoing": "Zacznij od tego, dokąd jedziesz",
+  "tP1_typeAnAddressOrTap": "Wpisz adres albo dotknij Dom lub Praca. Nic nie zostanie wysłane, dopóki nie dotkniesz „Znajdź przejazd”.",
+  "tP1_gotIt": "Rozumiem",
+  "tP2_firstTimeHereLaterOr_a11y": "Pierwszy raz tutaj: Później albo w każdy dzień roboczy",
+  "common_laterOrEveryWeekday": "Później albo w każdy dzień roboczy",
+  "tP2_tapNowToPickA": "Stuknij „Teraz”, aby wybrać godzinę lub powtarzać przejazd w dni robocze. Jedziesz do innego miasta? Po prostu wpisz je w „Dokąd?”.",
+  "tP3_firstTimeHereYourPickup_a11y": "Pierwszy raz tutaj: Kod odbioru chroni ciebie",
+  "common_yourPickupCodeKeepsYou": "Kod odbioru dba o twoje bezpieczeństwo",
+  "tP3_checkThePlateFirstThen": "Najpierw sprawdź tablicę. Potem podaj 4 cyfry: kierowca je wpisuje i oboje wiecie, że to właściwe auto.",
+  "tP4_firstTimeHereKeepThe_a11y": "Pierwszy raz tutaj: Zatrzymaj dobrych ludzi",
+  "common_keepTheGoodOnes": "Zatrzymaj tych dobrych",
+  "tP4_likedADriverTapAdd": "Dobrze się jechało? Stuknij „Dodaj” po przejeździe. Twoja ekipa jest w Profilu: pytamy ich pierwszych, a ty wiesz, kiedy planują trasę.",
+  "xGuestGate_createAnAccountToRide": "Załóż konto, by jechać",
+  "xGuestGate_soDriversKnowWhoTheyre": "Żeby kierowcy wiedzieli, kogo zabierają. To 30 sekund, a wyszukiwanie zostanie zachowane.",
+  "xLocationDenied_locationIsOffForSameway": "Lokalizacja dla sameway jest wyłączona",
+  "xLocationDenied_turnItOnInSettings": "Włącz ją w Ustawienia › sameway › Lokalizacja, aby widzieć kierowców w pobliżu. Adres odbioru możesz też wpisać.",
+  "common_openSettings": "Otwórz Ustawienia",
+  "xLocationOff_locationIsOff": "Lokalizacja wyłączona",
+  "xLocationOff_turnItOnSoWe": "Włącz ją, abyśmy mogli dopasować kierowców przejeżdżających w pobliżu. Albo wpisz adres odbioru.",
+  "xLocationOff_turnOnLocation": "Włącz lokalizację",
+  "xLocationOff_enterPickupAddress": "Wpisz adres odbioru",
+  "xMapFailed_mapDidntLoadYourDriver": "Mapa się nie wczytała. Kierowca, miejsce odbioru i kod działają dalej.",
+  "xNoDrivers_itsQuietRightNowPick": "Teraz jest spokojnie. Wybierz, co ci pasuje:",
+  "xNoDrivers_keepSearchingInBackground": "Szukaj dalej w tle",
+  "xNoDrivers_wellNotifyYouForThe": "Powiadomimy cię przez następne 30 min",
+  "xNoDrivers_walkUpTo1Km": "Dojdź do 1 km do odbioru",
+  "xNoDrivers_findsMoreDriversOnMain": "Więcej kierowców na głównych drogach",
+  "xNoDrivers_scheduleForLater": "Zaplanuj na później",
+  "xNoDrivers_matchingStarts2HBefore": "Dopasowanie startuje 2 godz. wcześniej",
+  "common_stopSearching": "Przestań szukać",
+  "xNotifDenied_notificationsAreOffRoutinesCant": "Powiadomienia są wyłączone. Stałe trasy nie zapytają cię rano, a ty nie dowiesz się, kiedy kierowca dojedzie.",
+  "xNotifDenied_turnOnInSettings": "Włącz w Ustawieniach",
+  "xOffline_youreOffline": "Jesteś offline",
+  "xOffline_mapMayBeOutOf": "Mapa może być nieaktualna. Połączymy się ponownie automatycznie.",
+  "xOffline_searchNeedsAConnection": "Wyszukiwanie wymaga internetu",
+  "xOffline_tryAgain": "Spróbuj ponownie",
+  "xServerError_yourRidesAndMessagesAre": "Twoje przejazdy i wiadomości są bezpieczne. Spróbuj za chwilę.",
+  "xServerError_codeTime": "Błąd {code} · {time}",
+  "xSessionExpired_pleaseSignInAgain": "Zaloguj się ponownie",
+  "xSessionExpired_youWereSignedOutFor": "Wylogowaliśmy cię dla bezpieczeństwa, np. po zmianie hasła na innym urządzeniu. Przejazdy zostają.",
+  "xSignOut_signOut": "Wylogować się?",
+  "xSignOut_upcomingRides": "{count, plural, one{Masz {count} nadchodzący przejazd. Pozostaje zarezerwowany} few{Masz {count} nadchodzące przejazdy. Pozostają zarezerwowane} many{Masz {count} nadchodzących przejazdów. Pozostają zarezerwowane} other{Masz {count} nadchodzącego przejazdu. Pozostają zarezerwowane}} i nadal dostaniesz przypomnienia.",
+  "@xSignOut_upcomingRides": {
+    "x-needs-review": true
+  },
+  "xSuspended_yourAccountIsPaused": "Twoje konto jest wstrzymane",
+  "xSuspended_pausedBecause": "{date} wstrzymaliśmy twoje konto po {reports, plural, one{{reports} zgłoszeniu} few{{reports} zgłoszeniach} many{{reports} zgłoszeniach} other{{reports} zgłoszenia}}, że nie pojawiasz się na zarezerwowanych przejazdach ({dates}).",
+  "@xSuspended_pausedBecause": {
+    "x-needs-review": true
+  },
+  "xSuspended_rule": "Zasada {number} · {title}",
+  "xSuspended_ridesCancelled": "Twoje nadchodzące przejazdy anulowaliśmy i powiadomiliśmy pozostałe osoby. Odwołanie możesz złożyć do {deadline}. Odpowiadamy w ciągu 3 dni.",
+  "xSuspended_reference": "Numer sprawy: {reference}",
+  "xSuspended_appeal": "Odwołaj się",
+  "xSuspended_readTheCommunityRules": "Przeczytaj zasady społeczności",
+  "xUpdate_updateSamewayToKeepRiding": "Zaktualizuj sameway, aby dalej jeździć",
+  "xUpdate_thisVersionNoLongerWorks": "Ta wersja nie działa już z naszymi serwerami. Aktualizacja zajmie minutę, a przejazdy i wiadomości zostaną.",
+  "xUpdate_update": "Aktualizuj",
   "legacy_iAm": "Jestem…",
   "legacy_chooseRole": "Wybierz swoją rolę, aby zacząć",
   "legacy_driver": "Kierowca",

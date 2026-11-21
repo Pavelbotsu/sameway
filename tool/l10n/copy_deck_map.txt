@@ -1,0 +1,922 @@
+# Copy deck → ARB decisions (see tool/l10n/import_copy_deck.dart).
+# suggested_key | action | key | en | uk | pl | review
+# suggested_key | pl | <Polish>     deck en/uk, Polish written by me (needs review)
+# suggested_key | skip | <reason>    board-note, os-string, sample, release-notes, variant
+
+# ── Rows with no translation in the deck ─────────────────────────────────────
+b_done | icu | bMissions_done_a11y | done | виконано | zrobione | uk pl
+b_not_done | icu | bMissions_notDone_a11y | not done | не виконано | niezrobione | uk pl
+b_sw1042_just_now | icu | bMyReports_idWhen | #{reportId} · {when} | #{reportId} · {when} | #{reportId} · {when}
+b_sw1031_yesterday | merge | bMyReports_idWhen
+b_sw1019_mon | merge | bMyReports_idWhen
+b_sw1007_last_week | merge | bMyReports_idWhen
+b_screen_choose_on_map_passenger | icu | bReport_screen | Screen: {screen} | Екран: {screen} | Ekran: {screen} | uk pl
+b_version_093 | icu | bReportDetail_version | Version {version} | Версія {version} | Wersja {version} | uk pl
+b_beta_report_a_bug | icu | bShake_betaReportBug_a11y | Beta: Report a bug | Бета: надіслати репорт | Beta: zgłoś błąd | uk pl
+di_1842_9_min_26_km | icu | diDDropOff_timeDurationDistance | {time} · {duration} · {distance} | {time} · {duration} · {distance} | {time} · {duration} · {distance}
+di_navigation | icu | diDMinimal_navigation_a11y | Navigation | Навігація | Nawigacja | uk pl
+di_marek_2_min_away_pickup | icu | diPComing_driverAwayPickup_a11y | {driverName} · {eta} away. Pickup: {pickup} | {driverName} · за {eta}. Зустріч: {pickup} | {driverName} · za {eta}. Odbiór: {pickup} | uk pl
+di_longpress | skip | board-note
+di_looking_for_drivers_312 | icu | diPSearch_lookingElapsed_a11y | Looking for drivers, {elapsed} | Шукаємо водія, {elapsed} | Szukamy kierowców, {elapsed} | uk pl
+di_next_state | skip | board-note
+di_you_2_min | icu | diPWalk_youEta | You · {duration} | Ти · {duration} | Ty · {duration} | uk pl
+di_marek_3_min | icu | common_nameDuration | {name} · {duration} | {name} · {duration} | {name} · {duration}
+di_compact | skip | board-note
+di_driver_tomasz_kr_7t15m | icu | diSUpcoming_driverPlate | Driver: {driverName} · {plate} | Водій: {driverName} · {plate} | Kierowca: {driverName} · {plate} | uk pl
+di_prototype_looking_for_drivers | skip | board-note
+i_4_z | skip | sample
+i_7_z | skip | sample
+i_12_z | skip | sample
+i_3_z | skip | sample
+i_5_z | skip | sample
+i_8_z | skip | sample
+i_21_z | skip | sample
+i_11_z | skip | sample
+i_65_z | skip | sample
+i_16_z | skip | sample
+i_15_z | skip | sample
+i_1240_2_h_10 | icu | iRequestExpired_arrivalDuration | → {arrival} · {duration} | → {arrival} · {duration} | → {arrival} · {duration}
+i_e | skip | sample
+o_pavloexamplecom | skip | sample
+pf_ios_timesensitive_interruption_level_so | skip | board-note
+pf_fri_20_nov | skip | sample
+pf_android_channel_between_cities_high | skip | board-note
+pf_dont_allow | skip | os-string
+pf_allow_sameway_to_access_this | skip | os-string
+pf_only_this_time | skip | os-string
+pf_select_time | skip | os-string
+pr_koda | skip | sample
+pr_octavia | skip | sample
+pr_kr_7374b | skip | sample
+pr_13_of_37_1_box | icu | common_rewardsProgress | {collected} of {total} · {boxes, plural, =0{no boxes to open} =1{1 box to open} other{{boxes} boxes to open}} | {collected} з {total} · сюрпризів до відкриття: {boxes} | {collected} z {total} · paczki do otwarcia: {boxes} | uk pl
+ps_prototype_driver_found | skip | board-note
+ps_1831_3_min_11_km | icu | psNotifDriver_timeDurationDistance | {time} · {duration} · {distance} | {time} · {duration} · {distance} | {time} · {duration} · {distance}
+ps_220_m_3_min | icu | psSuggest_distanceDuration | {distance} · {duration} | {distance} · {duration} | {distance} · {duration}
+p_polit | skip | sample
+p_ul_mogilsk_99 | skip | sample
+platform_ios | skip | os-string
+platform_android | skip | os-string
+platform_allow_sameway_to_use_your | skip | os-string
+platform_allow_once | skip | os-string
+platform_allow_while_using_app | skip | os-string
+platform_dont_allow | skip | os-string
+platform_while_using_the_app | skip | os-string
+rw_of_37 | icu | rwEmpty_ofTotal | of {total} | з {total} | z {total} | uk pl
+xl_arrives_1120_via_bochnia_tarnw | skip | variant
+xl_marek_your_people | skip | variant
+xl_arrives_1540_via_tarnw | skip | variant
+
+# ── B_ (beta, bug reports): Polish missing in the deck ───────────────────────
+b_mark_the_problem | pl | Zaznacz problem
+b_highlight | pl | Podświetl
+b_arrow | pl | Strzałka
+b_hide | pl | Ukryj
+b_circle_whats_wrong_use_hide | pl | Zakreśl, co jest nie tak. „Ukryj” użyj na wszystkim, co osobiste: imionach, numerach rejestracyjnych, adresach.
+b_last_2_min_no_messages | pl | Ostatnie 2 min · bez wiadomości i dokładnych lokalizacji
+b_how_to_report_a_bug | pl | Jak zgłosić błąd
+b_three_ways_all_open_the | pl | Trzy sposoby, każdy otwiera ten sam formularz. Wybierz najwygodniejszy.
+b_shake_your_phone | pl | Potrząśnij telefonem
+b_works_on_any_screen_we | pl | Działa na każdym ekranie. Zapiszemy zrzut ekranu dokładnie z tej chwili.
+b_tap_the_beta_pill | pl | Dotknij „Beta”
+b_small_button_in_the_corner | pl | Mały przycisk w rogu każdego ekranu w czasie testów.
+b_profile_help_feedback | pl | Profil › Pomoc i opinie
+b_if_shaking_isnt_your_thing | pl | Jeśli nie chcesz potrząsać telefonem.
+b_a_good_report_has_three | pl | Dobre zgłoszenie ma trzy części
+b_what_you_did | pl | Co robisz
+b_tapped_find_a_ride_with | pl | „Dotykam »Znajdź przejazd«, cel: Politechnika”
+b_what_you_expected | pl | Co ma się stać
+b_searching_screen | pl | „Ma się otworzyć wyszukiwanie”
+b_what_happened | pl | Co dzieje się naprawdę
+b_app_froze_for_5_s | pl | „Aplikacja zawiesza się na 5 s i wraca do mapy”
+b_we_attach_automatically_screenshot_app | pl | Automatycznie dołączamy: zrzut ekranu, wersję aplikacji, model telefonu, twoją rolę, bieżący ekran i logi z ostatnich 2 minut. Nigdy twoich wiadomości ani dokładnego adresu domowego.
+b_got_it_start_testing | pl | Jasne, zaczynam testy
+b_test_missions | pl | Misje testowe
+b_try_these_at_least_once | pl | Wypróbuj każdą przynajmniej raz. Odhaczymy ją automatycznie.
+b_2_of_6_done | icu | bMissions_doneOfTotal | {done} of {total} done | Виконано {done} з {total} | Zrobione: {done} z {total} | pl
+b_find_a_ride_as_a | pl | Znajdź przejazd jako pasażer
+b_search_request_a_seat_use | pl | Wyszukaj, poproś o miejsce, użyj kodu odbioru
+b_share_a_route_as_a | pl | Udostępnij trasę jako kierowca
+b_set_a_route_accept_a | pl | Ustaw trasę, zaakceptuj prośbę, wpisz kod
+b_schedule_a_ride_for_tomorrow | pl | Zaplanuj przejazd na jutro
+b_in_krakw_with_arrive_by | pl | Po Krakowie, z „Przyjazd do”
+b_book_part_of_an_intercity | pl | Zarezerwuj część trasy między miastami
+b_eg_krakw_tarnw_on_a | pl | Np. Kraków → Tarnów na dłuższej trasie
+b_chat_during_a_ride | pl | Napisz w trakcie przejazdu
+b_quick_replies_and_live_location | pl | Szybkie odpowiedzi i lokalizacja na żywo
+b_switch_roles_and_back | pl | Zmień rolę i wróć
+b_from_the_role_pill_on | pl | Przełącznikiem roli na mapie
+b_testing_alone | pl | Testujesz sam?
+b_turn_on_a_demo_driver | pl | Włącz kierowcę demo: wirtualne auto jeździ po Krakowie i akceptuje twoje prośby.
+b_demo_driver | pl | Kierowca demo
+b_next_reporting_bugs | pl | Dalej: zgłaszanie błędów
+b_my_reports | pl | Moje zgłoszenia
+b_closed | pl | Zamknięte
+b_pin_jumps_back_after_moving | skip | sample
+b_need_info | pl | Potrzebne szczegóły
+b_driver_photo_missing_in_offer | skip | sample
+b_fixed_in_093 | icu | bMyReports_fixedIn | Fixed in {version} | Виправлено в {version} | Naprawione w {version} | pl
+b_find_passengers_button_nearly_invisible | skip | sample
+b_seen | pl | Przeczytane
+b_chat_keyboard_covers_quick_replies | skip | sample
+b_4_reports_1_fixed_youre | icu | bMyReports_summary | {reports, plural, =1{1 report} other{{reports} reports}} · {fixed} fixed · you’re in the top 10 testers this week | {reports, plural, one{{reports} репорт} few{{reports} репорти} many{{reports} репортів} other{{reports} репорту}} · виправлено: {fixed} · цього тижня ти в топ-10 тестувальників | {reports, plural, one{{reports} zgłoszenie} few{{reports} zgłoszenia} many{{reports} zgłoszeń} other{{reports} zgłoszenia}} · naprawione: {fixed} · w tym tygodniu jesteś w top 10 testerów | uk pl
+b_what_kind | pl | Jaki typ?
+b_bug | pl | Błąd
+b_crash | pl | Awaria
+b_looks_wrong | pl | Wygląd
+b_idea | pl | Pomysł
+b_how_bad_is_it | pl | Jak bardzo to przeszkadza?
+b_blocks_me | pl | Blokuje mnie
+b_annoying | pl | Irytuje
+b_minor | pl | Drobiazg
+b_what_did_you_do | pl | Co robisz?
+b_moved_the_map_to_set | skip | sample
+b_what_did_you_expect | pl | Co miało się stać?
+b_pin_stays_where_i_put | skip | sample
+b_eg_the_pin_jumped_back | pl | Np. pinezka wraca tam, gdzie stoję
+b_filled_in_for_you | pl | Uzupełnione automatycznie
+b_next_screenshot | pl | Dalej: zrzut ekranu
+b_sw1031 | skip | sample
+b_the_drivers_photo_shows_just | skip | sample
+b_yesterday_1820 | icu | bReportDetail_yesterdayAt | Yesterday {time} | Учора, {time} | Wczoraj, {time} | pl
+b_thanks_does_it_happen_on | skip | sample
+b_today_0912_pavlo_sameway_team | icu | bReportDetail_todayTeamReply | Today {time} · {name}, sameway team | Сьогодні, {time} · {name}, команда sameway | Dziś, {time} · {name}, zespół sameway | pl
+b_reply_to_the_team | pl | Odpowiedz zespołowi
+b_attach_screen_recording | pl | Dołącz nagranie ekranu
+b_cant_reproduce_anymore | pl | Już się nie powtarza
+b_thanks_its_with_the_team | pl | Dzięki! Zgłoszenie trafiło do zespołu
+b_report_sw1042 | icu | bSent_reportId | Report #{reportId} | Репорт #{reportId} | Zgłoszenie #{reportId} | pl
+b_we_read_every_report_youll | pl | Czytamy każde zgłoszenie. Odpowiemy tutaj, zwykle w ciągu doby, a gdy naprawimy błąd, dostaniesz powiadomienie.
+b_test_mission_done_youre_2 | icu | bSent_missionProgress | Test mission done? You’re {done} of {total} in. | Виконано {done} з {total} сценаріїв. Так тримати! | Misja zaliczona? Masz już {done} z {total}. | pl
+b_back_to_the_app | pl | Wróć do aplikacji
+b_see_my_reports | pl | Moje zgłoszenia
+b_something_wrong | pl | Coś nie tak?
+b_we_saved_a_screenshot_of | pl | Zapisaliśmy zrzut ekranu tego, co widzisz.
+b_something_broke_or_looks_wrong | pl | Coś się zepsuło albo źle wygląda
+b_share_an_idea | pl | Podziel się pomysłem
+b_something_could_be_better | pl | Coś mogłoby działać lepiej
+b_shook_by_accident | pl | Potrząśnięte przypadkiem
+b_turn_off_shake_to_report | pl | Wyłącz zgłaszanie potrząśnięciem
+b_beta_testers | pl | Beta testy
+b_youre_testing_sameway_before_everyone | pl | Testujesz sameway przed wszystkimi
+b_thanks_for_helping_this_is | pl | Dzięki za pomoc! To wczesna wersja: niektóre rzeczy się zepsują i właśnie takie miejsca chcemy znaleźć.
+b_version_093_build_412_android | icu | bWelcome_versionBuild | Version {version} · build {build} · {platform} | Версія {version} · збірка {build} · {platform} | Wersja {version} · kompilacja {build} · {platform} | pl
+b_things_can_break | pl | Coś może się zepsuć
+b_crashes_and_odd_behaviour_are | pl | Awarie i dziwne zachowanie są normalne. Zgłaszaj je, nie obchodź.
+b_data_may_reset | pl | Dane mogą zniknąć
+b_rides_chats_and_rewards_can | pl | Przejazdy, czaty i nagrody mogą zostać wyczyszczone między wersjami.
+b_real_people_real_cars | pl | Prawdziwi ludzie, prawdziwe auta
+b_rides_with_other_testers_are | pl | Przejazdy z innymi testerami są prawdziwe. Te same zasady bezpieczeństwa: kod odbioru, bezpieczne postoje.
+b_keep_it_private | pl | Na razie to tajemnica
+b_please_dont_post_screenshots_publicly | pl | Prosimy, nie publikuj zrzutów ekranu przed premierą.
+b_show_me_how_it_works | pl | Pokaż, jak to działa
+b_skip_ive_done_this_before | pl | Pomiń, już to znam
+b_whats_in_this_build | pl | Co nowego w tej wersji
+b_new | pl | Nowe
+b_scheduled_rides_and_the_rides | skip | release-notes
+b_between_cities_stops_and_partofroute | skip | release-notes
+b_your_people_and_daily_routines | skip | release-notes
+b_rewards_and_mystery_boxes | skip | release-notes
+b_fixed | pl | Naprawione
+b_destination_pin_jumping_back_after | skip | release-notes
+b_driver_info_not_showing_after | skip | release-notes
+b_find_passengers_button_was_nearly | skip | release-notes
+b_known_issues_no_need_to | pl | Znane problemy · nie trzeba ich zgłaszać
+b_live_location_in_chat_can | skip | release-notes
+b_ukrainian_city_names_missing_in | skip | release-notes
+b_rewards_dont_sync_between_two | skip | release-notes
+b_next_what_to_test | pl | Dalej: co przetestować
+
+# ── DI_ (Dynamic Island / Live Activity) ─────────────────────────────────────
+# DI_Spec and the long explanations are board notes; the fake home-screen app
+# names are mock-up content.
+di_dropoff_9_min | icu | diDDropOff_dropOffIn_a11y | Drop-off · {duration} | Висадка · за {duration} | Wysiadka · za {duration} | pl
+di_olena_al_jana_pawa_ii | icu | diDDropOff_passengerOnRoute | {passengerName} · {place}, on your route | {passengerName} · {place}, по дорозі | {passengerName} · {place}, na twojej trasie | pl
+di_passenger_is_out | pl | Pasażer wysiadł
+di_one_button_to_end_the | skip | board-note
+di_route_shared_passengers_on_your | skip | board-note
+di_navigation_owns_the_island_sameway | skip | board-note
+di_on_your_route_1_min | icu | diDRequest_onRouteDetourPlace | On your route · +{detour} · {place} | По дорозі · +{detour} · {place} | Na trasie · +{detour} · {place} | pl
+di_to_politechnika_74_km_together | icu | diDRequest_toPlaceTogether | To {place} · {distance} together | До {place} · разом {distance} | Do: {place} · razem {distance} | pl
+di_alert_with_sound_and_a | skip | board-note
+di_pick_up_olena_on_the | icu | diDToPickup_pickUpSide_a11y | Pick up: {passengerName} · {side} | Забрати: {passengerName} · {side} | Odbierz: {passengerName} · {side} | pl
+di_ul_mogilska_12_green_jacket | icu | diDToPickup_placeNote | {place} · {note} | {place} · {note} | {place} · {note}
+di_expanded_over_the_navigation_app | skip | board-note
+di_the_driver_is_at_the | skip | board-note
+di_how_was_it_with_marek | icu | diPArrived_howWasIt | How was it with {driverName}? | Як доїхали? Водій: {driverName} | Jak minęła podróż? Kierowca: {driverName} | pl
+di_rate | skip | superseded-d7
+di_last_alert_the_activity_ends | skip | board-note
+di_compact_while_the_driver_comes | skip | board-note
+di_longpress_pickup_code_opens_the | skip | board-note
+di_marek_is_picking_you_up | icu | diPFound_pickingYouUp_a11y | {driverName} is picking you up | Тебе забере: {driverName} | Odbierze cię: {driverName} | uk pl
+di_pickup_1831_ul_mogilska_12 | icu | diPFound_pickupAtWalk | Pickup {time} · {place} · {distance} walk | Зустріч о {time} · {place} · {distance} пішки | Odbiór o {time} · {place} · {distance} pieszo | pl
+di_alert_the_island_expands_by | skip | board-note
+di_driver_marek_26_km_left | icu | diPInRide_driverDistanceLeft | Driver: {driverName} · {distance} left | Водій: {driverName} · ще {distance} | Kierowca: {driverName} · zostało {distance} | pl
+di_in_the_car_the_island | skip | board-note
+di_mail | skip | sample
+di_calendar | skip | sample
+di_camera | skip | sample
+di_photos | skip | sample
+di_maps | skip | sample
+di_clock | skip | sample
+di_weather | skip | sample
+di_notes | skip | sample
+di_settings | skip | sample
+di_browser | skip | sample
+di_the_app_is_closed_but | skip | board-note
+di_to_politechnika_2_drivers_nearby | icu | diPSearchExp_toPlaceDriversNearby | To {place} · {count, plural, =1{1 driver} other{{count} drivers}} nearby | До {place} · {count, plural, one{поруч {count} водій} few{поруч {count} водії} many{поруч {count} водіїв} other{поруч {count} водія}} | Do: {place} · {count, plural, one{{count} kierowca} few{{count} kierowców} many{{count} kierowców} other{{count} kierowcy}} w pobliżu | uk pl
+di_longpress_buttons_work_without_opening | skip | board-note
+di_marek_is_here | icu | diPWaiting_driverIsHere_a11y | {driverName} is here | Уже на місці: {driverName} | Już na miejscu: {driverName} | uk pl
+di_silver_corolla_waits_up_to | icu | diPWaiting_carWaitsUpTo | {car} · waits up to {duration} | {car} · чекає до {duration} | {car} · czeka do {duration} | pl
+di_timesensitive_alert_one_of_the | skip | board-note
+di_you_meet_at_the_pickup | icu | diPWalk_meetAround | You meet at the pickup spot around {time} | Зустрінетеся на точці приблизно о {time} | Spotkacie się w punkcie odbioru około {time} | pl
+di_pickupspot_flow_compact_shows_a | skip | board-note
+di_departs_0730_via_tarnw | icu | diSUpcoming_departsVia | Departs {time} · via {via} | Виїзд о {time} · через {via} | Wyjazd o {time} · przez {via} | pl
+di_pickup_krakw_ul_bosacka_18 | icu | common_pickupPlace | Pickup: {place} | Зустріч: {place} | Odbiór: {place} | pl
+di_running_late | pl | Spóźnię się
+di_scheduled_rides_start_the_activity | skip | board-note
+di_dynamic_island | skip | board-note
+di_how_sameway_lives_at_the | skip | board-note
+di_three_sizes | skip | board-note
+di_compact_2 | skip | board-note
+di_one_activity_icon_or_avatar | skip | board-note
+di_minimal | skip | board-note
+di_another_apps_activity_is_also | skip | board-note
+di_expanded | skip | board-note
+di_longpress_or_an_alert_title | skip | board-note
+di_driver_accepted | skip | board-note
+di_walk_to_pickup_spot | skip | board-note
+di_220_m | skip | sample
+di_driver_is_waiting | skip | board-note
+di_in_the_car | skip | board-note
+di_route_shared | skip | board-note
+di_2_free | icu | diDLive_seatsFree | {seats} free | {seats, plural, one{{seats} вільне} few{{seats} вільні} many{{seats} вільних} other{{seats} вільного}} | {seats, plural, one{{seats} wolne} few{{seats} wolne} many{{seats} wolnych} other{{seats} wolnego}} | uk pl
+di_new_request | skip | board-note
+di_waiting_at_pickup | skip | board-note
+di_dropoff | skip | board-note
+di_scheduled_ride_soon | skip | board-note
+di_45_min | skip | sample
+di_one_sameway_activity_at_a | skip | board-note
+di_the_island_is_always_pure | skip | board-note
+di_never_show_the_pickup_code | skip | board-note
+di_alerts_only_for_the_moments | skip | board-note
+di_update_at_most_every_1015 | skip | board-note
+di_every_button_opens_a_screen | skip | board-note
+di_iphones_without_dynamic_island_get | skip | board-note
+di_voiceover_reads_the_full_state | skip | board-note
+platform_marek_2_min_away | icu | common_nameEtaAway | {name} · {duration} away | {name} · за {duration} | {name} · za {duration} | pl
+rules_what_happens | pl | Co się dzieje
+
+# ── PS_ (pickup spots): Polish missing in the deck ───────────────────────────
+ps_youre_at_the_pickup_spot | pl | Jesteś w punkcie odbioru
+ps_stand_by_the_bus_stop | pl | Stań przy znaku przystanku, żeby kierowcy cię widzieli.
+ps_4_drivers_passed_here_in | icu | psArrived_driversPassed | {count, plural, =1{1 driver passed} other{{count} drivers passed}} here in the last {minutes} min | {count, plural, one{За останні {minutes} хв тут проїхав {count} водій} few{За останні {minutes} хв тут проїхали {count} водії} many{За останні {minutes} хв тут проїхало {count} водіїв} other{За останні {minutes} хв тут проїхало {count} водія}} | {count, plural, one{W ciągu ostatnich {minutes} min przejechał tędy {count} kierowca} few{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} many{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} other{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowcy}} | uk pl
+ps_better_odds | pl | Większe szanse
+ps_meet_marek_at_a_pickup | icu | psAsk_meetAtSpot | Meet {driverName} at a pickup spot? | Зустрінетеся на зручній точці? | Spotkacie się w punkcie odbioru? | pl
+ps_marek_is_driving_along_ul | icu | psAsk_driverAlongStreet | {driverName} is driving along {street}. Your street is a {detour} detour for him, so the pickup spot works better for both of you. In carpooling you agree on the pickup point together. | {driverName}: їде по {street}. Заїхати на твою вулицю – це для водія ще {detour} гаку, тож точка зустрічі зручніша вам обом. У попутках місце зустрічі обирають разом. | {driverName}: jedzie ulicą {street}. Twoja ulica to dla kierowcy {detour} objazdu, więc punkt odbioru jest wygodniejszy dla was obojga. We wspólnych przejazdach miejsce odbioru ustalacie razem. | uk pl
+ps_your_current_point | pl | Twoje obecne miejsce
+ps_6_min_for_marek | icu | psAsk_extraForDriver | +{detour} for {driverName} | +{detour} для водія | +{detour} dla kierowcy | pl
+ps_on_his_route_1831 | icu | psAsk_onRouteAt | On his route · {time} | По його дорозі · {time} | Na jego trasie · {time} | pl
+ps_i_cant_walk_there | pl | Nie dam rady tam dojść
+ps_ok_ill_walk | pl | OK, dojdę
+ps_cant_walk_well_ask_the | pl | Nie możesz dojść? Zapytamy kierowcę, czy może jeszcze podjechać na twoją ulicę. To jego decyzja, a twoje miejsce czeka, dopóki nie zdecyduje.
+ps_olena_cant_walk_to_the | icu | psDriverChoice_cantWalk | {passengerName} can’t walk to the pickup spot | {passengerName}: не може дійти до точки | {passengerName}: nie może dojść do punktu odbioru | uk pl
+ps_her_original_point_is_a | icu | psDriverChoice_originalPointDetour | Their original point is a {detour} detour (+{distance}). Your call: pick them up there or let us find them another driver. | Місце пасажира – це {detour} гаку (+{distance}). Вирішуєш ти: заїхати туди чи хай ми знайдемо іншого водія. | Pierwotne miejsce pasażera to {detour} objazdu (+{distance}). Twoja decyzja: odbierz stamtąd albo poszukamy innego kierowcy. | uk pl
+ps_pick_up_there | pl | Odbiorę stamtąd
+ps_not_this_time | pl | Nie tym razem
+ps_carpooling_not_a_taxi_the | pl | Wspólne przejazdy, nie taksówka: kierowca zawsze sam decyduje o objeździe. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.
+ps_pickup_spots | pl | Punkty odbioru
+ps_marked_places_where_drivers_pass | pl | Oznaczone miejsca, gdzie kierowcy przejeżdżają najczęściej i mogą bezpiecznie się zatrzymać: zatoki autobusowe, szerokie ulice, dobrze oświetlone skrzyżowania. Czekając tutaj, szybciej zostaniesz odebrany.
+ps_drivers_pass_more_often | pl | Kierowcy jeżdżą tu częściej
+ps_main_roads_on_popular_routes | pl | Główne ulice na popularnych trasach
+ps_safe_to_stop | pl | Można bezpiecznie stanąć
+ps_legal_stops_bus_bays_good | pl | Dozwolone postoje, zatoki, dobre światło
+ps_never_far | pl | Zawsze blisko
+ps_we_only_suggest_spots_within | icu | psIntro_withinWalk | We only suggest spots within a {minutes}-minute walk | Пропонуємо лише точки до {minutes} хв пішки | Proponujemy tylko punkty do {minutes} min pieszo | pl
+ps_i_cant_walk_far | pl | Trudno mi chodzić daleko
+ps_olena_agreed_to_meet_at | icu | psNotifDriver_agreedToMeet | {passengerName} agreed to meet at a pickup spot | {passengerName}: підійде до точки зустрічі | {passengerName}: dojdzie do punktu odbioru | uk pl
+ps_pickup_ul_mogilska_12_right | icu | psNotifDriver_pickupOnRoute | Pickup: {place}, right on your route. No detour, you save {saved}. | Зустріч: {place}, просто на твоєму маршруті. Без гаку, мінус {saved}. | Odbiór: {place}, dokładnie na twojej trasie. Bez objazdu, oszczędzasz {saved}. | pl
+ps_walk_to_a_pickup_spot | pl | Dojdziesz do punktu odbioru?
+ps_marek_is_on_ul_mogilska | icu | psNotifPassenger_walkSaves | {driverName} is on {street}. A {walk} walk to the pickup spot saves him a {detour} detour. Pickup at {time}. | {driverName}: їде по {street}. {walk} пішки до точки – і водієві не треба давати гаку на {detour}. Зустріч о {time}. | {driverName}: jedzie ulicą {street}. {walk} pieszo do punktu odbioru oszczędza kierowcy {detour} objazdu. Odbiór o {time}. | uk pl
+ps_ill_walk | pl | Dojdę
+ps_cant_walk_there | pl | Nie dam rady dojść
+ps_sent_only_when_a_short | skip | board-note
+ps_suggest_pickup_spots | pl | Proponuj punkty odbioru
+ps_when_a_short_walk_gets | pl | Gdy krótki spacer pomoże szybciej pojechać
+ps_how_far_can_you_walk | pl | Ile możesz przejść pieszo?
+ps_5_min | icu | psSettings_walkMinutes | {minutes} min | {minutes} хв | {minutes} min | pl
+ps_8_min | merge | psSettings_walkMinutes
+ps_pick_me_up_only_where | pl | Odbieraj mnie tylko z mojego miejsca
+ps_for_a_wheelchair_kids_or | pl | Na wózek, z dziećmi albo z ciężkim bagażem. Kierowcy widzą to, zanim zaakceptują.
+ps_pickup_spot | pl | Punkt odbioru
+ps_walk_3_min_get_picked | icu | psSuggest_walkGetPickedFaster | Walk {walk}, get picked up faster | Пройдись {walk}, і тебе заберуть швидше | Przejdź {walk}, a szybciej cię odbiorą | pl
+ps_right_now_drivers_pass_ul | icu | psSuggest_driversPassMoreOften | Right now drivers pass {street} about {times}× more often than your street. | Зараз по {street} водії їздять приблизно в {times} р. частіше, ніж твоєю вулицею. | Teraz kierowcy przejeżdżają ulicą {street} około {times}× częściej niż twoją. | uk pl
+ps_here | pl | Tutaj
+ps_12_min_wait | icu | psSuggest_waitAbout | ~{duration} wait | чекати ~{duration} | czekanie ok. {duration} | pl
+ps_at_the_spot | pl | W punkcie
+ps_4_min_wait | merge | psSuggest_waitAbout
+ps_stay_here | pl | Zostanę tutaj
+ps_walk_there | pl | Pójdę tam
+ps_your_search_keeps_running_either | pl | Wyszukiwanie trwa tak czy inaczej.
+ps_walking_to_the_pickup_spot | pl | Idziesz do punktu odbioru
+ps_220_m_3_min_still | icu | psWalk_distanceDurationSearching | {distance} · {duration} · still searching | {distance} · {duration} · пошук триває | {distance} · {duration} · wciąż szukamy | pl
+ps_go_back_to_where_i | pl | Wróć tam, gdzie byłem
+ps_walk_to_ul_mogilska_12 | icu | psWalkToDriver_walkTo | Walk to {place} | Йди до {place} | Idź do: {place} | pl
+ps_you_both_arrive_around_1831 | icu | psWalkToDriver_bothArriveAround | You both arrive around {time} | Будете там приблизно одночасно, о {time} | Oboje będziecie tam około {time} | pl
+ps_you | pl | Ty
+ps_3_min | icu | common_minutesShort | {minutes} min | {minutes} хв | {minutes} min | pl
+ps_pickup_code_stays_the_same | icu | psWalkToDriver_codeStaysSame | Pickup code stays the same: {code} | Код зустрічі той самий: {code} | Kod odbioru się nie zmienia: {code} | pl
+
+# ── P_ (passenger) and B_ steps: sample data → placeholders ──────────────────
+b_step_1_of_2 | icu | bReport_stepOf | Step {step} of {total} | Крок {step} з {total} | Krok {step} z {total}
+b_step_2_of_2 | merge | bReport_stepOf
+p_keep_holding_calling_in_1 | icu | pCall112_keepHolding | Keep holding… calling in {seconds} s | Тримай… дзвінок за {seconds} с | Trzymaj… łączymy za {seconds} s
+p_marek_is_already_on_his | icu | pCancelConfirm_driverOnWay | {driverName} is already on his way and arrives in {eta}. We’ll tell him right away. | {driverName}: уже їде й буде за {eta}. Ми одразу йому скажемо. | {driverName}: już jedzie i będzie za {eta}. Od razu go powiadomimy. | uk pl
+p_marek_waits_up_to_5 | icu | pCantFind_driverWaits | {driverName} waits up to {minutes} min after he arrives. He’s in a {car}, {plate}. | {driverName}: чекає до {minutes} хв після приїзду. {car}, {plate}. | {driverName}: czeka do {minutes} min od przyjazdu. {car}, {plate}. | uk pl
+p_marek_sees_you_on_his | icu | pCantFind_driverSeesYou | {driverName} sees you on his map until pickup | {driverName}: бачить тебе на мапі до зустрічі | {driverName}: widzi cię na mapie do momentu odbioru | uk pl
+p_6_min_drive | icu | common_aboutDrive | ~{duration} drive | ~{duration} машиною | ~{duration} jazdy
+p_including_you_1_just_you | keep
+p_marek_cant_take_you_this | icu | pDeclined_driverCantTakeYou | {driverName} can’t take you this time | Цього разу не вийде: {driverName} | Tym razem nie da rady: {driverName}
+p_koda_fabia_blue_kr_7pl02 | merge | common_carPlate
+p_verified_licence_and_phone_41 | merge | common_trustLine
+p_walk_450_m | merge | common_walkDistance
+p_politechnika_krakowska_1842 | icu | common_placeTime | {place} · {time} | {place} · {time} | {place} · {time}
+p_26_km | skip | sample
+p_shared_with_marek | icu | common_sharedWith | Shared with {name} | Разом · {name} | Wspólnie · {name}
+p_04_kg | skip | sample
+p_how_was_the_ride_with | icu | common_howWasRide | How was the ride with {name}? | {name}: як доїхали? | {name}: jak minął przejazd?
+p_ride_with_marek_again | icu | pDone_rideAgain | Ride with {name} again? | Ще разом? · {name} | Jeszcze raz razem? · {name}
+p_marek_cancelled | icu | pDriverCancelled_driverCancelled | {driverName} cancelled | Водій скасував: {driverName} | Kierowca anulował: {driverName}
+p_searching_for_012 | icu | pDriverCancelled_searchingFor | Searching for {elapsed} | Шукаємо вже {elapsed} | Szukamy od {elapsed}
+p_marek_cant_make_the_pickup | icu | pDriverCantPickup_title | {driverName} can’t make the pickup | Не вийде забрати: {driverName} | Kierowca nie da rady cię zabrać: {driverName}
+p_he_cant_stop_safely_at | icu | pDriverCantPickup_body | He can’t stop safely at {street}. We’re searching again from the same spot, and you’re first in line. | Водій не може безпечно зупинитися тут: {street}. Шукаємо знову з тієї ж точки, і ти перший у черзі. | Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś pierwszy w kolejce. | uk pl
+p_tomorrow_politechnika | icu | common_dayPlace | {day} · {place} | {day} · {place} | {day} · {place}
+p_pickup_0810_marek_confirmed | icu | pHome_pickupConfirmed | Pickup {time} · {driverName} confirmed | Зустріч о {time} · водій підтвердив | Odbiór {time} · kierowca potwierdził
+p_2_unread | icu | common_unreadCount | {count} unread | {count, plural, one{{count} нове} few{{count} нові} many{{count} нових} other{{count} нового}} | {count, plural, one{{count} nieprzeczytana} few{{count} nieprzeczytane} many{{count} nieprzeczytanych} other{{count} nieprzeczytanej}} | uk pl
+p_arrival_9_min_26_km | icu | pInRide_arrivalLeft | Arrival · {duration} · {distance} left | Прибуття через {duration} · ще {distance} | Przyjazd · {duration} · zostało {distance}
+p_picked_up_ul_mogilska_12 | icu | pInRide_pickedUpAt | Picked up · {place} | У машині · {place} | Odebrano · {place}
+p_dropoff_300_m_from_destination | icu | pInRide_dropOffFromDestination | Drop-off {distance} from destination | Вийдеш за {distance} від потрібного місця | Wysiadka {distance} od celu
+p_2_drivers_on_your_way | icu | pOffers_driversOnYourWay | {count, plural, =1{1 driver} other{{count} drivers}} on your way | {count, plural, one{{count} водій їде} few{{count} водії їдуть} many{{count} водіїв їдуть} other{{count} водія їдуть}} у твій бік | {count, plural, one{{count} kierowca jedzie} few{{count} kierowców jedzie} many{{count} kierowców jedzie} other{{count} kierowcy jedzie}} w twoją stronę | uk pl
+p_marek | skip | sample
+p_toyota_corolla_silver_kr_4x21c | icu | common_carPlate | {car} · {plate} | {car} · {plate} | {car} · {plate}
+p_4_min | skip | sample
+p_verified_licence_and_phone_128 | icu | common_trustLine | Licence declared · email verified · {rides, plural, =1{1 ride} other{{rides} rides}} | Посвідчення задекларовано · email підтверджено · {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} | Prawo jazdy zadeklarowane · e-mail zweryfikowany · {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} | uk pl
+p_walk_120_m | icu | common_walkDistance | Walk {distance} | Пішки {distance} | Pieszo {distance}
+p_drops_you_300_m_away | icu | pOffers_dropsYouAway | Drops you {distance} away | Висадить за {distance} від потрібного місця | Wysadzi cię {distance} od celu
+p_kasia_9_min | merge | common_nameDuration
+p_walk_450_m_drops_you | icu | pOffers_walkDropsAtDoor | Walk {distance} · drops you at the door | {distance} пішки · висадить під дверима | Pieszo {distance} · wysadza pod drzwiami
+p_31_km_6_min_drive | icu | pPickMap_distanceDrive | {distance} · ~{duration} drive | {distance} · ~{duration} машиною | {distance} · ~{duration} jazdy
+p_ul_warszawska_24 | skip | sample
+p_krakw_31155 | skip | sample
+p_about_your_ride_with_marek | icu | pReport_aboutRide | About your ride with {driverName} on {date}, {time}. | Щодо поїздки, {date}, {time}. Водій: {driverName}. | Dotyczy przejazdu, {date}, {time}. Kierowca: {driverName}. | pl
+p_also_block_marek_you_wont | icu | common_alsoBlock | Also block {name}. You won’t be matched again. | Також заблокувати: {name}. Вас більше не поєднаємо. | Zablokuj też: {name}. Nie połączymy was ponownie.
+p_our_team_replies_within_24 | keep
+p_our_team_reads_every_report | keep
+p_sent_1852 | icu | pReportSent_sentAt | Sent · {time} | Надіслано · {time} | Wysłane · {time}
+p_marek_is_blocked_you_can | icu | pReportSent_blocked | {name} is blocked. You can undo this in Profile › Login & security › Blocked people. | Заблоковано: {name}. Скасувати можна в Профіль › Вхід і безпека › Заблоковані. | Zablokowano: {name}. Możesz to cofnąć w Profil › Logowanie i bezpieczeństwo › Zablokowane osoby. | uk pl
+p_marek_is_on_the_way | icu | common_driverOnTheWay | {driverName} is on the way | {driverName}: уже їде до тебе | {driverName}: jest w drodze | uk pl
+p_pickup_ul_mogilska_12_bus | merge | common_pickupPlace
+p_toyota_corolla_silver | skip | sample
+p_kr_4x21c | skip | sample
+p_marek_toyota_corolla_silver_kr | icu | pSafety_rideSummary | {driverName} · {car} · {plate} · picked up {time} at {place} | {driverName} · {car} · {plate} · зустріч о {time}, {place} | {driverName} · {car} · {plate} · odbiór {time}, {place}
+p_call_112_hold_for_2 | keep
+p_hold_for_2_seconds_this | keep
+p_politechnika | skip | sample
+p_ul_skaryskiego_3 | skip | sample
+p_politechnika_krakowska | skip | sample
+p_main_campus_ul_warszawska_24 | skip | sample
+p_31_km | skip | sample
+p_politechnika_czyyny_campus | skip | sample
+p_al_jana_pawa_ii_37 | skip | sample
+p_24_km | skip | sample
+p_politechnika_recent | icu | pSearch_placeRecent | {place} (recent) | {place} (нещодавно) | {place} (ostatnio)
+p_rzeszw | skip | sample
+p_rzeszw_is_another_city | icu | pSearchCity_anotherCity | {city} is another city | {city} – це інше місто | {city} to inne miasto
+p_rides_between_cities_are_planned | icu | pSearchCity_plannedAhead | Rides between cities are planned ahead by drivers. {count, plural, =1{1 ride} other{{count} rides}} to {city} this week, from {price}. | Міжміські маршрути водії планують заздалегідь. Напрямок {city}: цього тижня {count, plural, one{{count} варіант} few{{count} варіанти} many{{count} варіантів} other{{count} варіанта}}, від {price}. | Przejazdy między miastami kierowcy planują z wyprzedzeniem. Kierunek {city}: w tym tygodniu {count, plural, one{{count} przejazd} few{{count} przejazdy} many{{count} przejazdów} other{{count} przejazdu}}, od {price}. | uk pl
+p_see_rides_to_rzeszw | icu | pSearchCity_seeRides | See rides to {city} | Поїздки: {city} | Przejazdy: {city} | uk pl
+p_165_km | skip | sample
+p_rzeszw_jasionka_airport | skip | sample
+p_175_km | skip | sample
+p_usually_under_5_min_searching | icu | pSearching_usuallySearchingFor | Usually under 5 min · searching for {elapsed} | Зазвичай до 5 хв · шукаємо вже {elapsed} | Zwykle poniżej 5 min · szukamy od {elapsed}
+p_in_15_min | icu | common_inMinutes | In {minutes} min | Через {minutes} хв | Za {minutes} min
+p_leave_around_1839 | icu | common_leaveAround | Leave around {time} | Виїзд близько {time} | Wyjazd ok. {time}
+p_in_30_min | merge | common_inMinutes
+p_leave_around_1854 | merge | common_leaveAround
+p_waiting_for_marek_to_accept | icu | pWaiting_waitingFor | Waiting for {driverName} to accept | Чекаємо відповіді: {driverName} | Czekamy na akceptację: {driverName}
+p_usually_under_30_s_if | keep
+p_marek_4_min_to_pickup | icu | pWaiting_driverToPickup | {driverName} · {duration} to pickup | {driverName} · {duration} до зустрічі | {driverName} · {duration} do odbioru
+p_prototype_marek_accepts | skip | board-note
+
+# ── D_ (driver), O_ (onboarding), T_ (tutorial) ──────────────────────────────
+# The passenger's gender is data, not design: "her"/«Пасажирка» become neutral.
+d_cant_pick_up_olena | icu | dCantPickup_title | Can’t pick up {passengerName}? | Не можеш забрати: {passengerName}? | Nie możesz zabrać: {passengerName}?
+d_olena_keeps_her_place_and | icu | dCantPickup_keepsPlace | {passengerName} keeps their place, and we match them again straight away. | Пасажир: {passengerName}. Місце в черзі зберігається, ми одразу шукаємо іншого водія. | Pasażer: {passengerName}. Miejsce w kolejce zostaje, od razu szukamy innego kierowcy. | uk pl
+d_tell_olena | icu | dCantPickup_tell | Tell {passengerName} | Повідомити: {passengerName} | Powiadom: {passengerName}
+d_olena | skip | sample
+d_waiting_at_ul_mogilska_12 | icu | dCode_waitingAt | Waiting at {place} | Чекає на {place} | Czeka w miejscu: {place} | pl
+d_ask_olena_for_her_4digit | icu | dCode_askForCode | Ask {passengerName} for their 4‑digit code | Спитай у пасажира код із 4 цифр | Poproś pasażera o 4‑cyfrowy kod
+d_thanks_for_sharing_your_seat | icu | dDone_thanks | Thanks for sharing your seat, {name}. | {name}, дякуємо за компанію в дорозі! | {name}, dzięki, że dzielisz się miejscem. | pl
+d_58_km | skip | sample
+d_09_kg | skip | sample
+d_how_was_the_ride_with | merge | common_howWasRide
+d_drive_olena_again | icu | dDone_driveAgain | Drive {name} again? | Ще разом? · {name} | Jeszcze raz razem? · {name}
+d_olena_is_booked_for_pickup | icu | dEndRoute_passengerBooked | {passengerName} is booked for pickup in {duration}. We’ll tell them right away and look for another driver for them. | {passengerName}: чекає на зустріч за {duration}. Ми одразу попередимо пасажира й шукатимемо іншого водія. | {passengerName}: czeka na odbiór za {duration}. Od razu powiadomimy pasażera i poszukamy innego kierowcy. | uk pl
+d_koda_octavia_white | skip | sample
+d_kr_7374b_4_seats | icu | dHome_plateSeats | {plate} · {seats, plural, =1{1 seat} other{{seats} seats}} | {plate} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} | {plate} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} | uk pl
+d_1_unread | merge | common_unreadCount
+d_drop_off_olena_in_9 | icu | dInTrip_dropOffIn | Drop off {passengerName} in {duration} | Висадити: {passengerName}, через {duration} | Wysiadka: {passengerName} za {duration}
+d_then_6_min_to_your | icu | dInTrip_thenToDestination | Then {duration} to your destination | Потім ще {duration} до твоєї адреси | Potem {duration} do twojego celu
+d_drop_off_olena_al_jana | icu | dInTrip_dropOffAt | Drop off {passengerName} · {place} | Висадка: {passengerName} · {place} | Wysiadka: {passengerName} · {place}
+d_1857_your_destination | icu | dInTrip_yourDestinationAt | {time} · your destination | {time} · ти на місці | {time} · twój cel
+d_2_seats_still_free | icu | dInTrip_seatsStillFree | {seats, plural, =1{1 seat} other{{seats} seats}} still free | Ще {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} | Wciąż {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} | uk pl
+d_olena_dropped_off | icu | dInTrip_droppedOff | {passengerName} dropped off | Пасажир вийшов | Wysiadka zakończona
+d_3_seats_free_to_politechnika | icu | dLive_seatsFreeTo | {seats, plural, =1{1 seat} other{{seats} seats}} free · to {place} · {duration} | {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} · до {place} · {duration} | {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} · cel: {place} · {duration} | uk pl
+d_2_passengers_near_your_route | icu | dLive_passengersNearRoute | {count, plural, =1{1 passenger} other{{count} passengers}} near your route | Поруч із маршрутом {count, plural, one{{count} пасажир} few{{count} пасажири} many{{count} пасажирів} other{{count} пасажира}} | {count, plural, one{{count} pasażer} few{{count} pasażerów} many{{count} pasażerów} other{{count} pasażera}} blisko twojej trasy | uk pl
+d_waited_5_minutes | icu | dNoShow_waitedMinutes | Waited {minutes, plural, =1{1 minute} other{{minutes} minutes}} | Чекаєш {minutes, plural, one{{minutes} хвилину} few{{minutes} хвилини} many{{minutes} хвилин} other{{minutes} хвилини}} | Czekasz {minutes, plural, one{{minutes} minutę} few{{minutes} minuty} many{{minutes} minut} other{{minutes} minuty}} | uk pl
+d_olena_hasnt_come_yet | icu | dNoShow_notHereYet | {passengerName} hasn’t come yet | Ще не на місці: {passengerName} | Jeszcze nie ma: {passengerName}
+d_youve_waited_5_min_at | icu | dNoShow_waitedAt | You’ve waited {minutes} min at {place}. | Ти чекаєш уже {minutes} хв на {place}. | Czekasz już {minutes} min w miejscu: {place}. | pl
+d_you_can_leave_now_no | icu | dNoShow_canLeave | You can leave now. No penalty for you, and we’ll let {passengerName} know. | Можеш їхати. Жодних штрафів, а пасажира ми повідомимо. | Możesz jechać. Bez kary dla ciebie, a my damy znać pasażerowi. | uk pl
+d_wait_2_more_min | icu | dNoShow_waitMore | Wait {minutes} more min | Почекати ще {minutes} хв | Poczekaj jeszcze {minutes} min
+d_olena_cancelled | icu | dPassengerCancelled_title | {passengerName} cancelled | Скасовано: {passengerName} | Anulowano: {passengerName}
+d_olena_wants_to_join | icu | common_wantsToJoin | {passengerName} wants to join | {passengerName}: хоче поїхати з тобою | {passengerName}: chce dołączyć | uk pl
+d_2_min_detour_12_shared | icu | dRequest_detourRidesVerified | +{detour} detour · {rides, plural, =1{1 shared ride} other{{rides} shared rides}} · email verified | +{detour} гаку · {rides, plural, one{{rides} спільна поїздка} few{{rides} спільні поїздки} many{{rides} спільних поїздок} other{{rides} спільної поїздки}} · email підтверджено | +{detour} objazdu · {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · e-mail zweryfikowany | uk pl
+d_24_seconds_left_to_respond | icu | dRequest_secondsLeft | {seconds, plural, =1{1 second} other{{seconds} seconds}} left to respond | Лишилось {seconds, plural, one{{seconds} секунда} few{{seconds} секунди} many{{seconds} секунд} other{{seconds} секунди}} | {seconds, plural, one{Została {seconds} sekunda} few{Zostały {seconds} sekundy} many{Zostało {seconds} sekund} other{Zostało {seconds} sekundy}} na odpowiedź | uk pl
+d_24s | icu | dRequest_secondsShort | {seconds}s | {seconds} с | {seconds} s
+d_pickup_ul_mogilska_12 | merge | common_pickupPlace
+d_2_min | icu | common_plusDuration | +{duration} | +{duration} | +{duration}
+d_dropoff_on_your_route_11 | icu | dRequest_dropOffBefore | Drop-off on your route, {distance} before your destination | Висадка по твоїй дорозі, за {distance} до мети | Wysiadka na twojej trasie, {distance} przed celem
+d_marek_olena_and_2_more | icu | common_namesAndMore | {first}, {second} and {count} more | {first}, {second} і ще {count} | {first}, {second} i {count, plural, one{{count} inna osoba} few{{count} inne osoby} many{{count} innych osób} other{{count} innej osoby}} | uk pl
+d_when_the_detour_is_2 | icu | dRequestRules_detourUpTo | When the detour is {minutes} min or less | Коли гак до {minutes} хв | Gdy objazd trwa do {minutes} min
+d_30_s | skip | sample
+d_18_min_74_km | icu | common_durationDistance | {duration} · {distance} | {duration} · {distance} | {duration} · {distance}
+d_6_min | skip | sample
+d_3_free_seats | icu | common_freeSeats | {seats, plural, =1{1 free seat} other{{seats} free seats}} | {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} | {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} | uk pl
+d_your_car_has_4_seats | icu | dRouteOptions_carSeats | Your car has {seats, plural, =1{1 seat} other{{seats} seats}} | У твоїй машині {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} | Twoje auto ma {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} | uk pl
+d_pick_up_olena | icu | dToPickup_pickUp | Pick up {passengerName} | Забрати: {passengerName} | Odbiór: {passengerName}
+d_ul_mogilska_12_bus_stop | icu | common_placeDuration | {place} · {duration} | {place} · {duration} | {place} · {duration}
+d_message_olena | icu | common_messageName | Message {name} | Написати: {name} | Napisz: {name}
+o_pavlo | skip | sample
+o_at_least_8_characters | keep
+o_im_18_or_older | keep
+o_nameexamplecom | keep
+o_no_account_yet_for | icu | oCreate_noAccountYet | No account yet for {email}. It takes a minute. | Ще немає акаунта для {email}. Це забере хвилину. | Nie ma jeszcze konta dla {email}. Zajmie to minutę.
+o_it_takes_a_minute | merge | oCreate_noAccountYet
+o_pavloexamplecom_already_has_an_account | icu | oEmailExists_body | {email} already has an account through Google. Continue with Google to get back in. | {email} уже має акаунт через Google. Продовж через Google, щоб увійти. | {email} ma już konto przez Google. Kontynuuj z Google, aby się zalogować.
+o_a_4digit_pickup_code_confirms | keep
+o_when_a_driver_accepts_and | keep
+o_wrong_password_2_tries_left | icu | oPasswordError_triesLeft | Wrong password. {tries, plural, =1{1 try} other{{tries} tries}} left, then sign-in pauses for {minutes} min. | Неправильний пароль. {tries, plural, one{Ще {tries} спроба} few{Ще {tries} спроби} many{Ще {tries} спроб} other{Ще {tries} спроби}}, потім вхід призупиниться на {minutes} хв. | Złe hasło. {tries, plural, one{Została {tries} próba} few{Zostały {tries} próby} many{Zostało {tries} prób} other{Zostało {tries} próby}}, potem logowanie wstrzymamy na {minutes} min. | uk pl
+o_we_sent_a_reset_link | icu | oReset_sentLink | We sent a reset link to {email}. It works for 1 hour. | Ми надіслали посилання для скидання на {email}. Він діє 1 годину. | Wysłaliśmy link do resetu na {email}. Działa przez godzinę.
+o_it_works_for_1_hour | merge | oReset_sentLink
+o_didnt_get_it_check_spam | icu | common_resendIn | Didn’t get it? Check spam. You can resend in {countdown}. | Не прийшло? Глянь у спам. Надіслати ще раз можна через {countdown}. | Nie dotarło? Sprawdź spam. Ponowna wysyłka za {countdown}.
+o_didnt_get_it_check_spam_2 | merge | common_resendIn
+o_we_sent_a_6digit_code | icu | oVerify_sentCode | We sent a 6‑digit code to {email} | Ми надіслали 6‑значний код на {email} | Wysłaliśmy 6‑cyfrowy kod na {email}
+t_the_most_extra_time_youll | keep
+t_2_min_detour_dropoff_on | keep
+t_12_shared_rides_verified_phone | icu | tD3_exampleRequestTrust | 12 shared rides · email verified · 1 seat | 12 спільних поїздок · email підтверджено · 1 місце | 12 wspólnych przejazdów · e-mail zweryfikowany · 1 miejsce | uk pl
+t_dropoff_on_your_route_11 | keep
+t_each_request_shows_the_extra | keep
+t_ask_the_passenger_for_their | keep
+t_check_the_plate_first_then | keep
+
+# ── M_, PR_, PF_, R_, SO_, X_ ─────────────────────────────────────────────────
+m_when_you_book_a_ride | keep
+m_marek_confirmed_tomorrow_0810 | icu | mInbox_confirmedFor | {name} confirmed {day} {time} | Підтверджено на {day} {time} · {name} | Potwierdzone na {day} {time} · {name}
+m_tomorrow_0810_politechnika | icu | common_dayTimePlace | {day} {time} · {place} | {day} о {time} · {place} | {day} {time} · {place}
+m_fri_20_nov_dworzec_gwny | icu | common_datePlace | {date} · {place} | {date} · {place} | {date} · {place}
+m_tue_10_nov_nowa_huta | merge | common_datePlace
+m_mon_9_nov_nowa_huta | merge | common_datePlace
+m_call_marek | icu | common_callName | Call {name} | Подзвонити: {name} | Zadzwoń: {name}
+m_call_olena | merge | common_callName
+m_pickup_ul_mogilska_12_kr | icu | mThread_pickupPlate | Pickup {place} · {plate} | Зустріч {place} · {plate} | Odbiór {place} · {plate}
+m_marek_accepted_the_ride_request | icu | mThread_driverAccepted | {driverName} accepted the ride request | {driverName}: бере тебе | Prośba zaakceptowana · {driverName} | uk
+m_1801_seen | icu | mThread_seenAt | {time} · Seen | {time} · Прочитано | {time} · Przeczytane
+m_sharing_until_pickup_2_min | icu | mThread_sharingUntilPickup | Sharing until pickup · {duration} away | Видно до зустрічі · {duration} звідси | Udostępniana do odbioru · {duration} stąd
+m_running_2_min_late | icu | mThread_runningLate | Running {minutes} min late | Запізнююсь на {minutes} хв | Spóźnię się {minutes} min
+m_marek_confirmed_your_ride | icu | mUpdates_driverConfirmed | {driverName} confirmed your ride | Попутку підтверджено · {driverName} | Przejazd potwierdzony · {driverName}
+m_tomorrow_0810_to_politechnika | icu | mUpdates_dayTimeTo | {day} {time} to {place} | {day} о {time} на {place} | {day} {time} · do: {place}
+m_still_searching_for_monfri_0810 | icu | mUpdates_stillSearching | Still searching for {days} {time} | Ще шукаємо на {days} {time} | Wciąż szukamy: {days} {time}
+m_well_start_matching_2_h | keep
+m_you_saved_04_kg_co | icu | mUpdates_savedCo2 | You saved {co2} CO₂ | Мінус {co2} CO₂ | Oszczędzono {co2} CO₂
+m_ride_with_marek_thu_12 | icu | mUpdates_rideWithOn | Ride with {name} · {date} | Попутка · {name} · {date} | Przejazd · {name} · {date}
+m_mon_9_nov_we_found | icu | mUpdates_foundAnotherOption | {date} · we found you another option | {date} · ми знайшли інший варіант | {date} · znaleźliśmy inną opcję
+pf_thu_12 | skip | sample
+pf_fri_13 | skip | sample
+pf_sat_14 | skip | sample
+pf_sun_15 | skip | sample
+pf_today_thu_12_nov | icu | common_todayDate | Today, {date} | Сьогодні, {date} | Dziś, {date}
+pr_blocked_12_nov_after_a | icu | prBlocked_blockedOn | Blocked {date} · after a report | Заблоковано {date} · після скарги | Zablokowano {date} · po zgłoszeniu
+pr_consumption_l100_km | keep
+pr_consumption_kwh100_km | keep
+pr_you_have_30_days_to | skip | superseded-d17
+pr_app_developer_usually_going_to | skip | sample
+pr_9_short_tips_on_the | keep
+pr_2000_the_day_before | icu | prNotifications_timeDayBefore | {time} the day before | О {time} напередодні | {time} dzień wcześniej
+pr_30_min_before | icu | prNotifications_minutesBefore | {minutes} min before | За {minutes} хв | {minutes} min wcześniej
+pr_2_on | icu | prNotifications_countOn | {count} on | {count} увімкнено | {count, plural, one{{count} włączone} few{{count} włączone} many{{count} włączonych} other{{count} włączonego}} | pl
+pr_max_1_per_person_per | keep
+pr_strong_use_12_characters_for | keep
+pr_12_rides_96_km_shared | icu | common_ridesDistanceShared | {rides, plural, =1{1 ride} other{{rides} rides}} · {distance} shared | {rides, plural, one{{rides} раз} few{{rides} рази} many{{rides} разів} other{{rides} раза}} · {distance} разом | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {distance} razem | uk pl
+pr_sameway_093_beta | icu | common_appVersionBeta | sameway {version} (beta) | sameway {version} (бета) | sameway {version} (beta)
+pr_koda_octavia_kr_7374b | merge | common_carPlate
+pr_pavos42112gmailcom | skip | sample
+pr_1_person | icu | prSecurity_people | {count, plural, =1{1 person} other{{count} people}} | {count, plural, one{{count} людина} few{{count} людини} many{{count} людей} other{{count} людини}} | {count, plural, one{{count} osoba} few{{count} osoby} many{{count} osób} other{{count} osoby}} | uk pl
+pr_we_email_you_a_copy | keep
+pr_checked_by_the_sameway_team | skip | superseded-d15
+pr_usually_within_24_hours | keep
+platform_new_stop_olena | icu | common_newStop | New stop: {passengerName} | Нова зупинка: {passengerName} | Nowy przystanek: {passengerName}
+platform_hold_to_call_112 | keep
+platform_2_min | skip | sample
+r_olena_jan_kasia_hear_it | icu | rEditDriver_hearFirst | {names} hear it first | Першими дізнаються: {names} | Pierwsi dowiedzą się: {names} | uk pl
+r_marek_and_kasia_get_10 | icu | rEditPassenger_getEarly | {names} get {minutes} min before everyone else | На {minutes} хв раніше за інших бачать: {names} | {minutes} min przed innymi: {names} | uk pl
+r_monday_16_november | skip | sample
+r_leave_0750_home_politechnika_3 | icu | rNotifDriver_body | Leave {time} · {from} → {to} · {seats, plural, =1{1 seat} other{{seats} seats}}. {count, plural, =1{1 of your people is} other{{count} of your people are}} looking for this ride. | Виїзд о {time} · {from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Своїх, що чекають на цю поїздку: {count}. | Wyjazd {time} · {from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Osoby z ekipy, które szukają tego przejazdu: {count}. | uk pl
+r_arrive_by_1730_politechnika_home | icu | rNotifPassenger_body | Arrive by {time} · {from} → {to}. {driverName} (your people) drives at {departure} with {seats, plural, =1{1 free seat} other{{seats} free seats}}. | Бути до {time} · {from} → {to}. Свій водій: {driverName}, виїжджає о {departure}, {seats, plural, one{є {seats} місце} few{є {seats} місця} many{є {seats} місць} other{є {seats} місця}}. | Przyjazd do {time} · {from} → {to}. Twoja ekipa: {driverName}, jedzie o {departure}, {seats, plural, one{ma {seats} wolne miejsce} few{ma {seats} wolne miejsca} many{ma {seats} wolnych miejsc} other{ma {seats} wolnego miejsca}}. | uk pl
+r_ride_with_marek | icu | rNotifPassenger_rideWith | Ride with {driverName} | Так · {driverName} | Tak · {driverName} | uk pl
+r_monfri_home_politechnika_leave_0750 | icu | rRoutines_leaveAt | {days} · {from} → {to} · leave {time} | {days} · {from} → {to} · виїзд о {time} | {days} · {from} → {to} · wyjazd {time}
+r_asks_at_0700_notifies_your | icu | rRoutines_asksNotifiesPeople | Asks at {time} · notifies your people | Питає о {time} · свої в курсі | Pyta o {time} · powiadamia ekipę
+r_monfri_politechnika_home_arrive_by | icu | rRoutines_arriveBy | {days} · {from} → {to} · arrive by {time} | {days} · {from} → {to} · бути до {time} | {days} · {from} → {to} · przyjazd do {time}
+r_asks_at_1530_marek_first | icu | rRoutines_asksNameFirst | Asks at {time} · {name} first | Питає о {time} · спершу: {name} | Pyta o {time} · najpierw: {name} | uk pl
+r_tue_thu_home_fitness_czyyny | icu | rRoutines_daysRouteTime | {days} · {from} → {to} · {time} | {days} · {from} → {to} · {time} | {days} · {from} → {to} · {time}
+r_leave_0750_politechnika_3_seats | icu | rToday_leavePlaceSeats | Leave {time} · {place} · {seats, plural, =1{1 seat} other{{seats} seats}} | Виїзд о {time} · {place} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} | Wyjazd {time} · {place} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} | uk pl
+r_olena_and_jan_were_notified | icu | rToday_notified | {names} were notified | Уже знають: {names} | Powiadomiono: {names} | uk
+r_olena_already_took_a_seat | icu | rToday_alreadyTookSeat | {name} already took a seat (auto-accepted) | {name}: уже з тобою (своїх приймаємо одразу) | {name}: ma już miejsce (auto-akceptacja) | uk pl
+so_your_people_4 | icu | soPeople_yourPeopleCount | Your people · {count} | Свої попутники · {count} | Twoja ekipa · {count}
+so_14_rides_together_drives_to | icu | soPeople_ridesTogetherDrivesTo | {rides, plural, =1{1 ride} other{{rides} rides}} together · drives to {place} weekdays | {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · у будні їздить на {place} | {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · w dni robocze jeździ do: {place} | uk pl
+so_notifications_for_marek_on | icu | soPeople_notificationsOn | Notifications for {name}: on | Сповіщення · {name}: увімкнено | Powiadomienia: {name}, włączone | uk
+so_notifications_for_kasia_on | merge | soPeople_notificationsOn
+so_notifications_for_olena_on | merge | soPeople_notificationsOn
+so_notifications_for_jan_off | icu | soPeople_notificationsOff | Notifications for {name}: off | Сповіщення · {name}: вимкнено | Powiadomienia: {name}, wyłączone | uk
+so_5_rides_together_krakw_katowice | icu | soPeople_ridesTogetherPlace | {rides, plural, =1{1 ride} other{{rides} rides}} together · {place} | {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · {place} | {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · {place} | uk pl
+so_rode_together_2_times_nowa | merge | soPeople_ridesTogetherPlace
+so_rode_together_once_rzeszw | merge | soPeople_ridesTogetherPlace
+so_9_rides_together_you_drove | icu | soPeople_ridesTogetherYouDrove | {rides, plural, =1{1 ride} other{{rides} rides}} together · you drove | {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · ти за кермом | {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} · ty za kierownicą | uk pl
+so_3_rides_together | icu | common_ridesTogether | {rides, plural, =1{1 ride} other{{rides} rides}} together | {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом | {rides, plural, one{{rides} wspólny przejazd} few{{rides} wspólne przejazdy} many{{rides} wspólnych przejazdów} other{{rides} wspólnego przejazdu}} | uk pl
+so_anna | skip | sample
+so_drive_to_politechnika_every_weekday | skip | sample
+so_added_after_your_3rd_ride | keep
+so_tell_me_when_marek_plans | icu | soPerson_tellWhenPlans | Tell me when {name} plans a route | Повідомляти про маршрути: {name} | Powiadamiaj o trasach: {name} | uk
+so_krakw_city_and_intercity | skip | sample
+so_ask_marek_first_for_my | icu | soPerson_askFirstForRoutine | Ask {name} first for my routine | Спершу питати цього водія | Najpierw pytaj tę osobę o mój plan
+x_so_drivers_know_who_theyre | keep
+x_well_notify_you_for_the | keep
+x_walk_up_to_1_km | keep
+x_matching_starts_2_h_before | keep
+x_error_503_1824 | icu | xServerError_codeTime | Error {code} · {time} | Помилка {code} · {time} | Błąd {code} · {time}
+x_you_have_1_upcoming_ride | icu | xSignOut_upcomingRides | You have {count, plural, =1{1 upcoming ride. It stays booked} other{{count} upcoming rides. They stay booked}} and you’ll still get reminders. | {count, plural, one{У тебе {count} запланована попутка. Вона нікуди не дінеться} few{У тебе {count} заплановані попутки. Вони нікуди не дінуться} many{У тебе {count} запланованих попуток. Вони нікуди не дінуться} other{У тебе {count} запланованої попутки. Вони нікуди не дінуться}}, і нагадування теж прийдуть. | {count, plural, one{Masz {count} nadchodzący przejazd. Pozostaje zarezerwowany} few{Masz {count} nadchodzące przejazdy. Pozostają zarezerwowane} many{Masz {count} nadchodzących przejazdów. Pozostają zarezerwowane} other{Masz {count} nadchodzącego przejazdu. Pozostają zarezerwowane}} i nadal dostaniesz przypomnienia. | uk pl
+x_we_paused_your_account_on | icu | xSuspended_pausedBecause | We paused your account on {date} after {reports, plural, =1{1 report} other{{reports} reports}} of not turning up for booked rides ({dates}). | {date} ми призупинили твій акаунт після {reports, plural, one{{reports} скарги} few{{reports} скарг} many{{reports} скарг} other{{reports} скарги}}, що ти не приходиш на заброньовані поїздки ({dates}). | {date} wstrzymaliśmy twoje konto po {reports, plural, one{{reports} zgłoszeniu} few{{reports} zgłoszeniach} many{{reports} zgłoszeniach} other{{reports} zgłoszenia}}, że nie pojawiasz się na zarezerwowanych przejazdach ({dates}). | uk pl
+x_rule_42_turn_up_for | icu | xSuspended_rule | Rule {number} · {title} | Правило {number} · {title} | Zasada {number} · {title}
+x_your_upcoming_rides_were_cancelled | icu | xSuspended_ridesCancelled | Your upcoming rides were cancelled and the other people told. You can appeal until {deadline}. We reply within 3 days. | Твої майбутні поїздки скасовано, інших людей повідомлено. Оскаржити можна до {deadline}. Відповідаємо протягом 3 днів. | Twoje nadchodzące przejazdy anulowaliśmy i powiadomiliśmy pozostałe osoby. Odwołanie możesz złożyć do {deadline}. Odpowiadamy w ciągu 3 dni.
+x_reference_sw48211 | icu | xSuspended_reference | Reference: {reference} | Номер звернення: {reference} | Numer sprawy: {reference}
+
+# ── RW_ (rewards) ─────────────────────────────────────────────────────────────
+rw_your_route_line_on_the | keep
+rw_take_rides_inside_krakw_as | keep
+rw_10_rides | icu | common_ridesCount | {rides, plural, =1{1 ride} other{{rides} rides}} | {rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} | uk pl
+rw_25_rides | merge | common_ridesCount
+rw_100_rides | merge | common_ridesCount
+rw_31_rides | merge | common_ridesCount
+rw_1_ride | merge | common_ridesCount
+rw_31_100_rides | icu | rwDetail_ridesProgress | {done} / {total} rides | {done} з {total} попуток | {done} / {total} przejazdów | uk
+rw_unlocked_12_nov_2026 | icu | rwDetail_unlockedOn | Unlocked {date} | Отримано {date} | Odblokowano {date}
+rw_6_of_riders_have_it | icu | rwDetail_shareOfRiders | {percent} of riders have it | Є в {percent} користувачів | Ma ją {percent} użytkowników
+rw_1_box_to_open | icu | rwHome_boxesToOpen | {boxes, plural, =1{1 box} other{{boxes} boxes}} to open | {boxes, plural, one{{boxes} сюрприз} few{{boxes} сюрпризи} many{{boxes} сюрпризів} other{{boxes} сюрпризу}} | {boxes, plural, one{{boxes} paczka czeka} few{{boxes} paczki czekają} many{{boxes} paczek czeka} other{{boxes} paczki czeka}} | uk pl
+rw_next_krakw_regular_iii | icu | rwHome_nextBadge | Next: {badge} | Далі: {badge} | Dalej: {badge}
+rw_18_of_25_rides_in | icu | rwHome_ridesInCity | {done} of {total} rides in {city} | {done} з {total} попуток · {city} | {done} z {total} przejazdów · {city} | uk pl
+rw_4_of_5 | icu | common_doneOfTotal | {done} of {total} | {done} з {total} | {done} z {total}
+rw_3_of_6 | merge | common_doneOfTotal
+rw_3_of_8 | merge | common_doneOfTotal
+rw_2_of_4 | merge | common_doneOfTotal
+rw_1_of_4 | merge | common_doneOfTotal
+rw_first_intercity_0_1 | icu | rwHome_badgeProgress | {badge}, {progress} | {badge}, {progress} | {badge}, {progress}
+rw_early_bird_2_5_before | merge | rwHome_badgeProgress
+rw_100_drives_31_100 | merge | rwHome_badgeProgress
+rw_10_thankyous_6_10 | merge | rwHome_badgeProgress
+rw_explorer_3_cities | merge | rwHome_badgeProgress
+rw_500_km_club_165_500 | merge | rwHome_badgeProgress
+rw_city_passport_3_10_stamps | merge | rwHome_badgeProgress
+rw_first_kilo_1_kg_co | merge | rwHome_badgeProgress
+rw_ten_kilos_84_10_kg | merge | rwHome_badgeProgress
+rw_a_trees_worth_84_25 | merge | rwHome_badgeProgress
+rw_one_car_less_1_week | merge | rwHome_badgeProgress
+rw_crew_of_5_4_5 | merge | rwHome_badgeProgress
+rw_good_company_20_rides_with | merge | rwHome_badgeProgress
+rw_2_5_before_700 | icu | rwHome_progressBefore | {done} / {total} before {time} | {done} з {total} до {time} | {done} / {total} przed {time}
+rw_100_drives | keep
+rw_10_thankyous | keep
+rw_krakw_regular_level_ii | icu | rwHome_badgeLevel | {badge}, Level {level} | {badge}, рівень {level} | {badge}, poziom {level} | uk pl
+rw_krakw_regular | icu | rwHome_krakowRegular | Kraków Regular | Свій у Кракові | Krakowski bywalec | uk pl
+rw_3_cities | icu | rwHome_citiesCount | {count, plural, =1{1 city} other{{count} cities}} | {count, plural, one{{count} місто} few{{count} міста} many{{count} міст} other{{count} міста}} | {count, plural, one{{count} miasto} few{{count} miasta} many{{count} miast} other{{count} miasta}} | uk pl
+rw_500_km_club | keep
+rw_165_500_km | icu | rwHome_kmProgress | {value} / {goal} km | {value} з {goal} км | {value} / {goal} km
+rw_3_10_stamps | icu | rwHome_stampsProgress | {done} / {total} stamps | {done} з {total} штампів | {done} / {total} pieczątek
+rw_1_kg_co | icu | rwHome_kgCo2 | {value} kg CO₂ | {value} кг CO₂ | {value} kg CO₂
+rw_84_10_kg | icu | rwHome_kgProgress | {value} / {goal} kg | {value} з {goal} кг | {value} / {goal} kg
+rw_84_25_kg | merge | rwHome_kgProgress
+rw_1_week_of_shared_commutes | icu | rwHome_weeksShared | {weeks, plural, =1{1 week} other{{weeks} weeks}} of shared commutes | {weeks, plural, one{{weeks} тиждень} few{{weeks} тижні} many{{weeks} тижнів} other{{weeks} тижня}} їздите разом | {weeks, plural, one{{weeks} tydzień} few{{weeks} tygodnie} many{{weeks} tygodni} other{{weeks} tygodnia}} wspólnych dojazdów | uk pl
+rw_crew_of_5 | keep
+rw_20_rides_with_your_people | icu | rwHome_ridesWithPeople | {rides, plural, =1{1 ride} other{{rides} rides}} with your people | {rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} зі своїми | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} z ekipą | uk pl
+rw_3_of_10_stamps_ride | icu | rwPassport_stampsHint | {done} of {total} stamps · ride in a city to stamp it | {done} з {total} штампів · поїдь містом, щоб отримати штамп | {done} z {total} pieczątek · przejedź się po mieście, by ją zdobyć
+rw_since_mar_2026 | icu | rwPassport_since | since {monthYear} | з {monthYear} | od {monthYear}
+rw_21_nov | skip | sample
+rw_collect_10_stamps | keep
+rw_your_first_ride_between_cities | icu | rwUnlocked_firstIntercity | Your first ride between cities: {from} → {to} with {driverName}. | Перша попутка між містами: {from} → {to}, водій: {driverName}. | Twój pierwszy przejazd między miastami: {from} → {to}, kierowca: {driverName}. | uk pl
+
+# ── S_ (scheduled rides) ─────────────────────────────────────────────────────
+s_arrive_by_0830 | icu | sDetail_arriveBy | Arrive by {time} | На місці до {time} | Na miejscu do {time}
+s_tomorrow_pickup_at_0810_ul | icu | sDetail_dayPickupAt | {day} · pickup at {time}, {place} | {day} · зустріч о {time}, {place} | {day} · odbiór o {time}, {place}
+s_pickup_ul_mogilska_12 | icu | sDetail_pickupDot | Pickup · {place} | Зустріч · {place} | Odbiór · {place}
+s_walk_120_m_from_home | icu | sDetail_walkFromHome | Walk {distance} from home | {distance} пішки від дому | {distance} pieszo od domu
+s_dropoff_300_m_away | icu | sDetail_dropOffAway | Drop-off {distance} away | Вийдеш за {distance} від потрібного місця | Wysiadka {distance} od celu
+s_message_marek | merge | common_messageName
+s_marek_accepted_your_request | icu | common_requestAccepted | {driverName} accepted your request | Запит прийнято · {driverName} | Prośba zaakceptowana · {driverName}
+s_reminder_30_min_before_pickup | keep
+s_pickup_code_appears_when_marek | icu | sDetail_codeAppears | Pickup code appears when {driverName} is {minutes} min away | Код зустрічі з’явиться, коли водій буде за {minutes} хв | Kod odbioru pojawi się, gdy kierowca będzie {minutes} min od ciebie | uk pl
+s_daily_routine_work_monfri_leave | icu | sDriverRides_routineLeave | Daily routine · {label} · {days} · leave {time} | Регулярна · {label} · {days} · виїзд о {time} | Codzienny plan · {label} · {days} · wyjazd {time}
+s_we_ask_you_at_0700 | icu | common_weAskAt | We ask you at {time} each morning | Питаємо щоранку о {time} | Pytamy cię codziennie o {time}
+s_monday_16_nov | skip | sample
+s_2_of_3_seats_taken | icu | common_seatsTaken | {taken} of {total} seats taken | Зайнято {taken} з {total} | Zajęte {taken} z {total} miejsc
+s_olena_wants_a_seat | icu | sDriverRides_wantsSeat | {passengerName} wants a seat | {passengerName}: хоче місце | {passengerName}: chce miejsce | uk pl
+s_pickup_ul_mogilska_12_2 | icu | sDriverRides_pickupDetour | Pickup {place} · +{detour} | Зустріч {place} · +{detour} | Odbiór {place} · +{detour}
+s_jan_and_tomasz_confirmed | icu | sDriverRides_confirmed | {names} confirmed | З тобою: {names} | Potwierdzili: {names} | uk pl
+s_thursday_19_nov | skip | sample
+s_visible_to_passengers_3_seats | icu | sDriverRides_visibleSeats | Visible to passengers · {seats, plural, =1{1 seat} other{{seats} seats}} free | Видно пасажирам · {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} | Widoczna dla pasażerów · {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} | uk pl
+s_saturday_21_nov | skip | sample
+s_1_request | icu | common_requestsCount | {count, plural, =1{1 request} other{{count} requests}} | {count, plural, one{{count} запит} few{{count} запити} many{{count} запитів} other{{count} запиту}} | {count, plural, one{{count} prośba} few{{count} prośby} many{{count} próśb} other{{count} prośby}} | uk pl
+s_krakw_tarnw_rzeszw | skip | sample
+s_intercity_3_booked_across_3 | icu | sDriverRides_intercitySummary | Intercity · {bookings} booked across {stops, plural, =1{1 stop} other{{stops} stops}} · {price} | Міжміський · {bookings, plural, one{{bookings} бронювання} few{{bookings} бронювання} many{{bookings} бронювань} other{{bookings} бронювання}} на {stops, plural, one{{stops} відрізку} few{{stops} відрізках} many{{stops} відрізках} other{{stops} відрізка}} · {price} | Międzymiastowy · {bookings, plural, one{{bookings} rezerwacja} few{{bookings} rezerwacje} many{{bookings} rezerwacji} other{{bookings} rezerwacji}} na {stops, plural, one{{stops} odcinku} few{{stops} odcinkach} many{{stops} odcinkach} other{{stops} odcinka}} · {price} | uk pl
+s_84_kg | skip | sample
+s_96_km | skip | sample
+s_thu_12_nov_1842_with | icu | sPast_dateTimeWith | {date} · {time} · with {name} | {date} · {time} · {name} | {date} · {time} · {name}
+s_fri_30_oct_1610_with | merge | sPast_dateTimeWith
+s_tue_10_nov_0755_you | icu | sPast_youDrove | {date} · {time} · you drove {count, plural, =1{1 person} other{{count} people}} | {date} · {time} · пасажирів: {count} | {date} · {time} · przewiezione osoby: {count} | uk pl
+s_81_km | skip | sample
+s_mon_9_nov_cancelled_by | icu | sPast_cancelledByDriver | {date} · cancelled by driver | {date} · водій скасував | {date} · anulowany przez kierowcę
+s_galeria_krakowska | skip | sample
+s_40_km | skip | sample
+s_sat_21_nov_kasia_answer | icu | sRidesRequested_answerBy | {date} · {name} · answer by {deadline} | {date} · {name} · відповідь до {deadline} | {date} · {name} · odpowiedź do {deadline}
+s_daily_routine_work_monfri_arrive | icu | common_routineArrive | Daily routine · {label} · {days} · arrive by {time} | Регулярна · {label} · {days} · бути до {time} | Codzienny plan · {label} · {days} · na {time}
+s_we_ask_you_at_0715 | merge | common_weAskAt
+s_tomorrow_sat_14 | icu | common_dayDate | {day} · {date} | {day} · {date} | {day} · {date}
+s_pickup_0810_arrive_by_0830 | icu | common_pickupArriveDriver | Pickup {time} · arrive by {arrival} · {driverName}, {car} | Зустріч о {time} · на місці до {arrival} · {driverName}, {car} | Odbiór {time} · na miejscu do {arrival} · {driverName}, {car}
+s_monfri_arrive_by_0830_we | icu | common_daysArriveMatching | {days} · arrive by {time} · we start matching 2 h before | {days} · на місці до {time} · шукаємо за 2 год до | {days} · na miejscu do {time} · szukamy od 2 h przed
+s_fri_20_nov_kasia_hasnt | icu | common_notAnsweredYet | {date} · {name} hasn’t answered yet. We keep looking for others. | {date} · Ще немає відповіді: {name}. Шукаємо й інших. | {date} · Brak odpowiedzi: {name}. Szukamy dalej. | uk pl
+s_krakw_rzeszw | skip | sample
+s_sat_21_nov_with_marek | icu | common_dateWithDriverPlacePrice | {date} · with {driverName} · {place} · {price} | {date} · водій: {driverName} · {place} · {price} | {date} · kierowca: {driverName} · {place} · {price}
+s_saved_every_weekday_well_find | icu | sSaved_everyWeekday | Saved. Every weekday we’ll find you a ride arriving by {time}. | Збережено. Щобудня знайдемо тобі попутку, щоб бути на місці до {time}. | Zapisane. W każdy dzień roboczy znajdziemy ci przejazd na {time}.
+s_in_krakw | icu | common_inCity | In {city} | У місті: {city} | W mieście: {city} | uk pl
+s_home_ul_skaryskiego_3 | icu | common_labelAddress | {label} · {address} | {label} · {address} | {label} · {address}
+s_arrive_at_politechnika_by | icu | sSchedule_arriveAtBy | Arrive at {place} by | Бути на {place} до | {place}: na miejscu najpóźniej o | pl
+s_well_pick_a_pickup_time | keep
+s_15_min | icu | common_plusMinusMinutes | ±{minutes} min | ±{minutes} хв | ±{minutes} min
+s_30_min | merge | common_plusMinusMinutes
+s_thu_12_nov_18331842 | icu | sTripDetail_dateTimeRange | {date} · {start}–{end} | {date} · {start}–{end} | {date} · {start}–{end}
+s_passenger_with_marek | icu | sTripDetail_passengerWith | Passenger · with {driverName} | Пасажир · водій: {driverName} | Pasażer · kierowca: {driverName}
+s_ul_mogilska_12 | skip | sample
+s_9_min | skip | sample
+s_chat_stays_open_24_h | keep
+
+# ── N_ (notifications). Date headers and "x min ago" come from the OS. ───────
+n_sameway_request_24_s_left | icu | nD1_requestSecondsLeft | sameway · Request · {seconds} s left | sameway · Запит · ще {seconds} с | sameway · Prośba · zostało {seconds} s
+n_pickup_ul_mogilska_12_2 | icu | nD1_requestBody | Pickup {place} · +{detour} detour · drop-off on your route. | Зустріч {place} · +{detour} гаку · вийде по дорозі. | Odbiór {place} · +{detour} objazdu · wysiadka na twojej trasie.
+n_to_politechnika_3_seats_free | icu | nD1_toPlaceSeatsFree | To {place} · {seats, plural, =1{1 seat} other{{seats} seats}} free | До {place} · {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} | Do: {place} · {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} | uk pl
+n_18_min | skip | sample
+n_drivers_are_usually_in_a | skip | board-note
+n_400_m | skip | sample
+n_ul_mogilska | skip | sample
+n_1833_3_min_11_km | merge | psNotifDriver_timeDurationDistance
+n_olenas_pickup_in_400_m | icu | nD2_pickupInSide | {passengerName}’s pickup in {distance}, on the {side} | {passengerName} через {distance}, {side} | Odbiór: {passengerName}, za {distance} {side}
+n_ul_mogilska_12_shes_waiting | icu | nD2_placeWaiting | {place} · waiting at {spot} | {place} · чекає: {spot} | {place} · czeka: {spot} | uk pl
+n_200_m | skip | sample
+n_turn_back_via_ul_lubicz | icu | nD3_turnBackVia | Turn back via {street} | Розворот через {street} | Zawróć przez {street}
+n_1836_2_min | icu | nD3_timePlus | {time} · +{duration} | {time} · +{duration} | {time} · +{duration}
+n_did_you_pass_olena | icu | nD3_didYouPass | Did you pass {passengerName}? | Здається, проїхали: {passengerName} | Odbiór pominięty? · {passengerName} | uk
+n_you_drove_300_m_past | icu | nD3_drovePast | You drove {distance} past their pickup. Turn back (+{duration}) or suggest a new spot. | Ти вже на {distance} далі від місця зустрічі. Розвернись (+{duration}) або запропонуй інше місце. | Auto jest {distance} za miejscem odbioru. Zawróć (+{duration}) albo zaproponuj nowe miejsce.
+n_olena_is_at_the_pickup | icu | nD3_passengerAtPickup | {passengerName} is at the pickup | {passengerName}: уже на місці | {passengerName}: jest w miejscu odbioru | uk pl
+n_waiting_2_min_green_jacket | icu | nD3_waitingNote | Waiting {duration} · {note} | Чекає {duration} · {note} | Czeka {duration} · {note}
+n_3_min_ago | skip | os-string
+n_drop_off_olena_in_500 | icu | nD4_dropOffIn | Drop off {passengerName} in {distance} | Висадити: {passengerName}, через {distance} | Wysiadka: {passengerName}, za {distance} | uk
+n_al_jana_pawa_ii_37 | icu | nD4_placeOnRouteSafe | {place}, on your route. Stop only where it’s safe. | {place}, тобі по дорозі. Зупиняйся лише там, де безпечно. | {place}, na twojej trasie. Zatrzymaj się tylko tam, gdzie bezpiecznie.
+n_still_driving_with_olena | icu | nD4_stillDriving | Still driving with {passengerName}? | Ще їдете? · {passengerName} | Przejazd wciąż trwa? · {passengerName} | uk
+n_youve_been_parked_at_politechnika | icu | nD4_parkedEndTrip | You’ve been parked at {place} for {minutes} min. End the trip so they get their summary. | Машина вже {minutes} хв стоїть на місці. Натисни «Доїхали», щоб пасажир отримав підсумок. | Auto stoi przy celu od {minutes} min. Zakończ przejazd, żeby pasażer dostał podsumowanie.
+n_dropoff_reminders_mirror_pickup_ones | skip | board-note
+n_sunday_15_november | skip | os-string
+n_tomorrow_0750_2_passengers | icu | nD5_dayTimePassengers | {day} {time} · {count, plural, =1{1 passenger} other{{count} passengers}} | {day} о {time} · пасажирів: {count} | {day} {time} · pasażerowie: {count} | uk pl
+n_olena_ul_mogilska_12_and | icu | nD5_passengersLeaveOnTime | {passengers}. Leave on time, they’re counting on you. | {passengers}. Не запізнюйся, на тебе розраховують. | {passengers}. Wyjedź na czas, liczą na ciebie.
+n_new_booking_anna | icu | nD5_newBooking | New booking: {name} | Нова бронь: {name} | Nowa rezerwacja: {name}
+n_dbica_rzeszw_on_sat_21 | icu | nD5_requestAnswerBy | {from} → {to} on {date} · {seats, plural, =1{1 seat} other{{seats} seats}} · {price}. Answer by {deadline}. | {from} → {to}, {date} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price}. Відповісти до {deadline}. | {from} → {to}, {date} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price}. Odpowiedz do {deadline}. | uk pl
+n_5_h_ago | skip | os-string
+n_krakw_rzeszw_sat_0900_olena | icu | nD5_bookedBy | {from} → {to} {when} · {names} booked. | {from} → {to}, {when} · бронювання: {names}. | {from} → {to}, {when} · rezerwacje: {names}.
+n_jan_cancelled_his_seat | icu | nD5_seatCancelled | {name} cancelled their seat | Більше не їде: {name} | Rezerwacja anulowana · {name} | uk
+n_mon_16_nov_your_route | icu | nD5_routeStillOn | {date} · your route is still on with {name}. | {date} · маршрут у силі, з тобою: {name}. | {date} · trasa nadal aktualna, jedzie: {name}. | uk pl
+n_thursday_19_november | skip | os-string
+n_annas_request_expires_in_30 | icu | nD6_requestExpiresIn | {name}’s request expires in {minutes} min | Запит ({name}) спливає за {minutes} хв | Prośba ({name}) wygaśnie za {minutes} min
+n_olena_booked_a_seat | icu | nD6_bookedSeat | {name} booked a seat | Місце заброньовано: {name} | Miejsce zarezerwowane: {name} | uk pl
+n_krakw_rzeszw_sat_0900_instant | icu | nD6_instantBooking | {from} → {to} {when} · instant booking · {price}. | {from} → {to}, {when} · миттєве бронювання · {price}. | {from} → {to}, {when} · natychmiastowa rezerwacja · {price}.
+n_instant_bookings_are_a_plain | skip | board-note
+n_thursday_12_november | skip | os-string
+n_to_politechnika_searching_312 | icu | nP1_toPlaceSearching | To {place} · searching {elapsed} | До {place} · шукаємо {elapsed} | Do: {place} · szukamy {elapsed}
+n_usually_under_5_min_you | keep
+n_marek_can_pick_you_up | icu | nP1_offers | {driverName} can pick you up in {eta}, {walk} walk. {otherName} in {otherEta}. | {driverName}: забере тебе за {eta}, іти {walk}. {otherName}: за {otherEta}. | {driverName}: może cię odebrać za {eta}, {walk} pieszo. {otherName}: za {otherEta}. | uk pl
+n_request_marek | icu | nP1_requestDriver | Request {driverName} | Їду з: {driverName} | Poproś: {driverName} | uk
+n_marek_is_coming_2_min | icu | nP2_driverComing | {driverName} is coming · {duration} | {driverName}: їде · {duration} | {driverName}: jedzie · {duration} | uk pl
+n_silver_toyota_corolla_kr_4x21c | merge | common_carPlate
+n_pickup_ul_mogilska_12_your | icu | nP2_pickupCodeInApp | Pickup: {place} · your code is in the app | Зустріч: {place} · код у застосунку | Odbiór: {place} · kod jest w aplikacji
+n_1_min_ago | skip | os-string
+n_4_min_ago | skip | os-string
+n_pickup_in_4_min_at | icu | nP2_pickupInAtWalk | Pickup in {eta} at {place}. Walk {distance}. | Зустріч за {eta} на {place}. Іти {distance}. | Odbiór za {eta}: {place}. {distance} pieszo.
+n_marek_is_here_and_waiting | icu | nP3_driverHere | {driverName} is here and waiting | {driverName}: уже на місці | {driverName}: jest na miejscu i czeka | uk pl
+n_silver_corolla_kr_4x21c_at | icu | nP3_carAtPlaceWaits | {car} {plate} at {place}. They’ll wait up to {minutes} min. | {car} {plate}, {place}. Чекатиме до {minutes} хв. | {car} {plate}, {place}. Poczeka do {minutes} min.
+n_waiting_130_of_500 | icu | nP3_waitingOf | Waiting {elapsed} of {limit} | Чекає {elapsed} з {limit} | Czeka {elapsed} z {limit}
+n_in_130 | icu | nP3_inCountdown | in {countdown} | через {countdown} | za {countdown}
+n_marek_has_waited_3_min | icu | nP3_driverWaited | {driverName} has waited {minutes} min. Let them know or cancel so they can go. | Водій чекає вже {minutes} хв. Дай знати або скасуй, щоб людина не стояла дарма. | Kierowca czeka już {minutes} min. Daj znać albo anuluj, żeby mógł ruszyć.
+n_2_more_min | icu | nP3_moreMinutes | {minutes} more min | Ще {minutes} хв | Jeszcze {minutes} min
+n_timesensitive_breaks_through_focusdo_not | skip | board-note
+n_on_the_way_arrive_1842 | icu | nP4_onTheWayArrive | On the way · arrive {time} | Їдемо · будемо о {time} | W drodze · przyjazd {time}
+n_with_marek_26_km_left | icu | nP4_withDriverLeft | With {driverName} · {distance} left | Водій: {driverName} · ще {distance} | Kierowca: {driverName} · zostało {distance}
+n_dropoff_300_m_from_politechnika | icu | nP4_dropOffFrom | Drop-off {distance} from {place} | Вийдеш за {distance} від {place} | Wysiadka {distance} od celu: {place}
+n_26_km_shared_04_kg | icu | nP4_sharedSaved | {distance} shared, {co2} CO₂ saved. Was everything OK? | {distance} разом, мінус {co2} CO₂. Усе було добре? | {distance} wspólnie, {co2} CO₂ mniej. Wszystko OK?
+n_new_reward_krakw_regular_ii | icu | nP4_newReward | New reward: {badge} | Нова нагорода: {badge} | Nowa nagroda: {badge}
+n_25_rides_in_krakw_a | icu | nP4_ridesInCityBox | {rides, plural, =1{1 ride} other{{rides} rides}} in {city}. A mystery box is waiting. | {rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} · {city}. На тебе чекає сюрприз. | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {city}. Czeka paczka niespodzianka. | uk pl
+n_kasia_cant_take_you | icu | nP5_driverCantTakeYou | {driverName} can’t take you | {driverName}: не зможе тебе забрати | {driverName}: nie może cię zabrać | uk pl
+n_her_route_changed_youre_still | icu | nP5_routeChanged | Their route changed. You’re still matched with {count, plural, =1{1 other driver} other{{count} other drivers}}. | У водія змінився маршрут. {count, plural, one{Але є ще {count} водій} few{Але є ще {count} водії} many{Але є ще {count} водіїв} other{Але є ще {count} водія}}, яким з тобою по дорозі. | Trasa kierowcy się zmieniła. {count, plural, one{Nadal masz dopasowanie z {count} innym kierowcą} few{Nadal masz dopasowanie z {count} innymi kierowcami} many{Nadal masz dopasowanie z {count} innymi kierowcami} other{Nadal masz dopasowanie z {count} innego kierowcy}}. | uk pl
+n_2_min_ago | skip | os-string
+n_marek_cancelled_were_searching_again | icu | nP5_cancelledSearchingAgain | {driverName} cancelled, we’re searching again | Попутку скасовано, вже шукаємо іншого водія | Przejazd anulowany, szukamy ponownie
+n_sorry_you_keep_your_place | keep
+n_10_min_ago | skip | os-string
+n_searching_for_30_min_walk | icu | nP5_searchingLong | Searching for {minutes} min. Walk up to {distance} or plan for later? | Шукаємо вже {minutes} хв. Пройдешся до {distance} чи плануємо на потім? | Szukamy od {minutes} min. Przejdziesz do {distance} czy planujemy na później?
+n_walk_1_km | icu | nP5_walkDistance | Walk {distance} | Пройду {distance} | Pieszo {distance}
+n_friday_20_november | skip | os-string
+n_tomorrow_0900_krakw_rzeszw | icu | nP6_dayTimeRoute | {day} {time} · {from} → {to} | {day} о {time} · {from} → {to} | {day} {time} · {from} → {to}
+n_meet_marek_at_rondo_mogilskie | icu | nP6_meetAt | Meet {driverName} at {place}. Bring a medium bag max. | Зустріч: {place}. Водій: {driverName}. Сумка – максимум середня. | Spotkanie: {place}. Kierowca: {driverName}. Maks. średni bagaż.
+n_1_h_ago | skip | os-string
+n_marek_planned_a_route | icu | nP6_plannedRoute | {name} planned a route | {name}: кудись їде | Nowa trasa: {name} | uk
+n_krakw_zakopane_sun_22_nov | icu | nP6_peopleRoute | {from} → {to}, {when} · {seats, plural, =1{1 seat} other{{seats} seats}}. You’re in their people, so you see it first. | {from} → {to}, {when} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Ти серед своїх, тому бачиш це першим. | {from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to pierwszy. | uk pl
+n_mute_marek | icu | nP6_mute | Mute {name} | Не показувати: {name} | Wycisz: {name} | uk
+n_kasia_accepted_fri_27_nov | icu | nP6_acceptedFor | {driverName} accepted: {when} to {place}. | {driverName}: бере тебе. {when}, {place}. | Prośba zaakceptowana · {driverName}: {when}, {place}. | uk
+n_your_ride_is_in_30 | icu | nP6_rideIn | Your ride is in {minutes} min | За {minutes} хв виїзд | Twój przejazd za {minutes} min
+n_tomorrows_matching_worked_marek_0810 | icu | nP6_matchingWorked | Tomorrow’s matching worked: {driverName}, {time}, {place}. | На завтра все склалось · {driverName}, {time}, {place}. | Jutrzejsze dopasowanie się udało · {driverName}, {time}, {place}. | uk pl
+n_planned_rides_confirmation_eveningbefore_reminder | skip | board-note
+n_saturday_21_november | skip | os-string
+n_today_0900_krakw_rzeszw | merge | nP6_dayTimeRoute
+n_be_at_rondo_mogilskie_bus | icu | nP7_beAt | Be at {place} at {time}. {car} {plate}. Your code is in the app. | Будь тут: {place}, о {time}. {car} {plate}. Код у застосунку. | Bądź tutaj: {place}, o {time}. {car} {plate}. Kod jest w aplikacji. | uk pl
+n_kasia_accepted | icu | nP7_driverAccepted | {driverName} accepted | Прийнято · {driverName} | Zaakceptowano · {driverName} | uk pl
+n_sat_21_nov_1330_krakw | icu | nP7_whenRouteCash | {when} · {from} → {to} · {price} in cash. | {when} · {from} → {to} · {price} готівкою. | {when} · {from} → {to} · {price} gotówką.
+n_morning_of_the_ride_one | skip | board-note
+n_his_plans_changed_ewa_has | icu | nP8_plansChanged | Their plans changed. {name} has {seats, plural, =1{1 seat} other{{seats} seats}} at {time}, {price}. | У водія змінилися плани. {name}: {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} о {time}, {price}. | Kierowcy zmieniły się plany. {name}: {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} o {time}, {price}. | uk pl
+n_nothing_was_booked_2_other | icu | nP8_nothingBooked | Nothing was booked. {count, plural, =1{1 other ride} other{{count} other rides}} on {date}. | Нічого не заброньовано. {count, plural, one{{count} інший варіант} few{{count} інші варіанти} many{{count} інших варіантів} other{{count} іншого варіанта}} на {date}. | Nic nie zostało zarezerwowane. {count, plural, one{{count} inny przejazd} few{{count} inne przejazdy} many{{count} innych przejazdów} other{{count} innego przejazdu}}: {date}. | uk pl
+
+# ── I_ (between cities). City names come from cities.name_uk/name_pl; UK/PL
+#    use "Label: {city}" so no case forms are needed. ─────────────────────────
+i_krakw_bochnia | icu | common_route | {from} → {to} | {from} → {to} | {from} → {to}
+i_bochnia_tarnw | merge | common_route
+i_bochnia_dbica | merge | common_route
+i_bochnia_rzeszw | merge | common_route
+i_tarnw_dbica | merge | common_route
+i_tarnw_rzeszw | merge | common_route
+i_dbica_rzeszw | merge | common_route
+i_krakw_tarnw | merge | common_route
+i_krakw_dbica | merge | common_route
+i_sat_21_nov_krakw_rzeszw | icu | common_dateRoute | {date} · {from} → {to} | {date} · {from} → {to} | {date} · {from} → {to}
+i_krakw_rzeszw_sun_15_nov | icu | common_routeDate | {from} → {to} · {date} | {from} → {to} · {date} | {from} → {to} · {date}
+i_krakw_0900 | icu | common_cityTime | {city} · {time} | {city} · {time} | {city} · {time}
+i_rzeszw_1120 | merge | common_cityTime
+i_1_seat_16_z | icu | iBooking_seatsTimesPrice | {seats, plural, =1{1 seat} other{{seats} seats}} × {price} | {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} × {price} | {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} × {price} | uk pl
+i_you_pay_marek | icu | iBooking_youPay | You pay {driverName} | Платиш водієві | Płacisz kierowcy
+i_message_to_marek_optional | icu | iBooking_messageOptional | Message to {driverName} (optional) | Повідомлення водієві (необовʼязково) | Wiadomość do kierowcy (opcjonalnie)
+i_book_seat_16_z | icu | iBooking_bookSeatPrice | Book seat · {price} | Забронювати · {price} | Rezerwuj · {price}
+i_marek_is_told_right_away | icu | iCancelBooking_driverTold | {driverName} is told right away and your seat goes back on sale. You don’t owe anything. | Водій ({driverName}) дізнається одразу, а місце знову стане доступним. Платити нічого не треба. | Kierowca ({driverName}) dowie się od razu, a miejsce wróci do sprzedaży. Nic nie musisz płacić.
+i_popular_from_krakw | icu | iCityPicker_popularFrom | Popular from {city} | Часто їдуть звідси: {city} | Popularne trasy · {city} | uk pl
+i_41_rides_this_week | icu | iCityPicker_ridesThisWeek | {rides, plural, =1{1 ride} other{{rides} rides}} this week | {rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} цього тижня | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} w tym tygodniu | uk pl
+i_63_rides_this_week | merge | iCityPicker_ridesThisWeek
+i_28_rides_this_week | merge | iCityPicker_ridesThisWeek
+i_19_rides_this_week | merge | iCityPicker_ridesThisWeek
+i_295_km | skip | sample
+i_80_km | skip | sample
+i_85_km | skip | sample
+i_110_km | skip | sample
+i_tarnw | skip | sample
+i_zakopane | skip | sample
+i_youve_arrived_in_rzeszw | icu | iDone_arrivedIn | You’ve arrived in {city} | Ти на місці: {city} | Jesteś na miejscu: {city} | uk pl
+i_galeria_rzeszw_1122 | merge | common_placeTime
+i_96_kg | skip | sample
+i_did_you_pay_marek_16 | icu | iDone_didYouPay | Did you pay {driverName} {price}? | Оплата водієві ({driverName}): {price}. Усе сплачено? | Płatność dla kierowcy ({driverName}): {price}. Wszystko opłacone?
+i_thanks_you_paid_marek_16 | icu | iDoneRated_paid | Thanks! You paid {driverName} {price}. | Дякуємо! Оплата водієві ({driverName}): {price}, сплачено. | Dzięki! Płatność dla kierowcy ({driverName}): {price}, opłacone.
+i_olena_and_jan_are_told | icu | iDriverCancel_passengersTold | {names} are told right away and see other rides to {city}. | Пасажири ({names}) дізнаються одразу й побачать інші варіанти. Напрямок: {city}. | Pasażerowie ({names}) dowiedzą się od razu i zobaczą inne przejazdy. Kierunek: {city}. | uk pl
+i_marek_cancelled_sat_0900 | icu | iDriverCancelled_cancelled | {driverName} cancelled {when} | Скасовано рейс {when} · {driverName} | Przejazd {when} odwołany · {driverName} | uk pl
+i_other_rides_on_sat_21 | icu | iDriverCancelled_otherRidesOn | Other rides on {date} | Інші варіанти на {date} | Inne przejazdy: {date} | pl
+i_tell_me_when_someone_publishes | icu | iDriverCancelled_tellMe | Tell me when someone publishes {from} → {to} on {day}. | Повідомити, коли хтось опублікує {from} → {to} ({day}). | Daj znać, gdy ktoś opublikuje {from} → {to} ({day}). | uk pl
+i_step_3_of_3 | merge | bReport_stepOf
+i_step_2_of_3 | merge | bReport_stepOf
+i_step_1_of_3 | merge | bReport_stepOf
+i_departure_from_krakw | icu | iDriverDetails_departureFrom | Departure from {city} | Виїзд: {city} | Wyjazd: {city} | uk pl
+i_verified_passengers_book_right_away | keep
+i_olena_jan_and_kasia_get | icu | iDriverDetails_notifiedFirst | {names} get a notification first | Першими дізнаються: {names} | Pierwsi dostaną powiadomienie: {names} | uk pl
+i_sat_21_nov_0900_16 | icu | iDriverManage_dateTimePerSeat | {date} · {time} · {price} per seat | {date} · {time} · {price} за місце | {date} · {time} · {price} za miejsce
+i_1_of_3_seats_taken | merge | common_seatsTaken
+i_anna_wants_a_seat | merge | sDriverRides_wantsSeat
+i_dbica_rzeszw_1_seat_5 | icu | iDriverManage_requestLine | {from} → {to} · {seats, plural, =1{1 seat} other{{seats} seats}} · {price} · email not verified | {from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price} · email не підтверджено | {from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price} · e-mail niezweryfikowany | uk pl
+i_answer_by_thu_1000 | icu | common_answerBy | Answer by {deadline} | Відповісти до {deadline} | Odpowiedz do {deadline}
+i_instant_booking_is_on_but | icu | iDriverManage_needsOk | Instant booking is on, but {name}’s email isn’t verified yet, so they need your OK. | Миттєве бронювання ввімкнено, але email пасажира ({name}) ще не підтверджено, тож потрібна твоя згода. | Natychmiastowa rezerwacja jest włączona, ale e-mail pasażera ({name}) nie jest jeszcze zweryfikowany, więc potrzebna jest twoja zgoda. | uk pl
+i_krakw_rzeszw_16_z_your | icu | iDriverManage_routePricePeople | {from} → {to} · {price} · your people | {from} → {to} · {price} · твої люди | {from} → {to} · {price} · twoja ekipa
+i_jan | skip | sample
+i_krakw_tarnw_8_z | icu | common_routePrice | {from} → {to} · {price} | {from} → {to} · {price} | {from} → {to} · {price}
+i_24_of_65_z | icu | iDriverManage_collectedOf | {collected} of {total} | {collected} з {total} | {collected} z {total}
+i_krakw_rzeszw_165_km_stops | icu | iDriverPrice_routeStops | {from} → {to} · {distance} · stops in {stops} | {from} → {to} · {distance} · зупинки: {stops} | {from} → {to} · {distance} · przystanki: {stops} | uk pl
+i_krakw_rzeszw_165_km_stops_2 | merge | iDriverPrice_routeStops
+i_krakw_rzeszw_165_km_stop | icu | iPriceStops_routeOneStop | {from} → {to} · {distance} · stop in {stop} | {from} → {to} · {distance} · зупинка: {stop} | {from} → {to} · {distance} · przystanek: {stop}
+i_krakw_rzeszw_165_km_no | icu | iPriceStops_routeNoStops | {from} → {to} · {distance} · no stops | {from} → {to} · {distance} · без зупинок | {from} → {to} · {distance} · bez przystanków
+i_1_z_less | icu | iDriverPrice_less | {price} less | На {price} менше | {price} mniej
+i_1_z_more | icu | iDriverPrice_more | {price} more | На {price} більше | {price} więcej
+i_65_z_of_fuel_4 | icu | iDriverPrice_fuelSplit | {fuel} of fuel ÷ {people} people · {fuelType} {fuelPrice}/l, {date} | {fuel} за пальне ÷ {people, plural, one{{people} людина} few{{people} людини} many{{people} людей} other{{people} людини}} · {fuelType} {fuelPrice}/л, {date} | {fuel} za paliwo ÷ {people, plural, one{{people} osoba} few{{people} osoby} many{{people} osób} other{{people} osoby}} · {fuelType} {fuelPrice}/l, {date} | uk pl
+i_other_parts_are_priced_the | icu | iDriverPrice_otherParts | Other parts are priced the same way: {list}. | Інші відрізки рахуємо так само: {list}. | Inne odcinki liczymy tak samo: {list}.
+i_other_parts_are_priced_the_2 | merge | iDriverPrice_otherParts
+i_via_a4 | icu | iDriverRoute_via | via {road} | трасою {road} | przez {road}
+i_rynek_6_min | icu | common_placePlusDuration | {place} · +{duration} | {place} · +{duration} | {place} · +{duration}
+i_dworzec_pkp_4_min | merge | common_placePlusDuration
+i_orlen_ul_rzeszowska_3_min | merge | common_placePlusDuration
+i_stop_in_bochnia | icu | iDriverRoute_stopIn | Stop in {city} | Зупинка: {city} | Przystanek: {city} | uk pl
+i_stop_in_tarnw | merge | iDriverRoute_stopIn
+i_stop_in_dbica | merge | iDriverRoute_stopIn
+i_passengers_can_book_any_part | keep
+i_instant_booking_marek_is_told | icu | iMyBooking_instantDriverTold | Instant booking · {driverName} is told | Миттєве бронювання · водій ({driverName}) уже знає | Natychmiastowa rezerwacja · kierowca ({driverName}) już wie
+i_be_there_at_0855_leaves | icu | iMyBooking_beThere | Be there at {time} · leaves {departure} | Будь о {time} · відправлення о {departure} | Bądź o {time} · odjazd {departure}
+i_arrives_about_1120 | icu | iMyBooking_arrivesAbout | Arrives about {time} | Прибуття близько {time} | Przyjazd około {time}
+i_say_it_when_you_meet | icu | iMyBooking_sayCode | Say it when you meet. {driverName} types it in. | Скажи його під час зустрічі. Водій ({driverName}) його введе. | Powiedz go przy spotkaniu. Kierowca ({driverName}) go wpisze.
+i_16_z_in_cash | icu | iMyBooking_priceInCash | {price} in cash | {price} готівкою | {price} gotówką
+i_prototype_saturday_0904_at_the | skip | board-note
+i_prototype_arrive_in_rzeszw_1120 | skip | board-note
+i_olena_isnt_here_yet | icu | iNoShowDriver_notHereYet | {passengerName} isn’t here yet | Ще не на місці: {passengerName} | Jeszcze nie ma: {passengerName} | uk pl
+i_rondo_mogilskie_0904 | merge | common_placeTime
+i_wait_until_0910_after_that | icu | iNoShowDriver_waitUntil | Wait until {time}. After that you can leave: their seat is released and they’re told. | Зачекай до {time}. Потім можна їхати: місце звільниться, а пасажир отримає сповіщення. | Poczekaj do {time}. Potem możesz odjechać: miejsce się zwolni, a pasażer dostanie powiadomienie. | uk pl
+i_leave_without_olena | icu | iNoShowDriver_leaveWithout | Leave without {passengerName} | Їхати без пасажира ({passengerName}) | Odjedź bez pasażera ({passengerName}) | uk pl
+i_available_at_0910_in_6 | icu | common_availableAtIn | Available at {time} · in {minutes} min | Доступно о {time} · за {minutes} хв | Dostępne o {time} · za {minutes} min
+i_available_at_0915_in_11 | merge | common_availableAtIn
+i_marek_isnt_here_yet | icu | iNoShowPassenger_driverNotHere | {driverName} isn’t here yet | Ще не на місці: {driverName} | Jeszcze nie ma: {driverName} | uk pl
+i_rondo_mogilskie_0904_he_shares | icu | iNoShowPassenger_placeTimeSharing | {place} · {time} · sharing their location | {place} · {time} · ділиться геолокацією | {place} · {time} · udostępnia lokalizację
+i_marek_3_min_away | merge | common_nameEtaAway
+i_koda_octavia_65_l100_km | icu | iPriceHow_carConsumption | {car} · {consumption} l/100 km | {car} · {consumption} л/100 км | {car} · {consumption} l/100 km
+i_pb95_610_zl_18_nov | icu | iPriceHow_fuelPriceDate | {fuelType} {fuelPrice}/l · {date} | {fuelType} {fuelPrice}/л · {date} | {fuelType} {fuelPrice}/l · {date}
+i_you_3_seats | icu | iPriceHow_youPlusSeats | you + {seats, plural, =1{1 seat} other{{seats} seats}} | ти + {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} | ty + {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} | uk pl
+i_each_passenger_pays_the_same | icu | iPriceHow_eachPaysSame | Each passenger pays the same, even if only one books. The maximum is {max}, so a full car never collects more than the fuel costs. Parts of the route are priced by distance. | Кожен пасажир платить однаково, навіть якщо забронює лише один. Максимум {max}, тож повне авто ніколи не збере більше, ніж коштує пальне. Відрізки маршруту рахуємо за відстанню. | Każdy pasażer płaci tyle samo, nawet gdy zarezerwuje tylko jeden. Maksimum to {max}, więc pełne auto nigdy nie zbierze więcej, niż kosztuje paliwo. Odcinki trasy liczymy według odległości.
+i_1_stop | icu | iPriceStops_stopsCount | {stops, plural, =1{1 stop} other{{stops} stops}} | {stops, plural, one{{stops} зупинка} few{{stops} зупинки} many{{stops} зупинок} other{{stops} зупинки}} | {stops, plural, one{{stops} przystanek} few{{stops} przystanki} many{{stops} przystanków} other{{stops} przystanku}} | uk pl
+i_3_stops | merge | iPriceStops_stopsCount
+i_see_all_10_prices | icu | iPriceStops_seeAllPrices | See all {count} prices | Усі ціни ({count}) | Zobacz wszystkie ceny ({count})
+i_kasia_didnt_answer_in_time | icu | iRequestExpired_noAnswer | {driverName} didn’t answer in time | Немає відповіді вчасно: {driverName} | Brak odpowiedzi na czas: {driverName} | uk pl
+i_ewa | skip | sample
+i_sat_21_nov_1_seat | icu | common_dateSeats | {date} · {seats, plural, =1{1 seat} other{{seats} seats}} | {date} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} | {date} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} | uk pl
+i_sun_15_nov_1_seat | merge | common_dateSeats
+i_1120_2_h_20 | merge | iRequestExpired_arrivalDuration
+i_1540_2_h_10 | merge | iRequestExpired_arrivalDuration
+i_1925_2_h_25 | merge | iRequestExpired_arrivalDuration
+i_2_seats_left | icu | iResults_seatsLeft | {seats, plural, =1{1 seat left} other{{seats} seats left}} | {seats, plural, one{Останнє місце} few{Ще {seats} місця} many{Ще {seats} місць} other{Ще {seats} місця}} | {seats, plural, one{Zostało {seats} miejsce} few{Zostały {seats} miejsca} many{Zostało {seats} miejsc} other{Zostało {seats} miejsca}} | uk pl
+i_1_seat_left | merge | iResults_seatsLeft
+i_bochnia | skip | sample
+i_dbica | skip | sample
+i_part_of_katowice_przemyl_you | icu | iResults_partOfRoute | Part of {routeFrom} → {routeTo}. You ride {from} → {to}. | Частина маршруту {routeFrom} → {routeTo}. Тобі по дорозі: {from} → {to}. | Część trasy {routeFrom} → {routeTo}. Jedziesz {from} → {to}. | uk
+i_kasia | skip | sample
+i_usually_answers_in_40_min | icu | iResults_usuallyAnswersIn | Usually answers in {duration} | Зазвичай відповідає за {duration} | Zwykle odpowiada w {duration}
+i_tomasz | skip | sample
+i_get_notified_when_someone_publishes | icu | iResults_getNotified | Get notified when someone publishes {from} → {to} on {day}. | Скажемо, щойно хтось поїде {from} → {to} ({day}). | Dostaniesz powiadomienie, gdy ktoś opublikuje {from} → {to} ({day}). | uk pl
+i_no_rides_on_sun_15 | icu | iResultsEmpty_noRidesOn | No rides on {date} yet | Поки нічого немає: {date} | Jeszcze nie ma przejazdów: {date} | uk pl
+i_sat_14_3_rides | icu | iResultsEmpty_dayRides | {date} · {rides, plural, =1{1 ride} other{{rides} rides}} | {date} · {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} | {date} · {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} | uk pl
+i_mon_16_1_ride | merge | iResultsEmpty_dayRides
+i_sat_21_nov | skip | sample
+i_krakw_rzeszw_2_h_20 | icu | iRideDetail_routeDuration | {from} → {to} · {duration} | {from} → {to} · {duration} | {from} → {to} · {duration}
+i_rondo_mogilskie_bus_bay | skip | sample
+i_orlen_ul_rzeszowska | skip | sample
+i_galeria_rzeszw_parking_p1 | skip | sample
+i_128_rides_14_with_you | icu | iRideDetail_driverHistory | {rides, plural, =1{1 ride} other{{rides} rides}} · {together} with you · since {year} | {rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} · {together} разом із тобою · з {year} | {rides, plural, one{{rides} przejazd} few{{rides} przejazdy} many{{rides} przejazdów} other{{rides} przejazdu}} · {together} z tobą · od {year} | uk pl
+i_max_2_in_back | keep
+i_from_krakw | icu | iSearch_from | From: {city} | Звідки: {city} | Skąd: {city}
+i_krakw | skip | sample
+i_rondo_mogilskie | skip | sample
+i_to_rzeszw | icu | iSearch_to | To: {city} | Куди: {city} | Dokąd: {city}
+i_galeria_rzeszw | skip | sample
+i_withdraw_your_request_to_kasia | icu | iSecondRequest_withdrawQ | Withdraw your request to {driverName}? | Відкликати запит? Водій: {driverName} | Wycofać prośbę? Kierowca: {driverName}
+i_you_can_wait_for_one | icu | iSecondRequest_body | You can wait for one driver at a time on the same trip. If you book {newDriver}, your request to {oldDriver} is withdrawn and they’re told. | На тому самому маршруті можна чекати лише на одного водія. Якщо забронюєш варіант (водій: {newDriver}), запит (водій: {oldDriver}) буде відкликано, і водій отримає сповіщення. | Na tej samej trasie możesz czekać na jednego kierowcę naraz. Jeśli zarezerwujesz przejazd (kierowca: {newDriver}), prośba (kierowca: {oldDriver}) zostanie wycofana, a kierowca dostanie powiadomienie. | uk pl
+i_withdraw_and_book_marek | icu | iSecondRequest_withdrawAndBook | Withdraw and book {driverName} | Відкликати й забронювати: {driverName} | Wycofaj i zarezerwuj: {driverName}
+i_keep_waiting_for_kasia | icu | iSecondRequest_keepWaiting | Keep waiting for {driverName} | Чекати далі: {driverName} | Czekaj dalej: {driverName}
+i_waiting_for_kasia | icu | iWaiting_waitingFor | Waiting for {driverName} | Чекаємо відповіді: {driverName} | Czekamy na odpowiedź: {driverName}
+i_kasia_has_until_thu_0930 | icu | iWaiting_hasUntil | {driverName} has until {deadline} to answer (nights don’t count). We’ll notify you, and you’ll find it in Rides. | Водій: {driverName}. Має час на відповідь до {deadline} (ночі не враховуються). Ми повідомимо тебе, а запит буде в розділі «Попутки». | Kierowca: {driverName}. Ma czas na odpowiedź do {deadline} (noce się nie liczą). Powiadomimy cię, a prośbę znajdziesz w Przejazdach.
+i_kasia_1330 | merge | common_nameDuration
+i_krakw_rzeszw_1_seat_15 | icu | iWaiting_routeSeatsPrice | {from} → {to} · {seats, plural, =1{1 seat} other{{seats} seats}} · {price} | {from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price} | {from} → {to} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}} · {price} | uk pl
+i_prototype_kasia_accepts | skip | board-note
+i_prototype_no_answer_by_thu | skip | board-note
+
+# ── PR_Language: en/uk/pl only (decision 16); endonyms are not translated ────
+pr_currently_english | icu | prLanguage_currently | Currently {language} | Зараз: {language} | Obecnie: {language}
+pr_deutsch | skip | dropped-language-d16
+pr_german | skip | dropped-language-d16
+pr_espaol | skip | dropped-language-d16
+pr_spanish | skip | dropped-language-d16
+pr_franais | skip | dropped-language-d16
+pr_french | skip | dropped-language-d16
+pr_italiano | skip | dropped-language-d16
+pr_italian | skip | dropped-language-d16
+pr_polski | skip | endonym
+pr_english | skip | endonym
+pr_use_device_language | icu | prLanguage_useDevice | Use device language | Системна | Język urządzenia
+pr_names_are_shown_in_their | icu | prLanguage_footnote | Names are shown in their own language so anyone can find theirs. | Кожна мова названа по-своєму, щоб легко знайти рідну. | Nazwy są w swoim języku, żeby każdy znalazł swój.
+di_states | skip | board-note
+di_driver_coming | skip | board-note
+di_arrived | skip | board-note
+di_driving_to_pickup | skip | board-note
