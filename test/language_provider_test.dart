@@ -68,6 +68,23 @@ void main() {
     expect(prefs.getString('app_lang'), isNull);
   });
 
+  test('dropped languages (es/de/fr/it) fall back to device → English',
+      () async {
+    for (final dropped in ['es', 'de', 'fr', 'it']) {
+      SharedPreferences.setMockInitialValues({'app_lang': dropped});
+      final onUk = LanguageProvider(deviceLocale: const Locale('uk'));
+      await _settle();
+      expect(onUk.locale, const Locale('uk'), reason: dropped);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getString('app_lang'), isNull, reason: dropped);
+
+      SharedPreferences.setMockInitialValues({'app_lang': dropped});
+      final onGerman = LanguageProvider(deviceLocale: const Locale('de'));
+      await _settle();
+      expect(onGerman.locale, const Locale('en'), reason: dropped);
+    }
+  });
+
   test('storedOrDevice reads the saved choice for code without a context',
       () async {
     SharedPreferences.setMockInitialValues({'app_lang': 'uk'});

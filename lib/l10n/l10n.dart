@@ -25,7 +25,7 @@ L10n l10nFor(Locale locale) => lookupL10n(l10nResolve(locale));
 
 /// Registered instead of `L10n.delegate`: it accepts every locale and loads
 /// English for the ones without an ARB file, so `L10n.of(context)` never
-/// fails while the legacy `AppLocalizations` still offers more languages.
+/// fails (e.g. in a test or widget tree with another locale).
 class L10nFallbackDelegate extends LocalizationsDelegate<L10n> {
   const L10nFallbackDelegate();
 
