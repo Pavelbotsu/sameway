@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "common_retry": "Retry",
+  "@common_retry": {
+    "description": "Button that repeats a failed action"
+  }
+}

@@ -31,6 +31,7 @@ import 'features/onboarding/role_selection_screen.dart';
 import 'features/onboarding/splash_screen.dart';
 import 'features/passenger/passenger_provider.dart';
 import 'features/passenger/passenger_repository.dart';
+import 'l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
@@ -185,6 +186,7 @@ class _SamewayAppState extends State<SamewayApp> {
       locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
+        L10nFallbackDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
