@@ -2188,6 +2188,30 @@
   "@fmt_daysAgoShort": {
     "x-needs-review": true
   },
+  "err_passwordIncorrect": "Неправильний пароль",
+  "@err_passwordIncorrect": {
+    "x-needs-review": true
+  },
+  "err_rideNotActive": "Поділитися можна лише попуткою, що вже триває",
+  "@err_rideNotActive": {
+    "x-needs-review": true
+  },
+  "err_badImage": "Обери фото у форматі JPEG або PNG",
+  "@err_badImage": {
+    "x-needs-review": true
+  },
+  "err_notPickedUp": "Пасажира ще не забрано. Підтвердь код зустрічі або скасуй чи повідом про неявку.",
+  "@err_notPickedUp": {
+    "x-needs-review": true
+  },
+  "err_noShowTooEarly": "Зачекай ще трохи, перш ніж повідомляти про неявку",
+  "@err_noShowTooEarly": {
+    "x-needs-review": true
+  },
+  "err_roleLockedActiveRide": "Змінити роль можна після завершення попутки",
+  "@err_roleLockedActiveRide": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Я є…",
   "legacy_chooseRole": "Виберіть свою роль для початку",
   "legacy_driver": "Водій",

@@ -9895,6 +9895,30 @@
       }
     }
   },
+  "err_passwordIncorrect": "That password isn’t right",
+  "@err_passwordIncorrect": {
+    "description": "Server code wrong_password (confirming a sensitive action)"
+  },
+  "err_rideNotActive": "Only an ongoing ride can be shared",
+  "@err_rideNotActive": {
+    "description": "Server code ride_not_active (live share link)"
+  },
+  "err_badImage": "Choose a JPEG or PNG photo",
+  "@err_badImage": {
+    "description": "Server code bad_image (photo upload)"
+  },
+  "err_notPickedUp": "The passenger isn’t picked up yet. Confirm the pickup code, or cancel or report a no-show.",
+  "@err_notPickedUp": {
+    "description": "Server code not_picked_up (driver ends a ride before pickup)"
+  },
+  "err_noShowTooEarly": "Wait a little longer before reporting a no-show",
+  "@err_noShowTooEarly": {
+    "description": "Server code no_show_too_early when the screen has no minutes to show"
+  },
+  "err_roleLockedActiveRide": "You can switch roles after the ride ends",
+  "@err_roleLockedActiveRide": {
+    "description": "Server code role_locked_active_ride (decision 3, from Phase 3)"
+  },
   "legacy_iAm": "I am a…",
   "@legacy_iAm": {
     "description": "Legacy AppLocalizations.iAm"
