@@ -3,5 +3,1841 @@
   "common_retry": "Retry",
   "@common_retry": {
     "description": "Button that repeats a failed action"
+  },
+  "legacy_iAm": "I am a…",
+  "@legacy_iAm": {
+    "description": "Legacy AppLocalizations.iAm"
+  },
+  "legacy_chooseRole": "Choose your role to get started",
+  "@legacy_chooseRole": {
+    "description": "Legacy AppLocalizations.chooseRole"
+  },
+  "legacy_driver": "Driver",
+  "@legacy_driver": {
+    "description": "Legacy AppLocalizations.driver"
+  },
+  "legacy_driverSubtitle": "I have seats to share along my route",
+  "@legacy_driverSubtitle": {
+    "description": "Legacy AppLocalizations.driverSubtitle"
+  },
+  "legacy_passenger": "Passenger",
+  "@legacy_passenger": {
+    "description": "Legacy AppLocalizations.passenger"
+  },
+  "legacy_passengerSubtitle": "I need a ride to my destination",
+  "@legacy_passengerSubtitle": {
+    "description": "Legacy AppLocalizations.passengerSubtitle"
+  },
+  "legacy_continueAsGuest": "Continue as Guest",
+  "@legacy_continueAsGuest": {
+    "description": "Legacy AppLocalizations.continueAsGuest"
+  },
+  "legacy_canSwitchRoles": "You can switch roles anytime from settings.",
+  "@legacy_canSwitchRoles": {
+    "description": "Legacy AppLocalizations.canSwitchRoles"
+  },
+  "legacy_exploreAsGuest": "Explore as Guest",
+  "@legacy_exploreAsGuest": {
+    "description": "Legacy AppLocalizations.exploreAsGuest"
+  },
+  "legacy_guestSubtitle": "Browse the map without an account.\nSign in later to unlock full features.",
+  "@legacy_guestSubtitle": {
+    "description": "Legacy AppLocalizations.guestSubtitle"
+  },
+  "legacy_guestDriver": "Guest Driver",
+  "@legacy_guestDriver": {
+    "description": "Legacy AppLocalizations.guestDriver"
+  },
+  "legacy_guestPassenger": "Guest Passenger",
+  "@legacy_guestPassenger": {
+    "description": "Legacy AppLocalizations.guestPassenger"
+  },
+  "legacy_welcomeBack": "Welcome back",
+  "@legacy_welcomeBack": {
+    "description": "Legacy AppLocalizations.welcomeBack"
+  },
+  "legacy_createAccount": "Create account",
+  "@legacy_createAccount": {
+    "description": "Legacy AppLocalizations.createAccount"
+  },
+  "legacy_signInContinue": "Sign in to continue your journey",
+  "@legacy_signInContinue": {
+    "description": "Legacy AppLocalizations.signInContinue"
+  },
+  "legacy_joinSameway": "Join sameway today",
+  "@legacy_joinSameway": {
+    "description": "Legacy AppLocalizations.joinSameway"
+  },
+  "legacy_signIn": "Sign In",
+  "@legacy_signIn": {
+    "description": "Legacy AppLocalizations.signIn"
+  },
+  "legacy_signUp": "Sign Up",
+  "@legacy_signUp": {
+    "description": "Legacy AppLocalizations.signUp"
+  },
+  "legacy_account": "Account",
+  "@legacy_account": {
+    "description": "Legacy AppLocalizations.account"
+  },
+  "legacy_switchRole": "Switch Role",
+  "@legacy_switchRole": {
+    "description": "Legacy AppLocalizations.switchRole"
+  },
+  "legacy_language": "Language",
+  "@legacy_language": {
+    "description": "Legacy AppLocalizations.language"
+  },
+  "legacy_signOut": "Sign Out",
+  "@legacy_signOut": {
+    "description": "Legacy AppLocalizations.signOut"
+  },
+  "legacy_guest": "GUEST",
+  "@legacy_guest": {
+    "description": "Legacy AppLocalizations.guest"
+  },
+  "legacy_fieldRequired": "Required",
+  "@legacy_fieldRequired": {
+    "description": "Legacy AppLocalizations.fieldRequired"
+  },
+  "legacy_switchRoleTo": "Switch role",
+  "@legacy_switchRoleTo": {
+    "description": "Legacy AppLocalizations.switchRoleTo"
+  },
+  "legacy_switchToDriver": "Switch to Driver",
+  "@legacy_switchToDriver": {
+    "description": "Legacy AppLocalizations.switchToDriver"
+  },
+  "legacy_switchToPassenger": "Switch to Passenger",
+  "@legacy_switchToPassenger": {
+    "description": "Legacy AppLocalizations.switchToPassenger"
+  },
+  "legacy_currentRole": "Current role",
+  "@legacy_currentRole": {
+    "description": "Legacy AppLocalizations.currentRole"
+  },
+  "legacy_accountSecurity": "Account & Security",
+  "@legacy_accountSecurity": {
+    "description": "Legacy AppLocalizations.accountSecurity"
+  },
+  "legacy_readyToShare": "Ready to share your route?",
+  "@legacy_readyToShare": {
+    "description": "Legacy AppLocalizations.readyToShare"
+  },
+  "legacy_setRouteDesc": "Set your destination and find passengers heading your way.",
+  "@legacy_setRouteDesc": {
+    "description": "Legacy AppLocalizations.setRouteDesc"
+  },
+  "legacy_setRoute": "Set Route",
+  "@legacy_setRoute": {
+    "description": "Legacy AppLocalizations.setRoute"
+  },
+  "legacy_settingRoute": "Setting route…",
+  "@legacy_settingRoute": {
+    "description": "Legacy AppLocalizations.settingRoute"
+  },
+  "legacy_findPassengers": "Find Passengers",
+  "@legacy_findPassengers": {
+    "description": "Legacy AppLocalizations.findPassengers"
+  },
+  "legacy_setYourRoute": "Set your route",
+  "@legacy_setYourRoute": {
+    "description": "Legacy AppLocalizations.setYourRoute"
+  },
+  "legacy_destination": "Destination address",
+  "@legacy_destination": {
+    "description": "Legacy AppLocalizations.destination"
+  },
+  "legacy_yourDestination": "Your destination",
+  "@legacy_yourDestination": {
+    "description": "Legacy AppLocalizations.yourDestination"
+  },
+  "legacy_yourRequests": "YOUR REQUESTS",
+  "@legacy_yourRequests": {
+    "description": "Legacy AppLocalizations.yourRequests"
+  },
+  "legacy_yourRequestsHint": "Rides you've asked for — waiting for the driver.",
+  "@legacy_yourRequestsHint": {
+    "description": "Legacy AppLocalizations.yourRequestsHint"
+  },
+  "legacy_likelyMatchChip": "Heading your way",
+  "@legacy_likelyMatchChip": {
+    "description": "Legacy AppLocalizations.likelyMatchChip"
+  },
+  "legacy_chatConversation": "Conversation",
+  "@legacy_chatConversation": {
+    "description": "Legacy AppLocalizations.chatConversation"
+  },
+  "legacy_chatUnavailable": "You can only message your current match candidates",
+  "@legacy_chatUnavailable": {
+    "description": "Legacy AppLocalizations.chatUnavailable"
+  },
+  "legacy_chatSlowDown": "Sending too fast — wait a moment",
+  "@legacy_chatSlowDown": {
+    "description": "Legacy AppLocalizations.chatSlowDown"
+  },
+  "legacy_messagesTitle": "Messages",
+  "@legacy_messagesTitle": {
+    "description": "Legacy AppLocalizations.messagesTitle"
+  },
+  "legacy_noConversations": "No conversations yet",
+  "@legacy_noConversations": {
+    "description": "Legacy AppLocalizations.noConversations"
+  },
+  "legacy_noConversationsDesc": "Chats with your drivers and passengers appear here",
+  "@legacy_noConversationsDesc": {
+    "description": "Legacy AppLocalizations.noConversationsDesc"
+  },
+  "legacy_blockUserBody": "Neither of you will be able to message the other. You can undo this later.",
+  "@legacy_blockUserBody": {
+    "description": "Legacy AppLocalizations.blockUserBody"
+  },
+  "legacy_blockAction": "Block",
+  "@legacy_blockAction": {
+    "description": "Legacy AppLocalizations.blockAction"
+  },
+  "legacy_userBlocked": "User blocked",
+  "@legacy_userBlocked": {
+    "description": "Legacy AppLocalizations.userBlocked"
+  },
+  "legacy_reportReasonHint": "What happened? (optional)",
+  "@legacy_reportReasonHint": {
+    "description": "Legacy AppLocalizations.reportReasonHint"
+  },
+  "legacy_reportAction": "Report",
+  "@legacy_reportAction": {
+    "description": "Legacy AppLocalizations.reportAction"
+  },
+  "legacy_userReported": "Report sent — thank you",
+  "@legacy_userReported": {
+    "description": "Legacy AppLocalizations.userReported"
+  },
+  "legacy_partialRideTitle": "Partial ride — you continue after drop-off",
+  "@legacy_partialRideTitle": {
+    "description": "Legacy AppLocalizations.partialRideTitle"
+  },
+  "legacy_relayFallbackInfo": "After drop-off we'll immediately search for your next ride from there",
+  "@legacy_relayFallbackInfo": {
+    "description": "Legacy AppLocalizations.relayFallbackInfo"
+  },
+  "legacy_acceptPartialRide": "Accept partial ride",
+  "@legacy_acceptPartialRide": {
+    "description": "Legacy AppLocalizations.acceptPartialRide"
+  },
+  "legacy_relayLeg2Searching": "Leg 1 done — looking for your next ride…",
+  "@legacy_relayLeg2Searching": {
+    "description": "Legacy AppLocalizations.relayLeg2Searching"
+  },
+  "legacy_microDetourPassengerNote": "Driver picks you up at your location",
+  "@legacy_microDetourPassengerNote": {
+    "description": "Legacy AppLocalizations.microDetourPassengerNote"
+  },
+  "legacy_allowMicroDetourTitle": "Allow small detours",
+  "@legacy_allowMicroDetourTitle": {
+    "description": "Legacy AppLocalizations.allowMicroDetourTitle"
+  },
+  "legacy_allowMicroDetourSubtitle": "Pick up passengers up to ~300 m / 90 s off your route — always shown before you confirm",
+  "@legacy_allowMicroDetourSubtitle": {
+    "description": "Legacy AppLocalizations.allowMicroDetourSubtitle"
+  },
+  "legacy_matchStateSearching": "Searching for drivers heading your way…",
+  "@legacy_matchStateSearching": {
+    "description": "Legacy AppLocalizations.matchStateSearching"
+  },
+  "legacy_matchStateSearchingDesc": "We'll notify you the moment one appears",
+  "@legacy_matchStateSearchingDesc": {
+    "description": "Legacy AppLocalizations.matchStateSearchingDesc"
+  },
+  "legacy_matchStateCandidatesDesc": "Tap to see them on the map",
+  "@legacy_matchStateCandidatesDesc": {
+    "description": "Legacy AppLocalizations.matchStateCandidatesDesc"
+  },
+  "legacy_matchStateOffer": "Ride offer received",
+  "@legacy_matchStateOffer": {
+    "description": "Legacy AppLocalizations.matchStateOffer"
+  },
+  "legacy_matchStateOfferDesc": "Tap to review and accept",
+  "@legacy_matchStateOfferDesc": {
+    "description": "Legacy AppLocalizations.matchStateOfferDesc"
+  },
+  "legacy_matchStateRequested": "Request sent",
+  "@legacy_matchStateRequested": {
+    "description": "Legacy AppLocalizations.matchStateRequested"
+  },
+  "legacy_matchStateRequestedDesc": "Waiting for the driver to confirm",
+  "@legacy_matchStateRequestedDesc": {
+    "description": "Legacy AppLocalizations.matchStateRequestedDesc"
+  },
+  "legacy_matchStateMatched": "Ride confirmed",
+  "@legacy_matchStateMatched": {
+    "description": "Legacy AppLocalizations.matchStateMatched"
+  },
+  "legacy_matchStateMatchedDesc": "Tap for pickup details",
+  "@legacy_matchStateMatchedDesc": {
+    "description": "Legacy AppLocalizations.matchStateMatchedDesc"
+  },
+  "legacy_matchStateInProgress": "Ride in progress",
+  "@legacy_matchStateInProgress": {
+    "description": "Legacy AppLocalizations.matchStateInProgress"
+  },
+  "legacy_matchStateInProgressDesc": "Enjoy the trip",
+  "@legacy_matchStateInProgressDesc": {
+    "description": "Legacy AppLocalizations.matchStateInProgressDesc"
+  },
+  "legacy_pickOnMap": "Pick on map",
+  "@legacy_pickOnMap": {
+    "description": "Legacy AppLocalizations.pickOnMap"
+  },
+  "legacy_moveMapToDestination": "Move the map to your destination",
+  "@legacy_moveMapToDestination": {
+    "description": "Legacy AppLocalizations.moveMapToDestination"
+  },
+  "legacy_setDestinationHere": "Set destination here",
+  "@legacy_setDestinationHere": {
+    "description": "Legacy AppLocalizations.setDestinationHere"
+  },
+  "legacy_adviceTitle": "Tips to get matched",
+  "@legacy_adviceTitle": {
+    "description": "Legacy AppLocalizations.adviceTitle"
+  },
+  "legacy_adviceEnableLongWalk": "Allow a longer walk to reach more drivers heading your way.",
+  "@legacy_adviceEnableLongWalk": {
+    "description": "Legacy AppLocalizations.adviceEnableLongWalk"
+  },
+  "legacy_adviceNoSameWayDrivers": "No drivers heading your exact way yet — try again shortly.",
+  "@legacy_adviceNoSameWayDrivers": {
+    "description": "Legacy AppLocalizations.adviceNoSameWayDrivers"
+  },
+  "legacy_adviceNoDrivers": "No drivers nearby right now — try later or check planned trips.",
+  "@legacy_adviceNoDrivers": {
+    "description": "Legacy AppLocalizations.adviceNoDrivers"
+  },
+  "legacy_adviceSetDestination": "Set a destination to find drivers going your way.",
+  "@legacy_adviceSetDestination": {
+    "description": "Legacy AppLocalizations.adviceSetDestination"
+  },
+  "legacy_corridorRadius": "Corridor radius",
+  "@legacy_corridorRadius": {
+    "description": "Legacy AppLocalizations.corridorRadius"
+  },
+  "legacy_availableSeats": "Available seats",
+  "@legacy_availableSeats": {
+    "description": "Legacy AppLocalizations.availableSeats"
+  },
+  "legacy_routeActive": "Route active",
+  "@legacy_routeActive": {
+    "description": "Legacy AppLocalizations.routeActive"
+  },
+  "legacy_exploringAsGuest": "Exploring as Guest",
+  "@legacy_exploringAsGuest": {
+    "description": "Legacy AppLocalizations.exploringAsGuest"
+  },
+  "legacy_signInToShareRoute": "Sign In to Share Route",
+  "@legacy_signInToShareRoute": {
+    "description": "Legacy AppLocalizations.signInToShareRoute"
+  },
+  "legacy_signInShareDesc": "Sign in to share your route and get matched with passengers.",
+  "@legacy_signInShareDesc": {
+    "description": "Legacy AppLocalizations.signInShareDesc"
+  },
+  "legacy_lookingForRides": "Looking for rides",
+  "@legacy_lookingForRides": {
+    "description": "Legacy AppLocalizations.lookingForRides"
+  },
+  "legacy_lookingDesc": "We'll notify you when a driver with a matching route is nearby.",
+  "@legacy_lookingDesc": {
+    "description": "Legacy AppLocalizations.lookingDesc"
+  },
+  "legacy_signInToFindRides": "Sign In to Find Rides",
+  "@legacy_signInToFindRides": {
+    "description": "Legacy AppLocalizations.signInToFindRides"
+  },
+  "legacy_signInFindDesc": "Sign in to get matched with drivers heading your way.",
+  "@legacy_signInFindDesc": {
+    "description": "Legacy AppLocalizations.signInFindDesc"
+  },
+  "legacy_signInToContinue": "Sign in to continue",
+  "@legacy_signInToContinue": {
+    "description": "Legacy AppLocalizations.signInToContinue"
+  },
+  "legacy_signInRegister": "Sign In / Register",
+  "@legacy_signInRegister": {
+    "description": "Legacy AppLocalizations.signInRegister"
+  },
+  "legacy_fullName": "Full name",
+  "@legacy_fullName": {
+    "description": "Legacy AppLocalizations.fullName"
+  },
+  "legacy_emailAddress": "Email address",
+  "@legacy_emailAddress": {
+    "description": "Legacy AppLocalizations.emailAddress"
+  },
+  "legacy_password": "Password",
+  "@legacy_password": {
+    "description": "Legacy AppLocalizations.password"
+  },
+  "legacy_invalidEmail": "Invalid email",
+  "@legacy_invalidEmail": {
+    "description": "Legacy AppLocalizations.invalidEmail"
+  },
+  "legacy_minSixChars": "Min 6 characters",
+  "@legacy_minSixChars": {
+    "description": "Legacy AppLocalizations.minSixChars"
+  },
+  "legacy_noAccountYet": "Don't have an account? ",
+  "@legacy_noAccountYet": {
+    "description": "Legacy AppLocalizations.noAccountYet"
+  },
+  "legacy_alreadyHaveAccount": "Already have an account? ",
+  "@legacy_alreadyHaveAccount": {
+    "description": "Legacy AppLocalizations.alreadyHaveAccount"
+  },
+  "legacy_onboardTitle1": "Smarter routes, together.",
+  "@legacy_onboardTitle1": {
+    "description": "Legacy AppLocalizations.onboardTitle1"
+  },
+  "legacy_onboardSubtitle1": "Share rides with people heading your way.",
+  "@legacy_onboardSubtitle1": {
+    "description": "Legacy AppLocalizations.onboardSubtitle1"
+  },
+  "legacy_onboardTitle2": "Real-time matching.",
+  "@legacy_onboardTitle2": {
+    "description": "Legacy AppLocalizations.onboardTitle2"
+  },
+  "legacy_onboardSubtitle2": "Drivers and passengers find each other instantly.",
+  "@legacy_onboardSubtitle2": {
+    "description": "Legacy AppLocalizations.onboardSubtitle2"
+  },
+  "legacy_onboardTitle3": "Save CO₂ together.",
+  "@legacy_onboardTitle3": {
+    "description": "Legacy AppLocalizations.onboardTitle3"
+  },
+  "legacy_onboardSubtitle3": "Every shared trip reduces emissions.",
+  "@legacy_onboardSubtitle3": {
+    "description": "Legacy AppLocalizations.onboardSubtitle3"
+  },
+  "legacy_skip": "Skip",
+  "@legacy_skip": {
+    "description": "Legacy AppLocalizations.skip"
+  },
+  "legacy_getStarted": "Get Started",
+  "@legacy_getStarted": {
+    "description": "Legacy AppLocalizations.getStarted"
+  },
+  "legacy_continueLabel": "Continue",
+  "@legacy_continueLabel": {
+    "description": "Legacy AppLocalizations.continueLabel"
+  },
+  "legacy_safetyPassengerTitle": "Ride smart, stay safe",
+  "@legacy_safetyPassengerTitle": {
+    "description": "Legacy AppLocalizations.safetyPassengerTitle"
+  },
+  "legacy_safetyPassengerBody": "Sameway connects you with drivers already heading your way — it's not a taxi. Wait somewhere safe and easy to reach, near a spot a passing driver can pull over for. Only get in when you feel comfortable.",
+  "@legacy_safetyPassengerBody": {
+    "description": "Legacy AppLocalizations.safetyPassengerBody"
+  },
+  "legacy_safetyDriverTitle": "Drive your own way",
+  "@legacy_safetyDriverTitle": {
+    "description": "Legacy AppLocalizations.safetyDriverTitle"
+  },
+  "legacy_safetyDriverBody": "You're sharing the road you're already on. Only stop for a passenger when it's safe and they're in a good, reachable spot. If they're not, it's okay to keep going — take a small detour only if you're comfortable. It's your call, not an obligation.",
+  "@legacy_safetyDriverBody": {
+    "description": "Legacy AppLocalizations.safetyDriverBody"
+  },
+  "legacy_save": "Save",
+  "@legacy_save": {
+    "description": "Legacy AppLocalizations.save"
+  },
+  "legacy_cancel": "Cancel",
+  "@legacy_cancel": {
+    "description": "Legacy AppLocalizations.cancel"
+  },
+  "legacy_later": "Later",
+  "@legacy_later": {
+    "description": "Legacy AppLocalizations.later"
+  },
+  "legacy_openSettings": "Open Settings",
+  "@legacy_openSettings": {
+    "description": "Legacy AppLocalizations.openSettings"
+  },
+  "legacy_gpsOff": "GPS is off",
+  "@legacy_gpsOff": {
+    "description": "Legacy AppLocalizations.gpsOff"
+  },
+  "legacy_gpsOffMessage": "Location services are required to find rides.",
+  "@legacy_gpsOffMessage": {
+    "description": "Legacy AppLocalizations.gpsOffMessage"
+  },
+  "legacy_keepRide": "Keep ride",
+  "@legacy_keepRide": {
+    "description": "Legacy AppLocalizations.keepRide"
+  },
+  "legacy_cancelRideQ": "Cancel ride?",
+  "@legacy_cancelRideQ": {
+    "description": "Legacy AppLocalizations.cancelRideQ"
+  },
+  "legacy_cancelRideMessageDriver": "The passenger will be notified.",
+  "@legacy_cancelRideMessageDriver": {
+    "description": "Legacy AppLocalizations.cancelRideMessageDriver"
+  },
+  "legacy_cancelRideMessagePassenger": "Your driver will be notified.",
+  "@legacy_cancelRideMessagePassenger": {
+    "description": "Legacy AppLocalizations.cancelRideMessagePassenger"
+  },
+  "legacy_rideOffer": "Ride offer!",
+  "@legacy_rideOffer": {
+    "description": "Legacy AppLocalizations.rideOffer"
+  },
+  "legacy_accept": "Accept",
+  "@legacy_accept": {
+    "description": "Legacy AppLocalizations.accept"
+  },
+  "legacy_decline": "Decline",
+  "@legacy_decline": {
+    "description": "Legacy AppLocalizations.decline"
+  },
+  "legacy_rideAccepted": "Ride accepted!",
+  "@legacy_rideAccepted": {
+    "description": "Legacy AppLocalizations.rideAccepted"
+  },
+  "legacy_youAreInTheRide": "You're in the ride",
+  "@legacy_youAreInTheRide": {
+    "description": "Legacy AppLocalizations.youAreInTheRide"
+  },
+  "legacy_driverNotified": "Your driver has been notified. Stay at your location.",
+  "@legacy_driverNotified": {
+    "description": "Legacy AppLocalizations.driverNotified"
+  },
+  "legacy_messageDriver": "Message Driver",
+  "@legacy_messageDriver": {
+    "description": "Legacy AppLocalizations.messageDriver"
+  },
+  "legacy_driverLabel": "Driver",
+  "@legacy_driverLabel": {
+    "description": "Legacy AppLocalizations.driverLabel"
+  },
+  "legacy_corridorLabel": "km corridor",
+  "@legacy_corridorLabel": {
+    "description": "Legacy AppLocalizations.corridorLabel"
+  },
+  "legacy_seatLabel": "seat",
+  "@legacy_seatLabel": {
+    "description": "Legacy AppLocalizations.seatLabel"
+  },
+  "legacy_seatsLabel": "seats",
+  "@legacy_seatsLabel": {
+    "description": "Legacy AppLocalizations.seatsLabel"
+  },
+  "legacy_noRideRequests": "No ride requests yet",
+  "@legacy_noRideRequests": {
+    "description": "Legacy AppLocalizations.noRideRequests"
+  },
+  "legacy_noRideRequestsDesc": "Passengers near your route will appear here.",
+  "@legacy_noRideRequestsDesc": {
+    "description": "Legacy AppLocalizations.noRideRequestsDesc"
+  },
+  "legacy_displayName": "Display name",
+  "@legacy_displayName": {
+    "description": "Legacy AppLocalizations.displayName"
+  },
+  "legacy_changePassword": "Change password",
+  "@legacy_changePassword": {
+    "description": "Legacy AppLocalizations.changePassword"
+  },
+  "legacy_currentPassword": "Current password",
+  "@legacy_currentPassword": {
+    "description": "Legacy AppLocalizations.currentPassword"
+  },
+  "legacy_newPassword": "New password",
+  "@legacy_newPassword": {
+    "description": "Legacy AppLocalizations.newPassword"
+  },
+  "legacy_confirmNewPassword": "Confirm new password",
+  "@legacy_confirmNewPassword": {
+    "description": "Legacy AppLocalizations.confirmNewPassword"
+  },
+  "legacy_updatePassword": "Update Password",
+  "@legacy_updatePassword": {
+    "description": "Legacy AppLocalizations.updatePassword"
+  },
+  "legacy_passwordSameAsCurrent": "New password must differ from current password",
+  "@legacy_passwordSameAsCurrent": {
+    "description": "Legacy AppLocalizations.passwordSameAsCurrent"
+  },
+  "legacy_passwordsNotMatch": "New passwords do not match",
+  "@legacy_passwordsNotMatch": {
+    "description": "Legacy AppLocalizations.passwordsNotMatch"
+  },
+  "legacy_passwordTooShort": "Password must be at least 6 characters",
+  "@legacy_passwordTooShort": {
+    "description": "Legacy AppLocalizations.passwordTooShort"
+  },
+  "legacy_passwordUpdated": "Password updated",
+  "@legacy_passwordUpdated": {
+    "description": "Legacy AppLocalizations.passwordUpdated"
+  },
+  "legacy_networkError": "Network error",
+  "@legacy_networkError": {
+    "description": "Legacy AppLocalizations.networkError"
+  },
+  "legacy_nameUpdated": "Name updated",
+  "@legacy_nameUpdated": {
+    "description": "Legacy AppLocalizations.nameUpdated"
+  },
+  "legacy_emailCopied": "Email copied",
+  "@legacy_emailCopied": {
+    "description": "Legacy AppLocalizations.emailCopied"
+  },
+  "legacy_activeTrip": "Active trip",
+  "@legacy_activeTrip": {
+    "description": "Legacy AppLocalizations.activeTrip"
+  },
+  "legacy_noMessages": "No messages yet.\nSay hello!",
+  "@legacy_noMessages": {
+    "description": "Legacy AppLocalizations.noMessages"
+  },
+  "legacy_messageHint": "Message…",
+  "@legacy_messageHint": {
+    "description": "Legacy AppLocalizations.messageHint"
+  },
+  "legacy_tripHistory": "Trip History",
+  "@legacy_tripHistory": {
+    "description": "Legacy AppLocalizations.tripHistory"
+  },
+  "legacy_noTripsYet": "No trips yet",
+  "@legacy_noTripsYet": {
+    "description": "Legacy AppLocalizations.noTripsYet"
+  },
+  "legacy_firstRidePrompt": "Complete your first ride to see it here.",
+  "@legacy_firstRidePrompt": {
+    "description": "Legacy AppLocalizations.firstRidePrompt"
+  },
+  "legacy_selectOriginLocation": "Select an origin location",
+  "@legacy_selectOriginLocation": {
+    "description": "Legacy AppLocalizations.selectOriginLocation"
+  },
+  "legacy_selectDestinationLocation": "Select a destination location",
+  "@legacy_selectDestinationLocation": {
+    "description": "Legacy AppLocalizations.selectDestinationLocation"
+  },
+  "legacy_tripPlannedSuccess": "Trip planned successfully!",
+  "@legacy_tripPlannedSuccess": {
+    "description": "Legacy AppLocalizations.tripPlannedSuccess"
+  },
+  "legacy_locationNotAvailable": "Location not available",
+  "@legacy_locationNotAvailable": {
+    "description": "Legacy AppLocalizations.locationNotAvailable"
+  },
+  "legacy_requestSent": "Request sent!",
+  "@legacy_requestSent": {
+    "description": "Legacy AppLocalizations.requestSent"
+  },
+  "legacy_requestFailed": "Failed to send request",
+  "@legacy_requestFailed": {
+    "description": "Legacy AppLocalizations.requestFailed"
+  },
+  "legacy_promotionsAndRewards": "Promotions & Rewards",
+  "@legacy_promotionsAndRewards": {
+    "description": "Legacy AppLocalizations.promotionsAndRewards"
+  },
+  "legacy_activeOffers": "Active Offers",
+  "@legacy_activeOffers": {
+    "description": "Legacy AppLocalizations.activeOffers"
+  },
+  "legacy_expired": "Expired",
+  "@legacy_expired": {
+    "description": "Legacy AppLocalizations.expired"
+  },
+  "legacy_noPromotions": "No promotions available",
+  "@legacy_noPromotions": {
+    "description": "Legacy AppLocalizations.noPromotions"
+  },
+  "legacy_rateYourDriver": "Rate your driver",
+  "@legacy_rateYourDriver": {
+    "description": "Legacy AppLocalizations.rateYourDriver"
+  },
+  "legacy_rateYourPassenger": "Rate your passenger",
+  "@legacy_rateYourPassenger": {
+    "description": "Legacy AppLocalizations.rateYourPassenger"
+  },
+  "legacy_howWasExperience": "How was your experience?",
+  "@legacy_howWasExperience": {
+    "description": "Legacy AppLocalizations.howWasExperience"
+  },
+  "legacy_addCommentOptional": "Add a comment (optional)",
+  "@legacy_addCommentOptional": {
+    "description": "Legacy AppLocalizations.addCommentOptional"
+  },
+  "legacy_submit": "Submit",
+  "@legacy_submit": {
+    "description": "Legacy AppLocalizations.submit"
+  },
+  "legacy_skipRating": "Skip",
+  "@legacy_skipRating": {
+    "description": "Legacy AppLocalizations.skipRating"
+  },
+  "legacy_myCar": "My Car",
+  "@legacy_myCar": {
+    "description": "Legacy AppLocalizations.myCar"
+  },
+  "legacy_carMake": "Make",
+  "@legacy_carMake": {
+    "description": "Legacy AppLocalizations.carMake"
+  },
+  "legacy_carModel": "Model",
+  "@legacy_carModel": {
+    "description": "Legacy AppLocalizations.carModel"
+  },
+  "legacy_carColor": "Color",
+  "@legacy_carColor": {
+    "description": "Legacy AppLocalizations.carColor"
+  },
+  "legacy_carPlate": "Plate",
+  "@legacy_carPlate": {
+    "description": "Legacy AppLocalizations.carPlate"
+  },
+  "legacy_carMakeHint": "e.g. Toyota",
+  "@legacy_carMakeHint": {
+    "description": "Legacy AppLocalizations.carMakeHint"
+  },
+  "legacy_carModelHint": "e.g. Corolla",
+  "@legacy_carModelHint": {
+    "description": "Legacy AppLocalizations.carModelHint"
+  },
+  "legacy_carColorHint": "e.g. Silver",
+  "@legacy_carColorHint": {
+    "description": "Legacy AppLocalizations.carColorHint"
+  },
+  "legacy_carPlateHint": "e.g. KR 12345",
+  "@legacy_carPlateHint": {
+    "description": "Legacy AppLocalizations.carPlateHint"
+  },
+  "legacy_carInfoSaved": "Car info saved!",
+  "@legacy_carInfoSaved": {
+    "description": "Legacy AppLocalizations.carInfoSaved"
+  },
+  "legacy_testNotificationSent": "Test notification sent!",
+  "@legacy_testNotificationSent": {
+    "description": "Legacy AppLocalizations.testNotificationSent"
+  },
+  "legacy_mapStyle": "Map Style",
+  "@legacy_mapStyle": {
+    "description": "Legacy AppLocalizations.mapStyle"
+  },
+  "legacy_planATrip": "Plan a Trip",
+  "@legacy_planATrip": {
+    "description": "Legacy AppLocalizations.planATrip"
+  },
+  "legacy_findPlannedTrips": "Find Planned Trips",
+  "@legacy_findPlannedTrips": {
+    "description": "Legacy AppLocalizations.findPlannedTrips"
+  },
+  "legacy_testNotification": "Test Notification",
+  "@legacy_testNotification": {
+    "description": "Legacy AppLocalizations.testNotification"
+  },
+  "legacy_aiMatchingLabel": "AI-assisted matching",
+  "@legacy_aiMatchingLabel": {
+    "description": "Legacy AppLocalizations.aiMatchingLabel"
+  },
+  "legacy_aiMatchingSubtitle": "Experimental. Re-orders candidates using AI.",
+  "@legacy_aiMatchingSubtitle": {
+    "description": "Legacy AppLocalizations.aiMatchingSubtitle"
+  },
+  "legacy_testAILabel": "Test AI matching",
+  "@legacy_testAILabel": {
+    "description": "Legacy AppLocalizations.testAILabel"
+  },
+  "legacy_testAIOK": "AI ranker working",
+  "@legacy_testAIOK": {
+    "description": "Legacy AppLocalizations.testAIOK"
+  },
+  "legacy_testAIFailed": "AI ranker failed",
+  "@legacy_testAIFailed": {
+    "description": "Legacy AppLocalizations.testAIFailed"
+  },
+  "legacy_testAIDisabled": "AI not configured — using geometric",
+  "@legacy_testAIDisabled": {
+    "description": "Legacy AppLocalizations.testAIDisabled"
+  },
+  "legacy_candidateDriversTitle": "Drivers going your way",
+  "@legacy_candidateDriversTitle": {
+    "description": "Legacy AppLocalizations.candidateDriversTitle"
+  },
+  "legacy_candidateDriversEmpty": "No drivers going your way yet. We'll keep looking.",
+  "@legacy_candidateDriversEmpty": {
+    "description": "Legacy AppLocalizations.candidateDriversEmpty"
+  },
+  "legacy_sameWayBadge": "Same way",
+  "@legacy_sameWayBadge": {
+    "description": "Legacy AppLocalizations.sameWayBadge"
+  },
+  "legacy_newDriverBadge": "New",
+  "@legacy_newDriverBadge": {
+    "description": "Legacy AppLocalizations.newDriverBadge"
+  },
+  "legacy_driverDetails": "Driver details",
+  "@legacy_driverDetails": {
+    "description": "Legacy AppLocalizations.driverDetails"
+  },
+  "legacy_pickupPointLabel": "Pick-up",
+  "@legacy_pickupPointLabel": {
+    "description": "Legacy AppLocalizations.pickupPointLabel"
+  },
+  "legacy_dropoffPointLabel": "Drop-off",
+  "@legacy_dropoffPointLabel": {
+    "description": "Legacy AppLocalizations.dropoffPointLabel"
+  },
+  "legacy_zeroDetourLabel": "No detour — both stops are on your route",
+  "@legacy_zeroDetourLabel": {
+    "description": "Legacy AppLocalizations.zeroDetourLabel"
+  },
+  "legacy_noDestinationDeclared": "No destination set yet",
+  "@legacy_noDestinationDeclared": {
+    "description": "Legacy AppLocalizations.noDestinationDeclared"
+  },
+  "legacy_openWalkingDirections": "Open in walking directions",
+  "@legacy_openWalkingDirections": {
+    "description": "Legacy AppLocalizations.openWalkingDirections"
+  },
+  "legacy_tellCodeToPassenger": "Tell this code to your passenger when you arrive",
+  "@legacy_tellCodeToPassenger": {
+    "description": "Legacy AppLocalizations.tellCodeToPassenger"
+  },
+  "legacy_askDriverForCode": "Ask your driver for the pickup code",
+  "@legacy_askDriverForCode": {
+    "description": "Legacy AppLocalizations.askDriverForCode"
+  },
+  "legacy_copyCode": "Copy code",
+  "@legacy_copyCode": {
+    "description": "Legacy AppLocalizations.copyCode"
+  },
+  "legacy_codeCopied": "Code copied",
+  "@legacy_codeCopied": {
+    "description": "Legacy AppLocalizations.codeCopied"
+  },
+  "legacy_errSessionExpired": "Your session expired — please sign in again",
+  "@legacy_errSessionExpired": {
+    "description": "Legacy AppLocalizations.errSessionExpired"
+  },
+  "legacy_errNotFound": "Not found",
+  "@legacy_errNotFound": {
+    "description": "Legacy AppLocalizations.errNotFound"
+  },
+  "legacy_errServer": "Server is having trouble — try again in a moment",
+  "@legacy_errServer": {
+    "description": "Legacy AppLocalizations.errServer"
+  },
+  "legacy_errOffline": "Check your connection",
+  "@legacy_errOffline": {
+    "description": "Legacy AppLocalizations.errOffline"
+  },
+  "legacy_errGeneric": "Something went wrong",
+  "@legacy_errGeneric": {
+    "description": "Legacy AppLocalizations.errGeneric"
+  },
+  "legacy_errTimeout": "Taking too long — try again",
+  "@legacy_errTimeout": {
+    "description": "Legacy AppLocalizations.errTimeout"
+  },
+  "legacy_noInternet": "No internet",
+  "@legacy_noInternet": {
+    "description": "Legacy AppLocalizations.noInternet"
+  },
+  "legacy_locationNotSyncing": "Location not syncing — you may be hidden",
+  "@legacy_locationNotSyncing": {
+    "description": "Legacy AppLocalizations.locationNotSyncing"
+  },
+  "legacy_reconnecting": "Reconnecting…",
+  "@legacy_reconnecting": {
+    "description": "Legacy AppLocalizations.reconnecting"
+  },
+  "legacy_myLocation": "My location",
+  "@legacy_myLocation": {
+    "description": "Legacy AppLocalizations.myLocation"
+  },
+  "legacy_walkToDestination": "Walk to destination",
+  "@legacy_walkToDestination": {
+    "description": "Legacy AppLocalizations.walkToDestination"
+  },
+  "legacy_walkToDestinationHint": "Driver keeps their route — you walk from the nearest drop-off.",
+  "@legacy_walkToDestinationHint": {
+    "description": "Legacy AppLocalizations.walkToDestinationHint"
+  },
+  "legacy_permLocationTitle": "Find rides near you",
+  "@legacy_permLocationTitle": {
+    "description": "Legacy AppLocalizations.permLocationTitle"
+  },
+  "legacy_permLocationBody": "Sameway uses your location to match you with drivers heading your way. We only share your exact location with the matched driver — never with anyone else.",
+  "@legacy_permLocationBody": {
+    "description": "Legacy AppLocalizations.permLocationBody"
+  },
+  "legacy_permNotifTitle": "Stay in the loop",
+  "@legacy_permNotifTitle": {
+    "description": "Legacy AppLocalizations.permNotifTitle"
+  },
+  "legacy_permNotifBody": "We'll only notify you about ride-related events: a driver accepting, your driver arriving, or new messages on a trip.",
+  "@legacy_permNotifBody": {
+    "description": "Legacy AppLocalizations.permNotifBody"
+  },
+  "legacy_permContinue": "Continue",
+  "@legacy_permContinue": {
+    "description": "Legacy AppLocalizations.permContinue"
+  },
+  "legacy_permNotNow": "Not now",
+  "@legacy_permNotNow": {
+    "description": "Legacy AppLocalizations.permNotNow"
+  },
+  "legacy_checkInTitle": "Everything OK?",
+  "@legacy_checkInTitle": {
+    "description": "Legacy AppLocalizations.checkInTitle"
+  },
+  "legacy_checkInAllGood": "Yes, I'm fine",
+  "@legacy_checkInAllGood": {
+    "description": "Legacy AppLocalizations.checkInAllGood"
+  },
+  "legacy_checkInNeedHelp": "No, I need help",
+  "@legacy_checkInNeedHelp": {
+    "description": "Legacy AppLocalizations.checkInNeedHelp"
+  },
+  "legacy_sos": "SOS",
+  "@legacy_sos": {
+    "description": "Legacy AppLocalizations.sos"
+  },
+  "legacy_sosTitle": "Need help?",
+  "@legacy_sosTitle": {
+    "description": "Legacy AppLocalizations.sosTitle"
+  },
+  "legacy_sosBody": "You can call local emergency services or share your trip details with someone you trust.",
+  "@legacy_sosBody": {
+    "description": "Legacy AppLocalizations.sosBody"
+  },
+  "legacy_sosCall": "Call emergency services",
+  "@legacy_sosCall": {
+    "description": "Legacy AppLocalizations.sosCall"
+  },
+  "legacy_sosShare": "Share trip with contact",
+  "@legacy_sosShare": {
+    "description": "Legacy AppLocalizations.sosShare"
+  },
+  "legacy_profilePhoto": "Profile photo",
+  "@legacy_profilePhoto": {
+    "description": "Legacy AppLocalizations.profilePhoto"
+  },
+  "legacy_takePhoto": "Take photo",
+  "@legacy_takePhoto": {
+    "description": "Legacy AppLocalizations.takePhoto"
+  },
+  "legacy_fromGallery": "From gallery",
+  "@legacy_fromGallery": {
+    "description": "Legacy AppLocalizations.fromGallery"
+  },
+  "legacy_removePhoto": "Remove photo",
+  "@legacy_removePhoto": {
+    "description": "Legacy AppLocalizations.removePhoto"
+  },
+  "legacy_photoUpdated": "Photo updated",
+  "@legacy_photoUpdated": {
+    "description": "Legacy AppLocalizations.photoUpdated"
+  },
+  "legacy_bio": "Bio",
+  "@legacy_bio": {
+    "description": "Legacy AppLocalizations.bio"
+  },
+  "legacy_bioHint": "A short line about you (160 char max)",
+  "@legacy_bioHint": {
+    "description": "Legacy AppLocalizations.bioHint"
+  },
+  "legacy_phone": "Phone",
+  "@legacy_phone": {
+    "description": "Legacy AppLocalizations.phone"
+  },
+  "legacy_phoneHint": "+1 555 0100",
+  "@legacy_phoneHint": {
+    "description": "Legacy AppLocalizations.phoneHint"
+  },
+  "legacy_profileCompletion": "Profile completion",
+  "@legacy_profileCompletion": {
+    "description": "Legacy AppLocalizations.profileCompletion"
+  },
+  "legacy_verifyEmail": "Verify email",
+  "@legacy_verifyEmail": {
+    "description": "Legacy AppLocalizations.verifyEmail"
+  },
+  "legacy_emailVerified": "Email verified",
+  "@legacy_emailVerified": {
+    "description": "Legacy AppLocalizations.emailVerified"
+  },
+  "legacy_verificationCodeSent": "Code sent to your email",
+  "@legacy_verificationCodeSent": {
+    "description": "Legacy AppLocalizations.verificationCodeSent"
+  },
+  "legacy_enterVerificationCode": "Enter the 6-digit code",
+  "@legacy_enterVerificationCode": {
+    "description": "Legacy AppLocalizations.enterVerificationCode"
+  },
+  "legacy_verifyAction": "Verify",
+  "@legacy_verifyAction": {
+    "description": "Legacy AppLocalizations.verifyAction"
+  },
+  "legacy_resendCode": "Resend code",
+  "@legacy_resendCode": {
+    "description": "Legacy AppLocalizations.resendCode"
+  },
+  "legacy_profileUpdated": "Profile updated",
+  "@legacy_profileUpdated": {
+    "description": "Legacy AppLocalizations.profileUpdated"
+  },
+  "legacy_back": "Back",
+  "@legacy_back": {
+    "description": "Legacy AppLocalizations.back"
+  },
+  "legacy_dismiss": "Dismiss",
+  "@legacy_dismiss": {
+    "description": "Legacy AppLocalizations.dismiss"
+  },
+  "legacy_clear": "Clear",
+  "@legacy_clear": {
+    "description": "Legacy AppLocalizations.clear"
+  },
+  "legacy_togglePasswordVisibility": "Show/hide password",
+  "@legacy_togglePasswordVisibility": {
+    "description": "Legacy AppLocalizations.togglePasswordVisibility"
+  },
+  "legacy_reportABug": "Report a bug",
+  "@legacy_reportABug": {
+    "description": "Legacy AppLocalizations.reportABug"
+  },
+  "legacy_bugReportTitle": "What went wrong?",
+  "@legacy_bugReportTitle": {
+    "description": "Legacy AppLocalizations.bugReportTitle"
+  },
+  "legacy_bugReportDescription": "Describe what you were doing and what happened",
+  "@legacy_bugReportDescription": {
+    "description": "Legacy AppLocalizations.bugReportDescription"
+  },
+  "legacy_bugReportSubmit": "Send report",
+  "@legacy_bugReportSubmit": {
+    "description": "Legacy AppLocalizations.bugReportSubmit"
+  },
+  "legacy_bugReportThanks": "Thanks — we'll take a look",
+  "@legacy_bugReportThanks": {
+    "description": "Legacy AppLocalizations.bugReportThanks"
+  },
+  "legacy_showTutorialAgain": "Show tutorial again",
+  "@legacy_showTutorialAgain": {
+    "description": "Legacy AppLocalizations.showTutorialAgain"
+  },
+  "legacy_onboardTitle4": "Pickup code.",
+  "@legacy_onboardTitle4": {
+    "description": "Legacy AppLocalizations.onboardTitle4"
+  },
+  "legacy_onboardSubtitle4": "A shared 4-digit code confirms you and the driver have actually met.",
+  "@legacy_onboardSubtitle4": {
+    "description": "Legacy AppLocalizations.onboardSubtitle4"
+  },
+  "legacy_forgotPassword": "Forgot password?",
+  "@legacy_forgotPassword": {
+    "description": "Legacy AppLocalizations.forgotPassword"
+  },
+  "legacy_forgotPasswordHint": "Enter the email on your account — we'll send a 6-digit code.",
+  "@legacy_forgotPasswordHint": {
+    "description": "Legacy AppLocalizations.forgotPasswordHint"
+  },
+  "legacy_resetCodeHint": "6-digit code",
+  "@legacy_resetCodeHint": {
+    "description": "Legacy AppLocalizations.resetCodeHint"
+  },
+  "legacy_newPasswordHint": "New password",
+  "@legacy_newPasswordHint": {
+    "description": "Legacy AppLocalizations.newPasswordHint"
+  },
+  "legacy_resetSubmit": "Reset password",
+  "@legacy_resetSubmit": {
+    "description": "Legacy AppLocalizations.resetSubmit"
+  },
+  "legacy_resetSuccess": "Password reset — you're signed in.",
+  "@legacy_resetSuccess": {
+    "description": "Legacy AppLocalizations.resetSuccess"
+  },
+  "legacy_resetCodeSent": "If an account exists for that email, a code was sent.",
+  "@legacy_resetCodeSent": {
+    "description": "Legacy AppLocalizations.resetCodeSent"
+  },
+  "legacy_invalidCode": "Invalid or expired code",
+  "@legacy_invalidCode": {
+    "description": "Legacy AppLocalizations.invalidCode"
+  },
+  "legacy_rideRequestSent": "Ride request sent!",
+  "@legacy_rideRequestSent": {
+    "description": "Legacy AppLocalizations.rideRequestSent"
+  },
+  "legacy_noCarInfo": "No car info",
+  "@legacy_noCarInfo": {
+    "description": "Legacy AppLocalizations.noCarInfo"
+  },
+  "legacy_passengerAcceptedRide": "A passenger accepted your ride offer!",
+  "@legacy_passengerAcceptedRide": {
+    "description": "Legacy AppLocalizations.passengerAcceptedRide"
+  },
+  "legacy_endRouteAndSwitch": "End route & switch",
+  "@legacy_endRouteAndSwitch": {
+    "description": "Legacy AppLocalizations.endRouteAndSwitch"
+  },
+  "legacy_cancelRequestsAndSwitch": "Cancel requests & switch",
+  "@legacy_cancelRequestsAndSwitch": {
+    "description": "Legacy AppLocalizations.cancelRequestsAndSwitch"
+  },
+  "legacy_endDriverRouteQ": "End your driver route?",
+  "@legacy_endDriverRouteQ": {
+    "description": "Legacy AppLocalizations.endDriverRouteQ"
+  },
+  "legacy_cancelPassengerSearchQ": "Cancel passenger search?",
+  "@legacy_cancelPassengerSearchQ": {
+    "description": "Legacy AppLocalizations.cancelPassengerSearchQ"
+  },
+  "legacy_stayAsDriver": "Stay as driver",
+  "@legacy_stayAsDriver": {
+    "description": "Legacy AppLocalizations.stayAsDriver"
+  },
+  "legacy_stayAsPassenger": "Stay as passenger",
+  "@legacy_stayAsPassenger": {
+    "description": "Legacy AppLocalizations.stayAsPassenger"
+  },
+  "legacy_navRoute": "Route",
+  "@legacy_navRoute": {
+    "description": "Legacy AppLocalizations.navRoute"
+  },
+  "legacy_navPlan": "Plan",
+  "@legacy_navPlan": {
+    "description": "Legacy AppLocalizations.navPlan"
+  },
+  "legacy_navFind": "Find",
+  "@legacy_navFind": {
+    "description": "Legacy AppLocalizations.navFind"
+  },
+  "legacy_navChat": "Chat",
+  "@legacy_navChat": {
+    "description": "Legacy AppLocalizations.navChat"
+  },
+  "legacy_navFindTrips": "Find Trips",
+  "@legacy_navFindTrips": {
+    "description": "Legacy AppLocalizations.navFindTrips"
+  },
+  "legacy_navOffers": "Offers",
+  "@legacy_navOffers": {
+    "description": "Legacy AppLocalizations.navOffers"
+  },
+  "legacy_navReportBug": "Report bug",
+  "@legacy_navReportBug": {
+    "description": "Legacy AppLocalizations.navReportBug"
+  },
+  "legacy_navAccount": "Account",
+  "@legacy_navAccount": {
+    "description": "Legacy AppLocalizations.navAccount"
+  },
+  "legacy_errEnterDestination": "Enter a destination",
+  "@legacy_errEnterDestination": {
+    "description": "Legacy AppLocalizations.errEnterDestination"
+  },
+  "legacy_errAddressNotFound": "Address not found",
+  "@legacy_errAddressNotFound": {
+    "description": "Legacy AppLocalizations.errAddressNotFound"
+  },
+  "legacy_endRouteQ": "End route?",
+  "@legacy_endRouteQ": {
+    "description": "Legacy AppLocalizations.endRouteQ"
+  },
+  "legacy_endRouteBody": "Every passenger currently on board will be dropped off and you'll stop receiving new matches.",
+  "@legacy_endRouteBody": {
+    "description": "Legacy AppLocalizations.endRouteBody"
+  },
+  "legacy_endRouteAction": "End route",
+  "@legacy_endRouteAction": {
+    "description": "Legacy AppLocalizations.endRouteAction"
+  },
+  "legacy_cancelRide": "Cancel ride",
+  "@legacy_cancelRide": {
+    "description": "Legacy AppLocalizations.cancelRide"
+  },
+  "legacy_waitingForYourLocation": "Waiting for your location…",
+  "@legacy_waitingForYourLocation": {
+    "description": "Legacy AppLocalizations.waitingForYourLocation"
+  },
+  "legacy_waitingForPassengerLocation": "Waiting for passenger location…",
+  "@legacy_waitingForPassengerLocation": {
+    "description": "Legacy AppLocalizations.waitingForPassengerLocation"
+  },
+  "legacy_whereDoYouWantToGo": "Where do you want to go?",
+  "@legacy_whereDoYouWantToGo": {
+    "description": "Legacy AppLocalizations.whereDoYouWantToGo"
+  },
+  "legacy_waitingForDriver": "Waiting for driver…",
+  "@legacy_waitingForDriver": {
+    "description": "Legacy AppLocalizations.waitingForDriver"
+  },
+  "legacy_driverAccepted": "Driver accepted",
+  "@legacy_driverAccepted": {
+    "description": "Legacy AppLocalizations.driverAccepted"
+  },
+  "legacy_mapStyleStandard": "Standard",
+  "@legacy_mapStyleStandard": {
+    "description": "Legacy AppLocalizations.mapStyleStandard"
+  },
+  "legacy_mapStyleSatellite": "Satellite",
+  "@legacy_mapStyleSatellite": {
+    "description": "Legacy AppLocalizations.mapStyleSatellite"
+  },
+  "legacy_mapStyleDark": "Dark",
+  "@legacy_mapStyleDark": {
+    "description": "Legacy AppLocalizations.mapStyleDark"
+  },
+  "legacy_carLabel": "Car",
+  "@legacy_carLabel": {
+    "description": "Legacy AppLocalizations.carLabel"
+  },
+  "legacy_requestThisRide": "Request this ride",
+  "@legacy_requestThisRide": {
+    "description": "Legacy AppLocalizations.requestThisRide"
+  },
+  "legacy_reasonActiveDriverRoute": "an active driver route",
+  "@legacy_reasonActiveDriverRoute": {
+    "description": "Legacy AppLocalizations.reasonActiveDriverRoute"
+  },
+  "legacy_reasonAcceptedPassengerRide": "an accepted passenger ride",
+  "@legacy_reasonAcceptedPassengerRide": {
+    "description": "Legacy AppLocalizations.reasonAcceptedPassengerRide"
+  },
+  "legacy_reasonAcceptedDriverRide": "an accepted driver ride",
+  "@legacy_reasonAcceptedDriverRide": {
+    "description": "Legacy AppLocalizations.reasonAcceptedDriverRide"
+  },
+  "legacy_reasonPendingRideRequests": "pending ride requests",
+  "@legacy_reasonPendingRideRequests": {
+    "description": "Legacy AppLocalizations.reasonPendingRideRequests"
+  },
+  "legacy_reasonActiveDestinationSearch": "an active destination search",
+  "@legacy_reasonActiveDestinationSearch": {
+    "description": "Legacy AppLocalizations.reasonActiveDestinationSearch"
+  },
+  "legacy_enterSixDigitCode": "Enter the 6-digit code",
+  "@legacy_enterSixDigitCode": {
+    "description": "Legacy AppLocalizations.enterSixDigitCode"
+  },
+  "legacy_errDriverUnavailable": "This driver is no longer available",
+  "@legacy_errDriverUnavailable": {
+    "description": "Legacy AppLocalizations.errDriverUnavailable"
+  },
+  "legacy_errTooFarFromRoute": "You're too far from the driver's route",
+  "@legacy_errTooFarFromRoute": {
+    "description": "Legacy AppLocalizations.errTooFarFromRoute"
+  },
+  "legacy_errDriverPassedYou": "The driver has already passed your pickup point",
+  "@legacy_errDriverPassedYou": {
+    "description": "Legacy AppLocalizations.errDriverPassedYou"
+  },
+  "legacy_errDriverPositionStale": "Driver's position is not up to date — try again shortly",
+  "@legacy_errDriverPositionStale": {
+    "description": "Legacy AppLocalizations.errDriverPositionStale"
+  },
+  "legacy_errUpdateLocationFirst": "Update your location first",
+  "@legacy_errUpdateLocationFirst": {
+    "description": "Legacy AppLocalizations.errUpdateLocationFirst"
+  },
+  "legacy_errOfferGone": "This offer is no longer available",
+  "@legacy_errOfferGone": {
+    "description": "Legacy AppLocalizations.errOfferGone"
+  },
+  "legacy_errRideFull": "This ride is already full",
+  "@legacy_errRideFull": {
+    "description": "Legacy AppLocalizations.errRideFull"
+  },
+  "legacy_errWrongCode": "Wrong code — ask the driver again",
+  "@legacy_errWrongCode": {
+    "description": "Legacy AppLocalizations.errWrongCode"
+  },
+  "legacy_errRideNotAccepted": "The ride is not in the accepted state",
+  "@legacy_errRideNotAccepted": {
+    "description": "Legacy AppLocalizations.errRideNotAccepted"
+  },
+  "legacy_errInvalidCredentials": "Wrong email or password",
+  "@legacy_errInvalidCredentials": {
+    "description": "Legacy AppLocalizations.errInvalidCredentials"
+  },
+  "legacy_errEmailTaken": "This email is already registered",
+  "@legacy_errEmailTaken": {
+    "description": "Legacy AppLocalizations.errEmailTaken"
+  },
+  "legacy_errCodeInvalidOrExpired": "Invalid or expired code",
+  "@legacy_errCodeInvalidOrExpired": {
+    "description": "Legacy AppLocalizations.errCodeInvalidOrExpired"
+  },
+  "legacy_errCurrentPasswordWrong": "Current password is incorrect",
+  "@legacy_errCurrentPasswordWrong": {
+    "description": "Legacy AppLocalizations.errCurrentPasswordWrong"
+  },
+  "legacy_backgroundLocationUnavailable": "Background location couldn't start. Keep Sameway open on screen while driving, or passengers won't find you.",
+  "@legacy_backgroundLocationUnavailable": {
+    "description": "Legacy AppLocalizations.backgroundLocationUnavailable"
+  },
+  "legacy_ageConfirmLabel": "I confirm I am 18 or older",
+  "@legacy_ageConfirmLabel": {
+    "description": "Legacy AppLocalizations.ageConfirmLabel"
+  },
+  "legacy_acceptTermsLabel": "I accept the Terms of Service and the Privacy Policy",
+  "@legacy_acceptTermsLabel": {
+    "description": "Legacy AppLocalizations.acceptTermsLabel"
+  },
+  "legacy_termsOfService": "Terms of Service",
+  "@legacy_termsOfService": {
+    "description": "Legacy AppLocalizations.termsOfService"
+  },
+  "legacy_privacyPolicy": "Privacy Policy",
+  "@legacy_privacyPolicy": {
+    "description": "Legacy AppLocalizations.privacyPolicy"
+  },
+  "legacy_consentRequiredError": "Confirm you are 18 or older and accept the terms to continue",
+  "@legacy_consentRequiredError": {
+    "description": "Legacy AppLocalizations.consentRequiredError"
+  },
+  "legacy_birthDateLabel": "Date of birth",
+  "@legacy_birthDateLabel": {
+    "description": "Legacy AppLocalizations.birthDateLabel"
+  },
+  "legacy_birthDateRequired": "Enter your date of birth — Sameway is for people aged 18 or older",
+  "@legacy_birthDateRequired": {
+    "description": "Legacy AppLocalizations.birthDateRequired"
+  },
+  "legacy_errUnderage": "You must be 18 or older to use Sameway",
+  "@legacy_errUnderage": {
+    "description": "Legacy AppLocalizations.errUnderage"
+  },
+  "legacy_driverDeclTitle": "Before your first ride",
+  "@legacy_driverDeclTitle": {
+    "description": "Legacy AppLocalizations.driverDeclTitle"
+  },
+  "legacy_driverDeclBody": "Sameway doesn't check documents. You confirm these yourself and must show them to a passenger if asked.",
+  "@legacy_driverDeclBody": {
+    "description": "Legacy AppLocalizations.driverDeclBody"
+  },
+  "legacy_driverDeclLicence": "I have a valid driving licence",
+  "@legacy_driverDeclLicence": {
+    "description": "Legacy AppLocalizations.driverDeclLicence"
+  },
+  "legacy_driverDeclInsurance": "My car has valid third-party liability insurance (OC / ОСЦПВ)",
+  "@legacy_driverDeclInsurance": {
+    "description": "Legacy AppLocalizations.driverDeclInsurance"
+  },
+  "legacy_driverDeclRoadworthy": "My car is roadworthy and has a seat belt for every seat I offer",
+  "@legacy_driverDeclRoadworthy": {
+    "description": "Legacy AppLocalizations.driverDeclRoadworthy"
+  },
+  "legacy_driverDeclCostSharing": "I only share costs and never make a profit from passengers",
+  "@legacy_driverDeclCostSharing": {
+    "description": "Legacy AppLocalizations.driverDeclCostSharing"
+  },
+  "legacy_driverDeclAllRequired": "Confirm all four to drive with Sameway",
+  "@legacy_driverDeclAllRequired": {
+    "description": "Legacy AppLocalizations.driverDeclAllRequired"
+  },
+  "legacy_carDetailsRequired": "Add your car's make, model, colour and plate so passengers can recognise it",
+  "@legacy_carDetailsRequired": {
+    "description": "Legacy AppLocalizations.carDetailsRequired"
+  },
+  "legacy_outsideServiceArea": "Sameway isn't available here yet — we're live in Kraków and the Poltava region.",
+  "@legacy_outsideServiceArea": {
+    "description": "Legacy AppLocalizations.outsideServiceArea"
+  },
+  "legacy_termsGateTitle": "Before you continue",
+  "@legacy_termsGateTitle": {
+    "description": "Legacy AppLocalizations.termsGateTitle"
+  },
+  "legacy_termsGateBody": "To keep using Sameway, please confirm your age and accept our Terms of Service and Privacy Policy.",
+  "@legacy_termsGateBody": {
+    "description": "Legacy AppLocalizations.termsGateBody"
+  },
+  "legacy_analyticsConsentTitle": "Help us improve Sameway",
+  "@legacy_analyticsConsentTitle": {
+    "description": "Legacy AppLocalizations.analyticsConsentTitle"
+  },
+  "legacy_analyticsConsentBody": "Can we collect usage statistics, crash reports and performance data? It's optional — Sameway works the same either way, and you can change it any time in Account & Security.",
+  "@legacy_analyticsConsentBody": {
+    "description": "Legacy AppLocalizations.analyticsConsentBody"
+  },
+  "legacy_analyticsAllow": "Allow",
+  "@legacy_analyticsAllow": {
+    "description": "Legacy AppLocalizations.analyticsAllow"
+  },
+  "legacy_analyticsDeny": "No thanks",
+  "@legacy_analyticsDeny": {
+    "description": "Legacy AppLocalizations.analyticsDeny"
+  },
+  "legacy_analyticsSettingTitle": "Usage statistics & crash reports",
+  "@legacy_analyticsSettingTitle": {
+    "description": "Legacy AppLocalizations.analyticsSettingTitle"
+  },
+  "legacy_analyticsSettingSubtitle": "Optional. Helps us find bugs and improve the app.",
+  "@legacy_analyticsSettingSubtitle": {
+    "description": "Legacy AppLocalizations.analyticsSettingSubtitle"
+  },
+  "legacy_downloadMyData": "Download my data",
+  "@legacy_downloadMyData": {
+    "description": "Legacy AppLocalizations.downloadMyData"
+  },
+  "legacy_legalAndPrivacy": "Legal & privacy",
+  "@legacy_legalAndPrivacy": {
+    "description": "Legacy AppLocalizations.legalAndPrivacy"
+  },
+  "legacy_pickupLocked": "Too many wrong codes. Ask the driver to tap \"New code\".",
+  "@legacy_pickupLocked": {
+    "description": "Legacy AppLocalizations.pickupLocked"
+  },
+  "legacy_pickupCodeResetNotice": "The driver made a new pickup code — ask them for it.",
+  "@legacy_pickupCodeResetNotice": {
+    "description": "Legacy AppLocalizations.pickupCodeResetNotice"
+  },
+  "legacy_rideCancelledNoShow": "The driver couldn't find you at the pickup and cancelled the ride.",
+  "@legacy_rideCancelledNoShow": {
+    "description": "Legacy AppLocalizations.rideCancelledNoShow"
+  },
+  "legacy_rideCancelledTimeout": "Your ride expired before pickup and was cancelled.",
+  "@legacy_rideCancelledTimeout": {
+    "description": "Legacy AppLocalizations.rideCancelledTimeout"
+  },
+  "legacy_rideCancelledDriverEnded": "The driver ended their route before picking you up. The ride was cancelled.",
+  "@legacy_rideCancelledDriverEnded": {
+    "description": "Legacy AppLocalizations.rideCancelledDriverEnded"
+  },
+  "legacy_newPickupCode": "New code",
+  "@legacy_newPickupCode": {
+    "description": "Legacy AppLocalizations.newPickupCode"
+  },
+  "legacy_pickupLockedDriver": "The passenger entered a wrong code 5 times. Tap \"New code\" and tell them the new one.",
+  "@legacy_pickupLockedDriver": {
+    "description": "Legacy AppLocalizations.pickupLockedDriver"
+  },
+  "legacy_passengerNoShow": "Passenger didn't show",
+  "@legacy_passengerNoShow": {
+    "description": "Legacy AppLocalizations.passengerNoShow"
+  },
+  "legacy_noShowConfirmBody": "Cancel this ride because the passenger didn't show up? The seat becomes free again.",
+  "@legacy_noShowConfirmBody": {
+    "description": "Legacy AppLocalizations.noShowConfirmBody"
+  },
+  "legacy_noShowReported": "Ride cancelled — the passenger didn't show.",
+  "@legacy_noShowReported": {
+    "description": "Legacy AppLocalizations.noShowReported"
+  },
+  "legacy_newCodeIssued": "New code ready — tell it to the passenger.",
+  "@legacy_newCodeIssued": {
+    "description": "Legacy AppLocalizations.newCodeIssued"
+  },
+  "legacy_accountSuspended": "This account has been suspended. Contact support if you think this is a mistake.",
+  "@legacy_accountSuspended": {
+    "description": "Legacy AppLocalizations.accountSuspended"
+  },
+  "legacy_deleteAccount": "Delete account",
+  "@legacy_deleteAccount": {
+    "description": "Legacy AppLocalizations.deleteAccount"
+  },
+  "legacy_deleteAccountTitle": "Delete your account?",
+  "@legacy_deleteAccountTitle": {
+    "description": "Legacy AppLocalizations.deleteAccountTitle"
+  },
+  "legacy_deleteAccountBody": "This permanently deletes your profile, chats, location and planned trips. Rides and ratings that involved other people are kept without your name. This can't be undone.",
+  "@legacy_deleteAccountBody": {
+    "description": "Legacy AppLocalizations.deleteAccountBody"
+  },
+  "legacy_deleteAccountPasswordLabel": "Enter your password to confirm",
+  "@legacy_deleteAccountPasswordLabel": {
+    "description": "Legacy AppLocalizations.deleteAccountPasswordLabel"
+  },
+  "legacy_deleteAccountConfirm": "Delete permanently",
+  "@legacy_deleteAccountConfirm": {
+    "description": "Legacy AppLocalizations.deleteAccountConfirm"
+  },
+  "legacy_accountDeleted": "Your account has been deleted",
+  "@legacy_accountDeleted": {
+    "description": "Legacy AppLocalizations.accountDeleted"
+  },
+  "legacy_deleteAccountActiveRide": "Finish or cancel your current ride before deleting your account",
+  "@legacy_deleteAccountActiveRide": {
+    "description": "Legacy AppLocalizations.deleteAccountActiveRide"
+  },
+  "legacy_driversHeadingYourWay": "{n} heading your way",
+  "@legacy_driversHeadingYourWay": {
+    "description": "Legacy AppLocalizations.driversHeadingYourWay",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_blockUserQ": "Block {name}?",
+  "@legacy_blockUserQ": {
+    "description": "Legacy AppLocalizations.blockUserQ",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_reportUserQ": "Report {name}?",
+  "@legacy_reportUserQ": {
+    "description": "Legacy AppLocalizations.reportUserQ",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_relayStopInfo": "Drops you ~{meters} m from stop \"{stop}\"",
+  "@legacy_relayStopInfo": {
+    "description": "Legacy AppLocalizations.relayStopInfo",
+    "placeholders": {
+      "stop": {
+        "type": "String"
+      },
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_detourAddsLabel": "adds ~{meters} m / {seconds} s to your route",
+  "@legacy_detourAddsLabel": {
+    "description": "Legacy AppLocalizations.detourAddsLabel",
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_matchStateMatchedWith": "Matched with {name}",
+  "@legacy_matchStateMatchedWith": {
+    "description": "Legacy AppLocalizations.matchStateMatchedWith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_adviceTripTooShort": "Short trip (~{km} km) — walking may be faster, or arrange directly.",
+  "@legacy_adviceTripTooShort": {
+    "description": "Legacy AppLocalizations.adviceTripTooShort",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_adviceWalkCloser": "A driver passes ~{meters} m away — walking toward the road could get you a match (if it's safe).",
+  "@legacy_adviceWalkCloser": {
+    "description": "Legacy AppLocalizations.adviceWalkCloser",
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_typing": "{name} is typing…",
+  "@legacy_typing": {
+    "description": "Legacy AppLocalizations.typing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_walkToPickup": "Walk {dist} to pickup",
+  "@legacy_walkToPickup": {
+    "description": "Legacy AppLocalizations.walkToPickup",
+    "placeholders": {
+      "dist": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_etaApprox": "~{min} min away",
+  "@legacy_etaApprox": {
+    "description": "Legacy AppLocalizations.etaApprox",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_walkShort": "{dist} walk",
+  "@legacy_walkShort": {
+    "description": "Legacy AppLocalizations.walkShort",
+    "placeholders": {
+      "dist": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_ridesWithYou": "Rides {dist} with you",
+  "@legacy_ridesWithYou": {
+    "description": "Legacy AppLocalizations.ridesWithYou",
+    "placeholders": {
+      "dist": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_walkToPickupShort": "Walk {dist} to the pickup flag",
+  "@legacy_walkToPickupShort": {
+    "description": "Legacy AppLocalizations.walkToPickupShort",
+    "placeholders": {
+      "dist": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_walkApproxMinutes": "about {min} min",
+  "@legacy_walkApproxMinutes": {
+    "description": "Legacy AppLocalizations.walkApproxMinutes",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_walkEstimate": "≈ {minutes} min · {metres} m",
+  "@legacy_walkEstimate": {
+    "description": "Legacy AppLocalizations.walkEstimate",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "metres": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_checkInBody": "You and your {otherParty} look like you're in different places. If the ride is over, no action is needed.",
+  "@legacy_checkInBody": {
+    "description": "Legacy AppLocalizations.checkInBody",
+    "placeholders": {
+      "otherParty": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_sosShareBody": "I'm in a Sameway ride. My location: {mapsUrl}  Driver: {driver} · Plate: {plate}",
+  "@legacy_sosShareBody": {
+    "description": "Legacy AppLocalizations.sosShareBody",
+    "placeholders": {
+      "mapsUrl": {
+        "type": "String"
+      },
+      "driver": {
+        "type": "String"
+      },
+      "plate": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_shareTripLiveBody": "I'm in a Sameway ride. Follow it live: {url}",
+  "@legacy_shareTripLiveBody": {
+    "description": "Legacy AppLocalizations.shareTripLiveBody",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_semOffer": "Ride offer from {driverName}",
+  "@legacy_semOffer": {
+    "description": "Legacy AppLocalizations.semOffer",
+    "placeholders": {
+      "driverName": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_semAccepted": "Ride accepted, driver {driverName} is en route",
+  "@legacy_semAccepted": {
+    "description": "Legacy AppLocalizations.semAccepted",
+    "placeholders": {
+      "driverName": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_semInRide": "In ride with {driverName}",
+  "@legacy_semInRide": {
+    "description": "Legacy AppLocalizations.semInRide",
+    "placeholders": {
+      "driverName": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_passengerSentRequest": "{name} sent you a ride request",
+  "@legacy_passengerSentRequest": {
+    "description": "Legacy AppLocalizations.passengerSentRequest",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_savedCO2": "You saved {kg} kg CO₂",
+  "@legacy_savedCO2": {
+    "description": "Legacy AppLocalizations.savedCO2",
+    "placeholders": {
+      "kg": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_rideRequestsCount": "Ride requests ({n})",
+  "@legacy_rideRequestsCount": {
+    "description": "Legacy AppLocalizations.rideRequestsCount",
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_dropOffName": "Drop off {name}",
+  "@legacy_dropOffName": {
+    "description": "Legacy AppLocalizations.dropOffName",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_kmBetweenYou": "{km} km between you",
+  "@legacy_kmBetweenYou": {
+    "description": "Legacy AppLocalizations.kmBetweenYou",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_routeSummary": "{km} km · {count, plural, =1{1 passenger} other{{count} passengers}} notified",
+  "@legacy_routeSummary": {
+    "description": "Legacy AppLocalizations.routeSummary",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_pendingOffersCount": "{count, plural, =1{1 offer} other{{count} offers}} awaiting reply",
+  "@legacy_pendingOffersCount": {
+    "description": "Legacy AppLocalizations.pendingOffersCount",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_walkPill": "Walk {m} m · {min} min",
+  "@legacy_walkPill": {
+    "description": "Legacy AppLocalizations.walkPill",
+    "placeholders": {
+      "m": {
+        "type": "String"
+      },
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_driverInMin": "Driver in {min} min",
+  "@legacy_driverInMin": {
+    "description": "Legacy AppLocalizations.driverInMin",
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_seatsCorridorSummary": "Seats: {seats} · corridor {km} km",
+  "@legacy_seatsCorridorSummary": {
+    "description": "Legacy AppLocalizations.seatsCorridorSummary",
+    "placeholders": {
+      "seats": {
+        "type": "String"
+      },
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_switchWillEnd": "You have {reason}. Switching will end it and notify the other party.",
+  "@legacy_switchWillEnd": {
+    "description": "Legacy AppLocalizations.switchWillEnd",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "legacy_ageYears": "{n} y.o.",
+  "@legacy_ageYears": {
+    "description": "Legacy AppLocalizations.ageYears",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_wrongCodeAttemptsLeft": "Wrong code — {n, plural, =1{1 try} other{{n} tries}} left",
+  "@legacy_wrongCodeAttemptsLeft": {
+    "description": "Legacy AppLocalizations.wrongCodeAttemptsLeft",
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_noShowTooEarly": "You can report a no-show in {minutes} min.",
+  "@legacy_noShowTooEarly": {
+    "description": "Legacy AppLocalizations.noShowTooEarly",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "legacy_rideStatus_pending": "pending",
+  "@legacy_rideStatus_pending": {
+    "description": "Legacy AppLocalizations.rideStatus_pending"
+  },
+  "legacy_rideStatus_accepted": "accepted",
+  "@legacy_rideStatus_accepted": {
+    "description": "Legacy AppLocalizations.rideStatus_accepted"
+  },
+  "legacy_rideStatus_in_progress": "in ride",
+  "@legacy_rideStatus_in_progress": {
+    "description": "Legacy AppLocalizations.rideStatus_in_progress"
+  },
+  "legacy_rideStatus_declined": "declined",
+  "@legacy_rideStatus_declined": {
+    "description": "Legacy AppLocalizations.rideStatus_declined"
+  },
+  "legacy_rideStatus_done": "done",
+  "@legacy_rideStatus_done": {
+    "description": "Legacy AppLocalizations.rideStatus_done"
+  },
+  "legacy_rideStatus_cancelled": "cancelled",
+  "@legacy_rideStatus_cancelled": {
+    "description": "Legacy AppLocalizations.rideStatus_cancelled"
+  },
+  "legacy_rideStatus_offered": "offered",
+  "@legacy_rideStatus_offered": {
+    "description": "Legacy AppLocalizations.rideStatus_offered"
   }
 }
