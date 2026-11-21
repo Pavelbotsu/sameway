@@ -2719,6 +2719,51 @@
   "xUpdate_updateSamewayToKeepRiding": "Zaktualizuj sameway, aby dalej jeździć",
   "xUpdate_thisVersionNoLongerWorks": "Ta wersja nie działa już z naszymi serwerami. Aktualizacja zajmie minutę, a przejazdy i wiadomości zostaną.",
   "xUpdate_update": "Aktualizuj",
+  "fmt_metres": "{value} m",
+  "@fmt_metres": {
+    "x-needs-review": true
+  },
+  "fmt_kilometres": "{value} km",
+  "@fmt_kilometres": {
+    "x-needs-review": true
+  },
+  "fmt_minutes": "{minutes} min",
+  "@fmt_minutes": {
+    "x-needs-review": true
+  },
+  "fmt_hours": "{hours} godz.",
+  "@fmt_hours": {
+    "x-needs-review": true
+  },
+  "fmt_hoursMinutes": "{hours} godz. {minutes} min",
+  "@fmt_hoursMinutes": {
+    "x-needs-review": true
+  },
+  "fmt_seconds": "{seconds} s",
+  "@fmt_seconds": {
+    "x-needs-review": true
+  },
+  "fmt_kilograms": "{value} kg",
+  "@fmt_kilograms": {
+    "x-needs-review": true
+  },
+  "fmt_zloty": "{amount} zł",
+  "fmt_justNow": "teraz",
+  "@fmt_justNow": {
+    "x-needs-review": true
+  },
+  "fmt_minutesAgoShort": "{minutes} min",
+  "@fmt_minutesAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_hoursAgoShort": "{hours} godz.",
+  "@fmt_hoursAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_daysAgoShort": "{days} dni",
+  "@fmt_daysAgoShort": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Jestem…",
   "legacy_chooseRole": "Wybierz swoją rolę, aby zacząć",
   "legacy_driver": "Kierowca",

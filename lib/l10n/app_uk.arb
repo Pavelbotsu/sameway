@@ -2143,6 +2143,51 @@
   "xUpdate_updateSamewayToKeepRiding": "Онови sameway, щоб їздити далі",
   "xUpdate_thisVersionNoLongerWorks": "Ця версія вже не працює з нашими серверами. Оновлення займе хвилину, поїздки й повідомлення залишаться.",
   "xUpdate_update": "Оновити",
+  "fmt_metres": "{value} м",
+  "@fmt_metres": {
+    "x-needs-review": true
+  },
+  "fmt_kilometres": "{value} км",
+  "@fmt_kilometres": {
+    "x-needs-review": true
+  },
+  "fmt_minutes": "{minutes} хв",
+  "@fmt_minutes": {
+    "x-needs-review": true
+  },
+  "fmt_hours": "{hours} год",
+  "@fmt_hours": {
+    "x-needs-review": true
+  },
+  "fmt_hoursMinutes": "{hours} год {minutes} хв",
+  "@fmt_hoursMinutes": {
+    "x-needs-review": true
+  },
+  "fmt_seconds": "{seconds} с",
+  "@fmt_seconds": {
+    "x-needs-review": true
+  },
+  "fmt_kilograms": "{value} кг",
+  "@fmt_kilograms": {
+    "x-needs-review": true
+  },
+  "fmt_zloty": "{amount} zł",
+  "fmt_justNow": "щойно",
+  "@fmt_justNow": {
+    "x-needs-review": true
+  },
+  "fmt_minutesAgoShort": "{minutes} хв",
+  "@fmt_minutesAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_hoursAgoShort": "{hours} год",
+  "@fmt_hoursAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_daysAgoShort": "{days} дн",
+  "@fmt_daysAgoShort": {
+    "x-needs-review": true
+  },
   "legacy_iAm": "Я є…",
   "legacy_chooseRole": "Виберіть свою роль для початку",
   "legacy_driver": "Водій",

@@ -9789,6 +9789,112 @@
     "description": "Screens: X_Update",
     "x-deck": "x_update"
   },
+  "fmt_metres": "{value} m",
+  "@fmt_metres": {
+    "description": "Distance under 1 km; value is already formatted",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "fmt_kilometres": "{value} km",
+  "@fmt_kilometres": {
+    "description": "Distance; value is a locale-formatted decimal (3.1 / 3,1)",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "fmt_minutes": "{minutes} min",
+  "@fmt_minutes": {
+    "description": "Duration under an hour",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_hours": "{hours} h",
+  "@fmt_hours": {
+    "description": "Whole hours",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_hoursMinutes": "{hours} h {minutes} min",
+  "@fmt_hoursMinutes": {
+    "description": "Duration of an hour or more",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_seconds": "{seconds} s",
+  "@fmt_seconds": {
+    "description": "Duration under a minute",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_kilograms": "{value} kg",
+  "@fmt_kilograms": {
+    "description": "Weight (CO₂ saved); value is a locale-formatted decimal",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "fmt_zloty": "{amount} zł",
+  "@fmt_zloty": {
+    "description": "Whole złoty, same symbol in every language (docs/04)",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fmt_justNow": "now",
+  "@fmt_justNow": {
+    "description": "Chat list time for messages under a minute old"
+  },
+  "fmt_minutesAgoShort": "{minutes} min",
+  "@fmt_minutesAgoShort": {
+    "description": "Chat list time, minutes ago (no 'ago' to keep it short)",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_hoursAgoShort": "{hours} h",
+  "@fmt_hoursAgoShort": {
+    "description": "Chat list time, hours ago",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "fmt_daysAgoShort": "{days} d",
+  "@fmt_daysAgoShort": {
+    "description": "Chat list time, days ago (under a week)",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "legacy_iAm": "I am a…",
   "@legacy_iAm": {
     "description": "Legacy AppLocalizations.iAm"
