@@ -3609,12 +3609,7 @@ class _AccountSheetState extends State<_AccountSheet> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
             ? l.testNotificationSent
-            : friendlyError(
-                context,
-                ApiException(
-                  (jsonDecode(resp.body) as Map)['error'] as String? ?? '',
-                  statusCode: resp.statusCode,
-                ))),
+            : friendlyError(context, ApiException.fromResponse(resp))),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));

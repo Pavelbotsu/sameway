@@ -2093,6 +2093,94 @@
   "xUpdate_updateSamewayToKeepRiding": "Онови sameway, щоб їздити далі",
   "xUpdate_thisVersionNoLongerWorks": "Ця версія вже не працює з нашими серверами. Оновлення займе хвилину, поїздки й повідомлення залишаться.",
   "xUpdate_update": "Оновити",
+  "err_emailInvalid": "Введи правильну адресу пошти",
+  "@err_emailInvalid": {
+    "x-needs-review": true
+  },
+  "err_nameRequired": "Введи ім’я",
+  "@err_nameRequired": {
+    "x-needs-review": true
+  },
+  "err_nameTooLong": "Ім’я задовге",
+  "@err_nameTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordTooLong": "Пароль задовгий",
+  "@err_passwordTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordSameAsCurrent": "Новий пароль має відрізнятися від поточного",
+  "@err_passwordSameAsCurrent": {
+    "x-needs-review": true
+  },
+  "err_carDetailsTooLong": "Дані про авто задовгі",
+  "@err_carDetailsTooLong": {
+    "x-needs-review": true
+  },
+  "err_phoneInvalid": "Номер телефону виглядає неправильно",
+  "@err_phoneInvalid": {
+    "x-needs-review": true
+  },
+  "err_textTooLong": "{max, plural, one{Забагато тексту: максимум {max} символ} few{Забагато тексту: максимум {max} символи} many{Забагато тексту: максимум {max} символів} other{Забагато тексту: максимум {max} символу}}",
+  "@err_textTooLong": {
+    "x-needs-review": true
+  },
+  "err_photoTooLarge": "Фото завелике. Обери файл до {mb} МБ.",
+  "@err_photoTooLarge": {
+    "x-needs-review": true
+  },
+  "err_codeExpired": "Код уже не діє. Попроси новий.",
+  "@err_codeExpired": {
+    "x-needs-review": true
+  },
+  "err_noCodeRequested": "Спершу попроси код",
+  "@err_noCodeRequested": {
+    "x-needs-review": true
+  },
+  "err_waitBeforeNewCode": "Зачекай хвилину, перш ніж просити новий код",
+  "@err_waitBeforeNewCode": {
+    "x-needs-review": true
+  },
+  "err_tooManyAttempts": "Забагато спроб. Попроси новий код.",
+  "@err_tooManyAttempts": {
+    "x-needs-review": true
+  },
+  "err_tooManyRequests": "Забагато спроб поспіль. Зачекай трохи й спробуй знову.",
+  "@err_tooManyRequests": {
+    "x-needs-review": true
+  },
+  "err_emptyMessage": "Спершу напиши повідомлення",
+  "@err_emptyMessage": {
+    "x-needs-review": true
+  },
+  "err_cantMessageUser": "Цій людині не можна написати",
+  "@err_cantMessageUser": {
+    "x-needs-review": true
+  },
+  "err_messageMatchesOnly": "Писати можна тим, із ким у тебе є збіг",
+  "@err_messageMatchesOnly": {
+    "x-needs-review": true
+  },
+  "err_bugReportIncomplete": "Додай заголовок і опис",
+  "@err_bugReportIncomplete": {
+    "x-needs-review": true
+  },
+  "err_rideChanged": "Попутку вже оновлено. Перевір поточний стан.",
+  "@err_rideChanged": {
+    "x-needs-review": true
+  },
+  "err_pickupBehindYou": "Ця точка зустрічі вже позаду",
+  "@err_pickupBehindYou": {
+    "x-needs-review": true
+  },
+  "err_routeNotLive": "Твій маршрут уже не активний",
+  "@err_routeNotLive": {
+    "x-needs-review": true
+  },
+  "err_accountAlreadyDeleted": "Цей акаунт уже видалено",
+  "@err_accountAlreadyDeleted": {
+    "x-needs-review": true
+  },
   "legacy_safetyDriverBody": "Ти ділишся дорогою, якою вже їдеш. Зупиняйся заради пасажира лише тоді, коли це безпечно і пасажир у зручному, доступному місці. Якщо ні — спокійно їдь далі. Давай гаку, лише якщо тобі це зручно. Це твій вибір, а не обов’язок.",
   "@legacy_safetyDriverBody": {
     "x-needs-review": true

@@ -9992,6 +9992,104 @@
     "description": "Screens: X_Update",
     "x-deck": "x_update"
   },
+  "err_emailInvalid": "Enter a valid email address",
+  "@err_emailInvalid": {
+    "description": "Server error: the email field is missing or malformed"
+  },
+  "err_nameRequired": "Enter your name",
+  "@err_nameRequired": {
+    "description": "Server error: name is required / cannot be empty"
+  },
+  "err_nameTooLong": "That name is too long",
+  "@err_nameTooLong": {
+    "description": "Server error: name is too long"
+  },
+  "err_passwordTooLong": "That password is too long",
+  "@err_passwordTooLong": {
+    "description": "Server error: password is too long (max 72 bytes)"
+  },
+  "err_passwordSameAsCurrent": "Choose a new password that’s different from the current one",
+  "@err_passwordSameAsCurrent": {
+    "description": "Server error: new password must differ from current"
+  },
+  "err_carDetailsTooLong": "Car details are too long",
+  "@err_carDetailsTooLong": {
+    "description": "Server error: car details are too long"
+  },
+  "err_phoneInvalid": "That phone number doesn’t look right",
+  "@err_phoneInvalid": {
+    "description": "Server error: phone number is invalid"
+  },
+  "err_textTooLong": "{max, plural, =1{Too long: 1 character at most} other{Too long: {max} characters at most}}",
+  "@err_textTooLong": {
+    "description": "Server error: bio / comment / message / report reason is too long (max N characters)",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "err_photoTooLarge": "This photo is too big. Choose one under {mb} MB.",
+  "@err_photoTooLarge": {
+    "description": "Server error: photo is too large (max N MB)",
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "err_codeExpired": "This code has expired. Ask for a new one.",
+  "@err_codeExpired": {
+    "description": "Server error: email verification code expired"
+  },
+  "err_noCodeRequested": "Ask for a code first",
+  "@err_noCodeRequested": {
+    "description": "Server error: no email verification code requested"
+  },
+  "err_waitBeforeNewCode": "Wait a minute before asking for another code",
+  "@err_waitBeforeNewCode": {
+    "description": "Server error: please wait before requesting another code"
+  },
+  "err_tooManyAttempts": "Too many tries. Ask for a new code.",
+  "@err_tooManyAttempts": {
+    "description": "Server error: too many attempts — request a new code"
+  },
+  "err_tooManyRequests": "Too many tries in a row. Wait a moment and try again.",
+  "@err_tooManyRequests": {
+    "description": "HTTP 429 (rate limit, sending too fast)"
+  },
+  "err_emptyMessage": "Type a message first",
+  "@err_emptyMessage": {
+    "description": "Server error: empty message"
+  },
+  "err_cantMessageUser": "You can’t message this person",
+  "@err_cantMessageUser": {
+    "description": "Server error: messaging unavailable for this user (blocked)"
+  },
+  "err_messageMatchesOnly": "You can message people you’re matched with",
+  "@err_messageMatchesOnly": {
+    "description": "Server error: you can only message your current match candidates"
+  },
+  "err_bugReportIncomplete": "Add a title and a description",
+  "@err_bugReportIncomplete": {
+    "description": "Server error: bug report title and body are required"
+  },
+  "err_rideChanged": "This ride has already changed. Check its current status.",
+  "@err_rideChanged": {
+    "description": "Server error: the ride or request is no longer in the state the action needs (already cancelled, no longer pending, …)"
+  },
+  "err_pickupBehindYou": "This pickup is already behind you",
+  "@err_pickupBehindYou": {
+    "description": "Server error (driver): you have already passed this pickup"
+  },
+  "err_routeNotLive": "Your route isn’t live any more",
+  "@err_routeNotLive": {
+    "description": "Server error (driver): no active route"
+  },
+  "err_accountAlreadyDeleted": "This account has already been deleted",
+  "@err_accountAlreadyDeleted": {
+    "description": "Server error: account already deleted"
+  },
   "legacy_safetyDriverBody": "You're sharing the road you're already on. Only stop for a passenger when it's safe and they're in a good, reachable spot. If they're not, it's okay to keep going — take a small detour only if you're comfortable. It's your call, not an obligation.",
   "@legacy_safetyDriverBody": {
     "description": "Legacy AppLocalizations.safetyDriverBody"

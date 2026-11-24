@@ -105,6 +105,24 @@ class ApiException implements Exception {
   const ApiException(this.message,
       {this.statusCode = 0, this.code, this.details = const {}});
 
+  /// From an error response body `{error, code, …}`. Doesn't raise the
+  /// session signals: for calls made outside [ApiClient].
+  factory ApiException.fromResponse(http.Response res) {
+    String msg = 'Request failed';
+    String? code;
+    var details = const <String, dynamic>{};
+    try {
+      final parsed = jsonDecode(res.body);
+      if (parsed is Map) {
+        details = Map<String, dynamic>.from(parsed);
+        if (parsed['error'] != null) msg = parsed['error'].toString();
+        code = parsed['code']?.toString();
+      }
+    } catch (_) {/* not JSON — keep default */}
+    return ApiException(msg,
+        statusCode: res.statusCode, code: code, details: details);
+  }
+
   /// Pickup code: tries left before it locks (POST /pickup/confirm).
   int? get attemptsLeft => (details['attempts_left'] as num?)?.toInt();
 
@@ -277,17 +295,8 @@ class ApiClient {
   /// Any other 403 is "not allowed to touch this resource" (wrong role, not
   /// part of this ride) and doesn't affect the session.
   ApiException _error(http.Response res, {required bool authed}) {
-    String msg = 'Request failed';
-    String? code;
-    var details = const <String, dynamic>{};
-    try {
-      final parsed = jsonDecode(res.body);
-      if (parsed is Map) {
-        details = Map<String, dynamic>.from(parsed);
-        if (parsed['error'] != null) msg = parsed['error'].toString();
-        code = parsed['code']?.toString();
-      }
-    } catch (_) {/* not JSON — keep default */}
+    final e = ApiException.fromResponse(res);
+    final code = e.code;
     if (authed) {
       if (res.statusCode == 401) {
         SessionEvents.instance.fireExpired();
@@ -297,8 +306,7 @@ class ApiClient {
         SessionEvents.instance.fireSuspended();
       }
     }
-    return ApiException(msg,
-        statusCode: res.statusCode, code: code, details: details);
+    return e;
   }
 }
 

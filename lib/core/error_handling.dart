@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' show SocketException;
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 
 import '../l10n/error_codes.dart';
@@ -14,66 +15,77 @@ import 'api_client.dart';
 /// Lookup order:
 ///   1. ApiException `message == 'timeout'` → timeout copy
 ///   2. ApiException with a server `code` → lib/l10n/error_codes.dart
-///   3. ApiException with HTTP status → mapped per-class
-///   4. Known English backend messages (errors that come without a code)
+///   3. Known English backend messages (errors without a code), also in
+///      error_codes.dart. Before the status: a wrong password on sign-in is a
+///      401 too, and must not read "session expired".
+///   4. ApiException HTTP status → mapped per class
 ///   5. SocketException / TimeoutException → offline / timeout copy
-///   6. Anything else → generic copy. Unknown server text is never shown: the
+///   6. Anything else → generic copy, and the raw error goes to Crashlytics
+///      ([reportGenericError]). Unknown server text is never shown: the
 ///      backend speaks English only, and every visible string must follow the
 ///      app language.
 String friendlyError(BuildContext context, Object e) {
   final l = context.l10n;
   if (e is ApiException) {
     if (e.message == 'timeout') return l.legacy_errTimeout;
-    final byCode = serverErrorMessage(l, e.code);
+    final byCode = serverErrorMessage(l, e.code, e.details);
     if (byCode != null) return byCode;
+    final byText = serverMessageText(l, e.message);
+    if (byText != null) return byText;
     switch (e.statusCode) {
       // Only 401 means the session is gone. A 403 is "not allowed to do THIS"
-      // (wrong role, not your ride) and falls through to the message below —
-      // it used to read "session expired", which was simply wrong.
+      // (wrong role, not your ride) and falls through to the generic error.
       case 401:
         return l.legacy_errSessionExpired;
       case 404:
         return l.legacy_errNotFound;
+      case 429:
+        return l.err_tooManyRequests;
     }
     if (e.statusCode >= 500) return l.legacy_errServer;
-    return _knownBackendMessage(l, e.message.trim()) ?? l.legacy_errGeneric;
+    reportGenericError('HTTP ${e.statusCode}'
+        '${e.code == null ? '' : ' code=${e.code}'}: ${e.message}');
+    return l.legacy_errGeneric;
   }
   if (e is SocketException) return l.legacy_errOffline;
   if (e is TimeoutException) return l.legacy_errTimeout;
+  reportGenericError('${e.runtimeType}: $e');
   return l.legacy_errGeneric;
 }
 
-/// Exact-match translations for the backend's English `error` strings on
-/// responses that carry no `code`. Prefer adding a code on the server and a
-/// line in error_codes.dart over growing this list.
-String? _knownBackendMessage(L10n l, String msg) {
-  switch (msg) {
-    case 'driver is not available':
-      return l.legacy_errDriverUnavailable;
-    case "you're too far from the driver's route":
-      return l.legacy_errTooFarFromRoute;
-    case 'the driver has already passed you':
-      return l.legacy_errDriverPassedYou;
-    case "driver's position is not up to date — try again shortly":
-      return l.legacy_errDriverPositionStale;
-    case 'update your location first':
-      return l.legacy_errUpdateLocationFirst;
-    case 'offer no longer available':
-      return l.legacy_errOfferGone;
-    case 'ride is full':
-      return l.legacy_errRideFull;
-    case 'wrong code':
-      return l.legacy_errWrongCode;
-    case 'ride is not in the accepted state':
-      return l.legacy_errRideNotAccepted;
-    case 'invalid credentials':
-      return l.legacy_errInvalidCredentials;
-    case 'email already registered':
-      return l.legacy_errEmailTaken;
-    case 'invalid or expired code':
-      return l.legacy_errCodeInvalidOrExpired;
-    case 'current password is incorrect':
-      return l.legacy_errCurrentPasswordWrong;
-  }
-  return null;
+/// Where [friendlyError] sends the raw error when it shows the generic
+/// message, so unmapped server messages show up in Crashlytics. Tests swap it.
+@visibleForTesting
+void Function(String raw) genericErrorSink = _recordToCrashlytics;
+
+final _reported = <String>{};
+
+/// Reports [raw] once per app run (friendlyError also runs inside build).
+void reportGenericError(String raw) {
+  if (_reported.length >= 100 || !_reported.add(raw)) return;
+  genericErrorSink(raw);
+}
+
+@visibleForTesting
+void resetReportedGenericErrors() => _reported.clear();
+
+/// Non-fatal; honours the user's crash-reporting consent (collection is off
+/// without it). Never throws: Firebase may not be set up (tests, misconfigured
+/// builds).
+void _recordToCrashlytics(String raw) {
+  debugPrint('friendlyError fallback: $raw');
+  try {
+    FirebaseCrashlytics.instance
+        .recordError(UnmappedError(raw), StackTrace.current,
+            reason: 'generic error shown to the user', fatal: false)
+        .catchError((Object _) {});
+  } catch (_) {/* Firebase not initialised */}
+}
+
+/// What Crashlytics groups the generic-error reports under.
+class UnmappedError implements Exception {
+  UnmappedError(this.raw);
+  final String raw;
+  @override
+  String toString() => 'UnmappedError: $raw';
 }

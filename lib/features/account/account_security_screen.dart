@@ -132,10 +132,8 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         BrandedSnack.showInfo(context, l.verificationCodeSent);
         _showVerifyCodeSheet();
       } else {
-        final msg =
-            (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        BrandedSnack.showError(context,
-            friendlyError(context, ApiException(msg, statusCode: resp.statusCode)));
+        BrandedSnack.showError(
+            context, friendlyError(context, ApiException.fromResponse(resp)));
       }
     } catch (e) {
       if (mounted) BrandedSnack.showError(context, friendlyError(context, e));
@@ -754,11 +752,8 @@ class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
       if (!mounted) return;
       setState(() {
         _busy = false;
-        _error = switch (e.statusCode) {
-          403 => l.errCurrentPasswordWrong,
-          409 => l.deleteAccountActiveRide,
-          _ => friendlyError(context, e),
-        };
+        // wrong_password (403) and active_ride (409) are mapped by code.
+        _error = friendlyError(context, e);
       });
     } catch (e) {
       if (!mounted) return;
@@ -1002,10 +997,8 @@ class _VerifyEmailSheetState extends State<_VerifyEmailSheet> {
         Navigator.pop(context);
         BrandedSnack.showSuccess(context, widget.l.emailVerified);
       } else {
-        final msg =
-            (jsonDecode(resp.body) as Map)['error'] as String? ?? 'Failed';
-        setState(() => _err = friendlyError(
-            context, ApiException(msg, statusCode: resp.statusCode)));
+        setState(() =>
+            _err = friendlyError(context, ApiException.fromResponse(resp)));
       }
     } catch (e) {
       if (mounted) setState(() => _err = friendlyError(context, e));
@@ -1193,11 +1186,7 @@ class _ChangePasswordSectionState extends State<_ChangePasswordSection> {
           behavior: SnackBarBehavior.floating,
         ));
       } else {
-        final body = jsonDecode(resp.body) as Map;
-        final msg = friendlyError(
-            context,
-            ApiException(body['error'] as String? ?? '',
-                statusCode: resp.statusCode, code: body['code'] as String?));
+        final msg = friendlyError(context, ApiException.fromResponse(resp));
         setState(() => _serverError = msg);
       }
     } catch (_) {

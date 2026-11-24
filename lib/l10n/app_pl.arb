@@ -2516,6 +2516,94 @@
   "xUpdate_updateSamewayToKeepRiding": "Zaktualizuj sameway, aby dalej jeździć",
   "xUpdate_thisVersionNoLongerWorks": "Ta wersja nie działa już z naszymi serwerami. Aktualizacja zajmie minutę, a przejazdy i wiadomości zostaną.",
   "xUpdate_update": "Aktualizuj",
+  "err_emailInvalid": "Wpisz poprawny adres e-mail",
+  "@err_emailInvalid": {
+    "x-needs-review": true
+  },
+  "err_nameRequired": "Wpisz imię",
+  "@err_nameRequired": {
+    "x-needs-review": true
+  },
+  "err_nameTooLong": "To imię jest za długie",
+  "@err_nameTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordTooLong": "To hasło jest za długie",
+  "@err_passwordTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordSameAsCurrent": "Nowe hasło musi się różnić od obecnego",
+  "@err_passwordSameAsCurrent": {
+    "x-needs-review": true
+  },
+  "err_carDetailsTooLong": "Dane auta są za długie",
+  "@err_carDetailsTooLong": {
+    "x-needs-review": true
+  },
+  "err_phoneInvalid": "Ten numer telefonu wygląda na niepoprawny",
+  "@err_phoneInvalid": {
+    "x-needs-review": true
+  },
+  "err_textTooLong": "{max, plural, one{Za długi tekst: maksymalnie {max} znak} few{Za długi tekst: maksymalnie {max} znaki} many{Za długi tekst: maksymalnie {max} znaków} other{Za długi tekst: maksymalnie {max} znaku}}",
+  "@err_textTooLong": {
+    "x-needs-review": true
+  },
+  "err_photoTooLarge": "To zdjęcie jest za duże. Wybierz plik do {mb} MB.",
+  "@err_photoTooLarge": {
+    "x-needs-review": true
+  },
+  "err_codeExpired": "Ten kod jest już nieważny. Poproś o nowy.",
+  "@err_codeExpired": {
+    "x-needs-review": true
+  },
+  "err_noCodeRequested": "Najpierw poproś o kod",
+  "@err_noCodeRequested": {
+    "x-needs-review": true
+  },
+  "err_waitBeforeNewCode": "Poczekaj minutę, zanim poprosisz o nowy kod",
+  "@err_waitBeforeNewCode": {
+    "x-needs-review": true
+  },
+  "err_tooManyAttempts": "Za dużo prób. Poproś o nowy kod.",
+  "@err_tooManyAttempts": {
+    "x-needs-review": true
+  },
+  "err_tooManyRequests": "Za dużo prób pod rząd. Poczekaj chwilę i spróbuj ponownie.",
+  "@err_tooManyRequests": {
+    "x-needs-review": true
+  },
+  "err_emptyMessage": "Najpierw napisz wiadomość",
+  "@err_emptyMessage": {
+    "x-needs-review": true
+  },
+  "err_cantMessageUser": "Nie możesz napisać do tej osoby",
+  "@err_cantMessageUser": {
+    "x-needs-review": true
+  },
+  "err_messageMatchesOnly": "Możesz pisać do osób, z którymi masz dopasowanie",
+  "@err_messageMatchesOnly": {
+    "x-needs-review": true
+  },
+  "err_bugReportIncomplete": "Dodaj tytuł i opis",
+  "@err_bugReportIncomplete": {
+    "x-needs-review": true
+  },
+  "err_rideChanged": "Ten przejazd ma już inny status. Sprawdź aktualny.",
+  "@err_rideChanged": {
+    "x-needs-review": true
+  },
+  "err_pickupBehindYou": "To miejsce odbioru jest już za tobą",
+  "@err_pickupBehindYou": {
+    "x-needs-review": true
+  },
+  "err_routeNotLive": "Twoja trasa nie jest już aktywna",
+  "@err_routeNotLive": {
+    "x-needs-review": true
+  },
+  "err_accountAlreadyDeleted": "To konto jest już usunięte",
+  "@err_accountAlreadyDeleted": {
+    "x-needs-review": true
+  },
   "legacy_safetyDriverBody": "Dzielisz drogę, którą i tak jedziesz. Zatrzymuj się dla pasażera tylko wtedy, gdy jest to bezpieczne, a pasażer stoi w dobrym, dostępnym miejscu. Jeśli nie — możesz jechać dalej. Mały objazd tylko wtedy, gdy ci to odpowiada. To twój wybór, nie obowiązek.",
   "@legacy_safetyDriverBody": {
     "x-needs-review": true

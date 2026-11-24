@@ -55,7 +55,7 @@ final _same = {
 const _notVerbs = {
   'uk': {'постав', 'правила', 'розмов'},
   'pl': {'zł', 'pomysł', 'pomysłem', 'zespół', 'hasła', 'hasłem', 'udziałem',
-      'działa', 'zła'},
+      'działa', 'zła', 'tytuł'},
 };
 
 /// Hits about things, not people (key → words). Reviewed by hand; the
