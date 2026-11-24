@@ -1,6 +1,153 @@
 {
   "@@locale": "pl",
   "common_retry": "Ponów",
+  "err_passwordIncorrect": "Nieprawidłowe hasło",
+  "@err_passwordIncorrect": {
+    "x-needs-review": true
+  },
+  "err_rideNotActive": "Udostępnić można tylko trwający przejazd",
+  "@err_rideNotActive": {
+    "x-needs-review": true
+  },
+  "err_badImage": "Wybierz zdjęcie w formacie JPEG lub PNG",
+  "@err_badImage": {
+    "x-needs-review": true
+  },
+  "err_notPickedUp": "Pasażera jeszcze nie odebrano. Potwierdź kod odbioru albo anuluj lub zgłoś nieobecność.",
+  "@err_notPickedUp": {
+    "x-needs-review": true
+  },
+  "err_noShowTooEarly": "Poczekaj jeszcze chwilę, zanim zgłosisz nieobecność",
+  "@err_noShowTooEarly": {
+    "x-needs-review": true
+  },
+  "err_roleLockedActiveRide": "Rolę zmienisz po zakończeniu przejazdu",
+  "@err_roleLockedActiveRide": {
+    "x-needs-review": true
+  },
+  "pHome_distanceAway": "{distance} od ciebie",
+  "@pHome_distanceAway": {
+    "x-needs-review": true
+  },
+  "pHome_offerDeclined": "Oferta odrzucona",
+  "@pHome_offerDeclined": {
+    "x-needs-review": true
+  },
+  "pHome_lookingForNextRide": "Szukamy kolejnego przejazdu…",
+  "@pHome_lookingForNextRide": {
+    "x-needs-review": true
+  },
+  "dHome_legPickup": "Odbiór",
+  "@dHome_legPickup": {
+    "x-needs-review": true
+  },
+  "dHome_legContinue": "Dalej",
+  "@dHome_legContinue": {
+    "x-needs-review": true
+  },
+  "dHome_legDistanceEta": "{label} {distance} · {duration}",
+  "common_waitingForRating": "{role, select, driver{Czekamy, aż kierowca cię oceni…} other{Czekamy, aż pasażer cię oceni…}}",
+  "@common_waitingForRating": {
+    "x-needs-review": true
+  },
+  "common_aiBadge": "AI",
+  "@common_aiBadge": {
+    "x-needs-review": true
+  },
+  "common_unknownLocation": "nieznana lokalizacja",
+  "@common_unknownLocation": {
+    "x-needs-review": true
+  },
+  "oSplash_tagline": "Twoja droga. Każdego dnia.",
+  "notif_channelRide": "Powiadomienia o przejazdach",
+  "@notif_channelRide": {
+    "x-needs-review": true
+  },
+  "notif_channelRideDesc": "Oferty, akceptacje, odbiór i zakończenie przejazdów.",
+  "@notif_channelRideDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelChat": "Wiadomości na czacie",
+  "@notif_channelChat": {
+    "x-needs-review": true
+  },
+  "notif_channelChatDesc": "Nowe wiadomości od kierowcy lub pasażera.",
+  "@notif_channelChatDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketing": "Promocje i porady",
+  "@notif_channelMarketing": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketingDesc": "Opcjonalne powiadomienia promocyjne i informacyjne.",
+  "@notif_channelMarketingDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeChannel": "Udostępnianie trasy",
+  "@notif_routeChannel": {
+    "x-needs-review": true
+  },
+  "notif_routeChannelDesc": "Pasażerowie po drodze widzą cię, gdy jedziesz.",
+  "@notif_routeChannelDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeTitle": "sameway udostępnia twoją trasę",
+  "@notif_routeTitle": {
+    "x-needs-review": true
+  },
+  "notif_routeText": "Pasażerowie jadący w twoją stronę mogą cię znaleźć.",
+  "@notif_routeText": {
+    "x-needs-review": true
+  },
+  "fmt_metres": "{value} m",
+  "@fmt_metres": {
+    "x-needs-review": true
+  },
+  "fmt_kilometres": "{value} km",
+  "@fmt_kilometres": {
+    "x-needs-review": true
+  },
+  "fmt_minutes": "{minutes} min",
+  "@fmt_minutes": {
+    "x-needs-review": true
+  },
+  "fmt_hours": "{hours} godz.",
+  "@fmt_hours": {
+    "x-needs-review": true
+  },
+  "fmt_hoursMinutes": "{hours} godz. {minutes} min",
+  "@fmt_hoursMinutes": {
+    "x-needs-review": true
+  },
+  "fmt_seconds": "{seconds} s",
+  "@fmt_seconds": {
+    "x-needs-review": true
+  },
+  "fmt_kilograms": "{value} kg",
+  "@fmt_kilograms": {
+    "x-needs-review": true
+  },
+  "fmt_zloty": "{amount} zł",
+  "fmt_justNow": "teraz",
+  "@fmt_justNow": {
+    "x-needs-review": true
+  },
+  "fmt_minutesAgoShort": "{minutes} min",
+  "@fmt_minutesAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_hoursAgoShort": "{hours} godz.",
+  "@fmt_hoursAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_daysAgoShort": "{days} dni",
+  "@fmt_daysAgoShort": {
+    "x-needs-review": true
+  },
+  "prLanguage_english": "angielski",
+  "@prLanguage_english": {
+    "x-needs-review": true
+  },
   "bAnnotate_markTheProblem": "Zaznacz problem",
   "@bAnnotate_markTheProblem": {
     "x-needs-review": true
@@ -161,7 +308,7 @@
   "@bMissions_fromTheRolePillOn": {
     "x-needs-review": true
   },
-  "bMissions_testingAlone": "Testujesz sam?",
+  "bMissions_testingAlone": "Nie masz z kim testować?",
   "@bMissions_testingAlone": {
     "x-needs-review": true
   },
@@ -434,7 +581,7 @@
   "@diDDropOff_passengerOnRoute": {
     "x-needs-review": true
   },
-  "diDDropOff_passengerIsOut": "Pasażer wysiadł",
+  "diDDropOff_passengerIsOut": "Wysiadka zakończona",
   "@diDDropOff_passengerIsOut": {
     "x-needs-review": true
   },
@@ -540,7 +687,10 @@
     "x-needs-review": true
   },
   "dCode_askForCode": "Poproś pasażera o 4‑cyfrowy kod",
-  "common_itsOnHerScreenThis": "Ma go na ekranie. To potwierdza, że zabierasz właściwą osobę.",
+  "common_itsOnPassengerScreen": "Kod jest na ekranie pasażera. To potwierdza, że zabierasz właściwą osobę.",
+  "@common_itsOnPassengerScreen": {
+    "x-needs-review": true
+  },
   "common_wrongCodeMeansWrongPerson": "Zły kod to zła osoba. Nie ruszaj.",
   "common_codeNotWorking": "Kod nie działa?",
   "dDone_routeFinished": "Trasa zakończona",
@@ -550,7 +700,7 @@
   },
   "common_shared": "Wspólnie",
   "dDone_driveAgain": "Jeszcze raz razem? · {name}",
-  "dDone_addHerToYourPeople": "Dodaj tę osobę do ekipy. Dostanie powiadomienie, gdy zaplanujesz tę trasę.",
+  "dDone_addPassengerToPeople": "Dodaj tę osobę do ekipy. Dostanie powiadomienie, gdy zaplanujesz tę trasę.",
   "dEndRoute_endYourRoute": "Zakończyć trasę?",
   "dEndRoute_passengerBooked": "{passengerName}: czeka na odbiór za {duration}. Od razu powiadomimy pasażera i poszukamy innego kierowcy.",
   "@dEndRoute_passengerBooked": {
@@ -572,7 +722,10 @@
   "@dInTrip_seatsStillFree": {
     "x-needs-review": true
   },
-  "dInTrip_droppedOff": "Wysiadka zakończona",
+  "dInTrip_droppedOff": "Wysiadka zakończona: {passengerName}",
+  "@dInTrip_droppedOff": {
+    "x-needs-review": true
+  },
   "dLive_youreSharingYourRoute": "Udostępniasz swoją trasę",
   "dLive_seatsFreeTo": "{seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} · cel: {place} · {duration}",
   "@dLive_seatsFreeTo": {
@@ -601,10 +754,13 @@
   "@dNoShow_canLeave": {
     "x-needs-review": true
   },
-  "dNoShow_leaveWithoutHer": "Jedź bez niej",
+  "dNoShow_leaveWithoutPassenger": "Jedź bez pasażera",
+  "@dNoShow_leaveWithoutPassenger": {
+    "x-needs-review": true
+  },
   "dNoShow_waitMore": "Poczekaj jeszcze {minutes} min",
   "dPassengerCancelled_title": "Anulowano: {passengerName}",
-  "dPassengerCancelled_sheNoLongerNeedsThe": "Przejazd nie jest już potrzebny. Trasa zostaje aktywna, a miejsce znów jest wolne.",
+  "dPassengerCancelled_noLongerNeeded": "Przejazd nie jest już potrzebny. Trasa zostaje aktywna, a miejsce znów jest wolne.",
   "common_o_a11y": "O",
   "common_wantsToJoin": "{passengerName}: chce dołączyć",
   "@common_wantsToJoin": {
@@ -730,7 +886,10 @@
   "@iDriverCancelled_cancelled": {
     "x-needs-review": true
   },
-  "iDriverCancelled_hisPlansChangedYouDont": "Zmieniły mu się plany. Nic nie musisz płacić.",
+  "iDriverCancelled_plansChanged": "Plany się zmieniły. Nic nie musisz płacić.",
+  "@iDriverCancelled_plansChanged": {
+    "x-needs-review": true
+  },
   "iDriverCancelled_otherRidesOn": "Inne przejazdy: {date}",
   "@iDriverCancelled_otherRidesOn": {
     "x-needs-review": true
@@ -830,14 +989,20 @@
     "x-needs-review": true
   },
   "common_availableAtIn": "Dostępne o {time} · za {minutes} min",
-  "iNoShowDriver_shesHereEnterCode": "Jest na miejscu: wpisz kod",
+  "iNoShowDriver_passengerHereEnterCode": "Pasażer jest na miejscu: wpisz kod",
+  "@iNoShowDriver_passengerHereEnterCode": {
+    "x-needs-review": true
+  },
   "iNoShowPassenger_driverNotHere": "Jeszcze nie ma: {driverName}",
   "@iNoShowPassenger_driverNotHere": {
     "x-needs-review": true
   },
   "iNoShowPassenger_placeTimeSharing": "{place} · {time} · udostępnia lokalizację",
   "common_call": "Zadzwoń",
-  "iNoShowPassenger_heDidntCome": "Nie przyjechał",
+  "iNoShowPassenger_driverDidntCome": "Kierowcy nie było",
+  "@iNoShowPassenger_driverDidntCome": {
+    "x-needs-review": true
+  },
   "iPriceHow_howThePriceIsCalculated": "Jak liczymy cenę",
   "iPriceHow_route": "Trasa",
   "iPriceHow_yourCar": "Twoje auto",
@@ -987,7 +1152,10 @@
   "mUpdates_thisWeek": "W tym tygodniu",
   "mUpdates_savedCo2": "Oszczędzono {co2} CO₂",
   "mUpdates_rideWithOn": "Przejazd · {name} · {date}",
-  "mUpdates_rideCancelledByDriver": "Kierowca anulował przejazd",
+  "mUpdates_rideCancelledByDriver": "Przejazd anulowany przez kierowcę",
+  "@mUpdates_rideCancelledByDriver": {
+    "x-needs-review": true
+  },
   "mUpdates_foundAnotherOption": "{date} · znaleźliśmy inną opcję",
   "nD1_requestSecondsLeft": "sameway · Prośba · zostało {seconds} s",
   "nD1_requestBody": "Odbiór {place} · +{detour} objazdu · wysiadka na twojej trasie.",
@@ -1004,7 +1172,7 @@
   "@nD2_placeWaiting": {
     "x-needs-review": true
   },
-  "nD2_iSeeHer": "Widzę pasażera",
+  "nD2_iSeePassenger": "Widzę pasażera",
   "nD3_turnBackVia": "Zawróć przez {street}",
   "nD3_timePlus": "{time} · +{duration}",
   "nD3_didYouPass": "Odbiór pominięty? · {passengerName}",
@@ -1023,7 +1191,10 @@
   "nD4_droppedOff": "Wysadzono",
   "nD4_samewayTrip": "sameway · Podróż",
   "nD4_stillDriving": "Przejazd wciąż trwa? · {passengerName}",
-  "nD4_parkedEndTrip": "Auto stoi przy celu od {minutes} min. Zakończ przejazd, żeby pasażer dostał podsumowanie.",
+  "nD4_parkedEndTrip": "Auto stoi przy celu od {minutes} min. Zakończ przejazd, a pasażer dostanie podsumowanie.",
+  "@nD4_parkedEndTrip": {
+    "x-needs-review": true
+  },
   "nD4_endTrip": "Zakończ przejazd",
   "nD4_stillDriving2": "Wciąż jadę",
   "nD5_dayTimePassengers": "{day} {time} · pasażerowie: {count}",
@@ -1046,7 +1217,10 @@
   "@nD5_routeStillOn": {
     "x-needs-review": true
   },
-  "nD5_eveningbeforeReminderForEveryPlanned": "Przypomnienie wieczorem przed każdą zaplanowaną trasą z pasażerami, żeby nikt nie czekał na próżno. Anulowanie z powiadomienia pyta o powód i od razu informuje pasażerów.",
+  "nD5_eveningbeforeReminderForEveryPlanned": "Przypomnienie wieczorem przed każdą zaplanowaną trasą z pasażerami, żeby uniknąć czekania na próżno. Anulowanie z powiadomienia pyta o powód i od razu informuje pasażerów.",
+  "@nD5_eveningbeforeReminderForEveryPlanned": {
+    "x-needs-review": true
+  },
   "nD6_requestExpiresIn": "Prośba ({name}) wygaśnie za {minutes} min",
   "nD6_wed": "Śr",
   "nD6_bookedSeat": "Miejsce zarezerwowane: {name}",
@@ -1087,7 +1261,10 @@
   "nP3_waitingOf": "Czeka {elapsed} z {limit}",
   "nP3_inCountdown": "za {countdown}",
   "nP3_stillOnYourWay": "Jesteś w drodze?",
-  "nP3_driverWaited": "Kierowca czeka już {minutes} min. Daj znać albo anuluj, żeby mógł ruszyć.",
+  "nP3_driverWaited": "Kierowca czeka już {minutes} min. Daj znać albo anuluj – wtedy kierowca może ruszyć dalej.",
+  "@nP3_driverWaited": {
+    "x-needs-review": true
+  },
   "nP3_moreMinutes": "Jeszcze {minutes} min",
   "nP4_onTheWayArrive": "W drodze · przyjazd {time}",
   "nP4_withDriverLeft": "Kierowca: {driverName} · zostało {distance}",
@@ -1128,7 +1305,7 @@
   "nP6_directions": "Trasa dojścia",
   "nP6_samewayYourPeople": "sameway · Twoja ekipa",
   "nP6_plannedRoute": "Nowa trasa: {name}",
-  "nP6_peopleRoute": "{from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to pierwszy.",
+  "nP6_peopleRoute": "{from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to przed innymi.",
   "@nP6_peopleRoute": {
     "x-needs-review": true
   },
@@ -1313,7 +1490,10 @@
   "prLanguage_currently": "Obecnie: {language}",
   "prLanguage_polish": "polski",
   "prLanguage_ukrainian": "ukraiński",
-  "prLanguage_footnote": "Nazwy są w swoim języku, żeby każdy znalazł swój.",
+  "prLanguage_footnote": "Nazwy są w swoim języku, żeby łatwo było znaleźć swój.",
+  "@prLanguage_footnote": {
+    "x-needs-review": true
+  },
   "prMapStyle_standard": "Standardowa",
   "prMapStyle_satellite": "Satelitarna",
   "prMapStyle_matchPhonesDarkMode": "Jak tryb ciemny telefonu",
@@ -1441,7 +1621,7 @@
   "@psArrived_standByTheBusStop": {
     "x-needs-review": true
   },
-  "psArrived_driversPassed": "{count, plural, one{W ciągu ostatnich {minutes} min przejechał tędy {count} kierowca} few{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} many{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} other{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowcy}}",
+  "psArrived_driversPassed": "Kierowcy, którzy przejechali tędy w ciągu ostatnich {minutes} min: {count}",
   "@psArrived_driversPassed": {
     "x-needs-review": true
   },
@@ -1465,7 +1645,7 @@
   "@psAsk_extraForDriver": {
     "x-needs-review": true
   },
-  "psAsk_onRouteAt": "Na jego trasie · {time}",
+  "psAsk_onRouteAt": "Na trasie kierowcy · {time}",
   "@psAsk_onRouteAt": {
     "x-needs-review": true
   },
@@ -1477,7 +1657,7 @@
   "@psAsk_okIllWalk": {
     "x-needs-review": true
   },
-  "psAsk_cantWalkWellAskThe": "Nie możesz dojść? Zapytamy kierowcę, czy może jeszcze podjechać na twoją ulicę. To jego decyzja, a twoje miejsce czeka, dopóki nie zdecyduje.",
+  "psAsk_cantWalkWellAskThe": "Nie możesz dojść? Zapytamy kierowcę, czy da radę podjechać na twoją ulicę. Decyzja należy do kierowcy, a twoje miejsce czeka na ciebie do czasu decyzji.",
   "@psAsk_cantWalkWellAskThe": {
     "x-needs-review": true
   },
@@ -1497,7 +1677,7 @@
   "@psDriverChoice_notThisTime": {
     "x-needs-review": true
   },
-  "psDriverChoice_carpoolingNotATaxiThe": "Wspólne przejazdy, nie taksówka: kierowca zawsze sam decyduje o objeździe. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.",
+  "psDriverChoice_carpoolingNotATaxiThe": "Wspólne przejazdy, nie taksówka: o objeździe zawsze decyduje kierowca. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.",
   "@psDriverChoice_carpoolingNotATaxiThe": {
     "x-needs-review": true
   },
@@ -1637,7 +1817,7 @@
   "@psWalk_distanceDurationSearching": {
     "x-needs-review": true
   },
-  "psWalk_goBackToWhereI": "Wróć tam, gdzie byłem",
+  "psWalk_goBackToWhereI": "Wróć do poprzedniego miejsca",
   "@psWalk_goBackToWhereI": {
     "x-needs-review": true
   },
@@ -1662,7 +1842,7 @@
     "x-needs-review": true
   },
   "pCall112_keepHolding": "Trzymaj… łączymy za {seconds} s",
-  "pCancelConfirm_driverOnWay": "{driverName}: już jedzie i będzie za {eta}. Od razu go powiadomimy.",
+  "pCancelConfirm_driverOnWay": "{driverName}: już jedzie i będzie za {eta}. Od razu damy znać kierowcy.",
   "@pCancelConfirm_driverOnWay": {
     "x-needs-review": true
   },
@@ -1700,13 +1880,19 @@
   "common_good": "Dobrze",
   "common_reportAProblem": "Zgłoś problem",
   "pDone_rideAgain": "Jeszcze raz razem? · {name}",
-  "pDone_addHimToYourPeople": "Dodaj tę osobę do ekipy. Dowiesz się, gdy zaplanuje trasę.",
+  "pDone_addDriverToPeople": "Dodaj tę osobę do ekipy. Dowiesz się, gdy zaplanuje trasę.",
   "common_add": "Dodaj",
-  "pDriverCancelled_driverCancelled": "Kierowca anulował: {driverName}",
-  "pDriverCancelled_hesNoLongerDrivingThis": "Nie jedzie już w tę stronę. Przepraszamy. Już szukamy od nowa z tego samego miejsca odbioru.",
+  "pDriverCancelled_driverCancelled": "Anulowane przez kierowcę: {driverName}",
+  "@pDriverCancelled_driverCancelled": {
+    "x-needs-review": true
+  },
+  "pDriverCancelled_noLongerDrivingThisWay": "Kierowca nie jedzie już w tę stronę. Przepraszamy. Już szukamy od nowa z tego samego miejsca odbioru.",
+  "@pDriverCancelled_noLongerDrivingThisWay": {
+    "x-needs-review": true
+  },
   "pDriverCancelled_searchingFor": "Szukamy od {elapsed}",
   "pDriverCantPickup_title": "Kierowca nie da rady cię zabrać: {driverName}",
-  "pDriverCantPickup_body": "Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś pierwszy w kolejce.",
+  "pDriverCantPickup_body": "Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś na początku kolejki.",
   "@pDriverCantPickup_body": {
     "x-needs-review": true
   },
@@ -1726,7 +1912,10 @@
   "common_home": "Dom",
   "common_work": "Praca",
   "common_dayPlace": "{day} · {place}",
-  "pHome_pickupConfirmed": "Odbiór {time} · kierowca potwierdził",
+  "pHome_pickupConfirmed": "Odbiór {time} · {driverName}: potwierdzone",
+  "@pHome_pickupConfirmed": {
+    "x-needs-review": true
+  },
   "common_main_a11y": "Główne",
   "common_map": "Mapa",
   "common_rides": "Przejazdy",
@@ -1937,7 +2126,7 @@
   "@rwHome_badgeLevel": {
     "x-needs-review": true
   },
-  "rwHome_krakowRegular": "Krakowski bywalec",
+  "rwHome_krakowRegular": "Kraków na co dzień",
   "@rwHome_krakowRegular": {
     "x-needs-review": true
   },
@@ -2327,151 +2516,88 @@
   "xUpdate_updateSamewayToKeepRiding": "Zaktualizuj sameway, aby dalej jeździć",
   "xUpdate_thisVersionNoLongerWorks": "Ta wersja nie działa już z naszymi serwerami. Aktualizacja zajmie minutę, a przejazdy i wiadomości zostaną.",
   "xUpdate_update": "Aktualizuj",
-  "err_passwordIncorrect": "Nieprawidłowe hasło",
-  "@err_passwordIncorrect": {
+  "legacy_safetyDriverBody": "Dzielisz drogę, którą i tak jedziesz. Zatrzymuj się dla pasażera tylko wtedy, gdy jest to bezpieczne, a pasażer stoi w dobrym, dostępnym miejscu. Jeśli nie — możesz jechać dalej. Mały objazd tylko wtedy, gdy ci to odpowiada. To twój wybór, nie obowiązek.",
+  "@legacy_safetyDriverBody": {
     "x-needs-review": true
   },
-  "err_rideNotActive": "Udostępnić można tylko trwający przejazd",
-  "@err_rideNotActive": {
+  "legacy_readyToShare": "Udostępnisz trasę?",
+  "@legacy_readyToShare": {
     "x-needs-review": true
   },
-  "err_badImage": "Wybierz zdjęcie w formacie JPEG lub PNG",
-  "@err_badImage": {
+  "legacy_safetyPassengerTitle": "Jedź mądrze i bezpiecznie",
+  "@legacy_safetyPassengerTitle": {
     "x-needs-review": true
   },
-  "err_notPickedUp": "Pasażer nie został jeszcze odebrany. Potwierdź kod odbioru albo anuluj lub zgłoś, że się nie pojawił.",
-  "@err_notPickedUp": {
+  "legacy_driverNotified": "Powiadomiliśmy kierowcę. Zostań w swojej lokalizacji.",
+  "@legacy_driverNotified": {
     "x-needs-review": true
   },
-  "err_noShowTooEarly": "Poczekaj jeszcze chwilę, zanim zgłosisz, że ktoś się nie pojawił",
-  "@err_noShowTooEarly": {
+  "legacy_permNotifBody": "Powiadomimy cię tylko o sprawach związanych z przejazdem: akceptacji przez kierowcę, przyjeździe kierowcy lub nowych wiadomościach.",
+  "@legacy_permNotifBody": {
     "x-needs-review": true
   },
-  "err_roleLockedActiveRide": "Rolę zmienisz po zakończeniu przejazdu",
-  "@err_roleLockedActiveRide": {
+  "legacy_bugReportDescription": "Opisz, co się działo i co poszło nie tak",
+  "@legacy_bugReportDescription": {
     "x-needs-review": true
   },
-  "pHome_distanceAway": "{distance} od ciebie",
-  "@pHome_distanceAway": {
+  "legacy_resetSuccess": "Hasło zresetowane — już cię zalogowaliśmy.",
+  "@legacy_resetSuccess": {
     "x-needs-review": true
   },
-  "pHome_offerDeclined": "Oferta odrzucona",
-  "@pHome_offerDeclined": {
+  "legacy_passengerAcceptedRide": "Pasażer przyjmuje twoją ofertę przejazdu!",
+  "@legacy_passengerAcceptedRide": {
     "x-needs-review": true
   },
-  "pHome_lookingForNextRide": "Szukamy kolejnego przejazdu…",
-  "@pHome_lookingForNextRide": {
+  "legacy_driverAccepted": "Zaakceptowane przez kierowcę",
+  "@legacy_driverAccepted": {
     "x-needs-review": true
   },
-  "dHome_legPickup": "Odbiór",
-  "@dHome_legPickup": {
+  "legacy_errDriverPassedYou": "Kierowca jest już za twoim miejscem odbioru",
+  "@legacy_errDriverPassedYou": {
     "x-needs-review": true
   },
-  "dHome_legContinue": "Dalej",
-  "@dHome_legContinue": {
+  "legacy_driverDeclBody": "Sameway nie sprawdza dokumentów. To twoje własne potwierdzenie, a dokumenty musisz pokazać pasażerowi, jeśli o to poprosi.",
+  "@legacy_driverDeclBody": {
     "x-needs-review": true
   },
-  "dHome_legDistanceEta": "{label} {distance} · {duration}",
-  "common_waitingForRating": "{role, select, driver{Czekamy, aż kierowca cię oceni…} other{Czekamy, aż pasażer cię oceni…}}",
-  "@common_waitingForRating": {
+  "legacy_pickupLocked": "Zbyt wiele błędnych kodów. Poproś kierowcę o dotknięcie „Nowy kod”.",
+  "@legacy_pickupLocked": {
     "x-needs-review": true
   },
-  "common_aiBadge": "AI",
-  "@common_aiBadge": {
+  "legacy_pickupCodeResetNotice": "Kierowca ma nowy kod odbioru — poproś o podanie.",
+  "@legacy_pickupCodeResetNotice": {
     "x-needs-review": true
   },
-  "common_unknownLocation": "nieznana lokalizacja",
-  "@common_unknownLocation": {
+  "legacy_rideCancelledNoShow": "Przejazd anulowano: w miejscu odbioru nie udało się cię znaleźć.",
+  "@legacy_rideCancelledNoShow": {
     "x-needs-review": true
   },
-  "oSplash_tagline": "Twoja droga. Każdego dnia.",
-  "notif_channelRide": "Powiadomienia o przejazdach",
-  "@notif_channelRide": {
+  "legacy_rideCancelledDriverEnded": "Trasę kierowcy zakończono przed odbiorem. Przejazd anulowano.",
+  "@legacy_rideCancelledDriverEnded": {
     "x-needs-review": true
   },
-  "notif_channelRideDesc": "Oferty, akceptacje, odbiór i zakończenie przejazdów.",
-  "@notif_channelRideDesc": {
+  "legacy_pickupLockedDriver": "Zły kod wpisano 5 razy. Dotknij „Nowy kod” i podaj pasażerowi nowy.",
+  "@legacy_pickupLockedDriver": {
     "x-needs-review": true
   },
-  "notif_channelChat": "Wiadomości na czacie",
-  "@notif_channelChat": {
+  "legacy_passengerNoShow": "Pasażera nie było",
+  "@legacy_passengerNoShow": {
     "x-needs-review": true
   },
-  "notif_channelChatDesc": "Nowe wiadomości od kierowcy lub pasażera.",
-  "@notif_channelChatDesc": {
+  "legacy_noShowConfirmBody": "Anulować przejazd, bo pasażera nie było? Miejsce znów będzie wolne.",
+  "@legacy_noShowConfirmBody": {
     "x-needs-review": true
   },
-  "notif_channelMarketing": "Promocje i porady",
-  "@notif_channelMarketing": {
+  "legacy_noShowReported": "Przejazd anulowany — pasażera nie było.",
+  "@legacy_noShowReported": {
     "x-needs-review": true
   },
-  "notif_channelMarketingDesc": "Opcjonalne powiadomienia promocyjne i informacyjne.",
-  "@notif_channelMarketingDesc": {
+  "legacy_checkInBody": "Wygląda na to, że ty i {otherParty} jesteście w różnych miejscach. Jeśli przejazd jest już zakończony, nic nie musisz robić.",
+  "@legacy_checkInBody": {
     "x-needs-review": true
   },
-  "notif_routeChannel": "Udostępnianie trasy",
-  "@notif_routeChannel": {
-    "x-needs-review": true
-  },
-  "notif_routeChannelDesc": "Pasażerowie po drodze widzą cię, gdy jedziesz.",
-  "@notif_routeChannelDesc": {
-    "x-needs-review": true
-  },
-  "notif_routeTitle": "sameway udostępnia twoją trasę",
-  "@notif_routeTitle": {
-    "x-needs-review": true
-  },
-  "notif_routeText": "Pasażerowie jadący w twoją stronę mogą cię znaleźć.",
-  "@notif_routeText": {
-    "x-needs-review": true
-  },
-  "fmt_metres": "{value} m",
-  "@fmt_metres": {
-    "x-needs-review": true
-  },
-  "fmt_kilometres": "{value} km",
-  "@fmt_kilometres": {
-    "x-needs-review": true
-  },
-  "fmt_minutes": "{minutes} min",
-  "@fmt_minutes": {
-    "x-needs-review": true
-  },
-  "fmt_hours": "{hours} godz.",
-  "@fmt_hours": {
-    "x-needs-review": true
-  },
-  "fmt_hoursMinutes": "{hours} godz. {minutes} min",
-  "@fmt_hoursMinutes": {
-    "x-needs-review": true
-  },
-  "fmt_seconds": "{seconds} s",
-  "@fmt_seconds": {
-    "x-needs-review": true
-  },
-  "fmt_kilograms": "{value} kg",
-  "@fmt_kilograms": {
-    "x-needs-review": true
-  },
-  "fmt_zloty": "{amount} zł",
-  "fmt_justNow": "teraz",
-  "@fmt_justNow": {
-    "x-needs-review": true
-  },
-  "fmt_minutesAgoShort": "{minutes} min",
-  "@fmt_minutesAgoShort": {
-    "x-needs-review": true
-  },
-  "fmt_hoursAgoShort": "{hours} godz.",
-  "@fmt_hoursAgoShort": {
-    "x-needs-review": true
-  },
-  "fmt_daysAgoShort": "{days} dni",
-  "@fmt_daysAgoShort": {
-    "x-needs-review": true
-  },
-  "prLanguage_english": "angielski",
-  "@prLanguage_english": {
+  "legacy_savedCO2": "Oszczędność: {kg} kg CO₂",
+  "@legacy_savedCO2": {
     "x-needs-review": true
   },
   "legacy_iAm": "Jestem…",
@@ -2503,7 +2629,6 @@
   "legacy_switchToPassenger": "Przełącz na pasażera",
   "legacy_currentRole": "Obecna rola",
   "legacy_accountSecurity": "Konto i bezpieczeństwo",
-  "legacy_readyToShare": "Gotowy, by udostępnić trasę?",
   "legacy_setRouteDesc": "Ustaw cel i znajdź pasażerów jadących w tę samą stronę.",
   "legacy_setRoute": "Ustaw trasę",
   "legacy_settingRoute": "Ustawianie trasy…",
@@ -2580,10 +2705,8 @@
   "legacy_skip": "Pomiń",
   "legacy_getStarted": "Zaczynamy",
   "legacy_continueLabel": "Dalej",
-  "legacy_safetyPassengerTitle": "Jedź mądrze, bądź bezpieczny",
   "legacy_safetyPassengerBody": "Sameway łączy cię z kierowcami, którzy i tak jadą w twoją stronę — to nie taksówka. Czekaj w bezpiecznym, łatwo dostępnym miejscu, gdzie przejeżdżający kierowca może się zatrzymać. Wsiadaj tylko wtedy, gdy czujesz się komfortowo.",
   "legacy_safetyDriverTitle": "Jedź swoją drogą",
-  "legacy_safetyDriverBody": "Dzielisz drogę, którą i tak jedziesz. Zatrzymuj się dla pasażera tylko wtedy, gdy jest to bezpieczne, a on stoi w dobrym, dostępnym miejscu. Jeśli nie — możesz jechać dalej. Mały objazd tylko wtedy, gdy ci to odpowiada. To twój wybór, nie obowiązek.",
   "legacy_save": "Zapisz",
   "legacy_cancel": "Anuluj",
   "legacy_later": "Później",
@@ -2599,7 +2722,6 @@
   "legacy_decline": "Odrzuć",
   "legacy_rideAccepted": "Przejazd zaakceptowany!",
   "legacy_youAreInTheRide": "Jesteś w przejeździe",
-  "legacy_driverNotified": "Kierowca został powiadomiony. Zostań w swojej lokalizacji.",
   "legacy_messageDriver": "Napisz do kierowcy",
   "legacy_driverLabel": "Kierowca",
   "legacy_corridorLabel": "km korytarza",
@@ -2692,7 +2814,6 @@
   "legacy_permLocationTitle": "Znajdź przejazdy w pobliżu",
   "legacy_permLocationBody": "Sameway używa twojej lokalizacji, aby dopasować cię do kierowców jadących w twoją stronę. Dokładną lokalizację widzi tylko dopasowany kierowca — nikt inny.",
   "legacy_permNotifTitle": "Bądź na bieżąco",
-  "legacy_permNotifBody": "Powiadomimy cię tylko o sprawach związanych z przejazdem: akceptacji przez kierowcę, jego przyjeździe lub nowych wiadomościach.",
   "legacy_permContinue": "Dalej",
   "legacy_permNotNow": "Nie teraz",
   "legacy_checkInTitle": "Wszystko w porządku?",
@@ -2726,7 +2847,6 @@
   "legacy_togglePasswordVisibility": "Pokaż/ukryj hasło",
   "legacy_reportABug": "Zgłoś błąd",
   "legacy_bugReportTitle": "Co poszło nie tak?",
-  "legacy_bugReportDescription": "Opisz, co robiłeś i co się stało",
   "legacy_bugReportSubmit": "Wyślij zgłoszenie",
   "legacy_bugReportThanks": "Dzięki — przyjrzymy się temu",
   "legacy_showTutorialAgain": "Pokaż samouczek ponownie",
@@ -2737,12 +2857,10 @@
   "legacy_resetCodeHint": "6-cyfrowy kod",
   "legacy_newPasswordHint": "Nowe hasło",
   "legacy_resetSubmit": "Zresetuj hasło",
-  "legacy_resetSuccess": "Hasło zresetowane — jesteś zalogowany.",
   "legacy_resetCodeSent": "Jeśli konto z tym e-mailem istnieje, wysłaliśmy kod.",
   "legacy_invalidCode": "Nieprawidłowy lub wygasły kod",
   "legacy_rideRequestSent": "Prośba o przejazd wysłana!",
   "legacy_noCarInfo": "Brak danych samochodu",
-  "legacy_passengerAcceptedRide": "Pasażer zaakceptował twoją ofertę przejazdu!",
   "legacy_endRouteAndSwitch": "Zakończ trasę i przełącz",
   "legacy_cancelRequestsAndSwitch": "Anuluj prośby i przełącz",
   "legacy_endDriverRouteQ": "Zakończyć trasę kierowcy?",
@@ -2767,7 +2885,6 @@
   "legacy_waitingForPassengerLocation": "Czekamy na lokalizację pasażera…",
   "legacy_whereDoYouWantToGo": "Dokąd chcesz jechać?",
   "legacy_waitingForDriver": "Czekamy na kierowcę…",
-  "legacy_driverAccepted": "Kierowca zaakceptował",
   "legacy_mapStyleStandard": "Standardowa",
   "legacy_mapStyleSatellite": "Satelitarna",
   "legacy_mapStyleDark": "Ciemna",
@@ -2781,7 +2898,6 @@
   "legacy_enterSixDigitCode": "Wpisz 6-cyfrowy kod",
   "legacy_errDriverUnavailable": "Ten kierowca nie jest już dostępny",
   "legacy_errTooFarFromRoute": "Jesteś za daleko od trasy kierowcy",
-  "legacy_errDriverPassedYou": "Kierowca minął już twoje miejsce odbioru",
   "legacy_errDriverPositionStale": "Pozycja kierowcy jest nieaktualna — spróbuj za chwilę",
   "legacy_errUpdateLocationFirst": "Najpierw zaktualizuj swoją lokalizację",
   "legacy_errOfferGone": "Ta oferta nie jest już dostępna",
@@ -2802,7 +2918,6 @@
   "legacy_birthDateRequired": "Podaj datę urodzenia — Sameway jest dla osób od 18 lat",
   "legacy_errUnderage": "Aby korzystać z Sameway, musisz mieć ukończone 18 lat",
   "legacy_driverDeclTitle": "Przed pierwszym przejazdem",
-  "legacy_driverDeclBody": "Sameway nie sprawdza dokumentów. Potwierdzasz to sam i musisz je pokazać pasażerowi na jego prośbę.",
   "legacy_driverDeclLicence": "Mam ważne prawo jazdy",
   "legacy_driverDeclInsurance": "Mój samochód ma ważne ubezpieczenie OC",
   "legacy_driverDeclRoadworthy": "Mój samochód jest sprawny, a każde oferowane miejsce ma pas bezpieczeństwa",
@@ -2820,16 +2935,8 @@
   "legacy_analyticsSettingSubtitle": "Opcjonalne. Pomaga nam znajdować błędy i ulepszać aplikację.",
   "legacy_downloadMyData": "Pobierz moje dane",
   "legacy_legalAndPrivacy": "Prawo i prywatność",
-  "legacy_pickupLocked": "Zbyt wiele błędnych kodów. Poproś kierowcę, by dotknął „Nowy kod”.",
-  "legacy_pickupCodeResetNotice": "Kierowca wygenerował nowy kod odbioru — poproś go o niego.",
-  "legacy_rideCancelledNoShow": "Kierowca nie znalazł cię w miejscu odbioru i anulował przejazd.",
   "legacy_rideCancelledTimeout": "Twój przejazd wygasł przed odbiorem i został anulowany.",
-  "legacy_rideCancelledDriverEnded": "Kierowca zakończył trasę, zanim cię odebrał. Przejazd został anulowany.",
   "legacy_newPickupCode": "Nowy kod",
-  "legacy_pickupLockedDriver": "Pasażer 5 razy wpisał zły kod. Dotknij „Nowy kod” i podaj mu nowy.",
-  "legacy_passengerNoShow": "Pasażer się nie pojawił",
-  "legacy_noShowConfirmBody": "Anulować przejazd, bo pasażer się nie pojawił? Miejsce znów będzie wolne.",
-  "legacy_noShowReported": "Przejazd anulowany — pasażer się nie pojawił.",
   "legacy_newCodeIssued": "Nowy kod gotowy — podaj go pasażerowi.",
   "legacy_accountSuspended": "To konto zostało zawieszone. Skontaktuj się z pomocą, jeśli uważasz, że to pomyłka.",
   "legacy_deleteAccount": "Usuń konto",
@@ -2858,7 +2965,6 @@
   "legacy_walkToPickupShort": "Dojdź {dist} do flagi odbioru",
   "legacy_walkApproxMinutes": "ok. {min} min",
   "legacy_walkEstimate": "≈ {minutes} min · {metres} m",
-  "legacy_checkInBody": "Wygląda na to, że ty i {otherParty} jesteście w różnych miejscach. Jeśli przejazd się skończył, nic nie musisz robić.",
   "legacy_sosShareBody": "Jadę przejazdem Sameway. Moja lokalizacja: {mapsUrl}  Kierowca: {driver} · Rejestracja: {plate}",
   "legacy_shareTripLiveBody": "Jadę przejazdem Sameway. Śledź go na żywo: {url}",
   "legacy_semOffer": "Oferta przejazdu od: {driverName}",
@@ -2871,7 +2977,6 @@
   "@legacy_passengerSentRequest": {
     "x-needs-review": true
   },
-  "legacy_savedCO2": "Zaoszczędziłeś {kg} kg CO₂",
   "legacy_rideRequestsCount": "Prośby o przejazd ({n})",
   "legacy_dropOffName": "Wysadź: {name}",
   "legacy_kmBetweenYou": "{km} km między wami",

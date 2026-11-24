@@ -105,7 +105,7 @@ b_chat_during_a_ride | pl | Napisz w trakcie przejazdu
 b_quick_replies_and_live_location | pl | Szybkie odpowiedzi i lokalizacja na żywo
 b_switch_roles_and_back | pl | Zmień rolę i wróć
 b_from_the_role_pill_on | pl | Przełącznikiem roli na mapie
-b_testing_alone | pl | Testujesz sam?
+b_testing_alone | icu | bMissions_testingAlone | | | Nie masz z kim testować? | pl
 b_turn_on_a_demo_driver | pl | Włącz kierowcę demo: wirtualne auto jeździ po Krakowie i akceptuje twoje prośby.
 b_demo_driver | pl | Kierowca demo
 b_next_reporting_bugs | pl | Dalej: zgłaszanie błędów
@@ -191,7 +191,7 @@ b_next_what_to_test | pl | Dalej: co przetestować
 # names are mock-up content.
 di_dropoff_9_min | icu | diDDropOff_dropOffIn_a11y | Drop-off · {duration} | Висадка · за {duration} | Wysiadka · za {duration} | pl
 di_olena_al_jana_pawa_ii | icu | diDDropOff_passengerOnRoute | {passengerName} · {place}, on your route | {passengerName} · {place}, по дорозі | {passengerName} · {place}, na twojej trasie | pl
-di_passenger_is_out | pl | Pasażer wysiadł
+di_passenger_is_out | icu | diDDropOff_passengerIsOut | | Пасажира висаджено | Wysiadka zakończona | uk pl
 di_one_button_to_end_the | skip | board-note
 di_route_shared_passengers_on_your | skip | board-note
 di_navigation_owns_the_island_sameway | skip | board-note
@@ -269,21 +269,21 @@ rules_what_happens | pl | Co się dzieje
 # ── PS_ (pickup spots): Polish missing in the deck ───────────────────────────
 ps_youre_at_the_pickup_spot | pl | Jesteś w punkcie odbioru
 ps_stand_by_the_bus_stop | pl | Stań przy znaku przystanku, żeby kierowcy cię widzieli.
-ps_4_drivers_passed_here_in | icu | psArrived_driversPassed | {count, plural, =1{1 driver passed} other{{count} drivers passed}} here in the last {minutes} min | {count, plural, one{За останні {minutes} хв тут проїхав {count} водій} few{За останні {minutes} хв тут проїхали {count} водії} many{За останні {minutes} хв тут проїхало {count} водіїв} other{За останні {minutes} хв тут проїхало {count} водія}} | {count, plural, one{W ciągu ostatnich {minutes} min przejechał tędy {count} kierowca} few{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} many{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowców} other{W ciągu ostatnich {minutes} min przejechało tędy {count} kierowcy}} | uk pl
+ps_4_drivers_passed_here_in | icu | psArrived_driversPassed | {count, plural, =1{1 driver passed} other{{count} drivers passed}} here in the last {minutes} min | Водії, які проїхали тут за останні {minutes} хв: {count} | Kierowcy, którzy przejechali tędy w ciągu ostatnich {minutes} min: {count} | uk pl
 ps_better_odds | pl | Większe szanse
 ps_meet_marek_at_a_pickup | icu | psAsk_meetAtSpot | Meet {driverName} at a pickup spot? | Зустрінетеся на зручній точці? | Spotkacie się w punkcie odbioru? | pl
-ps_marek_is_driving_along_ul | icu | psAsk_driverAlongStreet | {driverName} is driving along {street}. Your street is a {detour} detour for him, so the pickup spot works better for both of you. In carpooling you agree on the pickup point together. | {driverName}: їде по {street}. Заїхати на твою вулицю – це для водія ще {detour} гаку, тож точка зустрічі зручніша вам обом. У попутках місце зустрічі обирають разом. | {driverName}: jedzie ulicą {street}. Twoja ulica to dla kierowcy {detour} objazdu, więc punkt odbioru jest wygodniejszy dla was obojga. We wspólnych przejazdach miejsce odbioru ustalacie razem. | uk pl
+ps_marek_is_driving_along_ul | icu | psAsk_driverAlongStreet | {driverName} is driving along {street}. Your street is a {detour} detour for the driver, so the pickup spot works better for both of you. In carpooling you agree on the pickup point together. | {driverName}: їде по {street}. Заїхати на твою вулицю – це для водія ще {detour} гаку, тож точка зустрічі зручніша вам обом. У попутках місце зустрічі обирають разом. | {driverName}: jedzie ulicą {street}. Twoja ulica to dla kierowcy {detour} objazdu, więc punkt odbioru jest wygodniejszy dla was obojga. We wspólnych przejazdach miejsce odbioru ustalacie razem. | uk pl
 ps_your_current_point | pl | Twoje obecne miejsce
 ps_6_min_for_marek | icu | psAsk_extraForDriver | +{detour} for {driverName} | +{detour} для водія | +{detour} dla kierowcy | pl
-ps_on_his_route_1831 | icu | psAsk_onRouteAt | On his route · {time} | По його дорозі · {time} | Na jego trasie · {time} | pl
+ps_on_his_route_1831 | icu | psAsk_onRouteAt | On the driver’s route · {time} | По дорозі водія · {time} | Na trasie kierowcy · {time} | uk pl
 ps_i_cant_walk_there | pl | Nie dam rady tam dojść
 ps_ok_ill_walk | pl | OK, dojdę
-ps_cant_walk_well_ask_the | pl | Nie możesz dojść? Zapytamy kierowcę, czy może jeszcze podjechać na twoją ulicę. To jego decyzja, a twoje miejsce czeka, dopóki nie zdecyduje.
+ps_cant_walk_well_ask_the | icu | psAsk_cantWalkWellAskThe | Can’t walk? We’ll ask the driver if they can still come to your street. It’s the driver’s call, and your seat stays yours until they decide. | Не можеш дійти? Ми спитаємо водія, чи вийде заїхати на твою вулицю. Вирішує водій, а місце поки лишається за тобою. | Nie możesz dojść? Zapytamy kierowcę, czy da radę podjechać na twoją ulicę. Decyzja należy do kierowcy, a twoje miejsce czeka na ciebie do czasu decyzji. | uk pl
 ps_olena_cant_walk_to_the | icu | psDriverChoice_cantWalk | {passengerName} can’t walk to the pickup spot | {passengerName}: не може дійти до точки | {passengerName}: nie może dojść do punktu odbioru | uk pl
 ps_her_original_point_is_a | icu | psDriverChoice_originalPointDetour | Their original point is a {detour} detour (+{distance}). Your call: pick them up there or let us find them another driver. | Місце пасажира – це {detour} гаку (+{distance}). Вирішуєш ти: заїхати туди чи хай ми знайдемо іншого водія. | Pierwotne miejsce pasażera to {detour} objazdu (+{distance}). Twoja decyzja: odbierz stamtąd albo poszukamy innego kierowcy. | uk pl
 ps_pick_up_there | pl | Odbiorę stamtąd
 ps_not_this_time | pl | Nie tym razem
-ps_carpooling_not_a_taxi_the | pl | Wspólne przejazdy, nie taksówka: kierowca zawsze sam decyduje o objeździe. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary.
+ps_carpooling_not_a_taxi_the | icu | psDriverChoice_carpoolingNotATaxiThe | Carpooling, not a taxi: the driver always decides whether to make a detour. If the answer is no, the passenger keeps searching and nobody gets a penalty. | Це попутки, а не таксі: чи давати гаку, завжди вирішує водій. Якщо водій відмовить, пасажир шукає далі, і ніхто не отримує штрафів. | Wspólne przejazdy, nie taksówka: o objeździe zawsze decyduje kierowca. Jeśli odmówi, pasażer szuka dalej i nikt nie dostaje kary. | uk pl
 ps_pickup_spots | pl | Punkty odbioru
 ps_marked_places_where_drivers_pass | pl | Oznaczone miejsca, gdzie kierowcy przejeżdżają najczęściej i mogą bezpiecznie się zatrzymać: zatoki autobusowe, szerokie ulice, dobrze oświetlone skrzyżowania. Czekając tutaj, szybciej zostaniesz odebrany.
 ps_drivers_pass_more_often | pl | Kierowcy jeżdżą tu częściej
@@ -296,7 +296,7 @@ ps_i_cant_walk_far | pl | Trudno mi chodzić daleko
 ps_olena_agreed_to_meet_at | icu | psNotifDriver_agreedToMeet | {passengerName} agreed to meet at a pickup spot | {passengerName}: підійде до точки зустрічі | {passengerName}: dojdzie do punktu odbioru | uk pl
 ps_pickup_ul_mogilska_12_right | icu | psNotifDriver_pickupOnRoute | Pickup: {place}, right on your route. No detour, you save {saved}. | Зустріч: {place}, просто на твоєму маршруті. Без гаку, мінус {saved}. | Odbiór: {place}, dokładnie na twojej trasie. Bez objazdu, oszczędzasz {saved}. | pl
 ps_walk_to_a_pickup_spot | pl | Dojdziesz do punktu odbioru?
-ps_marek_is_on_ul_mogilska | icu | psNotifPassenger_walkSaves | {driverName} is on {street}. A {walk} walk to the pickup spot saves him a {detour} detour. Pickup at {time}. | {driverName}: їде по {street}. {walk} пішки до точки – і водієві не треба давати гаку на {detour}. Зустріч о {time}. | {driverName}: jedzie ulicą {street}. {walk} pieszo do punktu odbioru oszczędza kierowcy {detour} objazdu. Odbiór o {time}. | uk pl
+ps_marek_is_on_ul_mogilska | icu | psNotifPassenger_walkSaves | {driverName} is on {street}. A {walk} walk to the pickup spot saves the driver a {detour} detour. Pickup at {time}. | {driverName}: їде по {street}. {walk} пішки до точки – і водієві не треба давати гаку на {detour}. Зустріч о {time}. | {driverName}: jedzie ulicą {street}. {walk} pieszo do punktu odbioru oszczędza kierowcy {detour} objazdu. Odbiór o {time}. | uk pl
 ps_ill_walk | pl | Dojdę
 ps_cant_walk_there | pl | Nie dam rady dojść
 ps_sent_only_when_a_short | skip | board-note
@@ -319,7 +319,7 @@ ps_walk_there | pl | Pójdę tam
 ps_your_search_keeps_running_either | pl | Wyszukiwanie trwa tak czy inaczej.
 ps_walking_to_the_pickup_spot | pl | Idziesz do punktu odbioru
 ps_220_m_3_min_still | icu | psWalk_distanceDurationSearching | {distance} · {duration} · still searching | {distance} · {duration} · пошук триває | {distance} · {duration} · wciąż szukamy | pl
-ps_go_back_to_where_i | pl | Wróć tam, gdzie byłem
+ps_go_back_to_where_i | icu | psWalk_goBackToWhereI | | | Wróć do poprzedniego miejsca | pl
 ps_walk_to_ul_mogilska_12 | icu | psWalkToDriver_walkTo | Walk to {place} | Йди до {place} | Idź do: {place} | pl
 ps_you_both_arrive_around_1831 | icu | psWalkToDriver_bothArriveAround | You both arrive around {time} | Будете там приблизно одночасно, о {time} | Oboje będziecie tam około {time} | pl
 ps_you | pl | Ty
@@ -330,9 +330,9 @@ ps_pickup_code_stays_the_same | icu | psWalkToDriver_codeStaysSame | Pickup code
 b_step_1_of_2 | icu | bReport_stepOf | Step {step} of {total} | Крок {step} з {total} | Krok {step} z {total}
 b_step_2_of_2 | merge | bReport_stepOf
 p_keep_holding_calling_in_1 | icu | pCall112_keepHolding | Keep holding… calling in {seconds} s | Тримай… дзвінок за {seconds} с | Trzymaj… łączymy za {seconds} s
-p_marek_is_already_on_his | icu | pCancelConfirm_driverOnWay | {driverName} is already on his way and arrives in {eta}. We’ll tell him right away. | {driverName}: уже їде й буде за {eta}. Ми одразу йому скажемо. | {driverName}: już jedzie i będzie za {eta}. Od razu go powiadomimy. | uk pl
-p_marek_waits_up_to_5 | icu | pCantFind_driverWaits | {driverName} waits up to {minutes} min after he arrives. He’s in a {car}, {plate}. | {driverName}: чекає до {minutes} хв після приїзду. {car}, {plate}. | {driverName}: czeka do {minutes} min od przyjazdu. {car}, {plate}. | uk pl
-p_marek_sees_you_on_his | icu | pCantFind_driverSeesYou | {driverName} sees you on his map until pickup | {driverName}: бачить тебе на мапі до зустрічі | {driverName}: widzi cię na mapie do momentu odbioru | uk pl
+p_marek_is_already_on_his | icu | pCancelConfirm_driverOnWay | {driverName} is already on the way and arrives in {eta}. We’ll let them know right away. | {driverName}: уже їде й буде за {eta}. Ми одразу повідомимо водія. | {driverName}: już jedzie i będzie za {eta}. Od razu damy znać kierowcy. | uk pl
+p_marek_waits_up_to_5 | icu | pCantFind_driverWaits | {driverName} waits up to {minutes} min after arriving. Car: {car}, {plate}. | {driverName}: чекає до {minutes} хв після приїзду. {car}, {plate}. | {driverName}: czeka do {minutes} min od przyjazdu. {car}, {plate}. | uk pl
+p_marek_sees_you_on_his | icu | pCantFind_driverSeesYou | {driverName} sees you on the map until pickup | {driverName}: бачить тебе на мапі до зустрічі | {driverName}: widzi cię na mapie do momentu odbioru | uk pl
 p_6_min_drive | icu | common_aboutDrive | ~{duration} drive | ~{duration} машиною | ~{duration} jazdy
 p_including_you_1_just_you | keep
 p_marek_cant_take_you_this | icu | pDeclined_driverCantTakeYou | {driverName} can’t take you this time | Цього разу не вийде: {driverName} | Tym razem nie da rady: {driverName}
@@ -345,12 +345,12 @@ p_shared_with_marek | icu | common_sharedWith | Shared with {name} | Разом 
 p_04_kg | skip | sample
 p_how_was_the_ride_with | icu | common_howWasRide | How was the ride with {name}? | {name}: як доїхали? | {name}: jak minął przejazd?
 p_ride_with_marek_again | icu | pDone_rideAgain | Ride with {name} again? | Ще разом? · {name} | Jeszcze raz razem? · {name}
-p_marek_cancelled | icu | pDriverCancelled_driverCancelled | {driverName} cancelled | Водій скасував: {driverName} | Kierowca anulował: {driverName}
+p_marek_cancelled | icu | pDriverCancelled_driverCancelled | {driverName} cancelled | Скасовано водієм: {driverName} | Anulowane przez kierowcę: {driverName} | uk pl
 p_searching_for_012 | icu | pDriverCancelled_searchingFor | Searching for {elapsed} | Шукаємо вже {elapsed} | Szukamy od {elapsed}
 p_marek_cant_make_the_pickup | icu | pDriverCantPickup_title | {driverName} can’t make the pickup | Не вийде забрати: {driverName} | Kierowca nie da rady cię zabrać: {driverName}
-p_he_cant_stop_safely_at | icu | pDriverCantPickup_body | He can’t stop safely at {street}. We’re searching again from the same spot, and you’re first in line. | Водій не може безпечно зупинитися тут: {street}. Шукаємо знову з тієї ж точки, і ти перший у черзі. | Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś pierwszy w kolejce. | uk pl
+p_he_cant_stop_safely_at | icu | pDriverCantPickup_body | The driver can’t stop safely at {street}. We’re searching again from the same spot, and you’re first in line. | Водій не може безпечно зупинитися тут: {street}. Шукаємо знову з тієї ж точки, і ти на початку черги. | Kierowca nie może tu bezpiecznie stanąć: {street}. Szukamy znowu z tego samego miejsca, a ty jesteś na początku kolejki. | uk pl
 p_tomorrow_politechnika | icu | common_dayPlace | {day} · {place} | {day} · {place} | {day} · {place}
-p_pickup_0810_marek_confirmed | icu | pHome_pickupConfirmed | Pickup {time} · {driverName} confirmed | Зустріч о {time} · водій підтвердив | Odbiór {time} · kierowca potwierdził
+p_pickup_0810_marek_confirmed | icu | pHome_pickupConfirmed | Pickup {time} · {driverName} confirmed | Зустріч о {time} · {driverName}: підтверджено | Odbiór {time} · {driverName}: potwierdzone | uk pl
 p_2_unread | icu | common_unreadCount | {count} unread | {count, plural, one{{count} нове} few{{count} нові} many{{count} нових} other{{count} нового}} | {count, plural, one{{count} nieprzeczytana} few{{count} nieprzeczytane} many{{count} nieprzeczytanych} other{{count} nieprzeczytanej}} | uk pl
 p_arrival_9_min_26_km | icu | pInRide_arrivalLeft | Arrival · {duration} · {distance} left | Прибуття через {duration} · ще {distance} | Przyjazd · {duration} · zostało {distance}
 p_picked_up_ul_mogilska_12 | icu | pInRide_pickedUpAt | Picked up · {place} | У машині · {place} | Odebrano · {place}
@@ -402,7 +402,7 @@ p_leave_around_1839 | icu | common_leaveAround | Leave around {time} | Виїз�
 p_in_30_min | merge | common_inMinutes
 p_leave_around_1854 | merge | common_leaveAround
 p_waiting_for_marek_to_accept | icu | pWaiting_waitingFor | Waiting for {driverName} to accept | Чекаємо відповіді: {driverName} | Czekamy na akceptację: {driverName}
-p_usually_under_30_s_if | keep
+p_usually_under_30_s_if | icu | pWaiting_usuallyUnder30SIf | Usually under 30 s. If the driver can’t take you, we keep searching automatically. | |
 p_marek_4_min_to_pickup | icu | pWaiting_driverToPickup | {driverName} · {duration} to pickup | {driverName} · {duration} до зустрічі | {driverName} · {duration} do odbioru
 p_prototype_marek_accepts | skip | board-note
 
@@ -428,7 +428,7 @@ d_then_6_min_to_your | icu | dInTrip_thenToDestination | Then {duration} to your
 d_drop_off_olena_al_jana | icu | dInTrip_dropOffAt | Drop off {passengerName} · {place} | Висадка: {passengerName} · {place} | Wysiadka: {passengerName} · {place}
 d_1857_your_destination | icu | dInTrip_yourDestinationAt | {time} · your destination | {time} · ти на місці | {time} · twój cel
 d_2_seats_still_free | icu | dInTrip_seatsStillFree | {seats, plural, =1{1 seat} other{{seats} seats}} still free | Ще {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} | Wciąż {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} | uk pl
-d_olena_dropped_off | icu | dInTrip_droppedOff | {passengerName} dropped off | Пасажир вийшов | Wysiadka zakończona
+d_olena_dropped_off | icu | dInTrip_droppedOff | {passengerName} dropped off | Висаджено: {passengerName} | Wysiadka zakończona: {passengerName} | uk pl
 d_3_seats_free_to_politechnika | icu | dLive_seatsFreeTo | {seats, plural, =1{1 seat} other{{seats} seats}} free · to {place} · {duration} | {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} · до {place} · {duration} | {seats, plural, one{{seats} wolne miejsce} few{{seats} wolne miejsca} many{{seats} wolnych miejsc} other{{seats} wolnego miejsca}} · cel: {place} · {duration} | uk pl
 d_2_passengers_near_your_route | icu | dLive_passengersNearRoute | {count, plural, =1{1 passenger} other{{count} passengers}} near your route | Поруч із маршрутом {count, plural, one{{count} пасажир} few{{count} пасажири} many{{count} пасажирів} other{{count} пасажира}} | {count, plural, one{{count} pasażer} few{{count} pasażerów} many{{count} pasażerów} other{{count} pasażera}} blisko twojej trasy | uk pl
 d_waited_5_minutes | icu | dNoShow_waitedMinutes | Waited {minutes, plural, =1{1 minute} other{{minutes} minutes}} | Чекаєш {minutes, plural, one{{minutes} хвилину} few{{minutes} хвилини} many{{minutes} хвилин} other{{minutes} хвилини}} | Czekasz {minutes, plural, one{{minutes} minutę} few{{minutes} minuty} many{{minutes} minut} other{{minutes} minuty}} | uk pl
@@ -462,9 +462,9 @@ o_no_account_yet_for | icu | oCreate_noAccountYet | No account yet for {email}. 
 o_it_takes_a_minute | merge | oCreate_noAccountYet
 o_pavloexamplecom_already_has_an_account | icu | oEmailExists_body | {email} already has an account through Google. Continue with Google to get back in. | {email} уже має акаунт через Google. Продовж через Google, щоб увійти. | {email} ma już konto przez Google. Kontynuuj z Google, aby się zalogować.
 o_a_4digit_pickup_code_confirms | keep
-o_when_a_driver_accepts_and | keep
+o_when_a_driver_accepts_and | icu | oNotifications_whenADriverAcceptsAnd | | Коли водій погоджується і коли до тебе лишається 2 хв | | uk
 o_wrong_password_2_tries_left | icu | oPasswordError_triesLeft | Wrong password. {tries, plural, =1{1 try} other{{tries} tries}} left, then sign-in pauses for {minutes} min. | Неправильний пароль. {tries, plural, one{Ще {tries} спроба} few{Ще {tries} спроби} many{Ще {tries} спроб} other{Ще {tries} спроби}}, потім вхід призупиниться на {minutes} хв. | Złe hasło. {tries, plural, one{Została {tries} próba} few{Zostały {tries} próby} many{Zostało {tries} prób} other{Zostało {tries} próby}}, potem logowanie wstrzymamy na {minutes} min. | uk pl
-o_we_sent_a_reset_link | icu | oReset_sentLink | We sent a reset link to {email}. It works for 1 hour. | Ми надіслали посилання для скидання на {email}. Він діє 1 годину. | Wysłaliśmy link do resetu na {email}. Działa przez godzinę.
+o_we_sent_a_reset_link | icu | oReset_sentLink | We sent a reset link to {email}. It works for 1 hour. | Ми надіслали посилання для скидання на {email}. Посилання діє 1 годину. | Wysłaliśmy link do resetu na {email}. Działa przez godzinę. | uk
 o_it_works_for_1_hour | merge | oReset_sentLink
 o_didnt_get_it_check_spam | icu | common_resendIn | Didn’t get it? Check spam. You can resend in {countdown}. | Не прийшло? Глянь у спам. Надіслати ще раз можна через {countdown}. | Nie dotarło? Sprawdź spam. Ponowna wysyłka za {countdown}.
 o_didnt_get_it_check_spam_2 | merge | common_resendIn
@@ -556,7 +556,7 @@ so_added_after_your_3rd_ride | keep
 so_tell_me_when_marek_plans | icu | soPerson_tellWhenPlans | Tell me when {name} plans a route | Повідомляти про маршрути: {name} | Powiadamiaj o trasach: {name} | uk
 so_krakw_city_and_intercity | skip | sample
 so_ask_marek_first_for_my | icu | soPerson_askFirstForRoutine | Ask {name} first for my routine | Спершу питати цього водія | Najpierw pytaj tę osobę o mój plan
-x_so_drivers_know_who_theyre | keep
+x_so_drivers_know_who_theyre | icu | xGuestGate_soDriversKnowWhoTheyre | | Так водій знатиме, кого забирає. Це пів хвилини, а пошук нікуди не дінеться. | | uk
 x_well_notify_you_for_the | keep
 x_walk_up_to_1_km | keep
 x_matching_starts_2_h_before | keep
@@ -603,7 +603,7 @@ rw_2_5_before_700 | icu | rwHome_progressBefore | {done} / {total} before {time}
 rw_100_drives | keep
 rw_10_thankyous | keep
 rw_krakw_regular_level_ii | icu | rwHome_badgeLevel | {badge}, Level {level} | {badge}, рівень {level} | {badge}, poziom {level} | uk pl
-rw_krakw_regular | icu | rwHome_krakowRegular | Kraków Regular | Свій у Кракові | Krakowski bywalec | uk pl
+rw_krakw_regular | icu | rwHome_krakowRegular | Kraków Regular | Краків щодня | Kraków na co dzień | uk pl
 rw_3_cities | icu | rwHome_citiesCount | {count, plural, =1{1 city} other{{count} cities}} | {count, plural, one{{count} місто} few{{count} міста} many{{count} міст} other{{count} міста}} | {count, plural, one{{count} miasto} few{{count} miasta} many{{count} miast} other{{count} miasta}} | uk pl
 rw_500_km_club | keep
 rw_165_500_km | icu | rwHome_kmProgress | {value} / {goal} km | {value} з {goal} км | {value} / {goal} km
@@ -649,7 +649,7 @@ s_thu_12_nov_1842_with | icu | sPast_dateTimeWith | {date} · {time} · with {na
 s_fri_30_oct_1610_with | merge | sPast_dateTimeWith
 s_tue_10_nov_0755_you | icu | sPast_youDrove | {date} · {time} · you drove {count, plural, =1{1 person} other{{count} people}} | {date} · {time} · пасажирів: {count} | {date} · {time} · przewiezione osoby: {count} | uk pl
 s_81_km | skip | sample
-s_mon_9_nov_cancelled_by | icu | sPast_cancelledByDriver | {date} · cancelled by driver | {date} · водій скасував | {date} · anulowany przez kierowcę
+s_mon_9_nov_cancelled_by | icu | sPast_cancelledByDriver | {date} · cancelled by driver | {date} · скасовано водієм | {date} · anulowany przez kierowcę | uk
 s_galeria_krakowska | skip | sample
 s_40_km | skip | sample
 s_sat_21_nov_kasia_answer | icu | sRidesRequested_answerBy | {date} · {name} · answer by {deadline} | {date} · {name} · відповідь до {deadline} | {date} · {name} · odpowiedź do {deadline}
@@ -696,7 +696,7 @@ n_3_min_ago | skip | os-string
 n_drop_off_olena_in_500 | icu | nD4_dropOffIn | Drop off {passengerName} in {distance} | Висадити: {passengerName}, через {distance} | Wysiadka: {passengerName}, za {distance} | uk
 n_al_jana_pawa_ii_37 | icu | nD4_placeOnRouteSafe | {place}, on your route. Stop only where it’s safe. | {place}, тобі по дорозі. Зупиняйся лише там, де безпечно. | {place}, na twojej trasie. Zatrzymaj się tylko tam, gdzie bezpiecznie.
 n_still_driving_with_olena | icu | nD4_stillDriving | Still driving with {passengerName}? | Ще їдете? · {passengerName} | Przejazd wciąż trwa? · {passengerName} | uk
-n_youve_been_parked_at_politechnika | icu | nD4_parkedEndTrip | You’ve been parked at {place} for {minutes} min. End the trip so they get their summary. | Машина вже {minutes} хв стоїть на місці. Натисни «Доїхали», щоб пасажир отримав підсумок. | Auto stoi przy celu od {minutes} min. Zakończ przejazd, żeby pasażer dostał podsumowanie.
+n_youve_been_parked_at_politechnika | icu | nD4_parkedEndTrip | You’ve been parked at {place} for {minutes} min. End the trip so they get their summary. | Машина вже {minutes} хв стоїть на місці. Натисни «Доїхали», і пасажир отримає підсумок. | Auto stoi przy celu od {minutes} min. Zakończ przejazd, a pasażer dostanie podsumowanie. | uk pl
 n_dropoff_reminders_mirror_pickup_ones | skip | board-note
 n_sunday_15_november | skip | os-string
 n_tomorrow_0750_2_passengers | icu | nD5_dayTimePassengers | {day} {time} · {count, plural, =1{1 passenger} other{{count} passengers}} | {day} о {time} · пасажирів: {count} | {day} {time} · pasażerowie: {count} | uk pl
@@ -727,7 +727,7 @@ n_marek_is_here_and_waiting | icu | nP3_driverHere | {driverName} is here and wa
 n_silver_corolla_kr_4x21c_at | icu | nP3_carAtPlaceWaits | {car} {plate} at {place}. They’ll wait up to {minutes} min. | {car} {plate}, {place}. Чекатиме до {minutes} хв. | {car} {plate}, {place}. Poczeka do {minutes} min.
 n_waiting_130_of_500 | icu | nP3_waitingOf | Waiting {elapsed} of {limit} | Чекає {elapsed} з {limit} | Czeka {elapsed} z {limit}
 n_in_130 | icu | nP3_inCountdown | in {countdown} | через {countdown} | za {countdown}
-n_marek_has_waited_3_min | icu | nP3_driverWaited | {driverName} has waited {minutes} min. Let them know or cancel so they can go. | Водій чекає вже {minutes} хв. Дай знати або скасуй, щоб людина не стояла дарма. | Kierowca czeka już {minutes} min. Daj znać albo anuluj, żeby mógł ruszyć.
+n_marek_has_waited_3_min | icu | nP3_driverWaited | {driverName} has waited {minutes} min. Let them know or cancel so they can go. | Водій чекає вже {minutes} хв. Дай знати або скасуй – тоді водій зможе їхати далі. | Kierowca czeka już {minutes} min. Daj znać albo anuluj – wtedy kierowca może ruszyć dalej. | uk pl
 n_2_more_min | icu | nP3_moreMinutes | {minutes} more min | Ще {minutes} хв | Jeszcze {minutes} min
 n_timesensitive_breaks_through_focusdo_not | skip | board-note
 n_on_the_way_arrive_1842 | icu | nP4_onTheWayArrive | On the way · arrive {time} | Їдемо · будемо о {time} | W drodze · przyjazd {time}
@@ -749,7 +749,7 @@ n_tomorrow_0900_krakw_rzeszw | icu | nP6_dayTimeRoute | {day} {time} · {from} �
 n_meet_marek_at_rondo_mogilskie | icu | nP6_meetAt | Meet {driverName} at {place}. Bring a medium bag max. | Зустріч: {place}. Водій: {driverName}. Сумка – максимум середня. | Spotkanie: {place}. Kierowca: {driverName}. Maks. średni bagaż.
 n_1_h_ago | skip | os-string
 n_marek_planned_a_route | icu | nP6_plannedRoute | {name} planned a route | {name}: кудись їде | Nowa trasa: {name} | uk
-n_krakw_zakopane_sun_22_nov | icu | nP6_peopleRoute | {from} → {to}, {when} · {seats, plural, =1{1 seat} other{{seats} seats}}. You’re in their people, so you see it first. | {from} → {to}, {when} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Ти серед своїх, тому бачиш це першим. | {from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to pierwszy. | uk pl
+n_krakw_zakopane_sun_22_nov | icu | nP6_peopleRoute | {from} → {to}, {when} · {seats, plural, =1{1 seat} other{{seats} seats}}. You’re in their people, so you see it first. | {from} → {to}, {when} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Ти серед своїх, тому бачиш це раніше за інших. | {from} → {to}, {when} · {seats, plural, one{{seats} miejsce} few{{seats} miejsca} many{{seats} miejsc} other{{seats} miejsca}}. Jesteś w ekipie, więc widzisz to przed innymi. | uk pl
 n_mute_marek | icu | nP6_mute | Mute {name} | Не показувати: {name} | Wycisz: {name} | uk
 n_kasia_accepted_fri_27_nov | icu | nP6_acceptedFor | {driverName} accepted: {when} to {place}. | {driverName}: бере тебе. {when}, {place}. | Prośba zaakceptowana · {driverName}: {when}, {place}. | uk
 n_your_ride_is_in_30 | icu | nP6_rideIn | Your ride is in {minutes} min | За {minutes} хв виїзд | Twój przejazd za {minutes} min
@@ -915,7 +915,7 @@ pr_italian | skip | dropped-language-d16
 pr_polski | skip | endonym
 pr_english | skip | endonym
 pr_use_device_language | icu | prLanguage_useDevice | Use device language | Системна | Język urządzenia
-pr_names_are_shown_in_their | icu | prLanguage_footnote | Names are shown in their own language so anyone can find theirs. | Кожна мова названа по-своєму, щоб легко знайти рідну. | Nazwy są w swoim języku, żeby każdy znalazł swój.
+pr_names_are_shown_in_their | icu | prLanguage_footnote | Names are shown in their own language so anyone can find theirs. | Кожна мова названа по-своєму, щоб легко знайти рідну. | Nazwy są w swoim języku, żeby łatwo było znaleźć swój. | pl
 di_states | skip | board-note
 di_driver_coming | skip | board-note
 di_arrived | skip | board-note
@@ -928,3 +928,25 @@ i_przemyl | skip | sample
 rw_wrocaw | skip | sample
 rw_gdask | skip | sample
 rw_lublin | skip | sample
+
+# ── Gender-neutral rewrites (the app doesn't know anyone's gender) ──
+d_its_on_her_screen_this | icu | common_itsOnPassengerScreen | It’s on the passenger’s screen. This confirms you picked up the right person. | | Kod jest na ekranie pasażera. To potwierdza, że zabierasz właściwą osobę. | pl
+d_add_her_to_your_people | icu | dDone_addPassengerToPeople | Add this passenger to your people. They’re notified when you plan this route. | |
+d_leave_without_her | icu | dNoShow_leaveWithoutPassenger | Leave without the passenger | Їхати без пасажира | Jedź bez pasażera | uk pl
+d_she_no_longer_needs_the | icu | dPassengerCancelled_noLongerNeeded | The passenger no longer needs the ride. Your route stays live and the seat is free again. | Пасажирові попутка більше не потрібна. Маршрут активний, місце знову вільне. | | uk
+i_his_plans_changed_you_dont | icu | iDriverCancelled_plansChanged | Plans changed. You don’t owe anything. | Плани змінилися. Платити нічого не треба. | Plany się zmieniły. Nic nie musisz płacić. | uk pl
+i_he_didnt_come | icu | iNoShowPassenger_driverDidntCome | The driver didn’t come | Водія не було | Kierowcy nie było | uk pl
+n_i_see_her | icu | nD2_iSeePassenger | I see the passenger | |
+p_add_him_to_your_people | icu | pDone_addDriverToPeople | Add this driver to your people. You’ll hear when they plan a route. | Додай у свої, і ти серед перших дізнаєшся про новий маршрут. | | uk
+n_dropped_off | icu | nD4_droppedOff | | Пасажира висаджено | | uk
+i_shes_here_enter_code | icu | iNoShowDriver_passengerHereEnterCode | Passenger is here: enter code | Пасажир тут: введи код | Pasażer jest na miejscu: wpisz kod | uk pl
+m_ride_cancelled_by_driver | icu | mUpdates_rideCancelledByDriver | | Попутку скасовано водієм | Przejazd anulowany przez kierowcę | uk pl
+n_bad_news_always_comes_with | icu | nP5_badNewsAlwaysComesWith | | Погана новина завжди йде з варіантом, що робити далі. Якщо водій скасовує попутку, ми самі шукаємо знову, починати з нуля не треба. | | uk
+t_liked_a_driver_tap_add | icu | tP4_likedADriverTapAdd | | Добре з’їздили? Натисни «Додати» після поїздки. Свої – у Профілі: їх питаємо першими, а ти знаєш, коли вони планують маршрут. | | uk
+n_eveningbefore_reminder_for_every_planned | icu | nD5_eveningbeforeReminderForEveryPlanned | | Увечері перед кожним запланованим маршрутом із пасажирами нагадуємо водієві, щоб нікому не довелося чекати дарма. Якщо водій скасовує зі сповіщення, питаємо причину й одразу пишемо пасажирам. | Przypomnienie wieczorem przed każdą zaplanowaną trasą z pasażerami, żeby uniknąć czekania na próżno. Anulowanie z powiadomienia pyta o powód i od razu informuje pasażerów. | uk pl
+t_enter_your_own_destination_we | icu | tD1_enterYourOwnDestinationWe | | Вкажи свій пункт призначення. Ми покажемо лише тих, кому по дорозі, нікуди спеціально їхати не треба. | | uk
+rw_your_first_person | icu | rwHome_yourFirstPerson | | Перша своя людина | | uk
+rw_your_first_person_unlocked | icu | rwHome_yourFirstPersonUnlocked_a11y | | Перша своя людина, є | | uk
+
+# ── Gender-neutral rewrites (the app doesn't know anyone's gender) ──
+p_hes_no_longer_driving_this | icu | pDriverCancelled_noLongerDrivingThisWay | The driver is no longer going this way. Sorry about that. We’re already searching again from the same pickup. | | Kierowca nie jedzie już w tę stronę. Przepraszamy. Już szukamy od nowa z tego samego miejsca odbioru. | pl
