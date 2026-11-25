@@ -2181,6 +2181,10 @@
   "@err_accountAlreadyDeleted": {
     "x-needs-review": true
   },
+  "legacy_forgotPassword": "Не пам’ятаєш пароль?",
+  "@legacy_forgotPassword": {
+    "x-needs-review": true
+  },
   "legacy_exploringAsGuest": "Досліджуєш як гість",
   "@legacy_exploringAsGuest": {
     "x-needs-review": true
@@ -2695,7 +2699,6 @@
   "@legacy_onboardSubtitle4": {
     "x-needs-review": true
   },
-  "legacy_forgotPassword": "Забули пароль?",
   "legacy_forgotPasswordHint": "Введи email свого акаунта — ми надішлемо 6-значний код.",
   "@legacy_forgotPasswordHint": {
     "x-needs-review": true

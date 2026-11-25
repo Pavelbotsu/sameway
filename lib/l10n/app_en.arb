@@ -10090,6 +10090,10 @@
   "@err_accountAlreadyDeleted": {
     "description": "Server error: account already deleted"
   },
+  "legacy_forgotPassword": "Forgot password?",
+  "@legacy_forgotPassword": {
+    "description": "Legacy AppLocalizations.forgotPassword"
+  },
   "legacy_exploringAsGuest": "Exploring as Guest",
   "@legacy_exploringAsGuest": {
     "description": "Legacy AppLocalizations.exploringAsGuest"
@@ -11200,10 +11204,6 @@
   "legacy_onboardSubtitle4": "A shared 4-digit code confirms you and the driver have actually met.",
   "@legacy_onboardSubtitle4": {
     "description": "Legacy AppLocalizations.onboardSubtitle4"
-  },
-  "legacy_forgotPassword": "Forgot password?",
-  "@legacy_forgotPassword": {
-    "description": "Legacy AppLocalizations.forgotPassword"
   },
   "legacy_forgotPasswordHint": "Enter the email on your account — we'll send a 6-digit code.",
   "@legacy_forgotPasswordHint": {

@@ -2604,6 +2604,7 @@
   "@err_accountAlreadyDeleted": {
     "x-needs-review": true
   },
+  "legacy_forgotPassword": "Nie pamiętasz hasła?",
   "legacy_exploringAsGuest": "Przeglądasz jako gość",
   "legacy_joinSameway": "Dołącz do sameway już dziś",
   "legacy_alreadyHaveAccount": "Masz już konto? ",
@@ -2941,7 +2942,6 @@
   "legacy_showTutorialAgain": "Pokaż samouczek ponownie",
   "legacy_onboardTitle4": "Kod odbioru.",
   "legacy_onboardSubtitle4": "Wspólny 4-cyfrowy kod potwierdza, że ty i kierowca naprawdę się spotkaliście.",
-  "legacy_forgotPassword": "Nie pamiętasz hasła?",
   "legacy_forgotPasswordHint": "Wpisz e-mail swojego konta — wyślemy 6-cyfrowy kod.",
   "legacy_resetCodeHint": "6-cyfrowy kod",
   "legacy_newPasswordHint": "Nowe hasło",
