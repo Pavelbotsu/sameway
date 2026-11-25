@@ -53,7 +53,7 @@ final _same = {
 
 /// Words that match a pattern but aren't verbs or pronouns.
 const _notVerbs = {
-  'uk': {'постав', 'правила', 'розмов'},
+  'uk': {'постав', 'правила', 'розмов', 'домовся'},
   'pl': {'zł', 'pomysł', 'pomysłem', 'zespół', 'hasła', 'hasłem', 'udziałem',
       'działa', 'zła', 'tytuł'},
 };

@@ -2604,6 +2604,10 @@
   "@err_accountAlreadyDeleted": {
     "x-needs-review": true
   },
+  "legacy_exploringAsGuest": "Przeglądasz jako gość",
+  "legacy_joinSameway": "Dołącz do sameway już dziś",
+  "legacy_alreadyHaveAccount": "Masz już konto? ",
+  "legacy_adviceTripTooShort": "Krótka trasa (ok. {km} km) — pieszo może być szybciej, albo umów się bezpośrednio.",
   "legacy_safetyDriverBody": "Dzielisz drogę, którą i tak jedziesz. Zatrzymuj się dla pasażera tylko wtedy, gdy jest to bezpieczne, a pasażer stoi w dobrym, dostępnym miejscu. Jeśli nie — możesz jechać dalej. Mały objazd tylko wtedy, gdy ci to odpowiada. To twój wybór, nie obowiązek.",
   "@legacy_safetyDriverBody": {
     "x-needs-review": true
@@ -2703,7 +2707,6 @@
   "legacy_welcomeBack": "Witaj ponownie",
   "legacy_createAccount": "Utwórz konto",
   "legacy_signInContinue": "Zaloguj się, aby kontynuować podróż",
-  "legacy_joinSameway": "Dołącz do sameway już dziś",
   "legacy_signIn": "Zaloguj się",
   "legacy_signUp": "Zarejestruj się",
   "legacy_account": "Konto",
@@ -2768,7 +2771,6 @@
   "legacy_corridorRadius": "Szerokość korytarza",
   "legacy_availableSeats": "Wolne miejsca",
   "legacy_routeActive": "Trasa aktywna",
-  "legacy_exploringAsGuest": "Przeglądasz jako gość",
   "legacy_signInToShareRoute": "Zaloguj się, aby udostępnić trasę",
   "legacy_signInShareDesc": "Zaloguj się, aby udostępnić trasę i znaleźć pasażerów.",
   "legacy_lookingForRides": "Szukamy przejazdów",
@@ -2783,7 +2785,6 @@
   "legacy_invalidEmail": "Nieprawidłowy e-mail",
   "legacy_minSixChars": "Min. 6 znaków",
   "legacy_noAccountYet": "Nie masz konta? ",
-  "legacy_alreadyHaveAccount": "Masz już konto? ",
   "legacy_onboardTitle1": "Mądrzejsze trasy, razem.",
   "legacy_onboardSubtitle1": "Dziel przejazdy z ludźmi jadącymi w tę samą stronę.",
   "legacy_onboardTitle2": "Dopasowanie na żywo.",
@@ -3040,7 +3041,6 @@
   "legacy_relayStopInfo": "Wysadza cię ok. {meters} m od przystanku „{stop}”",
   "legacy_detourAddsLabel": "dodaje ok. {meters} m / {seconds} s do twojej trasy",
   "legacy_matchStateMatchedWith": "Dopasowano: {name}",
-  "legacy_adviceTripTooShort": "Krótka trasa (ok. {km} km) — pieszo może być szybciej, albo umów się bezpośrednio.",
   "legacy_adviceWalkCloser": "Kierowca przejeżdża ok. {meters} m stąd — podejście bliżej drogi może dać dopasowanie (jeśli to bezpieczne).",
   "legacy_typing": "{name}: pisze…",
   "@legacy_typing": {

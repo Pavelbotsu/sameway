@@ -10090,6 +10090,27 @@
   "@err_accountAlreadyDeleted": {
     "description": "Server error: account already deleted"
   },
+  "legacy_exploringAsGuest": "Exploring as Guest",
+  "@legacy_exploringAsGuest": {
+    "description": "Legacy AppLocalizations.exploringAsGuest"
+  },
+  "legacy_joinSameway": "Join sameway today",
+  "@legacy_joinSameway": {
+    "description": "Legacy AppLocalizations.joinSameway"
+  },
+  "legacy_alreadyHaveAccount": "Already have an account? ",
+  "@legacy_alreadyHaveAccount": {
+    "description": "Legacy AppLocalizations.alreadyHaveAccount"
+  },
+  "legacy_adviceTripTooShort": "Short trip (~{km} km) — walking may be faster, or arrange directly.",
+  "@legacy_adviceTripTooShort": {
+    "description": "Legacy AppLocalizations.adviceTripTooShort",
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
   "legacy_safetyDriverBody": "You're sharing the road you're already on. Only stop for a passenger when it's safe and they're in a good, reachable spot. If they're not, it's okay to keep going — take a small detour only if you're comfortable. It's your call, not an obligation.",
   "@legacy_safetyDriverBody": {
     "description": "Legacy AppLocalizations.safetyDriverBody"
@@ -10243,10 +10264,6 @@
   "legacy_signInContinue": "Sign in to continue your journey",
   "@legacy_signInContinue": {
     "description": "Legacy AppLocalizations.signInContinue"
-  },
-  "legacy_joinSameway": "Join sameway today",
-  "@legacy_joinSameway": {
-    "description": "Legacy AppLocalizations.joinSameway"
   },
   "legacy_signIn": "Sign In",
   "@legacy_signIn": {
@@ -10504,10 +10521,6 @@
   "@legacy_routeActive": {
     "description": "Legacy AppLocalizations.routeActive"
   },
-  "legacy_exploringAsGuest": "Exploring as Guest",
-  "@legacy_exploringAsGuest": {
-    "description": "Legacy AppLocalizations.exploringAsGuest"
-  },
   "legacy_signInToShareRoute": "Sign In to Share Route",
   "@legacy_signInToShareRoute": {
     "description": "Legacy AppLocalizations.signInToShareRoute"
@@ -10563,10 +10576,6 @@
   "legacy_noAccountYet": "Don't have an account? ",
   "@legacy_noAccountYet": {
     "description": "Legacy AppLocalizations.noAccountYet"
-  },
-  "legacy_alreadyHaveAccount": "Already have an account? ",
-  "@legacy_alreadyHaveAccount": {
-    "description": "Legacy AppLocalizations.alreadyHaveAccount"
   },
   "legacy_onboardTitle1": "Smarter routes, together.",
   "@legacy_onboardTitle1": {
@@ -11624,15 +11633,6 @@
     "description": "Legacy AppLocalizations.matchStateMatchedWith",
     "placeholders": {
       "name": {
-        "type": "String"
-      }
-    }
-  },
-  "legacy_adviceTripTooShort": "Short trip (~{km} km) — walking may be faster, or arrange directly.",
-  "@legacy_adviceTripTooShort": {
-    "description": "Legacy AppLocalizations.adviceTripTooShort",
-    "placeholders": {
-      "km": {
         "type": "String"
       }
     }

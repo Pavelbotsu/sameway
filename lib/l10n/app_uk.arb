@@ -2181,6 +2181,22 @@
   "@err_accountAlreadyDeleted": {
     "x-needs-review": true
   },
+  "legacy_exploringAsGuest": "Досліджуєш як гість",
+  "@legacy_exploringAsGuest": {
+    "x-needs-review": true
+  },
+  "legacy_joinSameway": "Приєднуйся до sameway сьогодні",
+  "@legacy_joinSameway": {
+    "x-needs-review": true
+  },
+  "legacy_alreadyHaveAccount": "Уже маєш акаунт? ",
+  "@legacy_alreadyHaveAccount": {
+    "x-needs-review": true
+  },
+  "legacy_adviceTripTooShort": "Коротка поїздка (~{km} км) — пішки може бути швидше, або домовся напряму.",
+  "@legacy_adviceTripTooShort": {
+    "x-needs-review": true
+  },
   "legacy_safetyDriverBody": "Ти ділишся дорогою, якою вже їдеш. Зупиняйся заради пасажира лише тоді, коли це безпечно і пасажир у зручному, доступному місці. Якщо ні — спокійно їдь далі. Давай гаку, лише якщо тобі це зручно. Це твій вибір, а не обов’язок.",
   "@legacy_safetyDriverBody": {
     "x-needs-review": true
@@ -2289,7 +2305,6 @@
   "@legacy_signInContinue": {
     "x-needs-review": true
   },
-  "legacy_joinSameway": "Приєднайтесь до sameway сьогодні",
   "legacy_signIn": "Увійти",
   "legacy_signUp": "Зареєструватися",
   "legacy_account": "Акаунт",
@@ -2414,7 +2429,6 @@
   "legacy_corridorRadius": "Радіус коридору",
   "legacy_availableSeats": "Доступні місця",
   "legacy_routeActive": "Маршрут активний",
-  "legacy_exploringAsGuest": "Досліджуєте як гість",
   "legacy_signInToShareRoute": "Увійди, щоб поділитися маршрутом",
   "@legacy_signInToShareRoute": {
     "x-needs-review": true
@@ -2447,7 +2461,6 @@
   "legacy_invalidEmail": "Невірна електронна пошта",
   "legacy_minSixChars": "Мінімум 6 символів",
   "legacy_noAccountYet": "Немає акаунта? ",
-  "legacy_alreadyHaveAccount": "Вже маєте акаунт? ",
   "legacy_onboardTitle1": "Розумніші маршрути разом.",
   "legacy_onboardSubtitle1": "Поділися дорогою з тими, хто їде в тому ж напрямку.",
   "@legacy_onboardSubtitle1": {
@@ -2875,7 +2888,6 @@
   "@legacy_matchStateMatchedWith": {
     "x-needs-review": true
   },
-  "legacy_adviceTripTooShort": "Коротка поїздка (~{km} км) — пішки може бути швидше, або домовтесь напряму.",
   "legacy_adviceWalkCloser": "Водій проїжджає за ~{meters} м — підійди ближче до дороги, щоб знайти попутку (якщо це безпечно).",
   "@legacy_adviceWalkCloser": {
     "x-needs-review": true

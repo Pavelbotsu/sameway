@@ -39,8 +39,13 @@ final _formalPronoun = RegExp(
     '(?<![$_cyr])(Ви|Вас|Вам|Вами|Ваш|Ваша|Ваше|Ваші|Вашого|Вашої|Вашим|'
     'Вашій|Ваших|Вашу|ви|вас|вам|вами|ваш|ваша|ваше|ваші|вашого|вашої|'
     'вашим|вашій|ваших|вашу)(?![$_cyr])');
-final _formalImperative =
-    RegExp('[$_cyr]+(іть|йте|ьте|іться|йтеся|ьтеся)(?![$_cyr])');
+// Formal imperatives, also reflexive («Приєднайтесь», «домовтесь»).
+final _formalImperative = RegExp(
+    '[$_cyr]+(іть|йте|ьте|іться|йтеся|ьтеся|йтесь|ьтесь|'
+    '[бвгджзклмнпрстфхцчшщ]тесь|[бвгджзклмнпрстфхцчшщ]теся)(?![$_cyr])');
+// 2nd person plural present/future («маєте», «можете», «зустрінетеся»).
+final _formalPlural =
+    RegExp('[$_cyr]+(єте|ете|ите|їте)(ся|сь)?(?![$_cyr])');
 
 /// Words that end like a formal imperative but are not one.
 const _imperativeAllowlist = {'навіть'};
@@ -124,6 +129,8 @@ void main() {
       final s = icuSkeleton(text);
       final p = fromDeck(key) ? null : _formalPronoun.firstMatch(s);
       if (p != null) bad.add('$key: «${p.group(0)}» in $text');
+      final v = fromDeck(key) ? null : _formalPlural.firstMatch(s);
+      if (v != null) bad.add('$key: «${v.group(0)}» in $text');
       for (final m in _formalImperative.allMatches(s)) {
         if (_imperativeAllowlist.contains(m.group(0)!.toLowerCase())) continue;
         bad.add('$key: «${m.group(0)}» in $text');
