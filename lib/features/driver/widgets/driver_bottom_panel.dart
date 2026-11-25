@@ -507,7 +507,7 @@ class _RouteActiveCard extends StatelessWidget {
                 ),
                 Text(
                   l.routeSummary(
-                      route.distanceKm.toStringAsFixed(1), notifiedCount),
+                      SwFormat.of(context).decimal(route.distanceKm), notifiedCount),
                   style: const TextStyle(
                       color: AppColors.textSecondary, fontSize: 12),
                 ),
@@ -970,7 +970,7 @@ class _RequestTile extends StatelessWidget {
                             color: Color(0xFFFFC857), size: 12),
                         const SizedBox(width: 2),
                         Text(
-                          '${avg.toStringAsFixed(1)} ($count)',
+                          '${SwFormat.of(context).decimal(avg)} ($count)',
                           style: const TextStyle(
                               color: AppColors.textSecondary, fontSize: 11),
                         ),
@@ -1340,7 +1340,7 @@ class _AcceptedRideMapState extends State<_AcceptedRideMap> {
         const SizedBox(height: 6),
         Text(
           AppLocalizations.of(context)
-              .kmBetweenYou(distance.toStringAsFixed(1)),
+              .kmBetweenYou(SwFormat.of(context).decimal(distance)),
           style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,

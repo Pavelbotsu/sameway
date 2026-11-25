@@ -3,7 +3,6 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/foundation.dart';
 import 'package:latlong2/latlong.dart';
 import '../../core/analytics.dart';
-import '../../core/api_client.dart' show ApiException;
 import '../../core/geo.dart';
 import '../../core/haptics.dart';
 import '../../core/location_service.dart';
@@ -426,13 +425,11 @@ class DriverProvider extends ChangeNotifier {
       await loadRequests();
     } catch (e) {
       // Missing driver declaration / car details: the screen walks the
-      // driver through it and retries (driver_setup.dart).
-      if (e is ApiException &&
-          (e.code == 'driver_declaration_required' ||
-              e.code == 'car_details_required')) {
-        rethrow;
-      }
+      // driver through it and retries (driver_setup.dart). Anything else
+      // (outside the service area, routing failed, offline) the screen shows
+      // through friendlyError; it used to be stored here and never shown.
       error = e.toString();
+      rethrow;
     } finally {
       try {
         await trace.stop();

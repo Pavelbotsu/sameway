@@ -2157,7 +2157,7 @@ class _MatchTipsCardState extends State<_MatchTipsCard> {
   String? _text(AppLocalizations l, String code) {
     switch (code) {
       case 'trip_too_short':
-        return l.adviceTripTooShort(_tripKm.toStringAsFixed(1));
+        return l.adviceTripTooShort(SwFormat.of(context).decimal(_tripKm));
       case 'walk_closer':
         return l.adviceWalkCloser(_nearestM);
       case 'enable_long_walk':
@@ -2295,7 +2295,7 @@ class _OutstandingRequestTile extends StatelessWidget {
                               color: Color(0xFFFFC857), size: 13),
                           const SizedBox(width: 2),
                           Text(
-                            '${req.driverAvgRating!.toStringAsFixed(1)}'
+                            '${SwFormat.of(context).decimal(req.driverAvgRating!)}'
                             ' (${req.driverRatingCount})',
                             style: const TextStyle(
                               color: AppColors.textSecondary,
@@ -2462,7 +2462,7 @@ class _OfferCardState extends State<_OfferCard>
                             color: Color(0xFFFFC857), size: 14),
                         const SizedBox(width: 2),
                         Text(
-                          '${offer.driverAvgRating!.toStringAsFixed(1)} (${offer.driverRatingCount})',
+                          '${SwFormat.of(context).decimal(offer.driverAvgRating!)} (${offer.driverRatingCount})',
                           style: const TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 11,
@@ -2497,7 +2497,7 @@ class _OfferCardState extends State<_OfferCard>
                   ],
                   const SizedBox(height: 2),
                   Text(
-                    '${offer.corridorKm.toStringAsFixed(1)} ${l.corridorLabel} · '
+                    '${SwFormat.of(context).decimal(offer.corridorKm)} ${l.corridorLabel} · '
                     '${offer.seats} ${offer.seats == 1 ? l.seatLabel : l.seatsLabel}',
                     style: const TextStyle(
                       color: AppColors.textSecondary,
@@ -2959,7 +2959,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
                     color: Color(0xFFFFC857), size: 14),
                 const SizedBox(width: 2),
                 Text(
-                  '${widget.driverAvgRating!.toStringAsFixed(1)} (${widget.driverRatingCount})',
+                  '${SwFormat.of(context).decimal(widget.driverAvgRating!)} (${widget.driverRatingCount})',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -3762,7 +3762,7 @@ class _AccountSheetState extends State<_AccountSheet> {
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context).savedCO2(
-                              (_co2Saved ?? 18.7).toStringAsFixed(1)),
+                              SwFormat.of(context).decimal(_co2Saved ?? 18.7)),
                           style: const TextStyle(
                               color: AppColors.success,
                               fontSize: 14,
@@ -4415,7 +4415,7 @@ class _CandidateDriverRow extends StatelessWidget {
                           const Icon(Icons.star_rounded,
                               color: Color(0xFFFFC107), size: 14),
                           Text(
-                            driver.avgRating.toStringAsFixed(1),
+                            SwFormat.of(context).decimal(driver.avgRating),
                             style: const TextStyle(
                                 color: AppColors.textSecondary, fontSize: 12),
                           ),
@@ -4636,7 +4636,7 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
                     const SizedBox(height: 2),
                     Text(
                       l.seatsCorridorSummary('${driver.seats}',
-                          driver.corridorKm.toStringAsFixed(1)),
+                          SwFormat.of(context).decimal(driver.corridorKm)),
                       style: const TextStyle(
                           color: AppColors.textSecondary, fontSize: 13),
                     ),
