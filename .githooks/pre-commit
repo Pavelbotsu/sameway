@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# Blocks a commit that adds a secret. Enable once per clone:
+#   git config core.hooksPath .githooks
+# Needs gitleaks on PATH (go install github.com/zricethezav/gitleaks/v8@v8.21.2).
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo "pre-commit: gitleaks not found; install it (see .githooks/pre-commit) or commit with --no-verify only if you know why." >&2
+  exit 1
+fi
+exec gitleaks git --pre-commit --staged --redact --verbose .

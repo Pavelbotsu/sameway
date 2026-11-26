@@ -3,7 +3,7 @@
 Project rules are in `../CLAUDE.md`. This file only has commands.
 
 - Flutter: `C:\Users\hp855\dev\flutter_windows_3.24.3-stable\flutter\bin` (contains Flutter 3.35.2 / Dart 3.9 despite the folder name). In PowerShell use `flutter.bat` by full path if `flutter` isn't found.
-- Setup: `flutter pub get`
+- Setup: `flutter pub get`, then `git config core.hooksPath .githooks` (pre-commit runs gitleaks; install it with `go install github.com/zricethezav/gitleaks/v8@v8.21.2`). CI runs gitleaks on every push (`.github/workflows/gitleaks.yml`); allow-listed files are in `.gitleaks.toml`.
 - Check: `flutter analyze` and `flutter test`. **Never run `dart format`** on existing files (it rewrites whole files); keep the existing style.
 - Run against the local backend (`../sameway_backend/scripts/dev.sh`): `flutter run` (debug builds use `10.0.2.2:4040` automatically). Other hosts: `--dart-define=API_HOST=<host>` (+ `--dart-define=API_INSECURE=true` for plain http on a LAN IP).
 - **One emulator only.** For two-party flows the second party runs on the host:
