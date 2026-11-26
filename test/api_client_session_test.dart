@@ -10,6 +10,7 @@ import 'package:sameway/core/app_localizations.dart';
 import 'package:sameway/core/error_handling.dart';
 import 'package:sameway/core/session.dart';
 import 'package:sameway/core/token_storage.dart';
+import 'package:sameway/l10n/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Runs one authenticated GET against a canned response and reports which
@@ -74,6 +75,7 @@ void main() {
       locale: const Locale('en'),
       localizationsDelegates: const [
         AppLocalizations.delegate,
+        L10nFallbackDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -85,9 +87,10 @@ void main() {
     ));
     await tester.pumpAndSettle();
     final l = AppLocalizations.of(ctx);
+    // Unknown server text is never shown verbatim (it is English only).
     expect(
         friendlyError(ctx, const ApiException('not a participant on this ride', statusCode: 403)),
-        'not a participant on this ride');
+        l.errGeneric);
     expect(
         friendlyError(ctx,
             const ApiException('x', statusCode: 403, code: 'account_suspended')),

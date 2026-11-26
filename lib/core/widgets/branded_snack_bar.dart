@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_colors.dart';
+import '../../l10n/l10n.dart';
 
 /// Three flavored SnackBars on a shared brand template: error, success, info.
 ///
@@ -15,7 +16,7 @@ class BrandedSnack {
     BuildContext context,
     String message, {
     VoidCallback? onRetry,
-    String retryLabel = 'Retry',
+    String? retryLabel,
   }) {
     _show(context, message,
         accent: AppColors.error,
@@ -42,7 +43,7 @@ class BrandedSnack {
     required Color accent,
     required IconData icon,
     VoidCallback? onRetry,
-    String retryLabel = 'Retry',
+    String? retryLabel,
   }) {
     final messenger = ScaffoldMessenger.maybeOf(context);
     if (messenger == null) return;
@@ -85,7 +86,7 @@ class BrandedSnack {
                 textStyle: const TextStyle(
                     fontSize: 13, fontWeight: FontWeight.w700),
               ),
-              child: Text(retryLabel),
+              child: Text(retryLabel ?? context.l10n.common_retry),
             ),
         ],
       ),

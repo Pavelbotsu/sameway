@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
 import '../app_localizations.dart';
+import '../../l10n/l10n.dart';
 
 class RatingWaitBanner extends StatelessWidget {
-  final String otherPartyLabel; // "driver" / "passenger"
+  /// Who we wait for: the driver (true) or the passenger (false).
+  final bool otherIsDriver;
   final VoidCallback? onDismiss;
 
   const RatingWaitBanner({
     super.key,
-    required this.otherPartyLabel,
+    required this.otherIsDriver,
     this.onDismiss,
   });
 
@@ -37,7 +39,8 @@ class RatingWaitBanner extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Waiting for $otherPartyLabel to rate you…',
+                context.l10n.common_waitingForRating(
+                    otherIsDriver ? 'driver' : 'passenger'),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 13,

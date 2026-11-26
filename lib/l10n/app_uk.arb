@@ -1,0 +1,2964 @@
+{
+  "@@locale": "uk",
+  "common_retry": "Повторити",
+  "err_passwordIncorrect": "Неправильний пароль",
+  "@err_passwordIncorrect": {
+    "x-needs-review": true
+  },
+  "err_rideNotActive": "Поділитися можна лише попуткою, що вже триває",
+  "@err_rideNotActive": {
+    "x-needs-review": true
+  },
+  "err_badImage": "Обери фото у форматі JPEG або PNG",
+  "@err_badImage": {
+    "x-needs-review": true
+  },
+  "err_notPickedUp": "Пасажира ще не забрано. Підтвердь код зустрічі або скасуй чи повідом про неявку.",
+  "@err_notPickedUp": {
+    "x-needs-review": true
+  },
+  "err_noShowTooEarly": "Зачекай ще трохи, перш ніж повідомляти про неявку",
+  "@err_noShowTooEarly": {
+    "x-needs-review": true
+  },
+  "err_roleLockedActiveRide": "Змінити роль можна після завершення попутки",
+  "@err_roleLockedActiveRide": {
+    "x-needs-review": true
+  },
+  "pHome_distanceAway": "{distance} від тебе",
+  "@pHome_distanceAway": {
+    "x-needs-review": true
+  },
+  "pHome_offerDeclined": "Пропозицію відхилено",
+  "@pHome_offerDeclined": {
+    "x-needs-review": true
+  },
+  "pHome_lookingForNextRide": "Шукаємо наступну попутку…",
+  "@pHome_lookingForNextRide": {
+    "x-needs-review": true
+  },
+  "dHome_legPickup": "Зустріч",
+  "@dHome_legPickup": {
+    "x-needs-review": true
+  },
+  "dHome_legContinue": "Далі",
+  "@dHome_legContinue": {
+    "x-needs-review": true
+  },
+  "dHome_legDistanceEta": "{label} {distance} · {duration}",
+  "common_waitingForRating": "{role, select, driver{Чекаємо, поки водій тебе оцінить…} other{Чекаємо, поки пасажир тебе оцінить…}}",
+  "@common_waitingForRating": {
+    "x-needs-review": true
+  },
+  "common_aiBadge": "ШІ",
+  "@common_aiBadge": {
+    "x-needs-review": true
+  },
+  "common_unknownLocation": "місцезнаходження невідоме",
+  "@common_unknownLocation": {
+    "x-needs-review": true
+  },
+  "oSplash_tagline": "Нам по дорозі.",
+  "notif_channelRide": "Сповіщення про попутки",
+  "@notif_channelRide": {
+    "x-needs-review": true
+  },
+  "notif_channelRideDesc": "Пропозиції, підтвердження, зустріч і завершення попуток.",
+  "@notif_channelRideDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelChat": "Повідомлення в чаті",
+  "@notif_channelChat": {
+    "x-needs-review": true
+  },
+  "notif_channelChatDesc": "Нові повідомлення від водія чи пасажира.",
+  "@notif_channelChatDesc": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketing": "Акції та поради",
+  "@notif_channelMarketing": {
+    "x-needs-review": true
+  },
+  "notif_channelMarketingDesc": "Необов’язкові рекламні та інформаційні сповіщення.",
+  "@notif_channelMarketingDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeChannel": "Показ маршруту",
+  "@notif_routeChannel": {
+    "x-needs-review": true
+  },
+  "notif_routeChannelDesc": "Пасажири по дорозі бачать тебе, поки ти їдеш.",
+  "@notif_routeChannelDesc": {
+    "x-needs-review": true
+  },
+  "notif_routeTitle": "sameway показує твій маршрут",
+  "@notif_routeTitle": {
+    "x-needs-review": true
+  },
+  "notif_routeText": "Пасажири, яким по дорозі, можуть тебе знайти.",
+  "@notif_routeText": {
+    "x-needs-review": true
+  },
+  "fmt_metres": "{value} м",
+  "@fmt_metres": {
+    "x-needs-review": true
+  },
+  "fmt_kilometres": "{value} км",
+  "@fmt_kilometres": {
+    "x-needs-review": true
+  },
+  "fmt_minutes": "{minutes} хв",
+  "@fmt_minutes": {
+    "x-needs-review": true
+  },
+  "fmt_hours": "{hours} год",
+  "@fmt_hours": {
+    "x-needs-review": true
+  },
+  "fmt_hoursMinutes": "{hours} год {minutes} хв",
+  "@fmt_hoursMinutes": {
+    "x-needs-review": true
+  },
+  "fmt_seconds": "{seconds} с",
+  "@fmt_seconds": {
+    "x-needs-review": true
+  },
+  "fmt_kilograms": "{value} кг",
+  "@fmt_kilograms": {
+    "x-needs-review": true
+  },
+  "fmt_zloty": "{amount} zł",
+  "fmt_justNow": "щойно",
+  "@fmt_justNow": {
+    "x-needs-review": true
+  },
+  "fmt_minutesAgoShort": "{minutes} хв",
+  "@fmt_minutesAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_hoursAgoShort": "{hours} год",
+  "@fmt_hoursAgoShort": {
+    "x-needs-review": true
+  },
+  "fmt_daysAgoShort": "{days} дн",
+  "@fmt_daysAgoShort": {
+    "x-needs-review": true
+  },
+  "prLanguage_english": "англійська",
+  "@prLanguage_english": {
+    "x-needs-review": true
+  },
+  "bAnnotate_markTheProblem": "Познач проблему",
+  "bAnnotate_highlight": "Виділити",
+  "bAnnotate_arrow": "Стрілка",
+  "bAnnotate_hide": "Приховати",
+  "bAnnotate_circleWhatsWrongUseHide": "Обведи, що саме не так. «Приховати» – для особистих даних: імен, номерів, адрес.",
+  "bAnnotate_last2MinNoMessages": "За останні 2 хвилини · без повідомлень і точних адрес",
+  "bHowToReport_howToReportABug": "Як повідомити про баг",
+  "bHowToReport_threeWaysAllOpenThe": "Є три способи, і всі відкривають ту саму форму. Обирай найзручніший.",
+  "bHowToReport_shakeYourPhone": "Струсни телефон",
+  "bHowToReport_worksOnAnyScreenWe": "Працює на будь-якому екрані. Скріншот цього моменту збережеться сам.",
+  "bHowToReport_tapTheBetaPill": "Натисни «Бета»",
+  "bHowToReport_smallButtonInTheCorner": "Невелика кнопка в кутку кожного екрана, поки триває тест.",
+  "bHowToReport_profileHelpFeedback": "Профіль › Допомога й відгуки",
+  "bHowToReport_ifShakingIsntYourThing": "Якщо не хочеш трусити телефон.",
+  "bHowToReport_aGoodReportHasThree": "Хороший репорт відповідає на три питання",
+  "bHowToReport_whatYouDid": "Що робиш",
+  "bHowToReport_tappedFindARideWith": "«Натискаю “Знайти попутку”, куди – Politechnika»",
+  "bHowToReport_whatYouExpected": "Що має статися",
+  "bHowToReport_searchingScreen": "«Має відкритися пошук водія»",
+  "bHowToReport_whatHappened": "Що стається насправді",
+  "bHowToReport_appFrozeFor5S": "«Застосунок зависає на 5 секунд і повертає на мапу»",
+  "bHowToReport_weAttachAutomaticallyScreenshotApp": "Ми автоматично додаємо скріншот, версію застосунку, модель телефона, твою роль, поточний екран і логи за останні 2 хвилини. Твої повідомлення й точну адресу – ніколи.",
+  "bHowToReport_gotItStartTesting": "Усе ясно, починаємо",
+  "bMissions_testMissions": "Що протестувати",
+  "bMissions_tryTheseAtLeastOnce": "Спробуй кожен сценарій хоча б раз. Позначка з’явиться автоматично.",
+  "bMissions_doneOfTotal": "Виконано {done} з {total}",
+  "bMissions_findARideAsA": "Знайти попутку",
+  "bMissions_searchRequestASeatUse": "Пошук, «Хочу поїхати», код зустрічі",
+  "bMissions_done_a11y": "виконано",
+  "@bMissions_done_a11y": {
+    "x-needs-review": true
+  },
+  "bMissions_shareARouteAsA": "Підвезти попутника",
+  "bMissions_setARouteAcceptA": "Маршрут, прийняти запит, ввести код",
+  "bMissions_scheduleARideForTomorrow": "Запланувати попутку на завтра",
+  "bMissions_inKrakwWithArriveBy": "По Кракову, з «Бути до»",
+  "bMissions_notDone_a11y": "не виконано",
+  "@bMissions_notDone_a11y": {
+    "x-needs-review": true
+  },
+  "bMissions_bookPartOfAnIntercity": "Забронювати частину міжміського маршруту",
+  "bMissions_egKrakwTarnwOnA": "Наприклад, Краків → Тарнів у довшому маршруті",
+  "bMissions_chatDuringARide": "Написати водієві в дорозі",
+  "bMissions_quickRepliesAndLiveLocation": "Швидкі відповіді та геолокація",
+  "bMissions_switchRolesAndBack": "Змінити роль і повернутися",
+  "bMissions_fromTheRolePillOn": "Через перемикач на мапі",
+  "bMissions_testingAlone": "Немає з ким тестувати?",
+  "bMissions_turnOnADemoDriver": "Увімкни демоводія: віртуальна машина їздить Краковом і приймає твої запити.",
+  "bMissions_demoDriver_a11y": "Демоводій",
+  "bMissions_nextReportingBugs": "Далі: як надіслати баг",
+  "bMyReports_myReports": "Мої репорти",
+  "bMyReports_closed": "Закриті",
+  "bMyReports_idWhen": "#{reportId} · {when}",
+  "@bMyReports_idWhen": {
+    "x-needs-review": true
+  },
+  "bMyReports_needInfo": "Потрібні деталі",
+  "bMyReports_fixedIn": "Виправлено в {version}",
+  "bMyReports_seen": "Переглянуто",
+  "bMyReports_summary": "{reports, plural, one{{reports} репорт} few{{reports} репорти} many{{reports} репортів} other{{reports} репорту}} · виправлено: {fixed} · цього тижня ти в топ-10 тестувальників",
+  "@bMyReports_summary": {
+    "x-needs-review": true
+  },
+  "bReport_stepOf": "Крок {step} з {total}",
+  "bReport_whatKind": "Тип",
+  "bReport_bug": "Баг",
+  "bReport_crash": "Виліт",
+  "bReport_looksWrong": "Дизайн",
+  "bReport_idea": "Ідея",
+  "bReport_howBadIsIt": "Наскільки серйозно?",
+  "bReport_blocksMe": "Блокує",
+  "bReport_annoying": "Заважає",
+  "bReport_minor": "Дрібниця",
+  "bReport_whatDidYouDo": "Які були дії?",
+  "bReport_whatDidYouExpect": "Що мало статися?",
+  "bReport_egThePinJumpedBack_hint": "Наприклад: мітка повертається туди, де я стою",
+  "bReport_screen": "Екран: {screen}",
+  "@bReport_screen": {
+    "x-needs-review": true
+  },
+  "bReport_filledInForYou": "Заповнено автоматично",
+  "bReport_nextScreenshot": "Далі: скріншот",
+  "bReportDetail_version": "Версія {version}",
+  "@bReportDetail_version": {
+    "x-needs-review": true
+  },
+  "bReportDetail_yesterdayAt": "Учора, {time}",
+  "bReportDetail_todayTeamReply": "Сьогодні, {time} · {name}, команда sameway",
+  "bReportDetail_replyToTheTeam": "Відповісти",
+  "bReportDetail_attachScreenRecording": "Додати запис екрана",
+  "bReportDetail_cantReproduceAnymore": "Більше не відтворюється",
+  "bSent_thanksItsWithTheTeam": "Дякуємо! Команда вже отримала репорт",
+  "bSent_reportId": "Репорт #{reportId}",
+  "bSent_weReadEveryReportYoull": "Ми читаємо кожен репорт. Відповімо тут, зазвичай протягом дня, а коли виправимо – надішлемо сповіщення.",
+  "bSent_missionProgress": "Виконано {done} з {total} сценаріїв. Так тримати!",
+  "bSent_backToTheApp": "Повернутися до застосунку",
+  "bSent_seeMyReports": "Мої репорти",
+  "bShake_betaReportBug_a11y": "Бета: надіслати репорт",
+  "@bShake_betaReportBug_a11y": {
+    "x-needs-review": true
+  },
+  "bShake_somethingWrong": "Щось не так?",
+  "bShake_weSavedAScreenshotOf": "Ми вже зберегли скріншот цього екрана.",
+  "bShake_somethingBrokeOrLooksWrong": "Щось зламалося або виглядає не так",
+  "bShake_shareAnIdea": "Запропонувати ідею",
+  "bShake_somethingCouldBeBetter": "Що можна зробити краще",
+  "bShake_shookByAccident": "Випадково струснуло",
+  "bShake_turnOffShakeToReport": "Вимкнути струшування для репортів",
+  "bWelcome_betaTesters": "Бета-тест",
+  "bWelcome_youreTestingSamewayBeforeEveryone": "Ти серед перших, хто тестує sameway",
+  "bWelcome_thanksForHelpingThisIs": "Дякуємо, що допомагаєш! Це рання версія, тож дещо може ламатися. Саме такі місця ми й шукаємо.",
+  "bWelcome_versionBuild": "Версія {version} · збірка {build} · {platform}",
+  "bWelcome_thingsCanBreak": "Що може зламатись",
+  "bWelcome_crashesAndOddBehaviourAre": "Застосунок може вилітати чи поводитися дивно. Це нормально: просто напиши нам, не шукай обхідних шляхів.",
+  "bWelcome_dataMayReset": "Дані можуть зникнути",
+  "bWelcome_ridesChatsAndRewardsCan": "Між оновленнями попутки, чати й нагороди можуть обнулитися.",
+  "bWelcome_realPeopleRealCars": "Попутки справжні",
+  "bWelcome_ridesWithOtherTestersAre": "Інші тестувальники – реальні люди в реальних машинах. Правила безпеки ті самі: код зустрічі й зупинки лише там, де можна.",
+  "bWelcome_keepItPrivate": "Поки що це секрет",
+  "bWelcome_pleaseDontPostScreenshotsPublicly": "Будь ласка, не публікуй скріншоти до офіційного запуску.",
+  "bWelcome_showMeHowItWorks": "Як це працює?",
+  "bWelcome_skipIveDoneThisBefore": "Пропустити, я вже знаю",
+  "bWhatsNew_whatsInThisBuild": "Що нового в цій версії",
+  "bWhatsNew_new": "Нове",
+  "bWhatsNew_fixed": "Виправлено",
+  "bWhatsNew_knownIssuesNoNeedTo": "Відомі проблеми · про них писати не треба",
+  "bWhatsNew_nextWhatToTest": "Далі: що протестувати",
+  "diDDropOff_timeDurationDistance": "{time} · {duration} · {distance}",
+  "@diDDropOff_timeDurationDistance": {
+    "x-needs-review": true
+  },
+  "diDDropOff_dropOffIn_a11y": "Висадка · за {duration}",
+  "diDDropOff_passengerOnRoute": "{passengerName} · {place}, по дорозі",
+  "diDDropOff_passengerIsOut": "Пасажира висаджено",
+  "@diDDropOff_passengerIsOut": {
+    "x-needs-review": true
+  },
+  "diDMinimal_navigation_a11y": "Навігація",
+  "@diDMinimal_navigation_a11y": {
+    "x-needs-review": true
+  },
+  "diDRequest_onRouteDetourPlace": "По дорозі · +{detour} · {place}",
+  "diDRequest_toPlaceTogether": "До {place} · разом {distance}",
+  "diDToPickup_pickUpSide_a11y": "Забрати: {passengerName} · {side}",
+  "diDToPickup_placeNote": "{place} · {note}",
+  "diPArrived_howWasIt": "Як доїхали? Водій: {driverName}",
+  "diPComing_driverAwayPickup_a11y": "{driverName} · за {eta}. Зустріч: {pickup}",
+  "@diPComing_driverAwayPickup_a11y": {
+    "x-needs-review": true
+  },
+  "diPFound_pickingYouUp_a11y": "Тебе забере: {driverName}",
+  "@diPFound_pickingYouUp_a11y": {
+    "x-needs-review": true
+  },
+  "diPFound_pickupAtWalk": "Зустріч о {time} · {place} · {distance} пішки",
+  "diPInRide_driverDistanceLeft": "Водій: {driverName} · ще {distance}",
+  "diPSearch_lookingElapsed_a11y": "Шукаємо водія, {elapsed}",
+  "@diPSearch_lookingElapsed_a11y": {
+    "x-needs-review": true
+  },
+  "diPSearchExp_toPlaceDriversNearby": "До {place} · {count, plural, one{поруч {count} водій} few{поруч {count} водії} many{поруч {count} водіїв} other{поруч {count} водія}}",
+  "@diPSearchExp_toPlaceDriversNearby": {
+    "x-needs-review": true
+  },
+  "diPWaiting_driverIsHere_a11y": "Уже на місці: {driverName}",
+  "@diPWaiting_driverIsHere_a11y": {
+    "x-needs-review": true
+  },
+  "diPWaiting_carWaitsUpTo": "{car} · чекає до {duration}",
+  "diPWalk_meetAround": "Зустрінетеся на точці приблизно о {time}",
+  "diPWalk_youEta": "Ти · {duration}",
+  "@diPWalk_youEta": {
+    "x-needs-review": true
+  },
+  "common_nameDuration": "{name} · {duration}",
+  "@common_nameDuration": {
+    "x-needs-review": true
+  },
+  "diSUpcoming_departsVia": "Виїзд о {time} · через {via}",
+  "common_pickupPlace": "Зустріч: {place}",
+  "diSUpcoming_driverPlate": "Водій: {driverName} · {plate}",
+  "@diSUpcoming_driverPlate": {
+    "x-needs-review": true
+  },
+  "diSUpcoming_runningLate": "Запізнююсь",
+  "diDLive_seatsFree": "{seats, plural, one{{seats} вільне} few{{seats} вільні} many{{seats} вільних} other{{seats} вільного}}",
+  "@diDLive_seatsFree": {
+    "x-needs-review": true
+  },
+  "dCantPickup_title": "Не можеш забрати: {passengerName}?",
+  "dCantPickup_trafficOrAClosedRoad": "Затор або дорогу перекрито",
+  "dCantPickup_cantStopSafelyThere": "Там не можна безпечно зупинитися",
+  "dCantPickup_keepsPlace": "Пасажир: {passengerName}. Місце в черзі зберігається, ми одразу шукаємо іншого водія.",
+  "@dCantPickup_keepsPlace": {
+    "x-needs-review": true
+  },
+  "dCantPickup_tell": "Повідомити: {passengerName}",
+  "common_confirmPickup": "Підтвердити",
+  "dCode_waitingAt": "Чекає на {place}",
+  "dCode_askForCode": "Спитай у пасажира код із 4 цифр",
+  "common_itsOnPassengerScreen": "Код у пасажира на екрані. Так ти точно забираєш ту людину.",
+  "common_wrongCodeMeansWrongPerson": "Неправильний код – не та людина. Не рушай.",
+  "common_codeNotWorking": "Код не підходить?",
+  "dDone_routeFinished": "Доїхали!",
+  "dDone_thanks": "{name}, дякуємо за компанію в дорозі!",
+  "common_shared": "Разом",
+  "dDone_driveAgain": "Ще разом? · {name}",
+  "dDone_addPassengerToPeople": "Додай у свої, і коли ти знову поїдеш цим маршрутом, свої дізнаються першими.",
+  "dEndRoute_endYourRoute": "Завершити маршрут?",
+  "dEndRoute_passengerBooked": "{passengerName}: чекає на зустріч за {duration}. Ми одразу попередимо пасажира й шукатимемо іншого водія.",
+  "@dEndRoute_passengerBooked": {
+    "x-needs-review": true
+  },
+  "dEndRoute_keepDriving": "Їду далі",
+  "dEndUndo_routeEndedPassengersCantSee": "Маршрут завершено. Пасажири тебе більше не бачать.",
+  "common_switchToPassenger_a11y": "Перейти в режим пасажира",
+  "dHome_plateSeats": "{plate} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}",
+  "@dHome_plateSeats": {
+    "x-needs-review": true
+  },
+  "dInTrip_dropOffIn": "Висадити: {passengerName}, через {duration}",
+  "dInTrip_thenToDestination": "Потім ще {duration} до твоєї адреси",
+  "dInTrip_dropOffAt": "Висадка: {passengerName} · {place}",
+  "dInTrip_yourDestinationAt": "{time} · ти на місці",
+  "dInTrip_acceptMorePassengers": "Брати ще попутників",
+  "dInTrip_seatsStillFree": "Ще {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}}",
+  "@dInTrip_seatsStillFree": {
+    "x-needs-review": true
+  },
+  "dInTrip_droppedOff": "Висаджено: {passengerName}",
+  "@dInTrip_droppedOff": {
+    "x-needs-review": true
+  },
+  "dLive_youreSharingYourRoute": "Ти в дорозі, шукаємо попутників",
+  "dLive_seatsFreeTo": "{seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}} · до {place} · {duration}",
+  "@dLive_seatsFreeTo": {
+    "x-needs-review": true
+  },
+  "dLive_passengersNearRoute": "Поруч із маршрутом {count, plural, one{{count} пасажир} few{{count} пасажири} many{{count} пасажирів} other{{count} пасажира}}",
+  "@dLive_passengersNearRoute": {
+    "x-needs-review": true
+  },
+  "dLive_weAskYouBeforeAnyone": "Спитаємо тебе, перш ніж хтось приєднається",
+  "dLive_openNavigation": "Відкрити навігатор",
+  "dLive_whenYouAcceptSomeoneNavigation": "Коли ти когось приймаєш, навігація перезапускається із зупинкою.",
+  "common_endRoute": "Завершити",
+  "dLive_prototypeARequestArrives_a11y": "Прототип: приходить запит",
+  "dLiveNoBg_locationAccessIsOffPassengers": "Доступ до геолокації вимкнено. Пасажири не бачать твій маршрут.",
+  "dNoShow_waitedMinutes": "Чекаєш {minutes, plural, one{{minutes} хвилину} few{{minutes} хвилини} many{{minutes} хвилин} other{{minutes} хвилини}}",
+  "@dNoShow_waitedMinutes": {
+    "x-needs-review": true
+  },
+  "dNoShow_notHereYet": "Ще не на місці: {passengerName}",
+  "dNoShow_waitedAt": "Ти чекаєш уже {minutes} хв на {place}.",
+  "dNoShow_canLeave": "Можеш їхати. Жодних штрафів, а пасажира ми повідомимо.",
+  "@dNoShow_canLeave": {
+    "x-needs-review": true
+  },
+  "dNoShow_leaveWithoutPassenger": "Їхати без пасажира",
+  "@dNoShow_leaveWithoutPassenger": {
+    "x-needs-review": true
+  },
+  "dNoShow_waitMore": "Почекати ще {minutes} хв",
+  "dPassengerCancelled_title": "Скасовано: {passengerName}",
+  "dPassengerCancelled_noLongerNeeded": "Пасажирові попутка більше не потрібна. Маршрут активний, місце знову вільне.",
+  "@dPassengerCancelled_noLongerNeeded": {
+    "x-needs-review": true
+  },
+  "common_o_a11y": "O",
+  "common_wantsToJoin": "{passengerName}: хоче поїхати з тобою",
+  "@common_wantsToJoin": {
+    "x-needs-review": true
+  },
+  "dRequest_detourRidesVerified": "+{detour} гаку · {rides, plural, one{{rides} спільна поїздка} few{{rides} спільні поїздки} many{{rides} спільних поїздок} other{{rides} спільної поїздки}} · email підтверджено",
+  "@dRequest_detourRidesVerified": {
+    "x-needs-review": true
+  },
+  "dRequest_secondsLeft": "Лишилось {seconds, plural, one{{seconds} секунда} few{{seconds} секунди} many{{seconds} секунд} other{{seconds} секунди}}",
+  "@dRequest_secondsLeft": {
+    "x-needs-review": true
+  },
+  "dRequest_secondsShort": "{seconds} с",
+  "common_plusDuration": "+{duration}",
+  "dRequest_dropOffBefore": "Висадка по твоїй дорозі, за {distance} до мети",
+  "common_decline": "Не цього разу",
+  "common_accept": "Беру",
+  "dRequest_youreStoppedSoYouCan": "Ти стоїш, тож можна торкнутися. Під час руху запити читаються вголос і чекають, доки ти зупинишся.",
+  "common_rules": "Правила",
+  "common_requestsWhileDriving": "Запити за кермом",
+  "dRequestRules_cityRides": "Поїздки містом",
+  "dRequestRules_answeringARequestShouldNever": "Щоб відповісти на запит, не треба брати телефон у руки за кермом.",
+  "common_autoaccept": "Своїх одразу",
+  "common_yourPeople": "Свої попутники",
+  "common_namesAndMore": "{first}, {second} і ще {count}",
+  "@common_namesAndMore": {
+    "x-needs-review": true
+  },
+  "dRequestRules_autoacceptYourPeople_a11y": "Автоматично брати своїх",
+  "dRequestRules_shortDetours": "Короткий гак",
+  "dRequestRules_detourUpTo": "Коли гак до {minutes} хв",
+  "dRequestRules_autoacceptShortDetours_a11y": "Автоматично брати, якщо гак короткий",
+  "common_spokenAlerts": "Голосові підказки",
+  "dRequestRules_whileMoving": "На ходу",
+  "dRequestRules_whileMovingRequestsAreRead": "Під час руху запити читаються вголос. Відповідаєте на зупинці.",
+  "dRequestRules_noAnswerMeansTheRequest": "Немає відповіді – значить відмова. За «ні» штрафів не буває.",
+  "common_durationDistance": "{duration} · {distance}",
+  "common_howLongADetourIs": "Який об’їзд тобі підходить?",
+  "common_freeSeats": "{seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}}",
+  "@common_freeSeats": {
+    "x-needs-review": true
+  },
+  "common_change": "Змінити",
+  "common_startSharingRoute": "Шукати попутників",
+  "dRouteEmpty_destination_a11y": "Куди їдеш",
+  "dRouteEmpty_whereAreYouDriving_hint": "Куди їдеш?",
+  "dRouteEmpty_addADestinationToContinue": "Спершу вкажи, куди їдеш",
+  "dRouteOptions_seatsAndDetours": "Місця й гак",
+  "common_freeSeats2": "Вільні місця",
+  "dRouteOptions_carSeats": "У твоїй машині {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}",
+  "@dRouteOptions_carSeats": {
+    "x-needs-review": true
+  },
+  "common_fewerSeats_a11y": "Менше місць",
+  "common_moreSeats_a11y": "Більше місць",
+  "dTimeSheet_whenAreYouLeaving": "Коли виїжджаєш?",
+  "dToPickup_restartNavigationWithThePickup": "Перезапусти навігацію із зупинкою",
+  "dToPickup_pickUp": "Забрати: {passengerName}",
+  "common_placeDuration": "{place} · {duration}",
+  "common_messageName": "Написати: {name}",
+  "dToPickup_greenJacketStopOnlyWhere": "Зелена куртка. Зупиняйся лише там, де це безпечно й дозволено.",
+  "common_imHere": "Я тут",
+  "dToPickup_cantPickUp": "Не вийде забрати",
+  "dToPickup_prototypeArriveAtPickup_a11y": "Прототип: на точці",
+  "common_email": "Пошта",
+  "xMapFailed_retry": "Повторити",
+  "errors_messageNotSent": "Повідомлення не надіслано",
+  "xServerError_somethingWentWrongOnOur": "Щось пішло не так на нашому боці",
+  "iAllPrices_allPrices": "Усі ціни",
+  "iAllPrices_perSeatByDistanceSame": "За місце, за відстанню. Те саме правило, що й для всього маршруту.",
+  "common_route": "{from} → {to}",
+  "iBooking_bookASeat": "Забронювати місце",
+  "common_dateRoute": "{date} · {from} → {to}",
+  "common_cityTime": "{city} · {time}",
+  "iBooking_price": "Ціна",
+  "iBooking_seatsTimesPrice": "{seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} × {price}",
+  "@iBooking_seatsTimesPrice": {
+    "x-needs-review": true
+  },
+  "iBooking_youPay": "Платиш водієві",
+  "iBooking_inCashWhenYouMeet": "Готівкою під час зустрічі. Ціна та сама, скільки б людей не забронювало.",
+  "iBooking_messageOptional": "Повідомлення водієві (необов’язково)",
+  "iBooking_hiIHaveAMedium_hint": "Привіт! У мене середня сумка.",
+  "iBooking_instantBookingTheSeatIs": "Миттєве бронювання: місце твоє одразу.",
+  "iBooking_bookSeatPrice": "Забронювати · {price}",
+  "iCancelBooking_cancelYourSeat": "Скасувати твоє місце?",
+  "iCancelBooking_driverTold": "Водій ({driverName}) дізнається одразу, а місце знову стане доступним. Платити нічого не треба.",
+  "iCancelBooking_cancelSeat": "Скасувати місце",
+  "iCancelBooking_keepMySeat": "Залишити місце",
+  "iCityPicker_goingTo": "Куди їдеш",
+  "iCityPicker_searchCity_a11y": "Пошук міста",
+  "iCityPicker_rze": "Ряш",
+  "iCityPicker_cityOrTown_hint": "Місто чи селище",
+  "iCityPicker_popularFrom": "Часто їдуть звідси: {city}",
+  "@iCityPicker_popularFrom": {
+    "x-needs-review": true
+  },
+  "iCityPicker_ridesThisWeek": "{rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} цього тижня",
+  "@iCityPicker_ridesThisWeek": {
+    "x-needs-review": true
+  },
+  "iDone_arrivedIn": "Ти на місці: {city}",
+  "@iDone_arrivedIn": {
+    "x-needs-review": true
+  },
+  "iDone_didYouPay": "Оплата водієві ({driverName}): {price}. Усе сплачено?",
+  "iDone_yesInCash": "Так, готівкою",
+  "iDone_thereWasAProblem": "Була проблема",
+  "iDoneRated_paid": "Дякуємо! Оплата водієві ({driverName}): {price}, сплачено.",
+  "iDriverCancel_cancelThisRoute": "Скасувати цей маршрут?",
+  "iDriverCancel_passengersTold": "Пасажири ({names}) дізнаються одразу й побачать інші варіанти. Напрямок: {city}.",
+  "@iDriverCancel_passengersTold": {
+    "x-needs-review": true
+  },
+  "common_myPlansChanged": "Плани змінилися",
+  "iDriverCancel_carProblem": "Проблема з авто",
+  "common_somethingElse": "Щось інше",
+  "iDriverCancel_cancelRoute": "Скасувати маршрут",
+  "iDriverCancel_keepRoute": "Залишити маршрут",
+  "iDriverCancelled_rideCancelled": "Рейс скасовано",
+  "iDriverCancelled_cancelled": "Скасовано рейс {when} · {driverName}",
+  "@iDriverCancelled_cancelled": {
+    "x-needs-review": true
+  },
+  "iDriverCancelled_plansChanged": "Плани змінилися. Платити нічого не треба.",
+  "@iDriverCancelled_plansChanged": {
+    "x-needs-review": true
+  },
+  "iDriverCancelled_otherRidesOn": "Інші варіанти на {date}",
+  "iDriverCancelled_tellMe": "Повідомити, коли хтось опублікує {from} → {to} ({day}).",
+  "@iDriverCancelled_tellMe": {
+    "x-needs-review": true
+  },
+  "iDriverDetails_whenAndWho": "Коли й кого береш",
+  "iDriverDetails_departureFrom": "Виїзд: {city}",
+  "@iDriverDetails_departureFrom": {
+    "x-needs-review": true
+  },
+  "iDriverDetails_requests": "Запити",
+  "iDriverDetails_instantBooking": "Миттєве бронювання",
+  "iDriverDetails_askMe": "Питати мене",
+  "iDriverDetails_verifiedPassengersBookRightAway": "Підтверджені пасажири бронюють одразу. «Питати мене»: 3 год на відповідь, ночі не враховуються.",
+  "iDriverDetails_tellMyPeople": "Сказати своїм",
+  "iDriverDetails_notifiedFirst": "Першими дізнаються: {names}",
+  "@iDriverDetails_notifiedFirst": {
+    "x-needs-review": true
+  },
+  "common_notifyMyPeople_a11y": "Сказати своїм",
+  "iDriverDetails_luggage": "Багаж",
+  "iDriverDetails_small": "Малий",
+  "iDriverDetails_medium": "Середній",
+  "iDriverDetails_large": "Великий",
+  "iDriverManage_dateTimePerSeat": "{date} · {time} · {price} за місце",
+  "iDriverManage_editOrCancelRoute_a11y": "Змінити чи скасувати",
+  "iDriverManage_seatsByPartOfThe": "Хто де сидить",
+  "common_a_a11y": "A",
+  "iDriverManage_requestLine": "{from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price} · email не підтверджено",
+  "@iDriverManage_requestLine": {
+    "x-needs-review": true
+  },
+  "common_answerBy": "Відповісти до {deadline}",
+  "iDriverManage_needsOk": "Миттєве бронювання ввімкнено, але email пасажира ({name}) ще не підтверджено, тож потрібна твоя згода.",
+  "@iDriverManage_needsOk": {
+    "x-needs-review": true
+  },
+  "iDriverManage_booked": "Їдуть",
+  "iDriverManage_routePricePeople": "{from} → {to} · {price} · твої люди",
+  "common_routePrice": "{from} → {to} · {price}",
+  "iDriverManage_fuelCovered": "Покрито пального",
+  "iDriverManage_collectedOf": "{collected} з {total}",
+  "iDriverManage_messageAll": "Написати всім",
+  "iDriverManage_shareRoute": "Поділитися",
+  "iDriverPrice_pricePerSeat": "Ціна за місце",
+  "iDriverPrice_routeStops": "{from} → {to} · {distance} · зупинки: {stops}",
+  "@iDriverPrice_routeStops": {
+    "x-needs-review": true
+  },
+  "iDriverPrice_less": "На {price} менше",
+  "iDriverPrice_more": "На {price} більше",
+  "iDriverPrice_suggestedPrice": "Рекомендована ціна",
+  "iDriverPrice_fuelSplit": "{fuel} за пальне ÷ {people, plural, one{{people} людина} few{{people} людини} many{{people} людей} other{{people} людини}} · {fuelType} {fuelPrice}/л, {date}",
+  "@iDriverPrice_fuelSplit": {
+    "x-needs-review": true
+  },
+  "iDriverPrice_howItsCalculated": "Як це рахуємо",
+  "iDriverPrice_partOfTheWayCalculated": "Частина шляху · ми порахували",
+  "iDriverPrice_otherParts": "Інші відрізки рахуємо так само: {list}.",
+  "iDriverPrice_howPassengersPayYou": "Як пасажири тобі платять",
+  "iDriverPrice_inCashWhenYouMeet2": "Готівкою під час зустрічі. Без комісії.",
+  "iDriverPrice_takeBlikToo": "Приймати також BLIK",
+  "iDriverPrice_passengersSeeYourPhoneNumber": "Пасажири побачать твій номер телефону після прийняття, щоб надіслати BLIK.",
+  "iDriverRoute_stopsOnTheWay": "Зупинки по дорозі",
+  "iDriverRoute_via": "трасою {road}",
+  "common_placePlusDuration": "{place} · +{duration}",
+  "iDriverRoute_stopIn": "Зупинка: {city}",
+  "@iDriverRoute_stopIn": {
+    "x-needs-review": true
+  },
+  "iDriverRoute_passengersCanBookAnyPart": "Пасажири можуть узяти будь-який шматок маршруту, наприклад лише Тарнів → Ряшів. Зупинки обираємо там, куди легко дістатися.",
+  "iDriverRoute_next": "Далі",
+  "iMyBooking_yourBooking": "Твоє бронювання",
+  "iMyBooking_instantDriverTold": "Миттєве бронювання · водій ({driverName}) уже знає",
+  "iMyBooking_savedOnThisPhoneWorks": "Збережено в телефоні, працює без зв’язку",
+  "iMyBooking_beThere": "Будь о {time} · відправлення о {departure}",
+  "iMyBooking_arrivesAbout": "Прибуття близько {time}",
+  "iMyBooking_openInMaps": "Відкрити в Картах",
+  "iMyBooking_yourPickupCode": "Твій код зустрічі",
+  "iMyBooking_sayCode": "Скажи його під час зустрічі. Водій ({driverName}) його введе.",
+  "iMyBooking_priceInCash": "{price} готівкою",
+  "iMyBooking_imRunningLate": "Я запізнюся",
+  "iMyBooking_cancelBooking": "Скасувати бронювання",
+  "iNoShowDriver_notHereYet": "Ще не на місці: {passengerName}",
+  "@iNoShowDriver_notHereYet": {
+    "x-needs-review": true
+  },
+  "iNoShowDriver_waitUntil": "Зачекай до {time}. Потім можна їхати: місце звільниться, а пасажир отримає сповіщення.",
+  "@iNoShowDriver_waitUntil": {
+    "x-needs-review": true
+  },
+  "iNoShowDriver_leaveWithout": "Їхати без пасажира ({passengerName})",
+  "@iNoShowDriver_leaveWithout": {
+    "x-needs-review": true
+  },
+  "common_availableAtIn": "Доступно о {time} · за {minutes} хв",
+  "iNoShowDriver_passengerHereEnterCode": "Пасажир тут: введи код",
+  "@iNoShowDriver_passengerHereEnterCode": {
+    "x-needs-review": true
+  },
+  "iNoShowPassenger_driverNotHere": "Ще не на місці: {driverName}",
+  "@iNoShowPassenger_driverNotHere": {
+    "x-needs-review": true
+  },
+  "iNoShowPassenger_placeTimeSharing": "{place} · {time} · ділиться геолокацією",
+  "common_call": "Подзвонити",
+  "iNoShowPassenger_driverDidntCome": "Водія не було",
+  "@iNoShowPassenger_driverDidntCome": {
+    "x-needs-review": true
+  },
+  "iPriceHow_howThePriceIsCalculated": "Як рахуємо ціну",
+  "iPriceHow_route": "Маршрут",
+  "iPriceHow_yourCar": "Твоє авто",
+  "iPriceHow_carConsumption": "{car} · {consumption} л/100 км",
+  "iPriceHow_fuelPrice": "Ціна пального",
+  "iPriceHow_fuelPriceDate": "{fuelType} {fuelPrice}/л · {date}",
+  "iPriceHow_fuelForTheRoute": "Пальне на маршрут",
+  "iPriceHow_sharedBy": "Ділиться на",
+  "iPriceHow_youPlusSeats": "ти + {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}",
+  "@iPriceHow_youPlusSeats": {
+    "x-needs-review": true
+  },
+  "iPriceHow_eachPaysSame": "Кожен пасажир платить однаково, навіть якщо забронює лише один. Максимум {max}, тож повне авто ніколи не збере більше, ніж коштує пальне. Відрізки маршруту рахуємо за відстанню.",
+  "iPriceStops_noStops": "Без зупинок",
+  "iPriceStops_routeNoStops": "{from} → {to} · {distance} · без зупинок",
+  "iPriceStops_stopsCount": "{stops, plural, one{{stops} зупинка} few{{stops} зупинки} many{{stops} зупинок} other{{stops} зупинки}}",
+  "@iPriceStops_stopsCount": {
+    "x-needs-review": true
+  },
+  "iPriceStops_routeOneStop": "{from} → {to} · {distance} · зупинка: {stop}",
+  "iPriceStops_seeAllPrices": "Усі ціни ({count})",
+  "iRequestExpired_requestExpired": "Запит прострочено",
+  "iRequestExpired_noAnswer": "Немає відповіді вчасно: {driverName}",
+  "@iRequestExpired_noAnswer": {
+    "x-needs-review": true
+  },
+  "iRequestExpired_nothingWasBookedHereAre": "Нічого не заброньовано. Ось інші варіанти на той самий маршрут.",
+  "iRequestExpired_arrivalDuration": "→ {arrival} · {duration}",
+  "@iRequestExpired_arrivalDuration": {
+    "x-needs-review": true
+  },
+  "common_dateSeats": "{date} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}",
+  "@common_dateSeats": {
+    "x-needs-review": true
+  },
+  "iResults_filters_a11y": "Фільтри",
+  "iResults_pricePerSeatTheSame": "Ціна за місце, однакова, скільки б людей не забронювало. Ти платиш водієві готівкою під час зустрічі.",
+  "iResults_yourPeopleFirst": "Спершу свої",
+  "iResults_morning": "Зранку",
+  "iResults_directOnly": "Без зупинок",
+  "iResults_seatsLeft": "{seats, plural, one{Останнє місце} few{Ще {seats} місця} many{Ще {seats} місць} other{Ще {seats} місця}}",
+  "@iResults_seatsLeft": {
+    "x-needs-review": true
+  },
+  "iResults_instant": "Миттєво",
+  "iResults_partOfRoute": "Частина маршруту {routeFrom} → {routeTo}. Тобі по дорозі: {from} → {to}.",
+  "@iResults_partOfRoute": {
+    "x-needs-review": true
+  },
+  "iResults_usuallyAnswersIn": "Зазвичай відповідає за {duration}",
+  "iResults_full": "Місць нема",
+  "iResults_noSeatsLeft": "Місць немає",
+  "iResults_nothingFits": "Нічого не підходить?",
+  "iResults_getNotified": "Скажемо, щойно хтось поїде {from} → {to} ({day}).",
+  "@iResults_getNotified": {
+    "x-needs-review": true
+  },
+  "iResults_rideAlert_a11y": "Стежити за маршрутом",
+  "iResultsEmpty_noRidesOn": "Поки нічого немає: {date}",
+  "@iResultsEmpty_noRidesOn": {
+    "x-needs-review": true
+  },
+  "iResultsEmpty_driversPublishRidesDaysAhead": "Водії публікують поїздки за кілька днів. Скажемо, щойно з’явиться нова.",
+  "iResultsEmpty_tellMeAboutNewRides": "Повідомити про нові поїздки",
+  "common_routeDate": "{from} → {to} · {date}",
+  "iResultsEmpty_otherDays": "Інші дні",
+  "iResultsEmpty_dayRides": "{date} · {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}}",
+  "@iResultsEmpty_dayRides": {
+    "x-needs-review": true
+  },
+  "iRideDetail_routeDuration": "{from} → {to} · {duration}",
+  "iRideDetail_shareRide_a11y": "Поділитися",
+  "iRideDetail_yourPickup": "Тут сідаєш",
+  "iRideDetail_rynek": "Rynek",
+  "iRideDetail_dworzecPkp": "Dworzec PKP",
+  "iRideDetail_yourDropoff": "Тут виходиш",
+  "iRideDetail_driverHistory": "{rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} · {together} разом із тобою · з {year}",
+  "@iRideDetail_driverHistory": {
+    "x-needs-review": true
+  },
+  "iRideDetail_mediumBagOk": "Середня сумка – ок",
+  "iRideDetail_noSmoking": "Не куримо",
+  "iRideDetail_max2InBack": "Ззаду максимум двоє",
+  "iRideDetail_instantBookingTheSeatIs2": "Миттєве бронювання: місце твоє одразу після бронювання.",
+  "iRideDetail_perSeatCash": "за місце · готівка",
+  "iRideDetail_bookSeat": "Забронювати",
+  "iSearch_from": "Звідки: {city}",
+  "iSearch_to": "Куди: {city}",
+  "iSearch_swapCities_a11y": "Поміняти місцями",
+  "iSearch_date": "Коли",
+  "iSearch_seats": "Місця",
+  "iSearch_showRides": "Показати, хто їде",
+  "iSecondRequest_withdrawQ": "Відкликати запит? Водій: {driverName}",
+  "iSecondRequest_body": "На тому самому маршруті можна чекати лише на одного водія. Якщо забронюєш варіант (водій: {newDriver}), запит (водій: {oldDriver}) буде відкликано, і водій отримає сповіщення.",
+  "@iSecondRequest_body": {
+    "x-needs-review": true
+  },
+  "iSecondRequest_withdrawAndBook": "Відкликати й забронювати: {driverName}",
+  "iSecondRequest_keepWaiting": "Чекати далі: {driverName}",
+  "iWaiting_requestSent": "Чекаємо відповіді",
+  "iWaiting_waitingFor": "Чекаємо відповіді: {driverName}",
+  "iWaiting_hasUntil": "Водій: {driverName}. Має час на відповідь до {deadline} (ночі не враховуються). Ми повідомимо тебе, а запит буде в розділі «Попутки».",
+  "iWaiting_routeSeatsPrice": "{from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price}",
+  "@iWaiting_routeSeatsPrice": {
+    "x-needs-review": true
+  },
+  "iWaiting_keepBrowsing": "Переглядати далі",
+  "lScreens_rideDetail": "Деталі попутки",
+  "mEmpty_noConversationsYet": "Тут поки тихо",
+  "mEmpty_whenYouBookARide": "Щойно забронюєш попутку, чат із водієм з’явиться тут сам. Він працює ще 24 год після того, як доїдете.",
+  "mInbox_searchMessages_a11y": "Пошук у чатах",
+  "mInbox_rideUpdates": "Новини попуток",
+  "mInbox_confirmedFor": "Підтверджено на {day} {time} · {name}",
+  "mInbox_new_a11y": "нове",
+  "mInbox_activeRides": "Активні попутки",
+  "mInbox_online_a11y": "онлайн",
+  "common_dayTimePlace": "{day} о {time} · {place}",
+  "mInbox_typing": "пише…",
+  "common_datePlace": "{date} · {place}",
+  "common_pastRides": "Минулі попутки",
+  "mInbox_thanksForTheRide": "Дякую, що підвезли!",
+  "mInbox_youSeeYouNextWeek": "Ти: До наступного тижня!",
+  "common_imAtTheBusStop": "Я на зупинці",
+  "mSendFailed_notSentTapToRetry": "Не надіслано · Натисни, щоб повторити",
+  "mThread_driver": "Водій ·",
+  "common_callName": "Подзвонити: {name}",
+  "mThread_moreReportOrBlock_a11y": "Ще: поскаржитись чи заблокувати",
+  "mThread_pickupPlate": "Зустріч {place} · {plate}",
+  "mThread_view": "Відкрити",
+  "mThread_driverAccepted": "{driverName}: бере тебе",
+  "@mThread_driverAccepted": {
+    "x-needs-review": true
+  },
+  "mThread_hiIllBeAtThe": "Привіт! Буду на місці на кілька хвилин раніше.",
+  "mThread_greatThanksWhatDoYou": "Супер, дякую! Як тебе впізнати?",
+  "mThread_seenAt": "{time} · Прочитано",
+  "mThread_blackJacketRedBackpack": "Чорна куртка, червоний рюкзак",
+  "mThread_liveLocation": "Де я зараз",
+  "mThread_sharingUntilPickup": "Видно до зустрічі · {duration} звідси",
+  "mThread_imAtThePickup": "Я на місці",
+  "mThread_runningLate": "Запізнююсь на {minutes} хв",
+  "mThread_whereExactly": "А де саме?",
+  "mThread_attachLocationOrPhoto_a11y": "Надіслати геолокацію чи фото",
+  "mThread_send_a11y": "Надіслати",
+  "mThreadDriver_passenger": "Пасажир ·",
+  "mThreadDriver_youAcceptedTheRideRequest": "Домовились",
+  "mThreadDriver_onMyWay": "Вже їду",
+  "mThreadDriver_cantFindYou": "Не бачу тебе",
+  "mUpdates_driverConfirmed": "Попутку підтверджено · {driverName}",
+  "mUpdates_dayTimeTo": "{day} о {time} на {place}",
+  "mUpdates_stillSearching": "Ще шукаємо на {days} {time}",
+  "mUpdates_wellStartMatching2H": "Шукати почнемо за 2 год до виїзду",
+  "mUpdates_thisWeek": "Цього тижня",
+  "mUpdates_savedCo2": "Мінус {co2} CO₂",
+  "mUpdates_rideWithOn": "Попутка · {name} · {date}",
+  "mUpdates_rideCancelledByDriver": "Попутку скасовано водієм",
+  "@mUpdates_rideCancelledByDriver": {
+    "x-needs-review": true
+  },
+  "mUpdates_foundAnotherOption": "{date} · ми знайшли інший варіант",
+  "nD1_requestSecondsLeft": "sameway · Запит · ще {seconds} с",
+  "nD1_requestBody": "Зустріч {place} · +{detour} гаку · вийде по дорозі.",
+  "nD1_sharingYourRoute": "Ти в дорозі",
+  "nD1_toPlaceSeatsFree": "До {place} · {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}}",
+  "@nD1_toPlaceSeatsFree": {
+    "x-needs-review": true
+  },
+  "nD1_wellAskBeforeAnyoneIs": "Нікого не додамо без тебе. Голосові підказки увімкнені.",
+  "common_anyNavigationAppGoogleMaps": "Будь-який навігатор (Google Maps, Waze…)",
+  "common_samewayPickup": "sameway · Зустріч",
+  "nD2_pickupInSide": "Зустріч: {passengerName}, через {distance}, {side}",
+  "@nD2_pickupInSide": {
+    "x-needs-review": true
+  },
+  "nD2_placeWaiting": "{place} · чекає: {spot}",
+  "@nD2_placeWaiting": {
+    "x-needs-review": true
+  },
+  "nD2_iSeePassenger": "Бачу",
+  "nD3_turnBackVia": "Розворот через {street}",
+  "nD3_timePlus": "{time} · +{duration}",
+  "nD3_didYouPass": "Здається, проїхали: {passengerName}",
+  "@nD3_didYouPass": {
+    "x-needs-review": true
+  },
+  "nD3_drovePast": "Ти вже на {distance} далі від місця зустрічі. Розвернись (+{duration}) або запропонуй інше місце.",
+  "nD3_turnBack": "Розвернутись",
+  "nD3_suggestSpot": "Інше місце",
+  "nD3_pickedUp": "Вже в машині",
+  "nD3_passengerAtPickup": "{passengerName}: уже на місці",
+  "@nD3_passengerAtPickup": {
+    "x-needs-review": true
+  },
+  "nD3_waitingNote": "Чекає {duration} · {note}",
+  "nD4_samewayDropoff": "sameway · Висадка",
+  "nD4_dropOffIn": "Висадити: {passengerName}, через {distance}",
+  "@nD4_dropOffIn": {
+    "x-needs-review": true
+  },
+  "nD4_placeOnRouteSafe": "{place}, тобі по дорозі. Зупиняйся лише там, де безпечно.",
+  "nD4_droppedOff": "Пасажира висаджено",
+  "@nD4_droppedOff": {
+    "x-needs-review": true
+  },
+  "nD4_samewayTrip": "sameway · Попутка",
+  "nD4_stillDriving": "Ще їдете? · {passengerName}",
+  "@nD4_stillDriving": {
+    "x-needs-review": true
+  },
+  "nD4_parkedEndTrip": "Машина вже {minutes} хв стоїть на місці. Натисни «Доїхали», і пасажир отримає підсумок.",
+  "@nD4_parkedEndTrip": {
+    "x-needs-review": true
+  },
+  "nD4_endTrip": "Доїхали",
+  "nD4_stillDriving2": "Ще їдемо",
+  "nD5_dayTimePassengers": "{day} о {time} · пасажирів: {count}",
+  "@nD5_dayTimePassengers": {
+    "x-needs-review": true
+  },
+  "nD5_passengersLeaveOnTime": "Пасажири: {passengers}. Не запізнюйся, на тебе розраховують.",
+  "@nD5_passengersLeaveOnTime": {
+    "x-needs-review": true
+  },
+  "nD5_cantGo": "Не зможу",
+  "nD5_newBooking": "Нова бронь: {name}",
+  "nD5_requestAnswerBy": "{from} → {to}, {date} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} · {price}. Відповісти до {deadline}.",
+  "@nD5_requestAnswerBy": {
+    "x-needs-review": true
+  },
+  "nD5_bookedBy": "{from} → {to}, {when} · бронювання: {names}.",
+  "nD5_seatCancelled": "Більше не їде: {name}",
+  "@nD5_seatCancelled": {
+    "x-needs-review": true
+  },
+  "nD5_routeStillOn": "{date} · маршрут у силі, з тобою: {name}.",
+  "@nD5_routeStillOn": {
+    "x-needs-review": true
+  },
+  "nD5_eveningbeforeReminderForEveryPlanned": "Увечері перед кожним запланованим маршрутом із пасажирами нагадуємо водієві, щоб нікому не довелося чекати дарма. Якщо водій скасовує зі сповіщення, питаємо причину й одразу пишемо пасажирам.",
+  "@nD5_eveningbeforeReminderForEveryPlanned": {
+    "x-needs-review": true
+  },
+  "nD6_requestExpiresIn": "Запит ({name}) спливає за {minutes} хв",
+  "nD6_wed": "Ср",
+  "nD6_bookedSeat": "Місце заброньовано: {name}",
+  "@nD6_bookedSeat": {
+    "x-needs-review": true
+  },
+  "nD6_instantBooking": "{from} → {to}, {when} · миттєве бронювання · {price}.",
+  "common_lookingForDrivers": "Шукаємо водія",
+  "nP1_toPlaceSearching": "До {place} · шукаємо {elapsed}",
+  "nP1_usuallyUnder5MinYou": "Зазвичай до 5 хв. Застосунок можна закрити.",
+  "common_open": "Відкрити",
+  "nP1_samewayRide": "sameway · Попутка",
+  "nP1_offers": "{driverName}: забере тебе за {eta}, іти {walk}. {otherName}: за {otherEta}.",
+  "@nP1_offers": {
+    "x-needs-review": true
+  },
+  "nP1_seeDrivers": "Хто їде",
+  "nP1_requestDriver": "Їду з: {driverName}",
+  "@nP1_requestDriver": {
+    "x-needs-review": true
+  },
+  "nP1_searchingRunsAsALive": "Пошук висить як Live Activity (iOS) / постійне сповіщення (Android), тож можна вийти з застосунку. Коли знайдуться водії, приходить одне сповіщення, і поїхати можна в один тап.",
+  "nP2_driverComing": "{driverName}: їде · {duration}",
+  "@nP2_driverComing": {
+    "x-needs-review": true
+  },
+  "nP2_pickupCodeInApp": "Зустріч: {place} · код у застосунку",
+  "nP2_showCode": "Показати код",
+  "nP2_samewayMessage": "sameway · Повідомлення",
+  "common_imByTheBlueGate": "Я біля синьої брами, срібляста Corolla",
+  "nP2_reply": "Відповісти",
+  "common_imComing": "Вже йду",
+  "nP2_pickupInAtWalk": "Зустріч за {eta} на {place}. Іти {distance}.",
+  "nP2_liveActivityUpdatesEveryFew": "Live Activity оновлюється кожні кілька секунд, машинка їде по смужці. Код зустрічі на екрані блокування НЕ показуємо: його там може побачити хто завгодно. Відповісти можна, не відкриваючи застосунку.",
+  "nP3_timeSensitive": "ТЕРМІНОВО ·",
+  "nP3_driverHere": "{driverName}: уже на місці",
+  "@nP3_driverHere": {
+    "x-needs-review": true
+  },
+  "nP3_carAtPlaceWaits": "{car} {plate}, {place}. Чекатиме до {minutes} хв.",
+  "nP3_waitingOf": "Чекає {elapsed} з {limit}",
+  "nP3_inCountdown": "через {countdown}",
+  "nP3_stillOnYourWay": "Ти вже йдеш?",
+  "nP3_driverWaited": "Водій чекає вже {minutes} хв. Дай знати або скасуй – тоді водій зможе їхати далі.",
+  "@nP3_driverWaited": {
+    "x-needs-review": true
+  },
+  "nP3_moreMinutes": "Ще {minutes} хв",
+  "nP4_onTheWayArrive": "Їдемо · будемо о {time}",
+  "nP4_withDriverLeft": "Водій: {driverName} · ще {distance}",
+  "nP4_dropOffFrom": "Вийдеш за {distance} від {place}",
+  "nP4_youveArrivedNiceRide": "Приїхали! Як доїхали?",
+  "nP4_sharedSaved": "{distance} разом, мінус {co2} CO₂. Усе було добре?",
+  "nP4_reportProblem": "Щось не так",
+  "nP4_samewayRewards": "sameway · Нагороди",
+  "nP4_newReward": "Нова нагорода: {badge}",
+  "nP4_ridesInCityBox": "{rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} · {city}. На тебе чекає сюрприз.",
+  "@nP4_ridesInCityBox": {
+    "x-needs-review": true
+  },
+  "common_openBox": "Відкрити сюрприз",
+  "nP4_duringTheRideTheLive": "Поки ви в дорозі, Live Activity показує, коли будете, а «Поділитися» і «Безпека» завжди під рукою. Коли доїдете – один підсумок, а нагорода лише тоді, коли справді щось відкрилось.",
+  "nP5_driverCantTakeYou": "{driverName}: не зможе тебе забрати",
+  "@nP5_driverCantTakeYou": {
+    "x-needs-review": true
+  },
+  "nP5_routeChanged": "У водія змінився маршрут. {count, plural, one{Але є ще {count} водій} few{Але є ще {count} водії} many{Але є ще {count} водіїв} other{Але є ще {count} водія}}, яким з тобою по дорозі.",
+  "@nP5_routeChanged": {
+    "x-needs-review": true
+  },
+  "nP5_seeOptions": "Що далі",
+  "nP5_cancelledSearchingAgain": "Попутку скасовано, вже шукаємо іншого водія",
+  "nP5_sorryYouKeepYourPlace": "Вибач за це! Твоя черга зберігається. Зазвичай це до 5 хв.",
+  "common_ok": "Добре",
+  "common_noDriversOnYourRoute": "Поки ніхто не їде в твій бік",
+  "nP5_searchingLong": "Шукаємо вже {minutes} хв. Пройдешся до {distance} чи плануємо на потім?",
+  "nP5_walkDistance": "Пройду {distance}",
+  "common_keepSearching": "Шукати далі",
+  "nP5_stop": "Досить",
+  "nP5_badNewsAlwaysComesWith": "Погана новина завжди йде з варіантом, що робити далі. Якщо водій скасовує попутку, ми самі шукаємо знову, починати з нуля не треба.",
+  "@nP5_badNewsAlwaysComesWith": {
+    "x-needs-review": true
+  },
+  "nP6_samewayReminder": "sameway · Нагадування",
+  "nP6_dayTimeRoute": "{day} о {time} · {from} → {to}",
+  "nP6_meetAt": "Зустріч: {place}. Водій: {driverName}. Сумка – максимум середня.",
+  "nP6_viewRide": "Деталі",
+  "nP6_directions": "Як дійти",
+  "nP6_samewayYourPeople": "sameway · Свої",
+  "nP6_plannedRoute": "{name}: кудись їде",
+  "@nP6_plannedRoute": {
+    "x-needs-review": true
+  },
+  "nP6_peopleRoute": "{from} → {to}, {when} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Ти серед своїх, тому бачиш це раніше за інших.",
+  "@nP6_peopleRoute": {
+    "x-needs-review": true
+  },
+  "nP6_mute": "Не показувати: {name}",
+  "@nP6_mute": {
+    "x-needs-review": true
+  },
+  "common_tue": "Вт",
+  "nP6_seatConfirmed": "Місце твоє",
+  "nP6_acceptedFor": "{driverName}: бере тебе. {when}, {place}.",
+  "@nP6_acceptedFor": {
+    "x-needs-review": true
+  },
+  "nP6_rideIn": "За {minutes} хв виїзд",
+  "nP6_matchingWorked": "На завтра все склалось · {driverName}, {time}, {place}.",
+  "@nP6_matchingWorked": {
+    "x-needs-review": true
+  },
+  "nP7_samewayBetweenCities": "sameway · Між містами",
+  "nP7_beAt": "Будь тут: {place}, о {time}. {car} {plate}. Код у застосунку.",
+  "@nP7_beAt": {
+    "x-needs-review": true
+  },
+  "nP7_viewBooking": "Переглянути бронювання",
+  "common_thu": "чт",
+  "nP7_driverAccepted": "Прийнято · {driverName}",
+  "@nP7_driverAccepted": {
+    "x-needs-review": true
+  },
+  "nP7_whenRouteCash": "{when} · {from} → {to} · {price} готівкою.",
+  "nP8_plansChanged": "У водія змінилися плани. {name}: {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}} о {time}, {price}.",
+  "@nP8_plansChanged": {
+    "x-needs-review": true
+  },
+  "nP8_otherRides": "Інші варіанти",
+  "nP8_nothingBooked": "Нічого не заброньовано. {count, plural, one{{count} інший варіант} few{{count} інші варіанти} many{{count} інших варіантів} other{{count} іншого варіанта}} на {date}.",
+  "@nP8_nothingBooked": {
+    "x-needs-review": true
+  },
+  "nP8_aDriverCancellingTheDay": "Скасування водієм напередодні – термінове: пасажирові треба знайти інший варіант ще сьогодні. Прострочений запит – звичайне сповіщення з іншими варіантами в один дотик.",
+  "oCreate_createYourAccount": "Створи акаунт",
+  "oCreate_noAccountYet": "Ще немає акаунта для {email}. Це забере хвилину.",
+  "oCreate_firstName": "Ім’я",
+  "oCreate_yourFirstName_hint": "Твоє ім’я",
+  "oCreate_shownToDriversAndPassengers": "Його бачать водії й пасажири, з якими ти їдеш.",
+  "oCreate_chooseAPassword_hint": "Придумай пароль",
+  "oCreate_atLeast8Characters": "Мінімум 8 символів",
+  "oCreate_aNumberOrASymbol": "Цифра або символ",
+  "oCreate_im18OrOlder": "Мені вже виповнилося 18",
+  "oCreate_byCreatingAnAccountYou": "Створюючи акаунт, ти погоджуєшся з",
+  "oCreate_createAccount": "Створити акаунт",
+  "common_back_a11y": "Назад",
+  "oEmail_enterYourEmailIfYou": "Введи пошту. Якщо акаунт уже є, далі попросимо пароль.",
+  "oEmail_nameexamplecom_hint": "ім’я@пошта.com",
+  "oEmailExists_youSignedUpWithGoogle": "Акаунт створено через Google",
+  "oEmailExists_body": "{email} уже має акаунт через Google. Продовж через Google, щоб увійти.",
+  "oEmailExists_useADifferentEmail": "Вказати іншу пошту",
+  "oIntro1_skip": "Пропустити",
+  "oIntro1_ridesWithPeopleAlreadyGoing": "Їдь із тими, хто й так їде твоєю дорогою",
+  "oIntro1_driversOfferSeatsOnTrips": "Водії пропонують місця там, куди й так їдуть. Містом безкоштовно, між містами ділимо витрати. Це не таксі.",
+  "oIntro1_a4digitPickupCodeConfirms": "4‑значний код зустрічі підтверджує, що ти сідаєш у правильну машину.",
+  "oIntro1_oneCarInsteadOfTwo": "Одна машина замість двох. Рахуємо зекономлений CO₂.",
+  "oIntro1_getStarted": "Погнали",
+  "oNotifications_knowWhenYourDriverIs": "Знай, коли водій уже близько",
+  "oNotifications_whenADriverAcceptsAnd": "Коли водій погоджується і коли до тебе лишається 2 хв",
+  "@oNotifications_whenADriverAcceptsAnd": {
+    "x-needs-review": true
+  },
+  "oNotifications_whenYourDriverIsWaiting": "Коли водій уже чекає на точці",
+  "oNotifications_safetyAlertsNoAdsEver": "Сповіщення про безпеку. Жодної реклами.",
+  "oNotifications_turnOnNotifications": "Увімкнути сповіщення",
+  "oNotifications_askedOnceWhenYouRequest": "Питаємо один раз, коли вперше шукаєш попутку.",
+  "oPassword_welcomeBack": "З поверненням",
+  "common_p_a11y": "P",
+  "oPassword_notYouUseAnotherEmail": "Не ти? Вкажи іншу пошту",
+  "oPassword_password": "Пароль",
+  "oPassword_yourPassword_hint": "Твій пароль",
+  "common_showPassword_a11y": "Показати пароль",
+  "common_signIn": "Вхід",
+  "oPassword_forgotPassword": "Не пам’ятаєш пароль?",
+  "oPasswordError_triesLeft": "Неправильний пароль. {tries, plural, one{Ще {tries} спроба} few{Ще {tries} спроби} many{Ще {tries} спроб} other{Ще {tries} спроби}}, потім вхід призупиниться на {minutes} хв.",
+  "@oPasswordError_triesLeft": {
+    "x-needs-review": true
+  },
+  "oPermission_allowLocationToSeeRides": "Дозволь геолокацію, і ми покажемо попутки поруч",
+  "oPermission_matchYouWithDriversAlready": "Знайдемо водіїв, які вже їдуть твоїм маршрутом",
+  "oPermission_showTheExactWalkTo": "Покажемо, куди саме підійти",
+  "oPermission_sharedOnlyWithYourMatched": "Бачить лише твій водій і лише поки ви в дорозі",
+  "oPermission_allowLocation": "Дозволити",
+  "common_notNow": "Пізніше",
+  "oReset_resetPassword": "Скидання пароля",
+  "oReset_sentLink": "Ми надіслали посилання для скидання на {email}. Посилання діє 1 годину.",
+  "@oReset_sentLink": {
+    "x-needs-review": true
+  },
+  "oReset_openEmailApp": "Відкрити пошту",
+  "oReset_backToSignIn": "Назад до входу",
+  "common_resendIn": "Не прийшло? Глянь у спам. Надіслати ще раз можна через {countdown}.",
+  "oRole_howAreYouTravellingToday": "Як сьогодні їдеш?",
+  "oRole_pickOneToStartYou": "Обери, з чого почати. Змінити можна будь-коли просто на мапі.",
+  "oRole_imDriving": "Я за кермом",
+  "oRole_iHaveFreeSeatsOn": "Їду у своїх справах, є вільні місця",
+  "oRole_iNeedARide": "Шукаю попутку",
+  "oRole_findADriverAlreadyHeading": "Знайду водія, якому зі мною по дорозі",
+  "oSignIn_welcomeToSameway": "Привіт, це sameway",
+  "oSignIn_signInToRequestRides": "Увійди, щоб шукати попутки, писати водіям і бачити свою історію.",
+  "oSignIn_continueWithApple": "Продовжити з Apple",
+  "common_continueWithGoogle": "Увійти через Google",
+  "common_continueWithEmail": "Увійти через пошту",
+  "oSignIn_lookAroundFirst": "Спершу роззирнутися",
+  "oSignIn_noAccountNeededToBrowse": "Щоб глянути мапу, акаунт не потрібен. Увійдеш, коли шукатимеш попутку.",
+  "oSignIn_byContinuingYouAgreeTo": "Коли продовжуєш, ти погоджуєшся з документами:",
+  "oSignIn_terms": "Умови",
+  "oSignIn_and": "та",
+  "common_privacyPolicy": "Політика конфіденційності",
+  "common_sameway": "sameway",
+  "oSplash_continue_a11y": "Далі",
+  "common_verifyYourEmail": "Підтверди пошту",
+  "oVerify_checkYourInbox": "Перевір пошту",
+  "oVerify_sentCode": "Ми надіслали 6‑значний код на {email}",
+  "oVerify_verificationCode": "Код підтвердження",
+  "common_verify": "Підтвердити",
+  "oVerify_wrongEmailChangeIt": "Не та пошта? Змінити",
+  "pfCancel_keepRide": "Залишити",
+  "pfIntercity_samewayBetweenCitiesNow": "sameway · Між містами · зараз",
+  "pfLocation_showsRidesNearYouWhile": "Показує попутки поруч. Коли ділишся маршрутом, працює далі із синім індикатором.",
+  "pfLocation_aNotificationShowsWheneverYour": "Поки маршрут активний, видно сповіщення.",
+  "pfTime_pickATime": "Вибір часу",
+  "pfTime_dateAndTime_a11y": "Дата й час",
+  "common_todayDate": "Сьогодні, {date}",
+  "prBlocked_theyCantSeeYourRoutes": "Вони не бачать твоїх маршрутів і не можуть надсилати запити, а ми вас не поєднаємо. Їм про це не повідомляємо.",
+  "prBlocked_blockedOn": "Заблоковано {date} · після скарги",
+  "prBlocked_unblock": "Розблокувати",
+  "prBug_whereDidItHappen": "Де це сталося?",
+  "prBug_matching": "Пошук водія",
+  "prBug_chat": "Чат",
+  "common_whatHappened": "Що сталося?",
+  "prBug_egTheDestinationPinJumped_hint": "Напр.: посуваю мапу, а мітка стрибає назад",
+  "prBug_screenshotAttached": "Скріншот уже тут",
+  "prBug_takenWhenYouOpenedThis": "Зроблено, коли відкрилось це вікно",
+  "prBug_remove": "Прибрати",
+  "common_includeAppLogs": "Додати логи",
+  "prBug_noMessagesOrExactLocations": "Без повідомлень і точних адрес",
+  "common_sendReport": "Надіслати",
+  "prCar_passengersUseThisToRecognise": "Так пасажири впізнають твою машину при зустрічі.",
+  "prCar_make": "Марка",
+  "prCar_model": "Model",
+  "prCar_colour": "Колір",
+  "prCar_white": "Білий",
+  "prCar_silver": "Срібний",
+  "prCar_black": "Чорний",
+  "prCar_blue": "Синій",
+  "prCar_red": "Червоний",
+  "prCar_licencePlate": "Номер",
+  "prCar_passengerSeats": "Місця для пасажирів",
+  "prCar_defaultForNewRoutes": "Для нових маршрутів",
+  "prCar_fuel": "Пальне",
+  "prCar_petrol": "Бензин",
+  "prCar_diesel": "Дизель",
+  "prCar_lpg": "ГБО",
+  "prCar_electric": "Електро",
+  "prCar_consumptionL100Km": "Витрата, л/100 км",
+  "prCar_usedToSuggestYourPrice": "Використовується для рекомендованої ціни між містами.",
+  "prCar_saveCar": "Зберегти",
+  "prCarEV_consumptionKwh100Km": "Витрата, кВт·год/100 км",
+  "prCarEV_usedToSuggestYourPrice2": "Використовується для рекомендованої ціни між містами, із середньою ціною зарядки.",
+  "prDelete_deleteYourAccount": "Точно видалити акаунт?",
+  "prDelete_thisPermanentlyRemovesYourProfile": "Профіль, історія попуток і повідомлення зникнуть назавжди. Заплановані попутки скасуємо, а водіям повідомимо.",
+  "prDelete_toContinueConfirmItsYou": "Щоб продовжити, підтверди, що це ти: Face ID або пароль.",
+  "prDelete_deleteMyAccount": "Видалити мій акаунт",
+  "prDelete_keepAccount": "Залишити",
+  "prEdit_changePhoto_a11y": "Змінити фото",
+  "prEdit_displayName": "Як тебе звати",
+  "prEdit_yourName_hint": "Твоє ім’я",
+  "prEdit_bio": "Про себе",
+  "prEdit_phoneNumber": "Телефон",
+  "prEdit_shownOnlyToYourDriver": "Його бачить лише твій водій чи пасажир і лише поки ви в дорозі.",
+  "prEdit_saveChanges": "Зберегти",
+  "common_reportABug": "Щось зламалось?",
+  "common_beta": "Бета",
+  "prHelp_screenshotAndLogsAttachedFor": "Скріншот і логи додамо самі",
+  "prHelp_shakePhoneToReport": "Струсни телефон, щоб написати нам",
+  "prHelp_worksOnAnyScreenDuring": "Працює на будь-якому екрані, поки бета",
+  "prHelp_shakeToReport_a11y": "Струсни, щоб написати",
+  "prHelp_help": "Допомога",
+  "prHelp_faq": "FAQ",
+  "common_contactSupport": "Написати в підтримку",
+  "prHelp_usuallyRepliesWithinADay": "Зазвичай відповідаємо протягом дня",
+  "prHelp_firsttimeTips": "Підказки для початку",
+  "prHelp_n9ShortTipsOnThe": "9 коротких підказок на справжніх екранах",
+  "prHelp_replayTheIntro": "Показати інтро ще раз",
+  "prLanguage_appLanguage_a11y": "Мова застосунку",
+  "prLanguage_useDevice": "Системна",
+  "prLanguage_currently": "Зараз: {language}",
+  "prLanguage_polish": "польська",
+  "prLanguage_ukrainian": "українська",
+  "prLanguage_footnote": "Кожна мова названа по-своєму, щоб легко знайти рідну.",
+  "prMapStyle_standard": "Звичайна",
+  "prMapStyle_satellite": "Супутник",
+  "prMapStyle_matchPhonesDarkMode": "Як тема телефону",
+  "prMapStyle_switchesBetweenStandardAndDark": "Сама перемикається між звичайною і темною",
+  "prMapStyle_matchDarkMode_a11y": "Як тема телефону",
+  "prMapStyle_largerMapLabels": "Більші підписи",
+  "prMapStyle_easierToReadStreetNames": "Назви вулиць читати легше",
+  "prNotifications_duringARide": "У дорозі",
+  "prNotifications_liveRideOnLockScreen": "Дорога на екрані блокування",
+  "prNotifications_searchDriverComingEta": "Пошук, водій їде, коли будете",
+  "prNotifications_liveActivity_a11y": "Live Activity",
+  "prNotifications_spokenAlertsWhileDriving": "Голосові підказки за кермом",
+  "prNotifications_requestsPickupAndDropoffRead": "Запити, зустріч і висадка вголос",
+  "prNotifications_requestAnswerTime": "Час на відповідь",
+  "prNotifications_plannedRides": "Заплановані попутки",
+  "prNotifications_eveningbeforeReminder": "Нагадування ввечері",
+  "prNotifications_timeDayBefore": "О {time} напередодні",
+  "prNotifications_eveningReminder_a11y": "Нагадування ввечері",
+  "prNotifications_reminderBeforePickup": "Нагадування перед зустріччю",
+  "prNotifications_minutesBefore": "За {minutes} хв",
+  "prNotifications_pickupReminder_a11y": "Нагадування перед зустріччю",
+  "prNotifications_dailyRoutineCheckins": "Питання регулярних маршрутів",
+  "prNotifications_countOn": "{count} увімкнено",
+  "prNotifications_other": "Інше",
+  "prNotifications_yourPeoplesRoutes": "Маршрути своїх",
+  "prNotifications_max1PerPersonPer": "Не більше одного від людини за день",
+  "prNotifications_peopleRoutes_a11y": "Маршрути своїх",
+  "prNotifications_newsAndTips": "Новини й поради",
+  "prNotifications_news_a11y": "Новини",
+  "prNotifications_safetyAndPickupAlertsAre": "Сповіщення про безпеку й зустріч завжди увімкнені й пробиваються навіть крізь «Не турбувати».",
+  "prPassword_currentPassword": "Поточний пароль",
+  "prPassword_newPassword": "Новий пароль",
+  "prPassword_strongUse12CharactersFor": "Надійний · а ще краще 12+ символів",
+  "prPassword_repeatNewPassword": "Ще раз новий пароль",
+  "prPassword_forgotCurrentPassword": "Не пам’ятаєш поточний пароль?",
+  "prPassword_updatePassword": "Зберегти пароль",
+  "prPhoto_profilePhoto": "Фото профілю",
+  "prPhoto_zoom_a11y": "Масштаб",
+  "prPhoto_yourFaceClearlyVisible": "Обличчя добре видно",
+  "prPhoto_noSunglassesLogosOrGroup": "Без сонячних окулярів, логотипів і групових фото",
+  "prPhoto_weCheckNewPhotosUsually": "Ми перевіряємо нові фото, зазвичай за кілька хвилин. Доти інші бачать твої ініціали.",
+  "prPhoto_chooseAnother": "Вибрати інше",
+  "prPhoto_useThisPhoto": "Використати це фото",
+  "common_addAPhoto": "Додай фото",
+  "common_peopleAcceptRequestsFasterWhen": "Запити приймають швидше, коли видно, хто ти",
+  "common_account": "Акаунт",
+  "common_personalInfo": "Про мене",
+  "common_namePhotoBioPhone": "Ім’я, фото, про себе, телефон",
+  "common_loginSecurity": "Вхід і безпека",
+  "common_emailPasswordDeleteAccount": "Пошта, пароль, видалення акаунта",
+  "common_addYourCarToDrive": "Додай машину, щоб возити попутників",
+  "common_ridesPeople": "Попутки й свої",
+  "common_workMonfri": "Робота · пн–пт",
+  "common_rewardsProgress": "{collected} з {total} · сюрпризів до відкриття: {boxes}",
+  "@common_rewardsProgress": {
+    "x-needs-review": true
+  },
+  "common_ridesDistanceShared": "{rides, plural, one{{rides} раз} few{{rides} рази} many{{rides} разів} other{{rides} раза}} · {distance} разом",
+  "@common_ridesDistanceShared": {
+    "x-needs-review": true
+  },
+  "common_preferences": "Налаштування",
+  "common_language": "Мова",
+  "common_mapStyle": "Вигляд мапи",
+  "common_dark": "Темна",
+  "common_notifications": "Сповіщення",
+  "common_switchToDriver": "Стати водієм",
+  "common_support": "Підтримка",
+  "common_helpFeedback": "Допомога й відгуки",
+  "common_reportABugFaqContact": "Щось зламалось, питання, зв’язок",
+  "common_privacyLegal": "Приватність і документи",
+  "common_signOut": "Вихід",
+  "common_appVersionBeta": "sameway {version} (бета)",
+  "prProfileDriver_licenceCheckInProgress": "Перевіряємо посвідчення",
+  "prProfileDriver_cityRidesReadAloud": "Містом · читання вголос",
+  "prProfileDriver_switchToPassenger": "Стати пасажиром",
+  "prSecurity_signin": "Вхід",
+  "prSecurity_notVerifiedYet": "Ще не підтверджено",
+  "prSecurity_changePassword": "Змінити пароль",
+  "prSecurity_privacy": "Приватність",
+  "prSecurity_shareCrashReports": "Надсилати звіти про збої",
+  "prSecurity_optionalHelpsUsFixBugs": "Не обов’язково, але так ми швидше лагодимо баги.",
+  "prSecurity_termsOfService": "Умови користування",
+  "prSecurity_verification": "Перевірка",
+  "prSecurity_phoneEmailDrivingLicence": "Телефон, пошта, посвідчення",
+  "prSecurity_blockedPeople": "Заблоковані",
+  "prSecurity_people": "{count, plural, one{{count} людина} few{{count} людини} many{{count} людей} other{{count} людини}}",
+  "@prSecurity_people": {
+    "x-needs-review": true
+  },
+  "prSecurity_downloadMyData": "Завантажити мої дані",
+  "prSecurity_weEmailYouACopy": "Надішлемо копію на пошту протягом 48 год",
+  "prSecurity_dangerZone": "Обережно",
+  "prSecurity_deleteAccount": "Видалити акаунт",
+  "prSecurity_removesYourProfileRidesAnd": "Зникнуть профіль, попутки й повідомлення",
+  "prSwitchRole_switchRole": "Змінити роль",
+  "prSwitchRole_yourCurrentRideOrSearch": "Поточна попутка чи пошук залишаться як є. Поки ти в дорозі, роль змінити не можна.",
+  "prSwitchRole_offerSeatsOnATrip": "Бери попутників туди, куди й так їдеш. Уперше? Ми все покажемо.",
+  "prSwitchRole_currentlySelected": "Зараз обрано",
+  "prTips_eachTipAppearsOnceThe": "Кожна підказка з’являється один раз, коли вперше відкриваєш той екран. Тут можна переглянути будь-яку знову.",
+  "prVerifyLicence_passengersCanBookYouOnly": "Пасажири зможуть бронювати, щойно ми раз перевіримо посвідчення. Вони бачать «Посвідчення підтверджено», а не сам документ.",
+  "prVerifyLicence_front": "Лицьовий бік",
+  "prVerifyLicence_allFourCornersInThe": "Усі чотири кути в кадрі",
+  "prVerifyLicence_noGlareOnTheText": "Без відблисків на тексті",
+  "prVerifyLicence_categoryBValidToday": "Категорія B, чинне на сьогодні",
+  "prVerifyLicence_sendForChecking": "Надіслати на перевірку",
+  "prVerifyLicence_privacyNotice": "Повідомлення про конфіденційність",
+  "prVerifyRejected_notVerified": "Не підтверджено",
+  "prVerifyRejected_weCouldntVerifyYourLicence": "Не вдалося підтвердити посвідчення",
+  "prVerifyRejected_theTextOnTheBack": "Текст на звороті надто розмитий. Решта в порядку: зроби нове фото при доброму світлі.",
+  "prVerifyRejected_takeANewPhoto": "Зробити нове фото",
+  "prVerifyStatus_phone": "Телефон",
+  "prVerifyStatus_drivingLicence": "Водійське посвідчення",
+  "prVerifyStatus_checking": "Перевіряємо",
+  "prVerifyStatus_usuallyWithin24Hours": "Зазвичай протягом 24 годин",
+  "prVerifyStatus_youCanPlanRoutesNow": "Плани маршрутів можна створювати вже зараз. Бронювати тебе зможуть після перевірки. Ми повідомимо.",
+  "psArrived_youreAtThePickupSpot": "Ти на точці зустрічі",
+  "psArrived_standByTheBusStop": "Стань біля знака зупинки, щоб водії тебе бачили.",
+  "psArrived_driversPassed": "Водії, які проїхали тут за останні {minutes} хв: {count}",
+  "@psArrived_driversPassed": {
+    "x-needs-review": true
+  },
+  "psArrived_betterOdds": "Шанси вищі",
+  "psAsk_meetAtSpot": "Зустрінетеся на зручній точці?",
+  "psAsk_driverAlongStreet": "{driverName}: їде по {street}. Заїхати на твою вулицю – це для водія ще {detour} гаку, тож точка зустрічі зручніша вам обом. У попутках місце зустрічі обирають разом.",
+  "@psAsk_driverAlongStreet": {
+    "x-needs-review": true
+  },
+  "psAsk_yourCurrentPoint": "Твоє місце зараз",
+  "psAsk_extraForDriver": "+{detour} для водія",
+  "psAsk_onRouteAt": "По дорозі водія · {time}",
+  "@psAsk_onRouteAt": {
+    "x-needs-review": true
+  },
+  "psAsk_iCantWalkThere": "Не можу дійти",
+  "psAsk_okIllWalk": "Добре, піду",
+  "psAsk_cantWalkWellAskThe": "Не можеш дійти? Ми спитаємо водія, чи вийде заїхати на твою вулицю. Вирішує водій, а місце поки лишається за тобою.",
+  "@psAsk_cantWalkWellAskThe": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_cantWalk": "{passengerName}: не може дійти до точки",
+  "@psDriverChoice_cantWalk": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_originalPointDetour": "Місце пасажира – це {detour} гаку (+{distance}). Вирішуєш ти: заїхати туди чи хай ми знайдемо іншого водія.",
+  "@psDriverChoice_originalPointDetour": {
+    "x-needs-review": true
+  },
+  "psDriverChoice_pickUpThere": "Заїду туди",
+  "psDriverChoice_notThisTime": "Не цього разу",
+  "psDriverChoice_carpoolingNotATaxiThe": "Це попутки, а не таксі: чи давати гаку, завжди вирішує водій. Якщо водій відмовить, пасажир шукає далі, і ніхто не отримує штрафів.",
+  "@psDriverChoice_carpoolingNotATaxiThe": {
+    "x-needs-review": true
+  },
+  "psIntro_pickupSpots": "Зручні точки зустрічі",
+  "psIntro_markedPlacesWhereDriversPass": "Позначені місця, де водії проїжджають найчастіше й можуть безпечно зупинитися: автобусні кишені, широкі вулиці, освітлені перехрестя. Тут тебе заберуть швидше.",
+  "psIntro_driversPassMoreOften": "Тут частіше їздять",
+  "psIntro_mainRoadsOnPopularRoutes": "Головні вулиці на популярних маршрутах",
+  "psIntro_safeToStop": "Можна зупинитися",
+  "psIntro_legalStopsBusBaysGood": "Дозволені зупинки, кишені, гарне світло",
+  "psIntro_neverFar": "Завжди поруч",
+  "psIntro_withinWalk": "Пропонуємо лише точки до {minutes} хв пішки",
+  "psIntro_iCantWalkFar": "Мені важко далеко ходити",
+  "psNotifDriver_timeDurationDistance": "{time} · {duration} · {distance}",
+  "@psNotifDriver_timeDurationDistance": {
+    "x-needs-review": true
+  },
+  "psNotifDriver_agreedToMeet": "{passengerName}: підійде до точки зустрічі",
+  "@psNotifDriver_agreedToMeet": {
+    "x-needs-review": true
+  },
+  "psNotifDriver_pickupOnRoute": "Зустріч: {place}, просто на твоєму маршруті. Без гаку, мінус {saved}.",
+  "psNotifPassenger_walkToAPickupSpot": "Підійдеш до точки зустрічі?",
+  "psNotifPassenger_walkSaves": "{driverName}: їде по {street}. {walk} пішки до точки – і водієві не треба давати гаку на {detour}. Зустріч о {time}.",
+  "@psNotifPassenger_walkSaves": {
+    "x-needs-review": true
+  },
+  "psNotifPassenger_illWalk": "Піду",
+  "psNotifPassenger_cantWalkThere": "Не можу дійти",
+  "psSettings_suggestPickupSpots": "Пропонувати зручні точки",
+  "psSettings_whenAShortWalkGets": "Коли коротка прогулянка допоможе поїхати швидше",
+  "psSettings_howFarCanYouWalk": "Скільки можна пройти пішки?",
+  "psSettings_walkMinutes": "{minutes} хв",
+  "psSettings_pickMeUpOnlyWhere": "Забирати лише з мого місця",
+  "psSettings_forAWheelchairKidsOr": "Якщо з візком, з дітьми чи з важким багажем. Водії бачать це ще до того, як приймуть запит.",
+  "psSuggest_pickupSpot": "Точка зустрічі",
+  "psSuggest_distanceDuration": "{distance} · {duration}",
+  "@psSuggest_distanceDuration": {
+    "x-needs-review": true
+  },
+  "psSuggest_walkGetPickedFaster": "Пройдись {walk}, і тебе заберуть швидше",
+  "psSuggest_driversPassMoreOften": "Зараз по {street} водії їздять приблизно в {times} р. частіше, ніж твоєю вулицею.",
+  "@psSuggest_driversPassMoreOften": {
+    "x-needs-review": true
+  },
+  "psSuggest_here": "Тут",
+  "psSuggest_waitAbout": "чекати ~{duration}",
+  "psSuggest_atTheSpot": "На точці",
+  "psSuggest_stayHere": "Лишуся тут",
+  "psSuggest_walkThere": "Піду туди",
+  "psSuggest_yourSearchKeepsRunningEither": "Пошук триває в будь-якому разі.",
+  "psWalk_walkingToThePickupSpot": "Йдеш до точки зустрічі",
+  "psWalk_distanceDurationSearching": "{distance} · {duration} · пошук триває",
+  "psWalk_goBackToWhereI": "Повернутися назад",
+  "psWalkToDriver_walkTo": "Йди до {place}",
+  "psWalkToDriver_bothArriveAround": "Будете там приблизно одночасно, о {time}",
+  "psWalkToDriver_you": "Ти",
+  "common_minutesShort": "{minutes} хв",
+  "psWalkToDriver_codeStaysSame": "Код зустрічі той самий: {code}",
+  "pCall112_keepHolding": "Тримай… дзвінок за {seconds} с",
+  "pCancelConfirm_driverOnWay": "{driverName}: уже їде й буде за {eta}. Ми одразу повідомимо водія.",
+  "@pCancelConfirm_driverOnWay": {
+    "x-needs-review": true
+  },
+  "pCantFind_cantFindEachOther": "Не можете знайтися?",
+  "pCantFind_driverWaits": "{driverName}: чекає до {minutes} хв після приїзду. {car}, {plate}.",
+  "@pCantFind_driverWaits": {
+    "x-needs-review": true
+  },
+  "pCantFind_quickMessage": "Швидке повідомлення",
+  "pCantFind_imByTheEntrance": "Я біля входу",
+  "pCantFind_shareMyExactLocation": "Показати, де я точно",
+  "pCantFind_driverSeesYou": "{driverName}: бачить тебе на мапі до зустрічі",
+  "@pCantFind_driverSeesYou": {
+    "x-needs-review": true
+  },
+  "pCantFind_yourPhoneNumbersStayHidden": "Ваші номери лишаються прихованими",
+  "pCantFind_sendSomeoneALiveLink": "Надіслати комусь посилання наживо",
+  "common_aboutDrive": "~{duration} машиною",
+  "pConfirm_free": "Безкоштовно",
+  "pConfirm_when": "Коли",
+  "pConfirm_later": "Пізніше",
+  "common_people": "Свої",
+  "pConfirm_includingYou1JustYou": "Разом із тобою. 1 = лише ти.",
+  "pConfirm_fewerPeople_a11y": "Менше людей",
+  "pConfirm_morePeople_a11y": "Більше людей",
+  "common_findARide": "Знайти попутку",
+  "pDeclined_driverCantTakeYou": "Цього разу не вийде: {driverName}",
+  "pDeclined_thatHappensYourSearchIs": "Буває. Пошук триває, і ніхто не отримує штрафів.",
+  "pDeclined_dropsYouAtTheDoor": "Довезе під самі двері",
+  "common_youveArrived": "Приїхали!",
+  "common_placeTime": "{place} · {time}",
+  "common_sharedWith": "Разом · {name}",
+  "common_coSaved": "CO₂ зекономлено",
+  "common_howWasRide": "{name}: як доїхали?",
+  "common_good": "Все супер",
+  "common_reportAProblem": "Щось не так",
+  "pDone_rideAgain": "Ще разом? · {name}",
+  "pDone_addDriverToPeople": "Додай у свої, і ти серед перших дізнаєшся про новий маршрут.",
+  "@pDone_addDriverToPeople": {
+    "x-needs-review": true
+  },
+  "common_add": "Додати",
+  "pDriverCancelled_driverCancelled": "Скасовано водієм: {driverName}",
+  "@pDriverCancelled_driverCancelled": {
+    "x-needs-review": true
+  },
+  "pDriverCancelled_noLongerDrivingThisWay": "Водій більше не їде в цей бік. Перепрошуємо. Ми вже шукаємо знову з тієї ж точки.",
+  "pDriverCancelled_searchingFor": "Шукаємо вже {elapsed}",
+  "pDriverCantPickup_title": "Не вийде забрати: {driverName}",
+  "pDriverCantPickup_body": "Водій не може безпечно зупинитися тут: {street}. Шукаємо знову з тієї ж точки, і ти на початку черги.",
+  "@pDriverCantPickup_body": {
+    "x-needs-review": true
+  },
+  "pHome_czyyny": "CZYŻYNY",
+  "pHome_grzegrzki": "GRZEGÓRZKI",
+  "pHome_rakowice": "RAKOWICE",
+  "pHome_dbie": "DĄBIE",
+  "pHome_olsza": "OLSZA",
+  "common_role_a11y": "Роль",
+  "common_passenger": "Пасажир",
+  "common_switchToDriver_a11y": "Перейти в режим водія",
+  "common_driver": "Водій",
+  "common_centerMapOnMyLocation_a11y": "Показати, де я",
+  "common_whereTo": "Куди їдемо?",
+  "common_whenNowChangeTime_a11y": "Коли: зараз. Змінити час",
+  "common_now": "Зараз",
+  "common_home": "Дім",
+  "common_work": "Робота",
+  "common_dayPlace": "{day} · {place}",
+  "pHome_pickupConfirmed": "Зустріч о {time} · {driverName}: підтверджено",
+  "@pHome_pickupConfirmed": {
+    "x-needs-review": true
+  },
+  "common_main_a11y": "Головна",
+  "common_map": "Мапа",
+  "common_rides": "Попутки",
+  "common_unreadCount": "{count, plural, one{{count} нове} few{{count} нові} many{{count} нових} other{{count} нового}}",
+  "@common_unreadCount": {
+    "x-needs-review": true
+  },
+  "common_messages": "Чати",
+  "pInRide_pickupConfirmedOnYourWay": "Код прийнято · їдемо",
+  "pInRide_arrivalLeft": "Прибуття через {duration} · ще {distance}",
+  "pInRide_tripProgress_a11y": "Скільки лишилось",
+  "pInRide_pickedUpAt": "У машині · {place}",
+  "pInRide_dropOffFromDestination": "Вийдеш за {distance} від потрібного місця",
+  "common_safety": "Безпека",
+  "pInRide_prototypeArrive_a11y": "Прототип: доїхали",
+  "pOffers_driversOnYourWay": "{count, plural, one{{count} водій їде} few{{count} водії їдуть} many{{count} водіїв їдуть} other{{count} водія їдуть}} у твій бік",
+  "@pOffers_driversOnYourWay": {
+    "x-needs-review": true
+  },
+  "pOffers_freeYouMeetAtA": "Безкоштовно. Зустрічаєтеся на точці по дорозі водія.",
+  "common_verified_a11y": "Перевірений профіль",
+  "common_carPlate": "{car} · {plate}",
+  "pOffers_toPickup": "до зустрічі",
+  "common_trustLine": "Посвідчення задекларовано · email підтверджено · {rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}}",
+  "@common_trustLine": {
+    "x-needs-review": true
+  },
+  "common_walkDistance": "Пішки {distance}",
+  "pOffers_dropsYouAway": "Висадить за {distance} від потрібного місця",
+  "common_requestSeat": "Хочу поїхати",
+  "common_k_a11y": "K",
+  "pOffers_walkDropsAtDoor": "{distance} пішки · висадить під дверима",
+  "pOffers_request": "Запит",
+  "pPickMap_moveTheMapToSet": "Посунь мапу, щоб обрати місце",
+  "pPickMap_distanceDrive": "{distance} · ~{duration} машиною",
+  "pPickMap_setDestinationHere": "Сюди",
+  "pReport_aboutRide": "Щодо поїздки, {date}, {time}. Водій: {driverName}.",
+  "pReport_unsafeDriving": "Небезпечна їзда",
+  "pReport_wrongCarOrWrongPerson": "Не та машина або не та людина",
+  "pReport_madeMeFeelUncomfortable": "Мені було некомфортно",
+  "pReport_paymentProblem": "Проблема з оплатою",
+  "pReport_tellUsMoreOptional": "Розкажи детальніше (необов’язково)",
+  "common_alsoBlock": "Також заблокувати: {name}. Вас більше не поєднаємо.",
+  "pReport_ourTeamRepliesWithin24": "Відповідаємо протягом 24 год. У небезпеці дзвони 112.",
+  "pReportSent_reportSent": "Скаргу надіслано",
+  "pReportSent_thanksWereOnIt": "Дякуємо. Вже розбираємося.",
+  "pReportSent_ourTeamReadsEveryReport": "Ми читаємо кожну скаргу й відповідаємо протягом 24 год у Чати › Оновлення.",
+  "pReportSent_sentAt": "Надіслано · {time}",
+  "pReportSent_inReview": "На розгляді",
+  "pReportSent_replyFromOurTeam": "Відповідь команди",
+  "pReportSent_blocked": "Заблоковано: {name}. Скасувати можна в Профіль › Вхід і безпека › Заблоковані.",
+  "@pReportSent_blocked": {
+    "x-needs-review": true
+  },
+  "common_driverOnTheWay": "{driverName}: уже їде до тебе",
+  "@common_driverOnTheWay": {
+    "x-needs-review": true
+  },
+  "common_checkItFirst": "Спершу перевір",
+  "common_shareTrip_a11y": "Поділитися",
+  "common_pickupCode": "Код зустрічі",
+  "common_sayItWhenYouMeet": "Скажи при зустрічі",
+  "common_message": "Написати",
+  "common_cantFind": "Не бачиш?",
+  "pSafety_rideSummary": "{driverName} · {car} · {plate} · зустріч о {time}, {place}",
+  "pSafety_call112HoldFor2_a11y": "Дзвінок на 112. Утримуй 2 секунди. З програмою зчитування екрана двічі торкнися й підтверди.",
+  "pSafety_holdFor2SecondsThis": "Утримуй 2 секунди. Так не буде випадкових дзвінків.",
+  "pSafety_shareLiveTrip": "Поділитися маршрутом наживо",
+  "pSafety_aLinkShowsTheCar": "За посиланням видно машину й маршрут, поки не доїдеш",
+  "pSafety_thisIsntTheCarFrom": "Це не та машина, що в застосунку",
+  "pSafety_getOutWhenItsSafe": "Вийди, коли буде безпечно, і напиши нам",
+  "pSafety_unsafeDrivingBehaviourAnythingElse": "Небезпечна їзда, поведінка, будь-що інше",
+  "common_from_a11y": "Звідки",
+  "common_currentLocation": "Я тут",
+  "common_to_a11y": "Куди",
+  "pSearch_clear_a11y": "Стерти",
+  "pSearch_chooseOnMap": "На мапі",
+  "pSearch_dragTheMapToDrop": "Посунь мапу і постав мітку",
+  "pSearch_addAPlace": "Додати адресу",
+  "pSearch_results": "Результати",
+  "pSearch_placeRecent": "{place} (нещодавно)",
+  "pSearch_usedYesterday": "Була вчора",
+  "pSearchCity_anotherCity": "{city} – це інше місто",
+  "pSearchCity_plannedAhead": "Міжміські маршрути водії планують заздалегідь. Напрямок {city}: цього тижня {count, plural, one{{count} варіант} few{{count} варіанти} many{{count} варіантів} other{{count} варіанта}}, від {price}.",
+  "@pSearchCity_plannedAhead": {
+    "x-needs-review": true
+  },
+  "pSearchCity_seeRides": "Поїздки: {city}",
+  "@pSearchCity_seeRides": {
+    "x-needs-review": true
+  },
+  "pSearchCity_places": "Місця",
+  "pSearchCity_cityCentrePodkarpackie": "Центр міста · Підкарпаття",
+  "common_podkarpackie": "Підкарпатське воєводство",
+  "pSearchLoading_searchingPlaces": "Шукаємо місця",
+  "pSearchNoResults_noPlacesMatch": "Нічого не знайдено",
+  "pSearchNoResults_checkTheSpellingOrDrop": "Перевір написання або постав пін на мапі.",
+  "common_lookingForDrivers2": "Шукаємо, хто їде в твій бік…",
+  "pSearching_usuallySearchingFor": "Зазвичай до 5 хв · шукаємо вже {elapsed}",
+  "common_edit": "Змінити",
+  "pSearching_youCanLeaveTheApp": "Можеш закрити застосунок. Напишемо, щойно водій погодиться.",
+  "common_scheduleInstead": "Краще запланувати",
+  "common_cancel": "Скасувати",
+  "pSearching_prototypeDriversFound_a11y": "Прототип: водіїв знайдено",
+  "pTimeSheet_whenDoYouWantTo": "Коли хочеш їхати?",
+  "common_inMinutes": "Через {minutes} хв",
+  "common_leaveAround": "Виїзд близько {time}",
+  "common_pickADateAndTime": "Вибрати дату й час",
+  "common_repeatOnWeekdays": "Повторювати щобудня",
+  "common_sameTripMostDays": "Майже щодня той самий маршрут",
+  "common_done": "Готово",
+  "pWaiting_waitingFor": "Чекаємо відповіді: {driverName}",
+  "pWaiting_usuallyUnder30SIf": "Зазвичай до 30 с. Якщо водій не зможе, ми самі шукаємо далі.",
+  "pWaiting_waitingForAnswer_a11y": "Чекаємо відповіді",
+  "pWaiting_driverToPickup": "{driverName} · {duration} до зустрічі",
+  "common_cancelRequest": "Скасувати запит",
+  "pHome_profile": "Профіль",
+  "common_myCar": "Моя машина",
+  "common_cancelRide": "Скасувати попутку",
+  "pCancelConfirm_keepMyRide": "Залишити поїздку",
+  "pCancelConfirm_cancelThisRide": "Скасувати поїздку?",
+  "dRequestRules_readRequestsAloud": "Зачитувати запити вголос",
+  "dRequestRules_holdRequestsUntilYouStop": "Притримувати запити до зупинки",
+  "common_arriveBy": "Бути до",
+  "platform_location": "Геолокація",
+  "platform_locationPermission": "Доступ до геолокації",
+  "common_newStop": "Нова зупинка: {passengerName}",
+  "dToPickup_restart": "Перезапустити",
+  "pSafety_holdToCall112": "Утримуй, щоб подзвонити 112",
+  "pOffers_m_a11y": "M",
+  "common_samewayLogo_a11y": "логотип sameway",
+  "common_nameEtaAway": "{name} · за {duration}",
+  "rwBox_mysteryBox": "Сюрприз",
+  "rwBox_youGot": "Тобі випало",
+  "rwBox_goldenRoute": "Золотий маршрут",
+  "rwBox_yourRouteLineOnThe": "Твій маршрут на мапі 30 днів світитиметься золотом. Його бачать і ті, хто їде з тобою.",
+  "rwBox_rare": "Рідкісне",
+  "rwBox_cosmetic": "Для краси",
+  "rwBox_whatCanBeInside": "Що може бути всередині",
+  "rwBox_routeColoursAndMapPins": "Кольори маршруту й піни · рамки профілю · стікери для чату · без грошей і знижок. Ніщо з цього не впливає на те, кому дістанеться місце.",
+  "rwBox_useNow": "Увімкнути",
+  "rwDetail_takeRidesInsideKrakwAs": "Їзди Краковом пасажиром чи водієм. За кожен рівень – сюрприз.",
+  "common_ridesCount": "{rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}}",
+  "@common_ridesCount": {
+    "x-needs-review": true
+  },
+  "rwDetail_iii": "III",
+  "rwDetail_levelIii": "Рівень III",
+  "rwDetail_ridesProgress": "{done} з {total} попуток",
+  "@rwDetail_ridesProgress": {
+    "x-needs-review": true
+  },
+  "rwDetail_unlockedOn": "Отримано {date}",
+  "rwDetail_shareOfRiders": "Є в {percent} користувачів",
+  "rwDetail_share": "Поділитися",
+  "rwEmpty_ofTotal": "з {total}",
+  "@rwEmpty_ofTotal": {
+    "x-needs-review": true
+  },
+  "rwEmpty_yourFirstRewardComesWith": "Перша нагорода – з першою поїздкою.",
+  "rwEmpty_rewardsAreJustForFun": "Нагороди – просто для фану: кольори мапи, рамки профілю, стікери. Вони ніколи не впливають на те, кому дістанеться місце.",
+  "common_rewards": "Нагороди",
+  "rwHome_shareCollection_a11y": "Поділитися",
+  "rwHome_rewardsCollected": "нагород зібрано",
+  "rwHome_boxesToOpen": "{boxes, plural, one{{boxes} сюрприз} few{{boxes} сюрпризи} many{{boxes} сюрпризів} other{{boxes} сюрпризу}}",
+  "@rwHome_boxesToOpen": {
+    "x-needs-review": true
+  },
+  "rwHome_rewardsCollected2_a11y": "Зібрані нагороди",
+  "rwHome_nextBadge": "Далі: {badge}",
+  "rwHome_ridesInCity": "{done} з {total} попуток · {city}",
+  "@rwHome_ridesInCity": {
+    "x-needs-review": true
+  },
+  "rwHome_all": "Усі",
+  "rwHome_firsts": "Перший раз",
+  "rwHome_cities": "Міста",
+  "rwHome_green": "Еко",
+  "common_doneOfTotal": "{done} з {total}",
+  "rwHome_firstRideUnlocked_a11y": "Перша попутка, є",
+  "rwHome_firstRide": "Перша попутка",
+  "rwHome_unlocked": "Є!",
+  "rwHome_firstDriveUnlocked_a11y": "Вперше за кермом, є",
+  "rwHome_firstDrive": "Вперше за кермом",
+  "rwHome_plannerUnlocked_a11y": "Все за планом, є",
+  "rwHome_planner": "Все за планом",
+  "rwHome_creatureOfHabitUnlocked_a11y": "Як по годиннику, є",
+  "rwHome_creatureOfHabit": "Як по годиннику",
+  "rwHome_badgeProgress": "{badge}, {progress}",
+  "rwHome_firstIntercity": "Між містами",
+  "rwHome_passengerLevelIi_a11y": "Пасажир, рівень II",
+  "rwHome_ii": "II",
+  "rwHome_levelIi": "Рівень II",
+  "rwHome_driverLevelI_a11y": "Водій, рівень I",
+  "rwHome_i": "I",
+  "rwHome_levelI": "Рівень I",
+  "rwHome_fullCarUnlocked_a11y": "Повна машина, є",
+  "rwHome_fullCar": "Повна машина",
+  "rwHome_earlyBird": "Жайворонок",
+  "rwHome_progressBefore": "{done} з {total} до {time}",
+  "rwHome_n100Drives": "Сотня за кермом",
+  "rwHome_n10Thankyous": "10 «дякую»",
+  "rwHome_citiesTrips": "Міста й дороги",
+  "rwHome_badgeLevel": "{badge}, рівень {level}",
+  "@rwHome_badgeLevel": {
+    "x-needs-review": true
+  },
+  "rwHome_krakowRegular": "Краків щодня",
+  "@rwHome_krakowRegular": {
+    "x-needs-review": true
+  },
+  "rwHome_explorer": "Три міста",
+  "rwHome_citiesCount": "{count, plural, one{{count} місто} few{{count} міста} many{{count} міст} other{{count} міста}}",
+  "@rwHome_citiesCount": {
+    "x-needs-review": true
+  },
+  "rwHome_roadTripperUnlocked_a11y": "Далека дорога, є",
+  "rwHome_roadTripper": "Далека дорога",
+  "rwHome_stopoverPartOfARoute_a11y": "Пів дороги, частина маршруту",
+  "rwHome_stopover": "Пів дороги",
+  "rwHome_partOfARoute": "Частина маршруту",
+  "rwHome_n500KmClub": "Клуб 500 км",
+  "rwHome_kmProgress": "{value} з {goal} км",
+  "rwHome_cityPassport": "Паспорт міст",
+  "rwHome_stampsProgress": "{done} з {total} штампів",
+  "rwHome_firstKilo": "Перший кілограм",
+  "rwHome_kgCo2": "{value} кг CO₂",
+  "rwHome_tenKilos": "Десять кіло",
+  "rwHome_kgProgress": "{value} з {goal} кг",
+  "rwHome_aTreesWorth": "Ціле дерево",
+  "rwHome_oneCarLess": "На одну машину менше",
+  "rwHome_weeksShared": "{weeks, plural, one{{weeks} тиждень} few{{weeks} тижні} many{{weeks} тижнів} other{{weeks} тижня}} їздите разом",
+  "@rwHome_weeksShared": {
+    "x-needs-review": true
+  },
+  "rwHome_yourFirstPersonUnlocked_a11y": "Перша своя людина, є",
+  "@rwHome_yourFirstPersonUnlocked_a11y": {
+    "x-needs-review": true
+  },
+  "rwHome_yourFirstPerson": "Перша своя людина",
+  "@rwHome_yourFirstPerson": {
+    "x-needs-review": true
+  },
+  "rwHome_crewOf5": "П’ятеро своїх",
+  "rwHome_goodCompany": "Своя компанія",
+  "rwHome_ridesWithPeople": "{rides, plural, one{{rides} попутка} few{{rides} попутки} many{{rides} попуток} other{{rides} попутки}} зі своїми",
+  "@rwHome_ridesWithPeople": {
+    "x-needs-review": true
+  },
+  "rwHome_secretKeepRiding_a11y": "Секрет, їзди далі",
+  "rwHome_secret": "Секрет",
+  "rwHome_keepRiding": "Їзди далі",
+  "rwPassport_stampsHint": "{done} з {total} штампів · поїдь містом, щоб отримати штамп",
+  "rwPassport_since": "з {monthYear}",
+  "rwPassport_notYet": "Ще ні",
+  "rwPassport_collect10Stamps": "Збери 10 штампів",
+  "rwPassport_unlocksCityPassportAndA": "Відкриває «Паспорт міст» і рідкісний сюрприз.",
+  "rwPassport_findARideToA": "Поїхати в нове місто",
+  "rwUnlocked_newReward": "Нова нагорода",
+  "rwUnlocked_firstIntercity": "Перша попутка між містами: {from} → {to}, водій: {driverName}.",
+  "@rwUnlocked_firstIntercity": {
+    "x-needs-review": true
+  },
+  "rwUnlocked_youEarnedAMysteryBox": "Тобі сюрприз",
+  "rwUnlocked_openItNowOrLater": "Відкрий зараз або потім у «Нагородах»",
+  "rwUnlocked_seeAll": "Усі нагороди",
+  "rEditDriver_editRoutine": "Регулярний маршрут",
+  "rEditDriver_delete": "Видалення",
+  "rEditDriver_name": "Назва",
+  "rEditDriver_days": "Дні",
+  "rEditDriver_askMeAt": "Питати о",
+  "rEditDriver_yourDailyCheckinNotification": "Щоранкове сповіщення",
+  "rEditDriver_doItAutomatically": "Без питань",
+  "rEditDriver_hearFirst": "Першими дізнаються: {names}",
+  "@rEditDriver_hearFirst": {
+    "x-needs-review": true
+  },
+  "rEditDriver_peopleFirst_a11y": "Спершу свої",
+  "rEditDriver_autoacceptMyPeople": "Своїх одразу",
+  "rEditDriver_othersStillNeedYourOk": "Інших беремо тільки з твого дозволу",
+  "rEditDriver_saveRoutine": "Зберегти",
+  "rEditPassenger_askMyPeopleFirst": "Спершу питати своїх",
+  "rEditPassenger_getEarly": "На {minutes} хв раніше за інших бачать: {names}",
+  "@rEditPassenger_getEarly": {
+    "x-needs-review": true
+  },
+  "rNotifDriver_samewayDailyRoutine": "sameway · Регулярний маршрут",
+  "common_now2": "зараз",
+  "rNotifDriver_drivingToWorkToday": "Сьогодні на роботу?",
+  "rNotifDriver_body": "Виїзд о {time} · {from} → {to} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}. Своїх, що чекають на цю поїздку: {count}.",
+  "@rNotifDriver_body": {
+    "x-needs-review": true
+  },
+  "rNotifDriver_yesPublish": "Так, їду",
+  "rNotifDriver_notToday": "Не сьогодні",
+  "rNotifDriver_notificationPreviewActionsWorkRight": "Так виглядає сповіщення. Кнопки працюють просто з екрана блокування, застосунок відкривати не треба.",
+  "rNotifPassenger_needYourRideHomeToday": "Їдеш сьогодні додому?",
+  "rNotifPassenger_body": "Бути до {time} · {from} → {to}. Свій водій: {driverName}, виїжджає о {departure}, {seats, plural, one{є {seats} місце} few{є {seats} місця} many{є {seats} місць} other{є {seats} місця}}.",
+  "@rNotifPassenger_body": {
+    "x-needs-review": true
+  },
+  "rNotifPassenger_rideWith": "Так · {driverName}",
+  "@rNotifPassenger_rideWith": {
+    "x-needs-review": true
+  },
+  "rNotifPassenger_findAnother": "Інший водій",
+  "common_dailyRoutines": "Регулярні маршрути",
+  "common_newRoutine_a11y": "Новий регулярний маршрут",
+  "rRoutines_leaveAt": "{days} · {from} → {to} · виїзд о {time}",
+  "rRoutines_asksNotifiesPeople": "Питає о {time} · свої в курсі",
+  "common_workRoutine_a11y": "Регулярний маршрут: Робота",
+  "common_backHome": "Додому",
+  "rRoutines_arriveBy": "{days} · {from} → {to} · бути до {time}",
+  "rRoutines_asksNameFirst": "Питає о {time} · спершу: {name}",
+  "@rRoutines_asksNameFirst": {
+    "x-needs-review": true
+  },
+  "common_backHomeRoutine_a11y": "Регулярний маршрут: Додому",
+  "common_gym": "Спортзал",
+  "rRoutines_daysRouteTime": "{days} · {from} → {to} · {time}",
+  "common_paused": "На паузі",
+  "common_gymRoutine_a11y": "Регулярний маршрут: Спортзал",
+  "common_howItWorks": "Як це працює",
+  "common_atYourChosenTimeYou": "У вибраний час приходить одне сповіщення.",
+  "common_tapYesTodayPassengersWe": "Торкнися «Так, сьогодні». Пасажир: ми шукаємо за тебе. Водій: застосунок відкриється, щоб запустити маршрут.",
+  "common_tapNotTodayAndNothing": "Тиснеш «Не сьогодні» – і нічого не відбувається. Свої дізнаються тільки після твого «так».",
+  "rRoutinesEmpty_noRoutinesYet": "Регулярних маршрутів поки немає",
+  "rRoutinesEmpty_sameTripMostDaysPlan": "Майже щодня той самий маршрут? Сплануй один раз, а ми питатимемо щоранку.",
+  "rRoutinesEmpty_planARoutine": "Спланувати маршрут",
+  "rToday_todaysRouteIsPublished": "Маршрут на сьогодні опубліковано",
+  "rToday_leavePlaceSeats": "Виїзд о {time} · {place} · {seats, plural, one{{seats} місце} few{{seats} місця} many{{seats} місць} other{{seats} місця}}",
+  "@rToday_leavePlaceSeats": {
+    "x-needs-review": true
+  },
+  "rToday_notified": "Уже знають: {names}",
+  "@rToday_notified": {
+    "x-needs-review": true
+  },
+  "rToday_alreadyTookSeat": "{name}: уже з тобою (своїх приймаємо одразу)",
+  "@rToday_alreadyTookSeat": {
+    "x-needs-review": true
+  },
+  "common_viewRoute": "Маршрут",
+  "dRequestRules_timeToAnswer": "Час на відповідь",
+  "common_betweenCities": "Між містами",
+  "iPriceHow_suggestedPerSeat": "Рекомендовано за місце",
+  "rules_whatHappens": "Що відбувається",
+  "seScreens_driversFound": "Є водії",
+  "common_driverOnTheWay2": "Водій їде",
+  "seScreens_requestASeat": "Запит на місце",
+  "seScreens_incomingRequest": "Новий запит",
+  "seScreens_setRoute": "Маршрут",
+  "soPeople_searchPeople_a11y": "Пошук",
+  "soPeople_peopleYouLikedRidingWith": "Ті, з ким тобі добре їхалось. Коли ти кудись збираєшся, їх питаємо першими, а коли вони кудись їдуть, першим дізнаєшся ти. Дзвіночок вимикає це для кожного окремо.",
+  "soPeople_yourPeopleCount": "Свої попутники · {count}",
+  "soPeople_ridesTogetherDrivesTo": "{rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · у будні їздить на {place}",
+  "@soPeople_ridesTogetherDrivesTo": {
+    "x-needs-review": true
+  },
+  "soPeople_notificationsOn": "Сповіщення · {name}: увімкнено",
+  "@soPeople_notificationsOn": {
+    "x-needs-review": true
+  },
+  "soPeople_ridesTogetherPlace": "{rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · {place}",
+  "@soPeople_ridesTogetherPlace": {
+    "x-needs-review": true
+  },
+  "soPeople_ridesTogetherYouDrove": "{rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом · ти за кермом",
+  "@soPeople_ridesTogetherYouDrove": {
+    "x-needs-review": true
+  },
+  "common_ridesTogether": "{rides, plural, one{{rides} поїздка} few{{rides} поїздки} many{{rides} поїздок} other{{rides} поїздки}} разом",
+  "@common_ridesTogether": {
+    "x-needs-review": true
+  },
+  "soPeople_notificationsOff": "Сповіщення · {name}: вимкнено",
+  "@soPeople_notificationsOff": {
+    "x-needs-review": true
+  },
+  "soPeople_fromYourRecentRides": "Ви вже їздили разом",
+  "soPeople_onlyPeopleYouveActuallyShared": "Додати можна лише тих, з ким ви вже їхали разом.",
+  "soPeopleEmpty_noPeopleYet": "Своїх поки немає",
+  "soPeopleEmpty_afterARideTapAdd": "Після поїздки натисни «Додати», щоб зберегти людину, з якою було добре їхати. Наступного разу їх спитаємо першими.",
+  "soPerson_reportOrBlock_a11y": "Поскаржитись або заблокувати",
+  "soPerson_idPhoneVerified": "Документ і телефон перевірені",
+  "soPerson_ridesWithYou": "Разом із тобою",
+  "soPerson_totalRides": "Усього попуток",
+  "soPerson_memberSince": "У sameway з",
+  "soPerson_inYourPeople": "Серед своїх",
+  "soPerson_addedAfterYour3rdRide": "Додано після третього разу разом",
+  "soPerson_tellWhenPlans": "Повідомляти про маршрути: {name}",
+  "@soPerson_tellWhenPlans": {
+    "x-needs-review": true
+  },
+  "soPerson_routeNotifications_a11y": "Нові маршрути",
+  "soPerson_askFirstForRoutine": "Спершу питати цього водія",
+  "soPerson_beforeWeSearchOtherDrivers": "Ще до того, як шукати інших",
+  "soPerson_askFirst_a11y": "Спершу цього водія",
+  "sDetail_moreOptions_a11y": "Ще",
+  "sDetail_arriveBy": "На місці до {time}",
+  "sDetail_dayPickupAt": "{day} · зустріч о {time}, {place}",
+  "sDetail_pickupDot": "Зустріч · {place}",
+  "sDetail_walkFromHome": "{distance} пішки від дому",
+  "sDetail_dropOffAway": "Вийдеш за {distance} від потрібного місця",
+  "sDetail_whatHappensNext": "Що далі",
+  "common_requestAccepted": "Запит прийнято · {driverName}",
+  "sDetail_reminder30MinBeforePickup": "Нагадаємо за 30 хв до зустрічі",
+  "sDetail_codeAppears": "Код зустрічі з’явиться, коли водій буде за {minutes} хв",
+  "@sDetail_codeAppears": {
+    "x-needs-review": true
+  },
+  "sDetail_changeTime": "Змінити час",
+  "sDetail_cancelThisRide": "Скасувати цю поїздку",
+  "sDriverRides_routineLeave": "Регулярна · {label} · {days} · виїзд о {time}",
+  "common_weAskAt": "Питаємо щоранку о {time}",
+  "common_seatsTaken": "Зайнято {taken} з {total}",
+  "sDriverRides_wantsSeat": "{passengerName}: хоче місце",
+  "@sDriverRides_wantsSeat": {
+    "x-needs-review": true
+  },
+  "sDriverRides_pickupDetour": "Зустріч {place} · +{detour}",
+  "common_j_a11y": "J",
+  "common_t_a11y": "T",
+  "sDriverRides_confirmed": "З тобою: {names}",
+  "@sDriverRides_confirmed": {
+    "x-needs-review": true
+  },
+  "sDriverRides_noRequestsYet": "Запитів поки нема",
+  "sDriverRides_visibleSeats": "Видно пасажирам · {seats, plural, one{{seats} вільне місце} few{{seats} вільні місця} many{{seats} вільних місць} other{{seats} вільного місця}}",
+  "@sDriverRides_visibleSeats": {
+    "x-needs-review": true
+  },
+  "common_requestsCount": "{count, plural, one{{count} запит} few{{count} запити} many{{count} запитів} other{{count} запиту}}",
+  "@common_requestsCount": {
+    "x-needs-review": true
+  },
+  "sDriverRides_intercitySummary": "Міжміський · {bookings, plural, one{{bookings} бронювання} few{{bookings} бронювання} many{{bookings} бронювань} other{{bookings} бронювання}} на {stops, plural, one{{stops} відрізку} few{{stops} відрізках} many{{stops} відрізках} other{{stops} відрізка}} · {price}",
+  "@sDriverRides_intercitySummary": {
+    "x-needs-review": true
+  },
+  "common_planARoute": "Маршрут наперед",
+  "sDriverSchedule_leaveHomeAt": "Виїжджаю з дому о",
+  "sDriverSchedule_passengersSeeThisAsYour": "Пасажири бачать це як час виїзду.",
+  "sDriverSchedule_publishAutomatically": "Автоматично",
+  "common_publishRoute": "Опублікувати",
+  "sPast_november": "Листопад",
+  "sPast_dateTimeWith": "{date} · {time} · {name}",
+  "sPast_nowaHuta": "Nowa Huta",
+  "sPast_youDrove": "{date} · {time} · пасажирів: {count}",
+  "@sPast_youDrove": {
+    "x-needs-review": true
+  },
+  "sPast_cancelledByDriver": "{date} · скасовано водієм",
+  "@sPast_cancelledByDriver": {
+    "x-needs-review": true
+  },
+  "sPast_october": "Жовтень",
+  "sPastEmpty_noPastRidesYet": "Поїздок поки немає",
+  "sPastEmpty_yourRidesAndTheCo": "Тут з’являться твої поїздки й зекономлений разом CO₂.",
+  "sRidesLoading_loadingYourRides": "Завантажуємо твої поїздки",
+  "sRidesRequested_waitingForAnAnswer": "Чекає на відповідь",
+  "sRidesRequested_answerBy": "{date} · {name} · відповідь до {deadline}",
+  "sSaved_upcoming": "Найближчі",
+  "sSaved_past": "Минулі",
+  "common_routineArrive": "Регулярна · {label} · {days} · бути до {time}",
+  "common_dayDate": "{day} · {date}",
+  "common_confirmed": "Підтверджено",
+  "common_pickupArriveDriver": "Зустріч о {time} · на місці до {arrival} · {driverName}, {car}",
+  "sSaved_nextWeek": "Наступного тижня",
+  "sSaved_repeats_a11y": "Повторюється",
+  "common_searching": "Шукаємо водія",
+  "common_daysArriveMatching": "{days} · на місці до {time} · шукаємо за 2 год до",
+  "sSaved_requested": "Запит надіслано",
+  "sSaved_dworzecGwny": "Dworzec Główny",
+  "common_notAnsweredYet": "{date} · Ще немає відповіді: {name}. Шукаємо й інших.",
+  "@common_notAnsweredYet": {
+    "x-needs-review": true
+  },
+  "common_dateWithDriverPlacePrice": "{date} · водій: {driverName} · {place} · {price}",
+  "sSaved_everyWeekday": "Збережено. Щобудня знайдемо тобі попутку, щоб бути на місці до {time}.",
+  "common_undo": "Відмінити",
+  "sSchedule_scheduleARide": "Запланувати попутку",
+  "common_close_a11y": "Закрити",
+  "common_inCity": "У місті: {city}",
+  "@common_inCity": {
+    "x-needs-review": true
+  },
+  "common_labelAddress": "{label} · {address}",
+  "common_leaveAt": "Виїхати о",
+  "common_today": "Сьогодні",
+  "common_sat": "Сб",
+  "common_sun": "Нд",
+  "common_mon": "Пн",
+  "common_pickAnotherDate_a11y": "Вибрати іншу дату",
+  "common_more": "Інша дата",
+  "sSchedule_arriveAtBy": "Бути на {place} до",
+  "common_hour_a11y": "Години",
+  "common_minute_a11y": "Хвилини",
+  "sSchedule_wellPickAPickupTime": "Час зустрічі підберемо самі, зазвичай за 20 хв до того.",
+  "sSchedule_flexibleBy": "Можу на",
+  "sSchedule_exact": "Точно",
+  "common_plusMinusMinutes": "±{minutes} хв",
+  "sSchedule_repeat": "Повторювати",
+  "sSchedule_monfri": "пн–пт",
+  "common_repeatOn_a11y": "Повторювати в",
+  "common_monday_a11y": "понеділок",
+  "common_mo": "Пн",
+  "common_tuesday_a11y": "вівторок",
+  "common_tu": "Вт",
+  "common_wednesday_a11y": "середа",
+  "common_we": "Ср",
+  "common_thursday_a11y": "четвер",
+  "common_th": "Чт",
+  "common_friday_a11y": "п’ятниця",
+  "common_fr": "Пт",
+  "common_saturday_a11y": "субота",
+  "common_sa": "Сб",
+  "common_sunday_a11y": "неділя",
+  "common_su": "Нд",
+  "common_eachDay": "Щодня",
+  "sSchedule_bookAutomatically": "Автоматично",
+  "common_askMeFirst": "Спершу питати",
+  "sSchedule_scheduleRide": "Запланувати",
+  "sTripDetail_tripDetails": "Подробиці",
+  "sTripDetail_dateTimeRange": "{date} · {start}–{end}",
+  "sTripDetail_passengerWith": "Пасажир · водій: {driverName}",
+  "sTripDetail_distance": "Відстань",
+  "sTripDetail_duration": "Час у дорозі",
+  "sTripDetail_chatStaysOpen24H": "Чат працює ще 24 год після того, як доїдете",
+  "sTripDetail_bookThisTripAgain": "Поїхати так само ще раз",
+  "tD1_firstTimeHereDriveWhere_a11y": "Вперше тут: Їдь туди, куди тобі й так треба",
+  "common_driveWhereYouWereGoing": "Їдь туди, куди тобі й так треба",
+  "tD1_enterYourOwnDestinationWe": "Вкажи свій пункт призначення. Ми покажемо лише тих, кому по дорозі, нікуди спеціально їхати не треба.",
+  "@tD1_enterYourOwnDestinationWe": {
+    "x-needs-review": true
+  },
+  "tD2_firstTimeHereHowLong_a11y": "Уперше тут: Який об’їзд тобі підходить?",
+  "tD2_theMostExtraTimeYoull": "Скільки додаткового часу можна витратити на одну зупинку. 2 хв – менше пасажирів, 6 хв – більше. Кожну зупинку ти підтверджуєш.",
+  "tD3_n2MinDetourDropoffOn": "+2 хв гаку · висадка по твоїй дорозі",
+  "tD3_exampleRequestTrust": "12 спільних поїздок · email підтверджено · 1 місце",
+  "@tD3_exampleRequestTrust": {
+    "x-needs-review": true
+  },
+  "tD3_dropoffOnYourRoute11": "Вийде по дорозі, за 1,1 км до твоєї адреси",
+  "tD3_sayAcceptOrDeclineNo": "Скажи «беру» або «ні». Без відповіді – відмова, і жодних штрафів.",
+  "tD3_autoacceptRules": "Правила автоприйняття",
+  "tD3_firstTimeHereYouDecide_a11y": "Вперше тут: Ти вирішуєш, кого брати",
+  "common_youDecideWhoRides": "Кого брати, вирішуєш ти",
+  "tD3_eachRequestShowsTheExtra": "Кожен запит показує додатковий час, наприклад +2 хв. На відповідь є 30 с. Немає відповіді – це відмова, завжди без штрафу.",
+  "tD4_firstTimeHereStartOnly_a11y": "Вперше тут: Рушай лише з правильним кодом",
+  "common_startOnlyWithTheRight": "Без коду не рушай",
+  "tD4_askThePassengerForTheir": "Спитай у пасажира код із 4 цифр і введи. Не та людина – не той код. І зупиняйся лише там, де безпечно й можна.",
+  "tD5_firstTimeHereSameRoad_a11y": "Вперше тут: Щодня той самий маршрут?",
+  "common_sameRoadEveryDay": "Щодня той самий маршрут?",
+  "tD5_planARouteAndRepeat": "Сплануй маршрут і повторюй щобудня. Обери «Спершу питати» – щоранку одне сповіщення спитає «Їдеш сьогодні?». Один тап – і маршрут опубліковано.",
+  "tP1_firstTimeHereStartWith_a11y": "Вперше тут: Почни з того, куди їдеш",
+  "tP1_firstTimeHere": "Вперше тут",
+  "common_startWithWhereYoureGoing": "Почни з того, куди тобі треба",
+  "tP1_typeAnAddressOrTap": "Введи адресу або тисни «Дім» чи «Робота». Нічого не відправиться, доки не натиснеш «Знайти попутку».",
+  "tP1_gotIt": "Зрозуміло",
+  "tP2_firstTimeHereLaterOr_a11y": "Вперше тут: Пізніше або щобудня",
+  "common_laterOrEveryWeekday": "Пізніше або щобудня",
+  "tP2_tapNowToPickA": "Натисни «Зараз», щоб вибрати час або повторювати поїздку щобудня. Їдеш в інше місто? Просто введи його в «Куди?».",
+  "tP3_firstTimeHereYourPickup_a11y": "Вперше тут: Код зустрічі захищає тебе",
+  "common_yourPickupCodeKeepsYou": "Код зустрічі береже тебе",
+  "tP3_checkThePlateFirstThen": "Спершу перевір номер. Потім назви 4 цифри: водій їх вводить, і ви обоє знаєте, що машина та сама.",
+  "tP4_firstTimeHereKeepThe_a11y": "Вперше тут: Тримайся своїх",
+  "common_keepTheGoodOnes": "Хороших водіїв варто тримати поруч",
+  "tP4_likedADriverTapAdd": "Добре з’їздили? Натисни «Додати» після поїздки. Свої – у Профілі: їх питаємо першими, а ти знаєш, коли вони планують маршрут.",
+  "@tP4_likedADriverTapAdd": {
+    "x-needs-review": true
+  },
+  "xGuestGate_createAnAccountToRide": "Щоб поїхати, потрібен акаунт",
+  "xGuestGate_soDriversKnowWhoTheyre": "Так водій знатиме, кого забирає. Це пів хвилини, а пошук нікуди не дінеться.",
+  "@xGuestGate_soDriversKnowWhoTheyre": {
+    "x-needs-review": true
+  },
+  "xLocationDenied_locationIsOffForSameway": "Геолокацію для sameway вимкнено",
+  "xLocationDenied_turnItOnInSettings": "Увімкни в Параметри › sameway › Геолокація, щоб бачити водіїв поруч. Адресу зустрічі можна й ввести.",
+  "common_openSettings": "Відкрити Параметри",
+  "xLocationOff_locationIsOff": "Геолокацію вимкнено",
+  "xLocationOff_turnItOnSoWe": "Увімкни її, щоб ми знайшли водіїв, які проїжджають поруч. Або просто введи адресу, звідки тебе забрати.",
+  "xLocationOff_turnOnLocation": "Увімкнути геолокацію",
+  "xLocationOff_enterPickupAddress": "Ввести адресу",
+  "xMapFailed_mapDidntLoadYourDriver": "Мапа не завантажилася. Водій, точка зустрічі й код працюють.",
+  "xNoDrivers_itsQuietRightNowPick": "Зараз тихо. Як буде зручніше?",
+  "xNoDrivers_keepSearchingInBackground": "Шукати далі у фоні",
+  "xNoDrivers_wellNotifyYouForThe": "Скажемо, якщо хтось з’явиться протягом 30 хв",
+  "xNoDrivers_walkUpTo1Km": "Пройтись до 1 км",
+  "xNoDrivers_findsMoreDriversOnMain": "На великих вулицях водіїв більше",
+  "xNoDrivers_scheduleForLater": "Запланувати на потім",
+  "xNoDrivers_matchingStarts2HBefore": "Шукати почнемо за 2 год",
+  "common_stopSearching": "Досить шукати",
+  "xNotifDenied_notificationsAreOffRoutinesCant": "Сповіщення вимкнено. Регулярні маршрути не зможуть питати тебе зранку, і ти не почуєш, коли приїде водій.",
+  "xNotifDenied_turnOnInSettings": "Увімкнути в Параметрах",
+  "xOffline_youreOffline": "Немає інтернету",
+  "xOffline_mapMayBeOutOf": "Мапа може бути не свіжа. Підключимось, щойно з’явиться зв’язок.",
+  "xOffline_searchNeedsAConnection": "Для пошуку потрібен інтернет",
+  "xOffline_tryAgain": "Ще раз",
+  "xServerError_yourRidesAndMessagesAre": "Твої поїздки й повідомлення в безпеці. Спробуй трохи згодом.",
+  "xServerError_codeTime": "Помилка {code} · {time}",
+  "xSessionExpired_pleaseSignInAgain": "Увійди ще раз",
+  "xSessionExpired_youWereSignedOutFor": "Ми вийшли з акаунта з міркувань безпеки, наприклад після зміни пароля на іншому пристрої. Поїздки збережено.",
+  "xSignOut_signOut": "Вийти з акаунта?",
+  "xSignOut_upcomingRides": "{count, plural, one{У тебе {count} запланована попутка. Вона нікуди не дінеться} few{У тебе {count} заплановані попутки. Вони нікуди не дінуться} many{У тебе {count} запланованих попуток. Вони нікуди не дінуться} other{У тебе {count} запланованої попутки. Вони нікуди не дінуться}}, і нагадування теж прийдуть.",
+  "@xSignOut_upcomingRides": {
+    "x-needs-review": true
+  },
+  "xSuspended_yourAccountIsPaused": "Твій акаунт призупинено",
+  "xSuspended_pausedBecause": "{date} ми призупинили твій акаунт після {reports, plural, one{{reports} скарги} few{{reports} скарг} many{{reports} скарг} other{{reports} скарги}}, що ти не приходиш на заброньовані поїздки ({dates}).",
+  "@xSuspended_pausedBecause": {
+    "x-needs-review": true
+  },
+  "xSuspended_rule": "Правило {number} · {title}",
+  "xSuspended_ridesCancelled": "Твої майбутні поїздки скасовано, інших людей повідомлено. Оскаржити можна до {deadline}. Відповідаємо протягом 3 днів.",
+  "xSuspended_reference": "Номер звернення: {reference}",
+  "xSuspended_appeal": "Оскаржити",
+  "xSuspended_readTheCommunityRules": "Правила спільноти",
+  "xUpdate_updateSamewayToKeepRiding": "Онови sameway, щоб їздити далі",
+  "xUpdate_thisVersionNoLongerWorks": "Ця версія вже не працює з нашими серверами. Оновлення займе хвилину, поїздки й повідомлення залишаться.",
+  "xUpdate_update": "Оновити",
+  "err_emailInvalid": "Введи правильну адресу пошти",
+  "@err_emailInvalid": {
+    "x-needs-review": true
+  },
+  "err_nameRequired": "Введи ім’я",
+  "@err_nameRequired": {
+    "x-needs-review": true
+  },
+  "err_nameTooLong": "Ім’я задовге",
+  "@err_nameTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordTooLong": "Пароль задовгий",
+  "@err_passwordTooLong": {
+    "x-needs-review": true
+  },
+  "err_passwordSameAsCurrent": "Новий пароль має відрізнятися від поточного",
+  "@err_passwordSameAsCurrent": {
+    "x-needs-review": true
+  },
+  "err_carDetailsTooLong": "Дані про авто задовгі",
+  "@err_carDetailsTooLong": {
+    "x-needs-review": true
+  },
+  "err_phoneInvalid": "Номер телефону виглядає неправильно",
+  "@err_phoneInvalid": {
+    "x-needs-review": true
+  },
+  "err_textTooLong": "{max, plural, one{Забагато тексту: максимум {max} символ} few{Забагато тексту: максимум {max} символи} many{Забагато тексту: максимум {max} символів} other{Забагато тексту: максимум {max} символу}}",
+  "@err_textTooLong": {
+    "x-needs-review": true
+  },
+  "err_photoTooLarge": "Фото завелике. Обери файл до {mb} МБ.",
+  "@err_photoTooLarge": {
+    "x-needs-review": true
+  },
+  "err_codeExpired": "Код уже не діє. Попроси новий.",
+  "@err_codeExpired": {
+    "x-needs-review": true
+  },
+  "err_noCodeRequested": "Спершу попроси код",
+  "@err_noCodeRequested": {
+    "x-needs-review": true
+  },
+  "err_waitBeforeNewCode": "Зачекай хвилину, перш ніж просити новий код",
+  "@err_waitBeforeNewCode": {
+    "x-needs-review": true
+  },
+  "err_tooManyAttempts": "Забагато спроб. Попроси новий код.",
+  "@err_tooManyAttempts": {
+    "x-needs-review": true
+  },
+  "err_tooManyRequests": "Забагато спроб поспіль. Зачекай трохи й спробуй знову.",
+  "@err_tooManyRequests": {
+    "x-needs-review": true
+  },
+  "err_emptyMessage": "Спершу напиши повідомлення",
+  "@err_emptyMessage": {
+    "x-needs-review": true
+  },
+  "err_cantMessageUser": "Цій людині не можна написати",
+  "@err_cantMessageUser": {
+    "x-needs-review": true
+  },
+  "err_messageMatchesOnly": "Писати можна тим, із ким у тебе є збіг",
+  "@err_messageMatchesOnly": {
+    "x-needs-review": true
+  },
+  "err_bugReportIncomplete": "Додай заголовок і опис",
+  "@err_bugReportIncomplete": {
+    "x-needs-review": true
+  },
+  "err_rideChanged": "Попутку вже оновлено. Перевір поточний стан.",
+  "@err_rideChanged": {
+    "x-needs-review": true
+  },
+  "err_pickupBehindYou": "Ця точка зустрічі вже позаду",
+  "@err_pickupBehindYou": {
+    "x-needs-review": true
+  },
+  "err_routeNotLive": "Твій маршрут уже не активний",
+  "@err_routeNotLive": {
+    "x-needs-review": true
+  },
+  "err_accountAlreadyDeleted": "Цей акаунт уже видалено",
+  "@err_accountAlreadyDeleted": {
+    "x-needs-review": true
+  },
+  "legacy_forgotPassword": "Не пам’ятаєш пароль?",
+  "@legacy_forgotPassword": {
+    "x-needs-review": true
+  },
+  "legacy_exploringAsGuest": "Досліджуєш як гість",
+  "@legacy_exploringAsGuest": {
+    "x-needs-review": true
+  },
+  "legacy_joinSameway": "Приєднуйся до sameway сьогодні",
+  "@legacy_joinSameway": {
+    "x-needs-review": true
+  },
+  "legacy_alreadyHaveAccount": "Уже маєш акаунт? ",
+  "@legacy_alreadyHaveAccount": {
+    "x-needs-review": true
+  },
+  "legacy_adviceTripTooShort": "Коротка поїздка (~{km} км) — пішки може бути швидше, або домовся напряму.",
+  "@legacy_adviceTripTooShort": {
+    "x-needs-review": true
+  },
+  "legacy_safetyDriverBody": "Ти ділишся дорогою, якою вже їдеш. Зупиняйся заради пасажира лише тоді, коли це безпечно і пасажир у зручному, доступному місці. Якщо ні — спокійно їдь далі. Давай гаку, лише якщо тобі це зручно. Це твій вибір, а не обов’язок.",
+  "@legacy_safetyDriverBody": {
+    "x-needs-review": true
+  },
+  "legacy_readyToShare": "Поділишся маршрутом?",
+  "@legacy_readyToShare": {
+    "x-needs-review": true
+  },
+  "legacy_safetyPassengerTitle": "Їдь розумно й безпечно",
+  "@legacy_safetyPassengerTitle": {
+    "x-needs-review": true
+  },
+  "legacy_driverNotified": "Водія сповіщено. Залишайся на місці.",
+  "@legacy_driverNotified": {
+    "x-needs-review": true
+  },
+  "legacy_permNotifBody": "Ми сповіщатимемо лише про події поїздки: коли водій приймає, прибуває, або надсилає повідомлення.",
+  "legacy_bugReportDescription": "Опиши, що робиш і що стається",
+  "@legacy_bugReportDescription": {
+    "x-needs-review": true
+  },
+  "legacy_resetSuccess": "Пароль скинуто, вхід виконано.",
+  "@legacy_resetSuccess": {
+    "x-needs-review": true
+  },
+  "legacy_passengerAcceptedRide": "Пасажир приймає твою пропозицію!",
+  "@legacy_passengerAcceptedRide": {
+    "x-needs-review": true
+  },
+  "legacy_driverAccepted": "Прийнято водієм",
+  "@legacy_driverAccepted": {
+    "x-needs-review": true
+  },
+  "legacy_errDriverPassedYou": "Водій уже за твоєю точкою зустрічі",
+  "@legacy_errDriverPassedYou": {
+    "x-needs-review": true
+  },
+  "legacy_driverDeclBody": "Sameway не перевіряє документи. Це твоє власне підтвердження, а документи треба показати пасажирові на прохання.",
+  "@legacy_driverDeclBody": {
+    "x-needs-review": true
+  },
+  "legacy_pickupLocked": "Забагато неправильних кодів. Попроси водія натиснути «Новий код».",
+  "@legacy_pickupLocked": {
+    "x-needs-review": true
+  },
+  "legacy_pickupCodeResetNotice": "У водія новий код зустрічі — попроси назвати.",
+  "@legacy_pickupCodeResetNotice": {
+    "x-needs-review": true
+  },
+  "legacy_rideCancelledNoShow": "Попутку скасовано: на місці зустрічі тебе не знайшли.",
+  "@legacy_rideCancelledNoShow": {
+    "x-needs-review": true
+  },
+  "legacy_rideCancelledDriverEnded": "Маршрут водія завершено, а тебе так і не забрали. Попутку скасовано.",
+  "@legacy_rideCancelledDriverEnded": {
+    "x-needs-review": true
+  },
+  "legacy_pickupLockedDriver": "Код 5 разів введено неправильно. Натисни «Новий код» і назви пасажирові новий.",
+  "@legacy_pickupLockedDriver": {
+    "x-needs-review": true
+  },
+  "legacy_passengerNoShow": "Пасажира не було",
+  "@legacy_passengerNoShow": {
+    "x-needs-review": true
+  },
+  "legacy_noShowConfirmBody": "Скасувати поїздку, бо пасажира не було? Місце знову стане вільним.",
+  "@legacy_noShowConfirmBody": {
+    "x-needs-review": true
+  },
+  "legacy_noShowReported": "Поїздку скасовано — пасажира не було.",
+  "@legacy_noShowReported": {
+    "x-needs-review": true
+  },
+  "legacy_checkInBody": "Здається, ти і {otherParty} зараз у різних місцях. Якщо попутку завершено, нічого робити не треба.",
+  "@legacy_checkInBody": {
+    "x-needs-review": true
+  },
+  "legacy_savedCO2": "Мінус {kg} кг CO₂",
+  "@legacy_savedCO2": {
+    "x-needs-review": true
+  },
+  "legacy_iAm": "Я є…",
+  "legacy_chooseRole": "Обери свою роль, щоб почати",
+  "@legacy_chooseRole": {
+    "x-needs-review": true
+  },
+  "legacy_driver": "Водій",
+  "legacy_driverSubtitle": "У мене є місця по моєму маршруту",
+  "legacy_passenger": "Пасажир",
+  "legacy_passengerSubtitle": "Мені потрібна поїздка до місця призначення",
+  "legacy_continueAsGuest": "Продовжити як гість",
+  "legacy_canSwitchRoles": "Роль можна змінити будь-коли в налаштуваннях.",
+  "@legacy_canSwitchRoles": {
+    "x-needs-review": true
+  },
+  "legacy_exploreAsGuest": "Досліджувати як гість",
+  "legacy_guestSubtitle": "Переглядай мапу без акаунта.\nУвійди пізніше, щоб відкрити всі функції.",
+  "@legacy_guestSubtitle": {
+    "x-needs-review": true
+  },
+  "legacy_guestDriver": "Гість-водій",
+  "legacy_guestPassenger": "Гість-пасажир",
+  "legacy_welcomeBack": "З поверненням",
+  "legacy_createAccount": "Створити акаунт",
+  "legacy_signInContinue": "Увійди, щоб продовжити",
+  "@legacy_signInContinue": {
+    "x-needs-review": true
+  },
+  "legacy_signIn": "Увійти",
+  "legacy_signUp": "Зареєструватися",
+  "legacy_account": "Акаунт",
+  "legacy_switchRole": "Змінити роль",
+  "legacy_language": "Мова",
+  "legacy_signOut": "Вийти",
+  "legacy_guest": "ГІСТЬ",
+  "legacy_fieldRequired": "Обов’язкове поле",
+  "legacy_switchRoleTo": "Змінити роль",
+  "legacy_switchToDriver": "Перейти у водія",
+  "legacy_switchToPassenger": "Перейти у пасажира",
+  "legacy_currentRole": "Поточна роль",
+  "legacy_accountSecurity": "Акаунт і безпека",
+  "legacy_setRouteDesc": "Вкажи, куди їдеш, і знайди попутників.",
+  "@legacy_setRouteDesc": {
+    "x-needs-review": true
+  },
+  "legacy_setRoute": "Встановити маршрут",
+  "legacy_settingRoute": "Встановлення маршруту…",
+  "legacy_findPassengers": "Знайти пасажирів",
+  "legacy_setYourRoute": "Вкажи свій маршрут",
+  "@legacy_setYourRoute": {
+    "x-needs-review": true
+  },
+  "legacy_destination": "Адреса призначення",
+  "legacy_yourDestination": "Куди їдеш",
+  "@legacy_yourDestination": {
+    "x-needs-review": true
+  },
+  "legacy_yourRequests": "ВАШІ ЗАПИТИ",
+  "legacy_yourRequestsHint": "Твої запити на попутки чекають на водія.",
+  "@legacy_yourRequestsHint": {
+    "x-needs-review": true
+  },
+  "legacy_likelyMatchChip": "Їде в твій бік",
+  "@legacy_likelyMatchChip": {
+    "x-needs-review": true
+  },
+  "legacy_chatConversation": "Розмова",
+  "legacy_chatUnavailable": "Писати можна лише поточним кандидатам на поїздку",
+  "legacy_chatSlowDown": "Занадто швидко — зачекай хвилинку",
+  "@legacy_chatSlowDown": {
+    "x-needs-review": true
+  },
+  "legacy_messagesTitle": "Повідомлення",
+  "legacy_noConversations": "Ще немає розмов",
+  "legacy_noConversationsDesc": "Тут з’являться чати з твоїми водіями та пасажирами",
+  "@legacy_noConversationsDesc": {
+    "x-needs-review": true
+  },
+  "legacy_blockUserBody": "Писати одне одному більше не вийде. Це можна скасувати пізніше.",
+  "@legacy_blockUserBody": {
+    "x-needs-review": true
+  },
+  "legacy_blockAction": "Заблокувати",
+  "legacy_userBlocked": "Користувача заблоковано",
+  "legacy_reportReasonHint": "Що сталося? (необов’язково)",
+  "legacy_reportAction": "Поскаржитися",
+  "legacy_userReported": "Скаргу надіслано — дякуємо",
+  "legacy_partialRideTitle": "Частина шляху — далі поїдеш іншою попуткою",
+  "@legacy_partialRideTitle": {
+    "x-needs-review": true
+  },
+  "legacy_relayFallbackInfo": "Після висадки одразу шукатимемо тобі наступну попутку звідти",
+  "@legacy_relayFallbackInfo": {
+    "x-needs-review": true
+  },
+  "legacy_acceptPartialRide": "Прийняти часткову поїздку",
+  "legacy_relayLeg2Searching": "Перший етап завершено — шукаємо наступну поїздку…",
+  "legacy_microDetourPassengerNote": "Водій забере тебе з твого місця",
+  "@legacy_microDetourPassengerNote": {
+    "x-needs-review": true
+  },
+  "legacy_allowMicroDetourTitle": "Дозволити невеликі об’їзди",
+  "legacy_allowMicroDetourSubtitle": "Забирати пасажирів до ~300 м / 90 с від маршруту — завжди показуємо перед підтвердженням",
+  "legacy_matchStateSearching": "Шукаємо водіїв у твоєму напрямку…",
+  "@legacy_matchStateSearching": {
+    "x-needs-review": true
+  },
+  "legacy_matchStateSearchingDesc": "Повідомимо, щойно хтось з’явиться",
+  "legacy_matchStateCandidatesDesc": "Торкнись, щоб побачити на мапі",
+  "@legacy_matchStateCandidatesDesc": {
+    "x-needs-review": true
+  },
+  "legacy_matchStateOffer": "Отримано пропозицію поїздки",
+  "legacy_matchStateOfferDesc": "Торкнись, щоб переглянути й прийняти",
+  "@legacy_matchStateOfferDesc": {
+    "x-needs-review": true
+  },
+  "legacy_matchStateRequested": "Запит надіслано",
+  "legacy_matchStateRequestedDesc": "Чекаємо підтвердження водія",
+  "legacy_matchStateMatched": "Поїздку підтверджено",
+  "legacy_matchStateMatchedDesc": "Торкнись, щоб побачити деталі зустрічі",
+  "@legacy_matchStateMatchedDesc": {
+    "x-needs-review": true
+  },
+  "legacy_matchStateInProgress": "Поїздка триває",
+  "legacy_matchStateInProgressDesc": "Гарної поїздки",
+  "legacy_pickOnMap": "Вибрати на карті",
+  "legacy_moveMapToDestination": "Посунь мапу до місця, куди їдеш",
+  "@legacy_moveMapToDestination": {
+    "x-needs-review": true
+  },
+  "legacy_setDestinationHere": "Призначити сюди",
+  "legacy_adviceTitle": "Поради, щоб знайти поїздку",
+  "legacy_adviceEnableLongWalk": "Дозволь довшу прогулянку, щоб охопити більше водіїв.",
+  "@legacy_adviceEnableLongWalk": {
+    "x-needs-review": true
+  },
+  "legacy_adviceNoSameWayDrivers": "Поки немає водіїв саме у твоєму напрямку — спробуй трохи згодом.",
+  "@legacy_adviceNoSameWayDrivers": {
+    "x-needs-review": true
+  },
+  "legacy_adviceNoDrivers": "Поруч зараз немає водіїв — спробуй пізніше або переглянь заплановані попутки.",
+  "@legacy_adviceNoDrivers": {
+    "x-needs-review": true
+  },
+  "legacy_adviceSetDestination": "Вкажи, куди їдеш, щоб знайти водіїв у твоєму напрямку.",
+  "@legacy_adviceSetDestination": {
+    "x-needs-review": true
+  },
+  "legacy_corridorRadius": "Радіус коридору",
+  "legacy_availableSeats": "Доступні місця",
+  "legacy_routeActive": "Маршрут активний",
+  "legacy_signInToShareRoute": "Увійди, щоб поділитися маршрутом",
+  "@legacy_signInToShareRoute": {
+    "x-needs-review": true
+  },
+  "legacy_signInShareDesc": "Увійди, щоб поділитися маршрутом і знайти пасажирів.",
+  "@legacy_signInShareDesc": {
+    "x-needs-review": true
+  },
+  "legacy_lookingForRides": "Шукаємо поїздки",
+  "legacy_lookingDesc": "Повідомимо, щойно поруч буде водій із відповідним маршрутом.",
+  "@legacy_lookingDesc": {
+    "x-needs-review": true
+  },
+  "legacy_signInToFindRides": "Увійди, щоб знайти попутки",
+  "@legacy_signInToFindRides": {
+    "x-needs-review": true
+  },
+  "legacy_signInFindDesc": "Увійди, щоб бачити водіїв, які їдуть у твоєму напрямку.",
+  "@legacy_signInFindDesc": {
+    "x-needs-review": true
+  },
+  "legacy_signInToContinue": "Увійди, щоб продовжити",
+  "@legacy_signInToContinue": {
+    "x-needs-review": true
+  },
+  "legacy_signInRegister": "Увійти / Зареєструватися",
+  "legacy_fullName": "Повне ім’я",
+  "legacy_emailAddress": "Електронна пошта",
+  "legacy_password": "Пароль",
+  "legacy_invalidEmail": "Невірна електронна пошта",
+  "legacy_minSixChars": "Мінімум 6 символів",
+  "legacy_noAccountYet": "Немає акаунта? ",
+  "legacy_onboardTitle1": "Розумніші маршрути разом.",
+  "legacy_onboardSubtitle1": "Поділися дорогою з тими, хто їде в тому ж напрямку.",
+  "@legacy_onboardSubtitle1": {
+    "x-needs-review": true
+  },
+  "legacy_onboardTitle2": "Підбір у реальному часі.",
+  "legacy_onboardSubtitle2": "Водії та пасажири миттєво знаходять одне одного.",
+  "legacy_onboardTitle3": "Економте CO₂ разом.",
+  "legacy_onboardSubtitle3": "Кожна спільна поїздка зменшує викиди.",
+  "legacy_skip": "Пропустити",
+  "legacy_getStarted": "Почати",
+  "legacy_continueLabel": "Продовжити",
+  "legacy_safetyPassengerBody": "Sameway з’єднує тебе з водіями, які й так їдуть у твоєму напрямку, — це не таксі. Чекай у безпечному й зручному місці, де водій зможе зупинитися дорогою. Сідай лише тоді, коли тобі комфортно.",
+  "@legacy_safetyPassengerBody": {
+    "x-needs-review": true
+  },
+  "legacy_safetyDriverTitle": "Їдь своїм маршрутом",
+  "@legacy_safetyDriverTitle": {
+    "x-needs-review": true
+  },
+  "legacy_save": "Зберегти",
+  "legacy_cancel": "Скасувати",
+  "legacy_later": "Пізніше",
+  "legacy_openSettings": "Відкрити налаштування",
+  "legacy_gpsOff": "GPS вимкнено",
+  "legacy_gpsOffMessage": "Потрібно увімкнути геолокацію, щоб знаходити поїздки.",
+  "legacy_keepRide": "Залишити поїздку",
+  "legacy_cancelRideQ": "Скасувати поїздку?",
+  "legacy_cancelRideMessageDriver": "Пасажир буде сповіщений.",
+  "legacy_cancelRideMessagePassenger": "Водій буде сповіщений.",
+  "legacy_rideOffer": "Пропозиція поїздки!",
+  "legacy_accept": "Прийняти",
+  "legacy_decline": "Відхилити",
+  "legacy_rideAccepted": "Поїздку прийнято!",
+  "legacy_youAreInTheRide": "Ти в дорозі",
+  "@legacy_youAreInTheRide": {
+    "x-needs-review": true
+  },
+  "legacy_messageDriver": "Написати водієві",
+  "legacy_driverLabel": "Водій",
+  "legacy_corridorLabel": "км коридор",
+  "legacy_seatLabel": "місце",
+  "legacy_seatsLabel": "місць",
+  "legacy_noRideRequests": "Поки немає запитів",
+  "legacy_noRideRequestsDesc": "Пасажири біля твого маршруту з’являться тут.",
+  "@legacy_noRideRequestsDesc": {
+    "x-needs-review": true
+  },
+  "legacy_displayName": "Ім’я",
+  "legacy_changePassword": "Змінити пароль",
+  "legacy_currentPassword": "Поточний пароль",
+  "legacy_newPassword": "Новий пароль",
+  "legacy_confirmNewPassword": "Підтвердити новий пароль",
+  "legacy_updatePassword": "Оновити пароль",
+  "legacy_passwordSameAsCurrent": "Новий пароль має відрізнятися від поточного",
+  "legacy_passwordsNotMatch": "Нові паролі не співпадають",
+  "legacy_passwordTooShort": "Пароль має містити мінімум 6 символів",
+  "legacy_passwordUpdated": "Пароль оновлено",
+  "legacy_networkError": "Помилка мережі",
+  "legacy_nameUpdated": "Ім’я оновлено",
+  "legacy_emailCopied": "Email скопійовано",
+  "legacy_activeTrip": "Активна поїздка",
+  "legacy_noMessages": "Поки немає повідомлень. Привітайся!",
+  "@legacy_noMessages": {
+    "x-needs-review": true
+  },
+  "legacy_messageHint": "Повідомлення…",
+  "legacy_tripHistory": "Історія поїздок",
+  "legacy_noTripsYet": "Поки немає поїздок",
+  "legacy_firstRidePrompt": "Заверши першу попутку, щоб побачити її тут.",
+  "@legacy_firstRidePrompt": {
+    "x-needs-review": true
+  },
+  "legacy_selectOriginLocation": "Обери, звідки їдеш",
+  "@legacy_selectOriginLocation": {
+    "x-needs-review": true
+  },
+  "legacy_selectDestinationLocation": "Обери, куди їдеш",
+  "@legacy_selectDestinationLocation": {
+    "x-needs-review": true
+  },
+  "legacy_tripPlannedSuccess": "Поїздку успішно заплановано!",
+  "legacy_locationNotAvailable": "Геолокація недоступна",
+  "legacy_requestSent": "Запит надіслано!",
+  "legacy_requestFailed": "Не вдалося надіслати запит",
+  "legacy_promotionsAndRewards": "Акції та винагороди",
+  "legacy_activeOffers": "Активні пропозиції",
+  "legacy_expired": "Минулі",
+  "legacy_noPromotions": "Немає доступних акцій",
+  "legacy_rateYourDriver": "Оцінити водія",
+  "legacy_rateYourPassenger": "Оцінити пасажира",
+  "legacy_howWasExperience": "Як доїхали?",
+  "@legacy_howWasExperience": {
+    "x-needs-review": true
+  },
+  "legacy_addCommentOptional": "Додати коментар (необов’язково)",
+  "legacy_submit": "Надіслати",
+  "legacy_skipRating": "Пропустити",
+  "legacy_myCar": "Моє авто",
+  "legacy_carMake": "Марка",
+  "legacy_carModel": "Модель",
+  "legacy_carColor": "Колір",
+  "legacy_carPlate": "Номерний знак",
+  "legacy_carMakeHint": "напр. Toyota",
+  "legacy_carModelHint": "напр. Corolla",
+  "legacy_carColorHint": "напр. Сріблястий",
+  "legacy_carPlateHint": "напр. КА 12345",
+  "legacy_carInfoSaved": "Інформацію про авто збережено!",
+  "legacy_testNotificationSent": "Тестове сповіщення надіслано!",
+  "legacy_mapStyle": "Стиль карти",
+  "legacy_planATrip": "Запланувати поїздку",
+  "legacy_findPlannedTrips": "Знайти заплановані поїздки",
+  "legacy_testNotification": "Тестове сповіщення",
+  "legacy_aiMatchingLabel": "AI-підбір",
+  "legacy_aiMatchingSubtitle": "Експериментально. Перевпорядковує кандидатів за допомогою AI.",
+  "legacy_testAILabel": "Перевірити AI-підбір",
+  "legacy_testAIOK": "AI-підбір працює",
+  "legacy_testAIFailed": "AI-підбір не працює",
+  "legacy_testAIDisabled": "AI не налаштовано — використовується геометричний",
+  "legacy_candidateDriversTitle": "Водії, яким по дорозі",
+  "legacy_candidateDriversEmpty": "Поки немає водіїв, яким по дорозі. Продовжуємо шукати.",
+  "legacy_sameWayBadge": "По дорозі",
+  "legacy_newDriverBadge": "Новий",
+  "legacy_driverDetails": "Деталі водія",
+  "legacy_pickupPointLabel": "Посадка",
+  "legacy_dropoffPointLabel": "Висадка",
+  "legacy_zeroDetourLabel": "Без гаку — обидві зупинки на твоєму маршруті",
+  "@legacy_zeroDetourLabel": {
+    "x-needs-review": true
+  },
+  "legacy_noDestinationDeclared": "Пункт призначення ще не вказано",
+  "legacy_openWalkingDirections": "Відкрити пішохідний маршрут",
+  "legacy_tellCodeToPassenger": "Скажи цей код пасажирові при зустрічі",
+  "@legacy_tellCodeToPassenger": {
+    "x-needs-review": true
+  },
+  "legacy_askDriverForCode": "Запитай у водія код зустрічі",
+  "@legacy_askDriverForCode": {
+    "x-needs-review": true
+  },
+  "legacy_copyCode": "Копіювати код",
+  "legacy_codeCopied": "Код скопійовано",
+  "legacy_errSessionExpired": "Сеанс завершився — увійди знову",
+  "@legacy_errSessionExpired": {
+    "x-needs-review": true
+  },
+  "legacy_errNotFound": "Не знайдено",
+  "legacy_errServer": "Сервер перевантажений — спробуй за хвилину",
+  "@legacy_errServer": {
+    "x-needs-review": true
+  },
+  "legacy_errOffline": "Перевірте з’єднання",
+  "legacy_errGeneric": "Щось пішло не так",
+  "legacy_errTimeout": "Занадто довго — спробуй ще раз",
+  "@legacy_errTimeout": {
+    "x-needs-review": true
+  },
+  "legacy_noInternet": "Немає інтернету",
+  "legacy_locationNotSyncing": "Геолокація не синхронізується — тебе можуть не бачити",
+  "@legacy_locationNotSyncing": {
+    "x-needs-review": true
+  },
+  "legacy_reconnecting": "Перепідключення…",
+  "legacy_myLocation": "Моє місцезнаходження",
+  "legacy_walkToDestination": "Пішки до місця призначення",
+  "legacy_walkToDestinationHint": "Водій їде своїм маршрутом — від найближчої точки висадки ти йдеш пішки.",
+  "@legacy_walkToDestinationHint": {
+    "x-needs-review": true
+  },
+  "legacy_permLocationTitle": "Знайди попутки поруч",
+  "@legacy_permLocationTitle": {
+    "x-needs-review": true
+  },
+  "legacy_permLocationBody": "Sameway використовує твою геолокацію, щоб знайти водіїв, які їдуть у твоєму напрямку. Точне місце бачить лише підібраний водій — більше ніхто.",
+  "@legacy_permLocationBody": {
+    "x-needs-review": true
+  },
+  "legacy_permNotifTitle": "Будь у курсі",
+  "@legacy_permNotifTitle": {
+    "x-needs-review": true
+  },
+  "legacy_permContinue": "Продовжити",
+  "legacy_permNotNow": "Не зараз",
+  "legacy_checkInTitle": "Все гаразд?",
+  "legacy_checkInAllGood": "Так, усе добре",
+  "legacy_checkInNeedHelp": "Ні, мені потрібна допомога",
+  "legacy_sos": "SOS",
+  "legacy_sosTitle": "Потрібна допомога?",
+  "legacy_sosBody": "Можеш подзвонити в екстрені служби або поділитися деталями поїздки з близькою людиною.",
+  "@legacy_sosBody": {
+    "x-needs-review": true
+  },
+  "legacy_sosCall": "Зателефонувати в екстрену службу",
+  "legacy_sosShare": "Поділитися поїздкою з контактом",
+  "legacy_profilePhoto": "Фото профілю",
+  "legacy_takePhoto": "Зробити фото",
+  "legacy_fromGallery": "З галереї",
+  "legacy_removePhoto": "Видалити фото",
+  "legacy_photoUpdated": "Фото оновлено",
+  "legacy_bio": "Біо",
+  "legacy_bioHint": "Кілька слів про себе (до 160 символів)",
+  "@legacy_bioHint": {
+    "x-needs-review": true
+  },
+  "legacy_phone": "Телефон",
+  "legacy_phoneHint": "+380 67 000 0000",
+  "legacy_profileCompletion": "Заповнення профілю",
+  "legacy_verifyEmail": "Підтвердити email",
+  "legacy_emailVerified": "Email підтверджено",
+  "legacy_verificationCodeSent": "Код надіслано на твій email",
+  "@legacy_verificationCodeSent": {
+    "x-needs-review": true
+  },
+  "legacy_enterVerificationCode": "Введи 6-значний код",
+  "@legacy_enterVerificationCode": {
+    "x-needs-review": true
+  },
+  "legacy_verifyAction": "Підтвердити",
+  "legacy_resendCode": "Надіслати код знову",
+  "legacy_profileUpdated": "Профіль оновлено",
+  "legacy_back": "Назад",
+  "legacy_dismiss": "Закрити",
+  "legacy_clear": "Очистити",
+  "legacy_togglePasswordVisibility": "Показати/сховати пароль",
+  "legacy_reportABug": "Повідомити про помилку",
+  "legacy_bugReportTitle": "Що пішло не так?",
+  "legacy_bugReportSubmit": "Надіслати",
+  "legacy_bugReportThanks": "Дякуємо — ми перевіримо",
+  "legacy_showTutorialAgain": "Показати посібник знову",
+  "legacy_onboardTitle4": "Код посадки.",
+  "legacy_onboardSubtitle4": "Спільний 4-значний код підтверджує, що зустріч із водієм відбулася.",
+  "@legacy_onboardSubtitle4": {
+    "x-needs-review": true
+  },
+  "legacy_forgotPasswordHint": "Введи email свого акаунта — ми надішлемо 6-значний код.",
+  "@legacy_forgotPasswordHint": {
+    "x-needs-review": true
+  },
+  "legacy_resetCodeHint": "6-значний код",
+  "legacy_newPasswordHint": "Новий пароль",
+  "legacy_resetSubmit": "Скинути пароль",
+  "legacy_resetCodeSent": "Якщо для цього email існує акаунт, код було надіслано.",
+  "legacy_invalidCode": "Невірний або прострочений код",
+  "legacy_rideRequestSent": "Запит на поїздку надіслано!",
+  "legacy_noCarInfo": "Немає інформації про авто",
+  "legacy_endRouteAndSwitch": "Завершити маршрут і переключити",
+  "legacy_cancelRequestsAndSwitch": "Скасувати запити і переключити",
+  "legacy_endDriverRouteQ": "Завершити маршрут водія?",
+  "legacy_cancelPassengerSearchQ": "Скасувати пошук пасажира?",
+  "legacy_stayAsDriver": "Залишитися водієм",
+  "legacy_stayAsPassenger": "Залишитися пасажиром",
+  "legacy_navRoute": "Маршрут",
+  "legacy_navPlan": "План",
+  "legacy_navFind": "Пошук",
+  "legacy_navChat": "Чат",
+  "legacy_navFindTrips": "Поїздки",
+  "legacy_navOffers": "Акції",
+  "legacy_navReportBug": "Звіт про баг",
+  "legacy_navAccount": "Акаунт",
+  "legacy_errEnterDestination": "Вкажи, куди їдеш",
+  "@legacy_errEnterDestination": {
+    "x-needs-review": true
+  },
+  "legacy_errAddressNotFound": "Адресу не знайдено",
+  "legacy_endRouteQ": "Завершити маршрут?",
+  "legacy_endRouteBody": "Усіх пасажирів у машині буде висаджено, і нових збігів більше не буде.",
+  "@legacy_endRouteBody": {
+    "x-needs-review": true
+  },
+  "legacy_endRouteAction": "Завершити маршрут",
+  "legacy_cancelRide": "Скасувати поїздку",
+  "legacy_waitingForYourLocation": "Чекаємо на твою геолокацію…",
+  "@legacy_waitingForYourLocation": {
+    "x-needs-review": true
+  },
+  "legacy_waitingForPassengerLocation": "Очікуємо геолокацію пасажира…",
+  "legacy_whereDoYouWantToGo": "Куди їдеш?",
+  "@legacy_whereDoYouWantToGo": {
+    "x-needs-review": true
+  },
+  "legacy_waitingForDriver": "Очікуємо водія…",
+  "legacy_mapStyleStandard": "Стандартна",
+  "legacy_mapStyleSatellite": "Супутник",
+  "legacy_mapStyleDark": "Темна",
+  "legacy_carLabel": "Автомобіль",
+  "legacy_requestThisRide": "Запросити цю поїздку",
+  "legacy_reasonActiveDriverRoute": "активний маршрут водія",
+  "legacy_reasonAcceptedPassengerRide": "підтверджену поїздку з пасажиром",
+  "legacy_reasonAcceptedDriverRide": "підтверджену поїздку з водієм",
+  "legacy_reasonPendingRideRequests": "запити на поїздку в очікуванні",
+  "legacy_reasonActiveDestinationSearch": "активний пошук поїздки",
+  "legacy_enterSixDigitCode": "Введи 6-значний код",
+  "@legacy_enterSixDigitCode": {
+    "x-needs-review": true
+  },
+  "legacy_errDriverUnavailable": "Цей водій уже недоступний",
+  "legacy_errTooFarFromRoute": "Ти занадто далеко від маршруту водія",
+  "@legacy_errTooFarFromRoute": {
+    "x-needs-review": true
+  },
+  "legacy_errDriverPositionStale": "Позиція водія не оновлена — спробуй трохи пізніше",
+  "@legacy_errDriverPositionStale": {
+    "x-needs-review": true
+  },
+  "legacy_errUpdateLocationFirst": "Спочатку онови свою геолокацію",
+  "@legacy_errUpdateLocationFirst": {
+    "x-needs-review": true
+  },
+  "legacy_errOfferGone": "Ця пропозиція вже недоступна",
+  "legacy_errRideFull": "У цій поїздці вже немає місць",
+  "legacy_errWrongCode": "Неправильний код — перепитай водія",
+  "@legacy_errWrongCode": {
+    "x-needs-review": true
+  },
+  "legacy_errRideNotAccepted": "Поїздка не в статусі «прийнято»",
+  "legacy_errInvalidCredentials": "Неправильна електронна пошта або пароль",
+  "legacy_errEmailTaken": "Ця електронна пошта вже зареєстрована",
+  "legacy_errCodeInvalidOrExpired": "Неправильний або прострочений код",
+  "legacy_errCurrentPasswordWrong": "Поточний пароль неправильний",
+  "legacy_backgroundLocationUnavailable": "Не вдалося запустити фонову геолокацію. Тримай Sameway відкритим на екрані під час руху, інакше пасажири тебе не знайдуть.",
+  "@legacy_backgroundLocationUnavailable": {
+    "x-needs-review": true
+  },
+  "legacy_ageConfirmLabel": "Підтверджую, що мені виповнилося 18 років",
+  "legacy_acceptTermsLabel": "Я приймаю Умови використання та Політику конфіденційності",
+  "legacy_termsOfService": "Умови використання",
+  "legacy_privacyPolicy": "Політика конфіденційності",
+  "legacy_consentRequiredError": "Підтверди, що тобі 18+, і прийми умови, щоб продовжити",
+  "@legacy_consentRequiredError": {
+    "x-needs-review": true
+  },
+  "legacy_birthDateLabel": "Дата народження",
+  "legacy_birthDateRequired": "Вкажи дату народження — Sameway лише для людей від 18 років",
+  "@legacy_birthDateRequired": {
+    "x-needs-review": true
+  },
+  "legacy_errUnderage": "Щоб користуватися Sameway, тобі має бути 18 або більше",
+  "@legacy_errUnderage": {
+    "x-needs-review": true
+  },
+  "legacy_driverDeclTitle": "Перед першою поїздкою",
+  "legacy_driverDeclLicence": "Маю чинне посвідчення водія",
+  "legacy_driverDeclInsurance": "Моє авто має чинну страховку цивільної відповідальності (ОСЦПВ / OC)",
+  "legacy_driverDeclRoadworthy": "Моє авто справне, і кожне запропоноване місце має пасок безпеки",
+  "legacy_driverDeclCostSharing": "Я лише ділю витрати й ніколи не заробляю на пасажирах",
+  "legacy_driverDeclAllRequired": "Підтверди всі чотири пункти, щоб їздити з Sameway",
+  "@legacy_driverDeclAllRequired": {
+    "x-needs-review": true
+  },
+  "legacy_carDetailsRequired": "Додай марку, модель, колір і номер авто, щоб пасажири могли його впізнати",
+  "@legacy_carDetailsRequired": {
+    "x-needs-review": true
+  },
+  "legacy_outsideServiceArea": "Sameway тут ще не працює — ми доступні в Кракові та на Полтавщині.",
+  "legacy_termsGateTitle": "Перш ніж продовжити",
+  "legacy_termsGateBody": "Щоб і далі користуватися Sameway, підтверди свій вік і прийми наші Умови використання та Політику конфіденційності.",
+  "@legacy_termsGateBody": {
+    "x-needs-review": true
+  },
+  "legacy_analyticsConsentTitle": "Допоможи нам покращити Sameway",
+  "@legacy_analyticsConsentTitle": {
+    "x-needs-review": true
+  },
+  "legacy_analyticsConsentBody": "Можна ми збиратимемо статистику використання, звіти про збої та дані про продуктивність? Це необов’язково — Sameway працює однаково в будь-якому разі, а змінити це можна будь-коли в розділі «Акаунт і безпека».",
+  "@legacy_analyticsConsentBody": {
+    "x-needs-review": true
+  },
+  "legacy_analyticsAllow": "Дозволити",
+  "legacy_analyticsDeny": "Ні, дякую",
+  "legacy_analyticsSettingTitle": "Статистика використання та звіти про збої",
+  "legacy_analyticsSettingSubtitle": "Необов’язково. Допомагає знаходити помилки та покращувати застосунок.",
+  "legacy_downloadMyData": "Завантажити мої дані",
+  "legacy_legalAndPrivacy": "Правова інформація та конфіденційність",
+  "legacy_rideCancelledTimeout": "Час поїздки минув до посадки, її скасовано.",
+  "legacy_newPickupCode": "Новий код",
+  "legacy_newCodeIssued": "Новий код готовий — скажи його пасажирові.",
+  "@legacy_newCodeIssued": {
+    "x-needs-review": true
+  },
+  "legacy_accountSuspended": "Цей акаунт заблоковано. Напиши в підтримку, якщо це помилка.",
+  "@legacy_accountSuspended": {
+    "x-needs-review": true
+  },
+  "legacy_deleteAccount": "Видалити акаунт",
+  "legacy_deleteAccountTitle": "Видалити акаунт?",
+  "legacy_deleteAccountBody": "Це остаточно видалить твій профіль, чати, геолокацію та заплановані попутки. Поїздки й оцінки за участю інших людей збережуться без твого імені. Цю дію не можна скасувати.",
+  "@legacy_deleteAccountBody": {
+    "x-needs-review": true
+  },
+  "legacy_deleteAccountPasswordLabel": "Введи пароль для підтвердження",
+  "@legacy_deleteAccountPasswordLabel": {
+    "x-needs-review": true
+  },
+  "legacy_deleteAccountConfirm": "Видалити назавжди",
+  "legacy_accountDeleted": "Твій акаунт видалено",
+  "@legacy_accountDeleted": {
+    "x-needs-review": true
+  },
+  "legacy_deleteAccountActiveRide": "Заверши або скасуй поточну попутку, перш ніж видаляти акаунт",
+  "@legacy_deleteAccountActiveRide": {
+    "x-needs-review": true
+  },
+  "legacy_driversHeadingYourWay": "Їдуть у твій бік: {n}",
+  "@legacy_driversHeadingYourWay": {
+    "x-needs-review": true
+  },
+  "legacy_blockUserQ": "Заблокувати: {name}?",
+  "@legacy_blockUserQ": {
+    "x-needs-review": true
+  },
+  "legacy_reportUserQ": "Поскаржитися: {name}?",
+  "@legacy_reportUserQ": {
+    "x-needs-review": true
+  },
+  "legacy_relayStopInfo": "Висадить тебе за ~{meters} м від зупинки «{stop}»",
+  "@legacy_relayStopInfo": {
+    "x-needs-review": true
+  },
+  "legacy_detourAddsLabel": "додає ~{meters} м / {seconds} с до твого маршруту",
+  "@legacy_detourAddsLabel": {
+    "x-needs-review": true
+  },
+  "legacy_matchStateMatchedWith": "Твій водій: {name}",
+  "@legacy_matchStateMatchedWith": {
+    "x-needs-review": true
+  },
+  "legacy_adviceWalkCloser": "Водій проїжджає за ~{meters} м — підійди ближче до дороги, щоб знайти попутку (якщо це безпечно).",
+  "@legacy_adviceWalkCloser": {
+    "x-needs-review": true
+  },
+  "legacy_typing": "{name}: пише…",
+  "@legacy_typing": {
+    "x-needs-review": true
+  },
+  "legacy_walkToPickup": "Пройди {dist} до точки зустрічі",
+  "@legacy_walkToPickup": {
+    "x-needs-review": true
+  },
+  "legacy_etaApprox": "~{min} хв їзди",
+  "legacy_walkShort": "{dist} пішки",
+  "legacy_ridesWithYou": "Їде з тобою {dist}",
+  "@legacy_ridesWithYou": {
+    "x-needs-review": true
+  },
+  "legacy_walkToPickupShort": "Пройди {dist} до позначки зустрічі",
+  "@legacy_walkToPickupShort": {
+    "x-needs-review": true
+  },
+  "legacy_walkApproxMinutes": "близько {min} хв",
+  "legacy_walkEstimate": "≈ {minutes} хв · {metres} м",
+  "legacy_sosShareBody": "Я в поїздці Sameway. Моя локація: {mapsUrl}  Водій: {driver} · Номер: {plate}",
+  "legacy_shareTripLiveBody": "Я в поїздці Sameway. Стежте за нею наживо: {url}",
+  "legacy_semOffer": "Пропозиція поїздки · {driverName}",
+  "@legacy_semOffer": {
+    "x-needs-review": true
+  },
+  "legacy_semAccepted": "Поїздку прийнято, водій їде до тебе · {driverName}",
+  "@legacy_semAccepted": {
+    "x-needs-review": true
+  },
+  "legacy_semInRide": "У дорозі · {driverName}",
+  "@legacy_semInRide": {
+    "x-needs-review": true
+  },
+  "legacy_passengerSentRequest": "Запит на попутку · {name}",
+  "@legacy_passengerSentRequest": {
+    "x-needs-review": true
+  },
+  "legacy_rideRequestsCount": "Запити на поїздку ({n})",
+  "legacy_dropOffName": "Висадити: {name}",
+  "@legacy_dropOffName": {
+    "x-needs-review": true
+  },
+  "legacy_kmBetweenYou": "{km} км одне від одного",
+  "@legacy_kmBetweenYou": {
+    "x-needs-review": true
+  },
+  "legacy_routeSummary": "{km} км · сповіщено пасажирів: {count}",
+  "legacy_pendingOffersCount": "очікують відповіді: {count}",
+  "legacy_walkPill": "Пішки {m} м · {min} хв",
+  "legacy_driverInMin": "Водій за {min} хв",
+  "legacy_seatsCorridorSummary": "Місць: {seats} · коридор {km} км",
+  "legacy_switchWillEnd": "Зараз у тебе {reason}. Перемикання завершить це й сповістить іншу сторону.",
+  "@legacy_switchWillEnd": {
+    "x-needs-review": true
+  },
+  "legacy_ageYears": "{n} р.",
+  "legacy_wrongCodeAttemptsLeft": "Неправильний код — залишилось спроб: {n}",
+  "legacy_noShowTooEarly": "Повідомити про неявку можна через {minutes} хв.",
+  "legacy_rideStatus_pending": "очікує",
+  "legacy_rideStatus_accepted": "прийнято",
+  "legacy_rideStatus_in_progress": "у поїздці",
+  "legacy_rideStatus_declined": "відхилено",
+  "legacy_rideStatus_done": "завершено",
+  "legacy_rideStatus_cancelled": "скасовано",
+  "legacy_rideStatus_offered": "запропоновано"
+}

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api_client.dart';
+import '../../core/error_handling.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/haptics.dart';
@@ -56,6 +57,7 @@ class ChatMessage {
   factory ChatMessage.skeleton({String? sender}) => ChatMessage(
         id: '',
         senderID: sender ?? 'them',
+        // l10n-ignore: skeleton placeholder, only drawn blurred by Skeletonizer
         content: 'Loading message content placeholder.',
         createdAt: DateTime.now(),
       );
@@ -390,6 +392,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         // Pre-ride anti-spam limit — keep the draft, tell the user.
         BrandedSnack.showInfo(
             context, AppLocalizations.of(context).chatSlowDown);
+      } else {
+        // Too long, blocked, not your thread …: say which, keep the draft.
+        BrandedSnack.showError(
+            context, friendlyError(context, ApiException.fromResponse(resp)));
       }
     } catch (_) {}
     if (mounted) setState(() => _sending = false);

@@ -43,7 +43,8 @@ import '../../core/widgets/walk_to_pickup_banner.dart';
 import '../../core/wkt.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../../core/widgets/glass_card.dart';
-import '../../core/widgets/language_sheet.dart';
+import '../account/language_screen.dart';
+import '../../theme/theme.dart' show SwRole;
 import '../../core/widgets/rating_wait_banner.dart';
 import '../../core/widgets/ride_check_in_sheet.dart';
 import '../../core/widgets/m3_expressive/wave_progress_indicator.dart';
@@ -60,6 +61,8 @@ import '../trips/trip_history_screen.dart';
 import '../trips/trip_search_sheet.dart';
 import '../../core/widgets/rating_sheet.dart';
 import 'passenger_provider.dart';
+import '../../l10n/format.dart';
+import '../../l10n/l10n.dart';
 
 class PassengerHomeScreen extends StatefulWidget {
   final bool isGuest;
@@ -288,7 +291,10 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
           );
       if (!mounted) return;
       setState(() {
-        _nearbyDrivers = list.map(_NearbyDriverInfo.fromJson).toList();
+        final fallbackName = context.l10n.legacy_driver;
+        _nearbyDrivers = list
+            .map((j) => _NearbyDriverInfo.fromJson(j, fallbackName))
+            .toList();
       });
       // The provider owns the match-state machine; feed it the count of
       // algorithm-endorsed (likely_match) drivers, not raw proximity.
@@ -311,7 +317,11 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
     if (!mounted) return;
     final l = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(ok ? l.rideRequestSent : (provider.error ?? l.requestFailed)),
+      content: Text(ok
+          ? l.rideRequestSent
+          : provider.lastError != null
+              ? friendlyError(context, provider.lastError!)
+              : l.requestFailed),
       backgroundColor: ok ? AppColors.success : AppColors.error,
       behavior: SnackBarBehavior.floating,
     ));
@@ -603,7 +613,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
   List<LatLng> _parseWKT(String wkt) => parseLineStringWKT(wkt);
 
   void _showLanguageSheet() {
-    LanguageSheet.show(context);
+    LanguageScreen.push(context, role: SwRole.passenger);
   }
 
   void _showBugReportSheet() {
@@ -1096,7 +1106,7 @@ class _PassengerHomeScreenState extends State<PassengerHomeScreen>
                 left: 0,
                 right: 0,
                 child: RatingWaitBanner(
-                  otherPartyLabel: 'driver',
+                  otherIsDriver: true,
                   onDismiss: () => p.clearAwaitingRating(),
                 ),
               ),
@@ -1990,6 +2000,7 @@ class _DestinationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final f = SwFormat.of(context);
     final hasDistance = distanceKm != null && distanceKm! > 0;
     // No server-side duration; estimate from distance at the assumed driver
     // speed — same helper the walk/pickup ETAs use.
@@ -1999,9 +2010,11 @@ class _DestinationCard extends StatelessWidget {
       if (hasDistance)
         _DestStat(
             icon: Icons.straighten_rounded,
-            label: '${distanceKm!.toStringAsFixed(1)} km'),
+            label: f.distance(distanceKm! * 1000)),
       if (mins != null)
-        _DestStat(icon: Icons.schedule_rounded, label: '~$mins min'),
+        _DestStat(
+            icon: Icons.schedule_rounded,
+            label: '~${f.duration(Duration(minutes: mins))}'),
       if (driversNearby > 0)
         _DestStat(
           icon: Icons.directions_car_rounded,
@@ -2144,7 +2157,7 @@ class _MatchTipsCardState extends State<_MatchTipsCard> {
   String? _text(AppLocalizations l, String code) {
     switch (code) {
       case 'trip_too_short':
-        return l.adviceTripTooShort(_tripKm.toStringAsFixed(1));
+        return l.adviceTripTooShort(SwFormat.of(context).decimal(_tripKm));
       case 'walk_closer':
         return l.adviceWalkCloser(_nearestM);
       case 'enable_long_walk':
@@ -2282,7 +2295,7 @@ class _OutstandingRequestTile extends StatelessWidget {
                               color: Color(0xFFFFC857), size: 13),
                           const SizedBox(width: 2),
                           Text(
-                            '${req.driverAvgRating!.toStringAsFixed(1)}'
+                            '${SwFormat.of(context).decimal(req.driverAvgRating!)}'
                             ' (${req.driverRatingCount})',
                             style: const TextStyle(
                               color: AppColors.textSecondary,
@@ -2449,7 +2462,7 @@ class _OfferCardState extends State<_OfferCard>
                             color: Color(0xFFFFC857), size: 14),
                         const SizedBox(width: 2),
                         Text(
-                          '${offer.driverAvgRating!.toStringAsFixed(1)} (${offer.driverRatingCount})',
+                          '${SwFormat.of(context).decimal(offer.driverAvgRating!)} (${offer.driverRatingCount})',
                           style: const TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 11,
@@ -2484,7 +2497,7 @@ class _OfferCardState extends State<_OfferCard>
                   ],
                   const SizedBox(height: 2),
                   Text(
-                    '${offer.corridorKm.toStringAsFixed(1)} ${l.corridorLabel} · '
+                    '${SwFormat.of(context).decimal(offer.corridorKm)} ${l.corridorLabel} · '
                     '${offer.seats} ${offer.seats == 1 ? l.seatLabel : l.seatsLabel}',
                     style: const TextStyle(
                       color: AppColors.textSecondary,
@@ -2946,7 +2959,7 @@ class _AcceptedCardState extends State<_AcceptedCard>
                     color: Color(0xFFFFC857), size: 14),
                 const SizedBox(width: 2),
                 Text(
-                  '${widget.driverAvgRating!.toStringAsFixed(1)} (${widget.driverRatingCount})',
+                  '${SwFormat.of(context).decimal(widget.driverAvgRating!)} (${widget.driverRatingCount})',
                   style: const TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 11,
@@ -3116,7 +3129,9 @@ class _AcceptedCardState extends State<_AcceptedCard>
           ),
           const SizedBox(height: 6),
           Text(
-            '${_haversineKm(widget.passengerPos!, widget.driverPos!).toStringAsFixed(1)} km away',
+            context.l10n.pHome_distanceAway(SwFormat.of(context).distance(
+                _haversineKm(widget.passengerPos!, widget.driverPos!) *
+                    1000)),
             style: const TextStyle(
               color: AppColors.textSecondary,
               fontSize: 12,
@@ -3247,19 +3262,19 @@ class _DeclinedCard extends StatelessWidget {
               color: AppColors.textSecondary, size: 26),
         ),
         const SizedBox(height: 14),
-        const Text(
-          'Offer declined',
-          style: TextStyle(
+        Text(
+          context.l10n.pHome_offerDeclined,
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 6),
-        const Text(
-          'Looking for the next available ride…',
+        Text(
+          context.l10n.pHome_lookingForNextRide,
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
         ),
         const SizedBox(height: 4),
       ],
@@ -3594,12 +3609,7 @@ class _AccountSheetState extends State<_AccountSheet> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ok
             ? l.testNotificationSent
-            : friendlyError(
-                context,
-                ApiException(
-                  (jsonDecode(resp.body) as Map)['error'] as String? ?? '',
-                  statusCode: resp.statusCode,
-                ))),
+            : friendlyError(context, ApiException.fromResponse(resp))),
         backgroundColor: ok ? AppColors.success : AppColors.error,
         behavior: SnackBarBehavior.floating,
       ));
@@ -3752,7 +3762,7 @@ class _AccountSheetState extends State<_AccountSheet> {
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context).savedCO2(
-                              (_co2Saved ?? 18.7).toStringAsFixed(1)),
+                              SwFormat.of(context).decimal(_co2Saved ?? 18.7)),
                           style: const TextStyle(
                               color: AppColors.success,
                               fontSize: 14,
@@ -3760,7 +3770,7 @@ class _AccountSheetState extends State<_AccountSheet> {
                         ),
                       ),
                       Text(
-                        '${_tripsCount ?? 6} trip${(_tripsCount ?? 6) == 1 ? '' : 's'}',
+                        context.l10n.common_ridesCount(_tripsCount ?? 6),
                         style: const TextStyle(
                             color: AppColors.textSecondary, fontSize: 12),
                       ),
@@ -4223,10 +4233,12 @@ class _NearbyDriverInfo {
     required this.ratingCount,
   });
 
-  factory _NearbyDriverInfo.fromJson(Map<String, dynamic> j) =>
+  /// [fallbackName] is the localized "Driver", for drivers without a name.
+  factory _NearbyDriverInfo.fromJson(
+          Map<String, dynamic> j, String fallbackName) =>
       _NearbyDriverInfo(
         driverId: j['driver_id'] as String,
-        driverName: j['driver_name'] as String? ?? 'Driver',
+        driverName: j['driver_name'] as String? ?? fallbackName,
         origin: LatLng(
           (j['origin_lat'] as num).toDouble(),
           (j['origin_lng'] as num).toDouble(),
@@ -4403,7 +4415,7 @@ class _CandidateDriverRow extends StatelessWidget {
                           const Icon(Icons.star_rounded,
                               color: Color(0xFFFFC107), size: 14),
                           Text(
-                            driver.avgRating.toStringAsFixed(1),
+                            SwFormat.of(context).decimal(driver.avgRating),
                             style: const TextStyle(
                                 color: AppColors.textSecondary, fontSize: 12),
                           ),
@@ -4437,7 +4449,7 @@ class _CandidateDriverRow extends StatelessWidget {
                         if (driver.walkM >= 0)
                           Text(
                             l.walkShort(
-                                WalkToPickupBanner.formatDistance(driver.walkM)),
+                                WalkToPickupBanner.formatDistance(context, driver.walkM)),
                             style: const TextStyle(
                                 color: AppColors.textSecondary, fontSize: 11),
                           ),
@@ -4624,7 +4636,7 @@ class _DriverInfoSheetState extends State<_DriverInfoSheet> {
                     const SizedBox(height: 2),
                     Text(
                       l.seatsCorridorSummary('${driver.seats}',
-                          driver.corridorKm.toStringAsFixed(1)),
+                          SwFormat.of(context).decimal(driver.corridorKm)),
                       style: const TextStyle(
                           color: AppColors.textSecondary, fontSize: 13),
                     ),

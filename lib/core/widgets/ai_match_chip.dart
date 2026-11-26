@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/l10n.dart';
+
 /// Small badge that surfaces when a match was produced by the AI re-ranker
 /// (server-stamped via `match_method` on the WS payload).
 ///
@@ -21,14 +23,14 @@ class AIMatchChip extends StatelessWidget {
           width: 0.6,
         ),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.auto_awesome_rounded, color: Color(0xFFC4B5FD), size: 10),
-          SizedBox(width: 3),
+          const Icon(Icons.auto_awesome_rounded, color: Color(0xFFC4B5FD), size: 10),
+          const SizedBox(width: 3),
           Text(
-            'AI',
-            style: TextStyle(
+            context.l10n.common_aiBadge,
+            style: const TextStyle(
               color: Color(0xFFE9D5FF),
               fontSize: 10,
               fontWeight: FontWeight.w700,

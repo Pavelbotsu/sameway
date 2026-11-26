@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
-import '../../core/widgets/language_sheet.dart';
+import '../account/language_screen.dart';
 import '../../core/token_storage.dart';
 import '../auth/auth_provider.dart';
 import '../auth/auth_screen.dart';
@@ -13,7 +13,7 @@ class RoleSelectionScreen extends StatelessWidget {
   const RoleSelectionScreen({super.key});
 
   void _showLanguageSheet(BuildContext context) {
-    LanguageSheet.show(context);
+    LanguageScreen.push(context);
   }
 
   @override

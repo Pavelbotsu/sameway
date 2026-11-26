@@ -21,7 +21,15 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      # lib/l10n/gen is not committed. Every key must exist in en, uk and pl:
+      # gen-l10n lists missing translations in build/l10n_untranslated.json.
+      - run: flutter gen-l10n
+      - name: No untranslated messages
+        run: |
+          cat build/l10n_untranslated.json
+          test "$(tr -d '[:space:]' < build/l10n_untranslated.json)" = "{}"
       - run: flutter analyze
       # Goldens are rendered on Windows and differ by a few pixels on Linux;
       # they run locally: flutter test --tags golden
+      # test/l10n checks the copy rules and that no widget hard-codes a string.
       - run: flutter test --exclude-tags golden

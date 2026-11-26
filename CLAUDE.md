@@ -19,3 +19,11 @@ Project rules are in `../CLAUDE.md`. This file only has commands.
 - Regenerate goldens with `flutter test --tags golden --update-goldens` after a Flutter or font upgrade, review the diff, commit.
 - `test/ui/tokens_sync_test.dart` checks that every `SwColors` value is in `../design-pack/design/tokens.json` (skipped when the design pack isn't checked out next to the app, e.g. in CI). A new colour goes into both.
 - Design system: `lib/theme` (tokens, `SwTheme.build(role)`, `context.role`) and `lib/ui` (components). New UI uses these, not `AppColors`.
+- Strings (from Phase 2): ARB in `lib/l10n/app_{en,uk,pl}.arb`, generated class `L10n` (`context.l10n.key`). `lib/l10n/gen/` is not committed: `flutter pub get` or `flutter gen-l10n` regenerates it (run it after changing an ARB file; the analyzer shows errors until then). `build/l10n_untranslated.json` must stay `{}`.
+  - Add hand-written keys: `dart run tool/l10n/add_keys.dart spec.json` (format in the script; mark the languages you wrote with `"review"`).
+  - Copy deck changed? `dart run tool/l10n/import_copy_deck.dart --report`, decide each new row in `tool/l10n/copy_deck_map.txt`, then run it without `--report`. `test/l10n/copy_deck_coverage_test.dart` fails until every row is decided.
+  - Strings to review: `dart run tool/l10n/needs_review.dart` rewrites `../design-pack/l10n/needs_review.md` (commit it on the design-pack branch; the PR links to it). `--stdout` prints it, `--count` gives totals.
+  - Server errors: `lib/l10n/error_codes.dart` maps `code`s and the English texts of codeless errors; anything unmapped shows the generic error and is logged to Crashlytics. The full list per endpoint is `../design-pack/docs/SERVER_ERRORS.md`.
+  - Formatting: `SwFormat.of(context)` (`lib/l10n/format.dart`) for distance, duration, 24 h time, deadlines with a day name, dates, weekday chips, whole złoty. Server error codes → `lib/l10n/error_codes.dart`.
+  - `lib/core/app_localizations.dart` is the old API, now a wrapper over the `legacy_*` keys. Don't add to it; when a screen moves to `context.l10n`, delete unused getters and their `legacy_*` keys.
+  - `test/l10n/` enforces the copy rules and the no-hard-coded-strings rule; a literal that must stay gets `// l10n-ignore: <reason>`.

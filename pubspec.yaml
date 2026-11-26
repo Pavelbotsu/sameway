@@ -35,6 +35,7 @@ dependencies:
   firebase_remote_config: ^5.5.0
   flutter_foreground_task: ^9.2.2
   flutter_secure_storage: ^9.2.4
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +47,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # ARB → lib/l10n/gen (see l10n.yaml). Generated code is not committed.
+  generate: true
 
   # Design system v3 (lib/theme). SIL OFL 1.1, see assets/fonts/OFL.txt.
   fonts:

@@ -6,6 +6,8 @@ import '../../core/api_client.dart';
 import '../../core/app_colors.dart';
 import '../../core/app_localizations.dart';
 import '../../core/token_storage.dart';
+import '../../l10n/format.dart';
+import '../../l10n/l10n.dart';
 
 class TripHistoryScreen extends StatefulWidget {
   const TripHistoryScreen({super.key});
@@ -192,12 +194,13 @@ class _TripCard extends StatelessWidget {
     final isDriving = trip.driverId == userId;
     final icon =
         isDriving ? Icons.drive_eta_rounded : Icons.person_rounded;
-    final roleLabel = isDriving ? 'Driver' : 'Passenger';
+    final l10n = context.l10n;
+    final fmt = SwFormat.of(context);
+    final roleLabel = isDriving ? l10n.legacy_driver : l10n.legacy_passenger;
     final roleColor = isDriving ? AppColors.primary : AppColors.teal;
 
     final date = trip.completedAt;
-    final dateStr =
-        '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    final dateStr = fmt.numericDate(date);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -258,7 +261,7 @@ class _TripCard extends StatelessWidget {
                         color: AppColors.textSecondary, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      '${trip.distanceKm.toStringAsFixed(1)} km',
+                      fmt.distance(trip.distanceKm * 1000),
                       style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 13,
@@ -270,7 +273,7 @@ class _TripCard extends StatelessWidget {
                         color: AppColors.success, size: 14),
                     const SizedBox(width: 4),
                     Text(
-                      '${trip.co2SavedKg.toStringAsFixed(2)} kg CO₂',
+                      l10n.rwHome_kgCo2(fmt.decimal(trip.co2SavedKg, digits: 2)),
                       style: const TextStyle(
                         color: AppColors.success,
                         fontSize: 13,

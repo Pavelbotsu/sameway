@@ -21,6 +21,7 @@ class SwPickupCode extends StatelessWidget {
     return Semantics(
       container: true,
       // Digits one by one, so "4827" isn't read as a number.
+      // l10n-ignore: only punctuation; the words come from [title]
       label: '$title: ${digits.join(' ')}',
       excludeSemantics: true,
       child: Container(

@@ -31,6 +31,7 @@ import 'features/onboarding/role_selection_screen.dart';
 import 'features/onboarding/splash_screen.dart';
 import 'features/passenger/passenger_provider.dart';
 import 'features/passenger/passenger_repository.dart';
+import 'l10n/l10n.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
@@ -90,7 +91,18 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) {
+          final language = LanguageProvider();
+          // Android notification channels carry their names in the app
+          // language; re-create them (same ids) when it changes.
+          var current = language.locale;
+          language.addListener(() {
+            if (language.locale == current) return;
+            current = language.locale;
+            FcmService.createChannels(current);
+          });
+          return language;
+        }),
         ChangeNotifierProvider(create: (_) => MapStyleProvider()),
         ChangeNotifierProvider(create: (_) => MatchingPreferenceProvider()),
         ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
@@ -180,11 +192,12 @@ class _SamewayAppState extends State<SamewayApp> {
     return MaterialApp(
       navigatorKey: _navKey,
       scaffoldMessengerKey: FcmService.scaffoldMessengerKey,
-      title: 'sameway',
+      title: 'sameway', // l10n-ignore: brand name (OS task switcher)
       theme: buildAppTheme(),
       locale: locale,
       localizationsDelegates: const [
         AppLocalizations.delegate,
+        L10nFallbackDelegate(),
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

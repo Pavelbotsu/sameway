@@ -1,3 +1,4 @@
+// l10n-ignore-file: FeatureFlags.promotions is off everywhere; deleted in Phase 13 (decision 13)
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

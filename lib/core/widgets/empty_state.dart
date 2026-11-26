@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
+import '../../l10n/l10n.dart';
 
 class EmptyState extends StatelessWidget {
   final IconData icon;
@@ -56,7 +57,7 @@ class EmptyState extends StatelessWidget {
             TextButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded, size: 16),
-              label: const Text('Retry'),
+              label: Text(context.l10n.common_retry),
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.textSecondary,
               ),

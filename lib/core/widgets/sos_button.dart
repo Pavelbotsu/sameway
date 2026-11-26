@@ -7,6 +7,7 @@ import '../app_colors.dart';
 import '../app_localizations.dart';
 import '../haptics.dart';
 import '../token_storage.dart';
+import '../../l10n/l10n.dart';
 
 /// The European emergency number. It works in every EU/EEA country (Sameway
 /// launches in Poland) and on any phone, with or without a SIM. It depends on
@@ -150,7 +151,7 @@ class SosSheet extends StatelessWidget {
     }
     final mapsUrl = (lat != null && lng != null)
         ? 'https://maps.google.com/?q=$lat,$lng'
-        : 'unknown location';
+        : context.l10n.common_unknownLocation;
     final body = AppLocalizations.of(context)
         .sosShareBody(mapsUrl, driverName, plate);
     try {
